@@ -41,7 +41,8 @@ export class LoggerHelper {
   static #whereLogger(options: TLoggerHelperOptions) {
     if (__DEV__ && this.extensionColors[options.where] === undefined) {
       const number = NumberHelper.getRandomNumber(this.allColors.length)
-      this.extensionColors[options.where] = this.allColors[number] ?? 'default'
+
+      this.extensionColors[options.where] = this.allColors[number] || 'default'
     }
 
     return this.#logger.extend(

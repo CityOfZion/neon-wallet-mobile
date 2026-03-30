@@ -9,6 +9,7 @@ import type { TRootState } from '@/types/redux'
 
 export function getNetworkMiddleware() {
   const networkListenerMiddleware = createListenerMiddleware()
+  const services = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName)
 
   networkListenerMiddleware.startListening({
     predicate: action =>
@@ -18,13 +19,13 @@ export function getNetworkMiddleware() {
       settingsReducerActions.saveCustomNetwork.match(action) ||
       settingsReducerActions.deleteCustomNetwork.match(action) ||
       (action.type === REHYDRATE && action.key === 'settingsReducer'),
-    effect: (action, listenerApi) => {
+    effect: (_action, listenerApi) => {
       const state = listenerApi.getState() as TRootState
-
       const selectedNetworkByBlockchain = state.settings?.data?.selectedNetworkByBlockchain
+
       if (!selectedNetworkByBlockchain) return
 
-      Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName).forEach(service => {
+      services.forEach(service => {
         service.setNetwork(selectedNetworkByBlockchain[service.name])
       })
     },

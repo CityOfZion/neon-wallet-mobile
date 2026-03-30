@@ -5,13 +5,13 @@ import { DateHelper } from '@/helpers/DateHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
-import type { INotificationReducer } from '.'
+import type { TNotificationReducer } from '.'
 
 import type { TNotification, TSaveNotification } from '@/types/store'
 
 const { t } = I18nextHelper.get()
 
-const saveNotification: CaseReducer<INotificationReducer, PayloadAction<TSaveNotification>> = (state, action) => {
+const saveNotification: CaseReducer<TNotificationReducer, PayloadAction<TSaveNotification>> = (state, action) => {
   const notification: TNotification = {
     id: UtilsHelper.uuid(),
     date: DateHelper.getNowUnix(),

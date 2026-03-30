@@ -2,49 +2,49 @@ import type { EBuyAndSellTokensScreenTabValue } from '@/routes/screens/BuyAndSel
 import type { TSettingsTab } from '@/routes/screens/SettingsScreen'
 
 import type { TBlockchainServiceKey } from './blockchain'
-import type { IAccountState, IContactState, IWalletState } from './store'
+import type { TAccount, TContact, TWallet } from './store'
 
 export type TOnboardingCompletedScreenParams = {
   isImport?: boolean
 }
 
 export type TWalletsScreenParams = {
-  wallet?: IWalletState
+  wallet?: TWallet
 }
 
 export type TWalletScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TWalletSettingsScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TAccountScreenParams = {
-  account: IAccountState
-  wallet: IWalletState
+  account: TAccount
+  wallet: TWallet
 }
 
 export type TAccountAssetsScreenParams = {
-  account: IAccountState
-  wallet: IWalletState
+  account: TAccount
+  wallet: TWallet
 }
 
 export type TAccountTransactionsScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TAccountConnectionsScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TAccountNftsScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TAccountSettingsScreenParams = {
-  account: IAccountState
-  wallet: IWalletState
+  account: TAccount
+  wallet: TWallet
 }
 
 export type TDappConnectionsScreenParams = {
@@ -53,7 +53,7 @@ export type TDappConnectionsScreenParams = {
 }
 
 export type TContactScreenParams = {
-  contact: IContactState
+  contact: TContact
 }
 
 export type TMoreScreenParams = {
@@ -77,7 +77,7 @@ export type TCreateWalletStep5ScreenParams = {
 }
 
 export type TCreateWalletStep6ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TImportScreen = {
@@ -85,7 +85,7 @@ export type TImportScreen = {
 }
 
 export type TSendScreenParams = {
-  account?: IAccountState
+  account?: TAccount
 }
 
 export type TSettingsProtocolEditScreen = {
@@ -93,33 +93,33 @@ export type TSettingsProtocolEditScreen = {
 }
 
 export type TSettingsWalletBackupStep1ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TSettingsWalletBackupStep2ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
   words: string[]
 }
 
 export type TSettingsWalletBackupStep3ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TSwapScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TBuyAndSellTokensScreenParams = {
-  account?: IAccountState
+  account?: TAccount
   screenType?: EBuyAndSellTokensScreenTabValue
 }
 
 export type TVoteNeo3ScreenParams = {
-  defaultNeo3Account?: IAccountState
+  defaultNeo3Account?: TAccount
 }
 
 export type TBridgeNeo3NeoXScreenParams = {
-  account?: IAccountState
+  account?: TAccount
 }
 
 export type TSettingsScreenParams = {
@@ -127,5 +127,5 @@ export type TSettingsScreenParams = {
 }
 
 export type TReceiveScreenParams = {
-  account: IAccountState
+  account: TAccount
 }

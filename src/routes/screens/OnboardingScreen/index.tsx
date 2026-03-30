@@ -30,7 +30,7 @@ import { OnboardingScreenProgress } from './OnboardingScreenProgress'
 
 import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 type TStep = 'wallet' | 'account' | 'finalizing'
 
@@ -103,7 +103,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
         navigation.goBack()
         setStep('wallet')
 
-        let wallet: IWalletState | undefined = wallets[0]
+        let wallet: TWallet | undefined = wallets[0]
         let mnemonic = ''
 
         if (!wallet) {

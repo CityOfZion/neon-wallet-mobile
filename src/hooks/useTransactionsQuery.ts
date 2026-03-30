@@ -9,70 +9,69 @@ import { DateHelper } from '@/helpers/DateHelper'
 
 import { useLanguageSelector, useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
-import { useAccountMapSelector } from './useAccountSelector'
+import { useAccountsMapSelector } from './useAccountSelector'
 import { useHiddenTokensByBlockchainSelector, usePendingTransactionsSelector } from './useUtilitySelector'
 
 import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
-import type {
-  IAccountState,
-  TAccountWithWallet,
-  TUseTransactionsGroupedTransactionsByDate,
-  TUseTransactionsTransaction,
-} from '@/types/store'
+import type { TAccount, TUseTransactionsGroupedTransactionsByDate, TUseTransactionsTransaction } from '@/types/store'
 
 export const buildTransactionsQueryKey = (blockchain: TBlockchainServiceKey, address: string, network: TNetwork) => {
-  const queryKey: any[] = ['transactions', blockchain, address, network]
-
-  return queryKey
+  return ['transactions', blockchain, address, network]
 }
 
-async function fetchTransaction(
-  account: IAccountState,
-  pageParam: any,
-  allAccountsMap: Map<string, TAccountWithWallet>
-) {
+async function fetchTransaction(account: TAccount, pageParam: any, accountsMap: Map<string, TAccount>) {
   const blockchainService = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
+
   const response = await blockchainService.blockchainDataService.getTransactionsByAddress({
     address: account.address,
     nextPageParams: pageParam,
   })
 
   const blockchain = account.blockchain
-
   const transactionsMap = new Map<string, TUseTransactionsTransaction>()
 
   response.transactions.forEach(transaction => {
-    const events = transaction.events.map(({ from, to, ...event }) => ({
-      ...event,
-      from,
-      to,
-      fromAccount: from ? allAccountsMap.get(AccountHelper.buildAccountKey({ address: from, blockchain })) : undefined,
-      toAccount: to ? allAccountsMap.get(AccountHelper.buildAccountKey({ address: to, blockchain })) : undefined,
-    }))
+    const newTransaction = { ...transaction, account, blockchain, isPending: false }
 
-    transactionsMap.set(transaction.txId, {
-      ...transaction,
-      account,
-      blockchain,
-      isPending: false,
-      events,
-    })
+    if (newTransaction.view === 'utxo') {
+      newTransaction.inputs = newTransaction.inputs.map(({ address, ...input }) => ({
+        ...input,
+        address,
+        account: address ? accountsMap.get(AccountHelper.buildAccountKey({ address, blockchain })) : undefined,
+      }))
+
+      newTransaction.outputs = newTransaction.outputs.map(({ address, ...output }) => ({
+        ...output,
+        address,
+        account: address ? accountsMap.get(AccountHelper.buildAccountKey({ address, blockchain })) : undefined,
+      }))
+    } else {
+      newTransaction.events = newTransaction.events.map(({ from, to, ...event }) => ({
+        ...event,
+        from,
+        to,
+        fromAccount: from ? accountsMap.get(AccountHelper.buildAccountKey({ address: from, blockchain })) : undefined,
+        toAccount: to ? accountsMap.get(AccountHelper.buildAccountKey({ address: to, blockchain })) : undefined,
+      }))
+    }
+
+    transactionsMap.set(transaction.txId, newTransaction)
   })
 
   return { transactionsMap, nextPageParams: response.nextPageParams }
 }
 
-export const useTransactionsQuery = (account: IAccountState) => {
+export const useTransactionsQuery = (account: TAccount) => {
   const { selectedNetwork } = useSelectedNetworkSelector(account.blockchain)
   const { pendingTransactions } = usePendingTransactionsSelector()
-  const { accountsMapRef } = useAccountMapSelector()
+  const { accountsMapRef } = useAccountsMapSelector()
   const { hiddenTokensByBlockchain } = useHiddenTokensByBlockchainSelector()
   const { language } = useLanguageSelector()
 
   const query = useInfiniteQuery({
     queryKey: buildTransactionsQueryKey(account.blockchain, account.address, selectedNetwork),
     queryFn: async ({ pageParam }) => fetchTransaction(account, pageParam, accountsMapRef.current),
-    initialPageParam: undefined as any,
+    initialPageParam: undefined,
     getNextPageParam: lastPage => lastPage.nextPageParams,
   })
 
@@ -112,10 +111,24 @@ export const useTransactionsQuery = (account: IAccountState) => {
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[transaction.blockchain]
 
       if (!!hiddenTokens && hiddenTokens.length > 0) {
-        transaction.events = transaction.events.filter(event => {
-          if (event.eventType === 'nft') return true
-          return !hiddenTokens.includes(service.tokenService.normalizeHash(event.contractHash))
-        })
+        const isHiddenToken = (tokenHash: string) => {
+          return hiddenTokens.includes(service.tokenService.normalizeHash(tokenHash))
+        }
+
+        if (transaction.view === 'utxo') {
+          transaction.inputs = transaction.inputs.filter(({ token }) => !isHiddenToken(token.hash))
+          transaction.outputs = transaction.outputs.filter(({ token }) => !isHiddenToken(token.hash))
+        } else {
+          transaction.events = transaction.events.filter(event => {
+            if (event.eventType !== 'token') return true
+
+            const tokenHash = event.token?.hash
+
+            if (!tokenHash) return true
+
+            return !isHiddenToken(tokenHash)
+          })
+        }
       }
 
       const date = DateHelper.format(transaction.date, 'MM-dd-yyyy')
@@ -124,6 +137,7 @@ export const useTransactionsQuery = (account: IAccountState) => {
 
       if (existingGroupedData) {
         existingGroupedData.data.push(transaction)
+
         return
       }
 

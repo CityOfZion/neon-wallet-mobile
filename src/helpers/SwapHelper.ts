@@ -2,9 +2,11 @@ import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
 import type { TSelectedNetworks } from '@/types/store'
 
 export class SwapHelper {
+  // Find the network parameter in https://api.simpleswap.io/docs/api/get-currencies
   static readonly #swapNetworkByBlockchainAndNetworkId: Map<string, string[]> = new Map([
     ['neo3-mainnet', ['neo3']],
     ['ethereum-1', ['eth']],
+    ['bitcoin-mainnet', ['btc']],
     ['neox-47763', ['']],
     ['polygon-137', ['matic']],
     ['base-8453', ['base', 'baseevm']],

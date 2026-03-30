@@ -14,7 +14,7 @@ import { useWalletsSelector } from './useWalletSelector'
 
 import { walletReducerActions } from '@/store/reducers/wallet'
 import type { TUseCreateWalletParams, TUseEditWalletParams } from '@/types/hooks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 export const useCreateWallet = () => {
   const dispatch = useAppDispatch()
@@ -22,12 +22,12 @@ export const useCreateWallet = () => {
 
   const createWallet = useCallback(
     async ({ name, backupStatus, mnemonic, id, type = 'standard' }: TUseCreateWalletParams) => {
-      const generatedId = id ?? UtilsHelper.uuid()
+      const generatedId = id || UtilsHelper.uuid()
 
-      const newWallet: IWalletState = {
+      const newWallet: TWallet = {
         name,
         id: generatedId,
-        backupStatus: backupStatus ?? (type === 'standard' ? 'unsuccessful' : 'successful'),
+        backupStatus: backupStatus || (type === 'standard' ? 'unsuccessful' : 'successful'),
         type,
       }
 
@@ -53,7 +53,7 @@ export const useDeleteWallet = () => {
   const { deleteAccount } = useDeleteAccount()
 
   const deleteWallet = useCallback(
-    async (wallet: IWalletState) => {
+    async (wallet: TWallet) => {
       try {
         const accounts = accountsRef.current.filter(account => account.idWallet === wallet.id)
         await Promise.allSettled(accounts.map(account => deleteAccount(account)))
@@ -87,7 +87,7 @@ export const useEditWallet = () => {
       }
 
       const updatedWallet = walletsRef.current.find(({ id }) => id === wallet.id)!
-      const editedWallet: IWalletState = Object.assign({}, updatedWallet, data)
+      const editedWallet: TWallet = Object.assign({}, updatedWallet, data)
 
       dispatch(walletReducerActions.saveWallet(editedWallet))
 

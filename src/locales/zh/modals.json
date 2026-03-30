@@ -402,15 +402,15 @@
   "languageSelectionModal": {
     "title": "语言"
   },
-  "nodeSelectionModal": {
+  "networkUrlSelectionModal": {
     "antiMevLabel": "反MEV",
     "blockHeightLabel": "区块高度：",
-    "description": "如果您遇到性能问题，请尝试在下方选择自定义节点",
+    "description": "如果您遇到性能问题，请尝试在下方选择自定义网络",
     "latencyLabel": "{{latency}}毫秒",
-    "nodesListLabel": "节点",
+    "listLabel": "网络 URL 列表",
     "refreshButtonLabel": "刷新",
     "selectAutomaticallyCheckboxLabel": "自动选择",
-    "title": "节点选择"
+    "title": "网络 URL 选择"
   },
   "notificationContextModal": {
     "markAsReadButtonLabel": "标记为已读",
@@ -480,7 +480,7 @@
     "inputLabels": {
       "name": "网络名称",
       "nameDescription": "（最多20个字符）",
-      "url": "新的RPC URL"
+      "url": "新的 URL"
     },
     "inputPlaceholder": {
       "name": "输入网络名称",
@@ -599,25 +599,13 @@
     "title": "进行存款"
   },
   "sellTokensDepositSuccessModal": {
-    "amount": {
-      "label": "金额"
-    },
-    "details": {
-      "label": "交易详情"
-    },
-    "recipient": {
-      "copy": "复制接收方",
-      "label": "接收方"
-    },
+    "amountLabel": "金额",
+    "detailsLabel": "交易详情",
+    "recipientLabel": "接收方",
     "subtitle": "您的代币已成功发送！",
     "title": "进行存款",
-    "transaction": {
-      "label": "交易"
-    },
-    "transactionHash": {
-      "copy": "复制交易哈希",
-      "label": "交易哈希"
-    }
+    "transactionHashLabel": "交易哈希",
+    "transactionLabel": "交易"
   },
   "sendConfirmModal": {
     "amountLabel": "金额",

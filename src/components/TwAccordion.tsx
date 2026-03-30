@@ -6,6 +6,7 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import Animated, { measure, useAnimatedRef, useSharedValue, withTiming } from 'react-native-reanimated'
 import { scheduleOnUI } from 'react-native-worklets'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
@@ -34,7 +35,7 @@ const Root = forwardRef<View, TTwAccordionRootProps>(
   ({ value, onValueChange, defaultValue, className, disabled, ...props }, ref) => {
     const nativeID = useId()
 
-    const [internalValue, setInternalValue] = useState(defaultValue ?? false)
+    const [internalValue, setInternalValue] = useState(defaultValue || false)
 
     const isControlled = value !== undefined
 
@@ -91,11 +92,15 @@ const Trigger = forwardRef<View, TTwAccordionTriggerProps>(
       >
         {leftElement}
 
-        {typeof label === 'string' ? <Text className="font-sans-medium text-asphalt">{label}</Text> : label}
+        {ElementHelper.isTextContentValid(label) ? (
+          <Text className="font-sans-medium text-asphalt">{label}</Text>
+        ) : (
+          label
+        )}
 
         <MdChevronRight
           aria-hidden
-          className={StyleHelper.mergeStyles('ml-auto h-6 w-6 text-white', iconClassName)}
+          className={StyleHelper.mergeStyles('ml-auto size-6 text-white', iconClassName)}
           style={{ transform: [{ rotate: context.value ? '-90deg' : '90deg' }] }}
         />
       </TouchableOpacity>

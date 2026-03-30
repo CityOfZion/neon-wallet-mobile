@@ -3,6 +3,8 @@ import { Text, View } from 'react-native'
 import { TwButton } from '@/components/TwButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
+
 import { useModalErase } from '@/hooks/useModalErase'
 
 import { TwModalLayout } from '@/layouts/TwModalLayout'
@@ -31,7 +33,7 @@ export const ErrorModal = ({ route }: TRootStackScreenProps<'ErrorModal'>) => {
       <MdOutlineCancel className="mt-3.5 size-32 text-pink" aria-hidden />
 
       <View className="my-7 w-full flex-shrink flex-grow items-center">
-        {typeof content === 'string' ? (
+        {ElementHelper.isTextContentValid(content) ? (
           <Text className="text-center font-sans-medium text-2xl text-white">{content}</Text>
         ) : (
           content

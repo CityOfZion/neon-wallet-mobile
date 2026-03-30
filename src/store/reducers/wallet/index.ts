@@ -7,10 +7,10 @@ import { createMigrate, persistReducer } from 'redux-persist'
 import { getWalletsMigrations } from './migrations'
 import { walletSliceReducers } from './reducers'
 
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
-export interface IWalletReducer {
-  data: IWalletState[]
+export type TWalletReducer = {
+  data: TWallet[]
 }
 
 export let walletReducerActions: CaseReducerActions<typeof walletSliceReducers, string>
@@ -18,11 +18,11 @@ export let walletReducerActions: CaseReducerActions<typeof walletSliceReducers, 
 export function getWalletReducer() {
   const walletsMigrations = getWalletsMigrations()
 
-  const walletReducerInitialState = {
+  const walletReducerInitialState: TWalletReducer = {
     data: [],
-  } as IWalletReducer
+  }
 
-  const walletReducerConfig: PersistConfig<IWalletReducer> = {
+  const walletReducerConfig: PersistConfig<TWalletReducer> = {
     key: 'walletReducer',
     storage,
     timeout: 0,

@@ -10,11 +10,11 @@ import { Skeleton } from '@/components/Skeleton'
 
 import { VoteNeo3ConfirmationDetailsLabel } from './VoteNeo3ConfirmationDetailsLabel'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
   title: string
-  neo3Account: IAccountState
+  neo3Account: TAccount
   candidate: TVoteServiceCandidate
   neoAmount: number
   isLoading?: boolean
@@ -75,7 +75,7 @@ export const VoteNeo3ConfirmationSummary = ({ title, neo3Account, candidate, neo
               <Details.Item
                 label={<VoteNeo3ConfirmationDetailsLabel>{t('detailsVotesLabel')}</VoteNeo3ConfirmationDetailsLabel>}
               >
-                {`${neoAmount} ${BSNeo3Constants.NEO_TOKEN.symbol}`}
+                {neoAmount} {BSNeo3Constants.NEO_TOKEN.symbol}
               </Details.Item>
             </Details.Body>
           </Details.Root>

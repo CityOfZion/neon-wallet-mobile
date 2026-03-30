@@ -11,10 +11,10 @@ import TbEye from '@/assets/images/tb-eye.svg'
 
 import { VoteNeo3ConfirmationSummary } from './VoteNeo3ConfirmationSummary'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  neo3Account: IAccountState
+  neo3Account: TAccount
   candidate: TVoteServiceCandidate
   neoAmount: number
   onClose(): void

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -66,10 +66,12 @@ export const AccountSettingsScreen = ({ navigation, route }: TWalletsStackScreen
     <TwScreenLayout title={t('title')}>
       <TwMenuButton label={t('customize')} leftElement={<TbPencil aria-hidden />} onPress={handlePressCustomize} />
 
-      <TwSeparator />
-
       {account.type === 'standard' && (
-        <TwMenuButton label={t('exportKey')} leftElement={<TbUpload aria-hidden />} onPress={handlePressExportKey} />
+        <Fragment>
+          <TwSeparator />
+
+          <TwMenuButton label={t('exportKey')} leftElement={<TbUpload aria-hidden />} onPress={handlePressExportKey} />
+        </Fragment>
       )}
 
       <View className="mt-auto items-center">

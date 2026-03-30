@@ -402,15 +402,15 @@
   "languageSelectionModal": {
     "title": "Sprache"
   },
-  "nodeSelectionModal": {
+  "networkUrlSelectionModal": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Block Höhe:",
-    "description": "Falls Sie Leistungsprobleme haben, versuchen Sie, unten einen Custom Node auszuwählen",
+    "description": "Wenn Sie Leistungsprobleme haben, versuchen Sie unten ein benutzerdefiniertes Netzwerk auszuwählen",
     "latencyLabel": "{{latency}}ms",
-    "nodesListLabel": "Nodes",
+    "listLabel": "Netzwerk-URL-Liste",
     "refreshButtonLabel": "Aktualisieren",
     "selectAutomaticallyCheckboxLabel": "Automatisch auswählen",
-    "title": "Node Auswahl"
+    "title": "Netzwerk-URL-Auswahl"
   },
   "notificationContextModal": {
     "markAsReadButtonLabel": "Als gelesen markieren",
@@ -480,7 +480,7 @@
     "inputLabels": {
       "name": "Network Name",
       "nameDescription": "(Max. 20 Zeichen)",
-      "url": "Neue RPC URL"
+      "url": "Neue URL"
     },
     "inputPlaceholder": {
       "name": "Network Namen eingeben",
@@ -599,25 +599,13 @@
     "title": "Einzahlung vornehmen"
   },
   "sellTokensDepositSuccessModal": {
-    "amount": {
-      "label": "Betrag"
-    },
-    "details": {
-      "label": "Transaktionsdetails"
-    },
-    "recipient": {
-      "copy": "Empfänger kopieren",
-      "label": "Empfänger"
-    },
+    "amountLabel": "Betrag",
+    "detailsLabel": "Transaktionsdetails",
+    "recipientLabel": "Empfänger",
     "subtitle": "Ihre Tokens wurden erfolgreich gesendet!",
     "title": "Einzahlung vornehmen",
-    "transaction": {
-      "label": "Transaktion"
-    },
-    "transactionHash": {
-      "copy": "Transaktions-Hash kopieren",
-      "label": "Transaktions-Hash"
-    }
+    "transactionHashLabel": "Transaktions-Hash",
+    "transactionLabel": "Transaktion"
   },
   "sendConfirmModal": {
     "amountLabel": "Betrag",

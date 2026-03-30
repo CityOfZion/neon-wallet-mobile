@@ -1,11 +1,11 @@
-import type { TBSToken } from '@cityofzion/blockchain-service'
+import type { TTransaction } from '@cityofzion/blockchain-service'
 import type { NavigationProp } from '@react-navigation/native'
 import type { Event } from '@sentry/react-native'
 import type { CoreTypes } from '@walletconnect/types'
 
 import type { TBlockchainServiceKey } from './blockchain'
 import type { Optional } from './global'
-import type { IAccountState, TCurrency, TLanguage, TUseTransactionsTransaction } from './store'
+import type { TAccount, TCurrency, TLanguage } from './store'
 import type { TToasterToastOptions } from './toaster'
 
 export type TWalletConnectRedirectParams = {
@@ -29,7 +29,7 @@ export type TClickupHelperCreateSupportTicketParams = {
 
 export type TBuyAndSellTokensHelperBuildIframeParams = {
   currency: TCurrency
-  account?: IAccountState
+  account?: TAccount
   baseUrl: string
   id: string
 }
@@ -94,8 +94,8 @@ export type TSentryHelperOptions = TLoggerHelperOptions & {
 }
 
 export type TTransactionHelperBuildPendingTransactionParams = {
-  txId: string
-  fromAccount: IAccountState
-  type?: Exclude<TUseTransactionsTransaction['type'], 'bridgeNeo3NeoX'>
-  events?: { toAccount?: IAccountState; toAddress: string; token: TBSToken; amount: string }[]
+  transaction: TTransaction<TBlockchainServiceKey>
+  account: TAccount
+  senderAccount?: TAccount
+  receiverAccounts?: (TAccount | undefined)[]
 }

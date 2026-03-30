@@ -29,13 +29,13 @@ const renderItem: ListRenderItem<TNote> = ({ item }) => {
       <View className="relative top-1 flex h-fit flex-row">
         <TwSeparator variant="vert" withoutContainer className="mx-2.5" />
 
-        <View className="absolute h-5 w-5 rounded-full bg-neon" />
+        <View className="absolute size-5 rounded-full bg-neon" />
       </View>
 
       <View className="flex-1">
         <Text className="font-sans-bold text-lg text-white">{item.date}</Text>
 
-        <View className="mt-2 gap-2">
+        <View className="mt-2 gap-1">
           {item.changes.map((change, index) => (
             <Text key={`${index}-${change}`} className="font-sans-regular text-gray-400">
               - {change}

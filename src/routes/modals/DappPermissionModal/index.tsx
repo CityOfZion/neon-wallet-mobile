@@ -27,13 +27,13 @@ import { DappPermissionSuccessContent } from './DappPermissionSuccessContent'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export type TDappPermissionProps = {
   request: PendingRequestTypes.Struct
   session: SessionTypes.Struct
   sessionDetails: TWalletKitHelperSessionDetails<TBlockchainServiceKey>
-  sessionAccount: IAccountState
+  sessionAccount: TAccount
   onAccept: () => void
   onReject: (reason?: ErrorResponse, toastMessage?: string) => void
   isAccepting: boolean
@@ -108,7 +108,7 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
   const [isRejecting, startReject] = usePressOnce(async (reason?: ErrorResponse, toastMessage?: string) => {
     await onReject(reason)
     handleErase()
-    ToastHelper.error({ message: toastMessage ?? t('errors.cancelled'), id: 'dapp-permission-cancel' })
+    ToastHelper.error({ message: toastMessage || t('errors.cancelled'), id: 'dapp-permission-cancel' })
   })
 
   useEffect(() => {
@@ -126,7 +126,7 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [request.id, t])
 
-  const Content = CUSTOM_CONTENT_BY_REQUEST[blockchain]?.[request.params.request.method] ?? DappPermissionGenericContent
+  const Content = CUSTOM_CONTENT_BY_REQUEST[blockchain]?.[request.params.request.method] || DappPermissionGenericContent
 
   return (
     <TwModalLayout

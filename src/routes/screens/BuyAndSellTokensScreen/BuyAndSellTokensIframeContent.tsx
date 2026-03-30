@@ -21,12 +21,12 @@ import TbArrowLeft from '@/assets/images/tb-arrow-left.svg'
 
 import type { TDepositActionsData } from './index'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
   baseUrl: string
   hidden: boolean
-  account?: IAccountState
+  account?: TAccount
   setDepositActionsData?: Dispatch<TDepositActionsData | null>
 }
 

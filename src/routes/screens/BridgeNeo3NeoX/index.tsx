@@ -30,7 +30,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
-import { useAccountMapSelector } from '@/hooks/useAccountSelector'
+import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useLazyBalance } from '@/hooks/useBalances'
@@ -51,13 +51,13 @@ import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TActionsData = {
   availableTokensToUse: TBridgeValue<TBridgeToken<TBlockchainServiceKey>[]>
   tokenToUse: TBridgeValue<TBridgeToken<TBlockchainServiceKey>>
   tokenToUseBalance: TBridgeValue<TBalanceResponse | undefined>
-  accountToUse: TBridgeValue<IAccountState>
+  accountToUse: TBridgeValue<TAccount>
   amountToUse: TBridgeValidateValue<string>
   amountToUseMin: TBridgeValue<string>
   amountToUseMax: TBridgeValue<string>
@@ -79,7 +79,7 @@ export const BridgeNeo3NeoXScreen = ({
 }: TWalletsStackScreenProps<'BridgeNeo3NeoXScreen'>) => {
   const { t } = useTranslation('screens', { keyPrefix: 'bridgeNeo3NeoXScreen' })
   const { t: tCommonErrors } = useTranslation('common', { keyPrefix: 'errors' })
-  const { accountsMapRef } = useAccountMapSelector()
+  const { accountsMapRef } = useAccountsMapSelector()
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { getBalance } = useLazyBalance()
   const { authenticate } = useAuthentication()
@@ -164,6 +164,7 @@ export const BridgeNeo3NeoXScreen = ({
 
   const neo3Service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName
     .neo3 as BSNeo3<TBlockchainServiceKey>
+
   const neoXService = BlockchainServiceHelper.bsAggregator.blockchainServicesByName
     .neox as BSNeoX<TBlockchainServiceKey>
 
@@ -175,7 +176,7 @@ export const BridgeNeo3NeoXScreen = ({
     await bridgeOrchestratorRef.current.switchTokens()
   }
 
-  const handleSetAccountToUse = async (account: IAccountState) => {
+  const handleSetAccountToUse = async (account: TAccount) => {
     try {
       const key = await SecureStoreHelper.getKey(account)
       if (!key) throw new AppError(tCommonErrors('noKey'))
@@ -223,10 +224,10 @@ export const BridgeNeo3NeoXScreen = ({
   const handleSelectTokenToUse = () => {
     navigation.navigate('TokenSelectionModal', {
       title: t('form.tokenToUseModalTitle'),
-      account: actionData.accountToUse.value ?? undefined,
+      account: actionData.accountToUse.value || undefined,
       blockchain: actionData.accountToUse.value?.blockchain,
-      selectedToken: actionData.tokenToUse.value ?? undefined,
-      tokens: actionData.availableTokensToUse.value ?? [],
+      selectedToken: actionData.tokenToUse.value || undefined,
+      tokens: actionData.availableTokensToUse.value || [],
       onSelect: (token: TBridgeToken<TBlockchainServiceKey>) => {
         bridgeOrchestratorRef.current.setTokenToUse(token)
       },
@@ -258,7 +259,7 @@ export const BridgeNeo3NeoXScreen = ({
 
     neo3NeoXBridgeOrchestrator.eventEmitter.on('accountToUse', accountToUse => {
       const value = accountToUse.value
-        ? (accountsMapRef.current.get(AccountHelper.buildAccountKey(accountToUse.value)) ?? null)
+        ? accountsMapRef.current.get(AccountHelper.buildAccountKey(accountToUse.value)) || null
         : null
 
       setData({ accountToUse: { ...accountToUse, value } })
@@ -291,9 +292,9 @@ export const BridgeNeo3NeoXScreen = ({
     const accountToUse = actionData.accountToUse.value!
     const tokenToUse = actionData.tokenToUse.value!
     const tokenToReceive = actionData.tokenToReceive.value!
-    const addressToReceive = actionData.addressToReceive.value ?? ''
-    const amountToUse = actionData.amountToUse.value ?? ''
-    const amountToReceive = actionData.amountToReceive.value ?? ''
+    const addressToReceive = actionData.addressToReceive.value || ''
+    const amountToUse = actionData.amountToUse.value || ''
+    const amountToReceive = actionData.amountToReceive.value || ''
 
     navigation.navigate('BridgeNeo3NeoXConfirmationModal', {
       tokenToUse,
@@ -302,7 +303,7 @@ export const BridgeNeo3NeoXScreen = ({
       addressToReceive,
       amountToUse,
       amountToReceive,
-      bridgeFee: actionData.bridgeFee.value ?? '',
+      bridgeFee: actionData.bridgeFee.value || '',
       fromService: bridgeOrchestratorRef.current.fromService,
       onSubmit: async modalNavigation => {
         try {
@@ -402,7 +403,7 @@ export const BridgeNeo3NeoXScreen = ({
         <ActionStep
           title={t('form.tokenToUseLabel')}
           error={!!actionData.tokenToUse.error}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <ActionTokenButton
             label={t('form.selectPlaceholder')}
@@ -423,7 +424,7 @@ export const BridgeNeo3NeoXScreen = ({
             <TwIconButton
               aria-label={t('form.switchTokensButtonLabel')}
               size="md"
-              className="h-8 w-8 rounded-full bg-neon"
+              className="size-8 rounded-full bg-neon"
               icon={<TbArrowsSort aria-hidden className="h-5 max-h-5 min-h-5 w-5 min-w-5 max-w-5 text-black" />}
               onPress={handleSwitchTokens}
             />
@@ -433,7 +434,7 @@ export const BridgeNeo3NeoXScreen = ({
         <ActionStep
           title={t('form.tokenToReceiveLabel')}
           error={!!actionData.tokenToReceive.error}
-          leftElement={<TbLock aria-hidden className="h-5 w-5" />}
+          leftElement={<TbLock aria-hidden className="size-5" />}
         >
           <ActionTokenButton
             label={t('form.selectPlaceholder')}
@@ -462,7 +463,7 @@ export const BridgeNeo3NeoXScreen = ({
 
         <ActionStep
           title={t('form.accountToUseLabel')}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
           error={hasAccountToUseError}
         >
           <ActionAddressButton
@@ -490,7 +491,7 @@ export const BridgeNeo3NeoXScreen = ({
         <ActionStep
           title={t('form.addressToReceiveLabel')}
           error={hasAddressToReceiveError}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <ActionAddressButton
             label={t('form.selectPlaceholder')}
@@ -533,7 +534,7 @@ export const BridgeNeo3NeoXScreen = ({
           descriptionClassName="text-xs mt-1 text-gray-100"
           className="-mt-5"
           error={hasAmountToUseError}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <ActionInput
             aria-label={t('form.amountToUseLabel')}
@@ -541,7 +542,7 @@ export const BridgeNeo3NeoXScreen = ({
             keyboardType="decimal-pad"
             className="text-md w-24"
             containerClassName="mt-6"
-            value={actionData.amountToUse.value ?? ''}
+            value={actionData.amountToUse.value || ''}
             disabled={isAmountsDisabled}
             editable={!isAmountsDisabled}
             error={hasAmountToUseError}
@@ -558,7 +559,7 @@ export const BridgeNeo3NeoXScreen = ({
         <View className="mb-4 flex flex-row justify-between gap-x-2 pl-9 pr-4">
           <Text className="font-sans-italic text-xs text-gray-100">{t('form.balanceLabel')}</Text>
           <Text className="font-sans-italic text-xs text-gray-100">
-            {actionData.tokenToUseBalance.value?.amount ?? t('form.balancePlaceholder')}
+            {actionData.tokenToUseBalance.value?.amount || t('form.balancePlaceholder')}
           </Text>
         </View>
 
@@ -570,10 +571,10 @@ export const BridgeNeo3NeoXScreen = ({
           descriptionClassName="text-xs mt-1 text-gray-100"
           className="mb-4"
           error={!!actionData.amountToReceive.error}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <Text className="font-sans-medium text-lg text-white">
-            {actionData.amountToReceive.value ?? t('form.amountToReceivePlaceholder')}
+            {actionData.amountToReceive.value || t('form.amountToReceivePlaceholder')}
           </Text>
         </ActionStep>
       </ActionCard>
@@ -582,7 +583,7 @@ export const BridgeNeo3NeoXScreen = ({
         <ActionFeeStep
           title={t('form.bridgeFeeLabel')}
           feePlaceholder={t('form.bridgeFeePlaceholder')}
-          fee={actionData.bridgeFee.value ?? undefined}
+          fee={actionData.bridgeFee.value || undefined}
           isCalculatingFee={actionData.bridgeFee.loading}
           service={bridgeOrchestratorRef.current.fromService}
         />

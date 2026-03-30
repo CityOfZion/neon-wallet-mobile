@@ -3,6 +3,7 @@ import { cloneElement } from 'react'
 import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
@@ -50,15 +51,13 @@ export const StepMenuButton = ({
             {label}
           </Text>
 
-          {value ? (
-            typeof value === 'string' ? (
-              <Text className="font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
-                {value}
-              </Text>
-            ) : (
-              value
-            )
-          ) : null}
+          {ElementHelper.isTextContentValid(value) ? (
+            <Text className="font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
+              {value}
+            </Text>
+          ) : (
+            value
+          )}
         </View>
       }
       className={StyleHelper.mergeStyles('h-auto', className)}
@@ -67,7 +66,7 @@ export const StepMenuButton = ({
           <View className="mt-1 h-full">
             {cloneElement(leftElement, {
               className: StyleHelper.mergeStyles(
-                'h-6 w-6 text-white',
+                'size-6 text-white',
                 { 'text-blue': !!value && !isDisabled },
                 leftElement.props.className
               ),
@@ -78,7 +77,7 @@ export const StepMenuButton = ({
       rightElement={
         <MdChevronRight
           aria-hidden
-          className={StyleHelper.mergeStyles('h-6 w-6 text-white', { 'text-neon': !!value && !isDisabled })}
+          className={StyleHelper.mergeStyles('size-6 text-white', { 'text-neon': !!value && !isDisabled })}
         />
       }
       disabled={isDisabled}

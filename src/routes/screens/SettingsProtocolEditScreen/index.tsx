@@ -45,7 +45,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
       labelProps={{ className: 'capitalize' }}
       subtitle={item.isDefault ? t('screens:settingsProtocolEditScreen.default') : undefined}
       subtitleClassName="flex-grow"
-      rightElement={isSelected ? <TbCheck aria-hidden className="h-6 w-6 text-neon" /> : undefined}
+      rightElement={isSelected ? <TbCheck aria-hidden className="size-6 text-neon" /> : undefined}
       onPress={item.onPress}
     />
   )
@@ -62,7 +62,6 @@ export const SettingsProtocolEditScreen = ({
   const { customNetworks } = useCustomNetworksSelector(blockchain)
 
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
-
   const isSelectedNetworkCustom = selectedNetwork.type === 'custom'
 
   const handlePress = async (network: TNetwork) => {
@@ -80,6 +79,7 @@ export const SettingsProtocolEditScreen = ({
     const accountSessions = BSWalletKitHelper.filterSessions(Object.values(sessions), {
       chains: [service.walletConnectService.chain],
     })
+
     await Promise.allSettled(
       accountSessions.map(session =>
         WalletKitHelper.kit.disconnectSession({
@@ -103,10 +103,8 @@ export const SettingsProtocolEditScreen = ({
     })
   }
 
-  const handleSelectNode = async () => {
-    navigation.navigate('NodeSelectionModal', {
-      blockchain,
-    })
+  const handleSelectNetworkUrl = async () => {
+    navigation.navigate('NetworkUrlSelectionModal', { blockchain })
   }
 
   const data = service.availableNetworks
@@ -117,10 +115,12 @@ export const SettingsProtocolEditScreen = ({
         network,
         selectedNetwork,
         onPress: handlePress.bind(null, network),
-        isDefault: network.id === service.defaultNetwork.id,
+        isDefault:
+          network.id === service.defaultNetwork.id ||
+          (service.availableNetworks.length <= 1 && !service.isCustomNetworkSupported),
       }
     })
-    .sort(item => (service.defaultNetwork.id === item.network.id ? -1 : 1))
+    .sort(item => (item.isDefault ? -1 : 1))
 
   return (
     <TwScreenLayout title={t(`common:blockchainServices.${blockchain}.label`)} withoutScroll>
@@ -129,11 +129,11 @@ export const SettingsProtocolEditScreen = ({
       <TwSeparator />
 
       <TwMenuButton
-        label={t('screens:settingsProtocolEditScreen.selectNodeButtonLabel')}
+        label={t('screens:settingsProtocolEditScreen.selectNetworkUrlButtonLabel')}
         description={selectedNetwork.url}
+        disabled={service.networkUrls.length <= 1}
         leftElement={<TbCube3dSphere aria-hidden />}
-        onPress={handleSelectNode}
-        disabled={service.rpcNetworkUrls.length <= 0}
+        onPress={handleSelectNetworkUrl}
       />
 
       {service.isCustomNetworkSupported && (

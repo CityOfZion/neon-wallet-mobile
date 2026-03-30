@@ -22,7 +22,7 @@ import { TwModalLayout } from '@/layouts/TwModalLayout'
 import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState, IWalletState } from '@/types/store'
+import type { TAccount, TWallet } from '@/types/store'
 
 type TActionData = {
   uri: string
@@ -93,7 +93,7 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
 
     const blockchains = services.map(service => service.name)
 
-    const handleSelectAccount = async (account: IAccountState) => {
+    const handleSelectAccount = async (account: TAccount) => {
       navigation.navigate('DappConnectionRequestModal', {
         account,
         proposal,
@@ -123,7 +123,7 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
       description: t('walletSelection.description'),
       onRequestClose: handleClose,
       blockchains,
-      onSelect: (wallet: IWalletState) => {
+      onSelect: (wallet: TWallet) => {
         navigation.navigate('AccountStackListSelectionModal', {
           wallet,
           title: t('accountSelection.title'),

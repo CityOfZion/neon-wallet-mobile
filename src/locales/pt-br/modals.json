@@ -402,15 +402,15 @@
   "languageSelectionModal": {
     "title": "Idioma"
   },
-  "nodeSelectionModal": {
+  "networkUrlSelectionModal": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Altura do bloco:",
-    "description": "Se você está tendo problemas de desempenho, tente selecionar um nó customizado abaixo",
+    "description": "Se você estiver enfrentando problemas de desempenho, tente selecionar uma rede personalizada abaixo",
     "latencyLabel": "{{latency}}ms",
-    "nodesListLabel": "Nós",
+    "listLabel": "Lista de URLs de rede",
     "refreshButtonLabel": "Atualizar",
     "selectAutomaticallyCheckboxLabel": "Selecionar automaticamente",
-    "title": "Seleção de nó"
+    "title": "Seleção de URL de rede"
   },
   "notificationContextModal": {
     "markAsReadButtonLabel": "Marcar como lido",
@@ -480,7 +480,7 @@
     "inputLabels": {
       "name": "Nome da Rede",
       "nameDescription": "(Máximo 20 Caracteres)",
-      "url": "Nova URL RPC"
+      "url": "Nova URL"
     },
     "inputPlaceholder": {
       "name": "Digite o Nome da Rede",
@@ -599,25 +599,13 @@
     "title": "Fazer um depósito"
   },
   "sellTokensDepositSuccessModal": {
-    "amount": {
-      "label": "Quantidade"
-    },
-    "details": {
-      "label": "Detalhes da transação"
-    },
-    "recipient": {
-      "copy": "Copiar destinatário",
-      "label": "Destinatário"
-    },
+    "amountLabel": "Quantidade",
+    "detailsLabel": "Detalhes da transação",
+    "recipientLabel": "Destinatário",
     "subtitle": "Seus tokens foram enviados com sucesso!",
     "title": "Fazer um depósito",
-    "transaction": {
-      "label": "Transação"
-    },
-    "transactionHash": {
-      "copy": "Copiar hash da transação",
-      "label": "Hash da transação"
-    }
+    "transactionHashLabel": "Hash da transação",
+    "transactionLabel": "Transação"
   },
   "sendConfirmModal": {
     "amountLabel": "Valor",

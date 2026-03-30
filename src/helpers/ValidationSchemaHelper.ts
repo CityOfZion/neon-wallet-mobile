@@ -21,12 +21,13 @@ const accountSchema = zod.object({
   blockchain: zod.union([
     zod.literal('neo3'),
     zod.literal('neoLegacy'),
-    zod.literal('ethereum'),
     zod.literal('neox'),
+    zod.literal('bitcoin'),
+    zod.literal('solana'),
+    zod.literal('ethereum'),
     zod.literal('polygon'),
     zod.literal('base'),
     zod.literal('arbitrum'),
-    zod.literal('solana'),
   ]),
   order: zod.number(),
   skin: zod.union([

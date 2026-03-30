@@ -21,10 +21,10 @@ import { TwTokenIcon } from './TwTokenIcon'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TToken, TTokenBalance, TUseBalanceOptionShowType } from '@/types/query'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type Props = {
-  accounts: IAccountState[]
+  accounts: TAccount[]
   showType?: TUseBalanceOptionShowType
   onItemPress?: (token: TTokenBalance) => void
   onItemLongPress?: (token: TTokenBalance) => void

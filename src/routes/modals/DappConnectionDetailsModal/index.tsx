@@ -16,10 +16,9 @@ import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 
-import { useAccountMapSelector } from '@/hooks/useAccountSelector'
+import { useAccountsWithWalletMapSelector } from '@/hooks/useAccountSelector'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
-import { useWalletsMapSelector } from '@/hooks/useWalletSelector'
 
 import { TwModalLayout } from '@/layouts/TwModalLayout'
 import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
@@ -34,8 +33,7 @@ export const DappConnectionDetailsModal = ({
 
   const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionDetailsModal' })
   const { t: commonT } = useTranslation('common')
-  const { accountsMapRef } = useAccountMapSelector()
-  const { walletsMapRef } = useWalletsMapSelector()
+  const { accountsWithWalletMapRef } = useAccountsWithWalletMapSelector()
   const { language } = useLanguageSelector()
 
   const [isDisconnecting, startDisconnect] = usePressOnce(async () => {
@@ -44,6 +42,7 @@ export const DappConnectionDetailsModal = ({
       .catch(error =>
         LoggerHelper.error(error, { where: 'DappConnectionDetailsModal', operation: 'disconnectSession' })
       )
+
     navigation.goBack()
   })
 
@@ -51,8 +50,9 @@ export const DappConnectionDetailsModal = ({
     session,
     services: BlockchainServiceHelper.bsAggregator.blockchainServices,
   })
-  const account = accountsMapRef.current.get(AccountHelper.buildAccountKey(sessionDetails))
-  const wallet = walletsMapRef.current.get(account?.idWallet || '')
+
+  const account = accountsWithWalletMapRef.current.get(AccountHelper.buildAccountKey(sessionDetails))
+  const wallet = account?.wallet
 
   return (
     <TwModalLayout

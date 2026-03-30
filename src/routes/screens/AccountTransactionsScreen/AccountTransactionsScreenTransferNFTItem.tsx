@@ -8,15 +8,16 @@ import { Skeleton } from '@/components/Skeleton'
 
 import { useNftQuery } from '@/hooks/useNftsQuery'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
   event: TTransactionNftEvent
 }
 
 export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TProps) => {
-  const { data, isLoading } = useNftQuery(account.blockchain, event.tokenHash, event.collectionHash)
+  const hash = event.nft?.hash
+  const { data, isLoading } = useNftQuery(account.blockchain, hash, event.nft?.collection?.hash)
 
   return (
     <Skeleton.Root loading={isLoading} className="mt-4 items-start gap-2.5">
@@ -27,7 +28,7 @@ export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TPr
 
       <Skeleton.Content className="flex-row gap-2.5">
         {data?.image && (
-          <Image contentFit="contain" className="h-7 w-7 rounded bg-gray-800" source={{ uri: data.image }} />
+          <Image contentFit="contain" className="size-7 rounded bg-gray-800" source={{ uri: data.image }} />
         )}
 
         <View>
@@ -41,7 +42,7 @@ export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TPr
             )}
 
             <Text className="max-w-36 font-sans-regular text-xs text-gray-100" numberOfLines={1}>
-              #{event.tokenHash}
+              #{hash}
             </Text>
           </View>
         </View>

@@ -17,10 +17,10 @@ import TbAlertTriangleFilled from '@/assets/images/tb-filled-alert-triangle.svg'
 import { WalletsScreenNotificationButton } from './WalletsScreenNotificationButton'
 
 import { walletReducerActions } from '@/store/reducers/wallet'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 type Props = {
-  selectedWallet?: IWalletState
+  selectedWallet?: TWallet
 }
 
 export const WalletsScreenHeader = ({ selectedWallet }: Props) => {
@@ -57,7 +57,7 @@ export const WalletsScreenHeader = ({ selectedWallet }: Props) => {
               className="h-9"
               variant="text-slim"
               label={t('walletBackupButtonLabel')}
-              leftElement={<TbAlertTriangleFilled aria-hidden className="h-5 w-5" />}
+              leftElement={<TbAlertTriangleFilled aria-hidden className="size-5" />}
               onPress={handlePressWarning}
               labelProps={{
                 className: 'text-xs font-sans-bold uppercase',
@@ -65,7 +65,7 @@ export const WalletsScreenHeader = ({ selectedWallet }: Props) => {
             />
           ) : (
             selectedWallet?.backupStatus === 'unsuccessful_with_knowledge' && (
-              <TbAlertTriangleFilled aria-hidden className="h-5 w-5 text-neon" />
+              <TbAlertTriangleFilled aria-hidden className="size-5 text-neon" />
             )
           )}
         </View>

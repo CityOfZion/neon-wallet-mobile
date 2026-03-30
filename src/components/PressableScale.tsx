@@ -34,7 +34,7 @@ type TProps = PressableProps & {
 
 export const PressableScale = ({ onLongPress, onPress, disabled, style, opacity, ...props }: TProps) => {
   const scaleSharedValue = useSharedValue(1)
-  const opacitySharedValue = useSharedValue(opacity ?? 1)
+  const opacitySharedValue = useSharedValue(opacity || 1)
 
   const animatedStyle = useAnimatedStyle(
     () => ({

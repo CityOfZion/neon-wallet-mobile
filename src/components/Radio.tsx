@@ -1,7 +1,9 @@
-import * as React from 'react'
+import React from 'react'
 
+import type { JSX } from 'react'
 import { type GestureResponderEvent, Pressable, type PressableProps, Text, View, type ViewProps } from 'react-native'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdRadioButtonChecked from '@/assets/images/md-radio-button-checked.svg'
@@ -52,7 +54,7 @@ const Root = React.forwardRef<View, TRootProps>(
         {...viewProps}
       >
         <View className="w-full gap-y-5">
-          {typeof label === 'string' ? (
+          {ElementHelper.isTextContentValid(label) ? (
             <Text className="font-sans-semibold text-sm uppercase text-gray-100">{label}</Text>
           ) : (
             label
@@ -77,7 +79,7 @@ const Item = React.forwardRef<View, TItemProps>(
     }
 
     const isChecked = typeof context.value === 'object' ? context.value.id === value.id : context.value === value
-    const isDisabled = (context.disabled || disabledProp) ?? false
+    const isDisabled = context.disabled || disabledProp || false
 
     function handlePress(event: GestureResponderEvent) {
       if (isDisabled) return
@@ -104,7 +106,7 @@ const Item = React.forwardRef<View, TItemProps>(
 
         {label && (
           <React.Fragment>
-            {typeof label === 'string' ? (
+            {ElementHelper.isTextContentValid(label) ? (
               <Text
                 nativeID={id}
                 numberOfLines={1}
@@ -112,16 +114,18 @@ const Item = React.forwardRef<View, TItemProps>(
               >
                 {label}
               </Text>
+            ) : label ? (
+              React.cloneElement(label as JSX.Element, { nativeID: id })
             ) : (
-              React.cloneElement(label, { nativeID: id })
+              label
             )}
           </React.Fragment>
         )}
 
         {isChecked ? (
-          <MdRadioButtonChecked aria-hidden role="presentation" className="h-6 w-6 text-neon" />
+          <MdRadioButtonChecked aria-hidden role="presentation" className="size-6 text-neon" />
         ) : (
-          <MdRadioButtonUnchecked aria-hidden role="presentation" className="h-6 w-6 text-gray-300" />
+          <MdRadioButtonUnchecked aria-hidden role="presentation" className="size-6 text-gray-300" />
         )}
       </Pressable>
     )

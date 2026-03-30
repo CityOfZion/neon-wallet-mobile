@@ -12,10 +12,10 @@ import { LinkHelper } from '@/helpers/LinkHelper'
 import MdLaunch from '@/assets/images/md-launch.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
   formattedDateTo: string
   formattedDateFrom: string
 }

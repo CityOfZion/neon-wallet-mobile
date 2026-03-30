@@ -27,9 +27,9 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const ImportAddressSelectionModal = ({ route }: TRootStackScreenProps<'ImportAddressSelectionModal'>) => {
   const { address, onConfirm } = route.params
 
-  const { accountsRef } = useAccountsSelector()
   const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelectionModal' })
   const { t: tCommon } = useTranslation('common')
+  const { accountsRef } = useAccountsSelector()
 
   const { createWallet } = useCreateWallet()
   const { importAccounts } = useImportAccounts()
@@ -72,9 +72,11 @@ export const ImportAddressSelectionModal = ({ route }: TRootStackScreenProps<'Im
   const { isMounting } = useMount(
     async () => {
       const generatedAccounts: TAccountSelectionAccordionAccount[] = []
+      const services = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName)
 
-      Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName).forEach(service => {
+      services.forEach(service => {
         if (!service.validateAddress(address)) return
+
         generatedAccounts.push({ address, blockchain: service.name })
       })
 

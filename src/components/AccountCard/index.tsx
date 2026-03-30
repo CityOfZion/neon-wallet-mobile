@@ -100,7 +100,7 @@ const AccountCardComponent = ({
 
       <View className="h-full w-full px-3.5 py-6">
         <View className="flex-row items-center gap-5">
-          <TwBlockchainIcon className="h-6 w-6" blockchain={account.blockchain} type="white" />
+          <TwBlockchainIcon className="size-6" blockchain={account.blockchain} type="white" />
 
           <Text
             className={StyleHelper.mergeStyles('flex-shrink flex-grow font-sans-semibold text-2xl text-white', {
@@ -108,7 +108,7 @@ const AccountCardComponent = ({
             })}
             numberOfLines={1}
           >
-            {account.name ?? t('accountPlaceholder')}
+            {account.name || t('accountPlaceholder')}
           </Text>
 
           {isCompacted || isStack ? (
@@ -132,7 +132,7 @@ const AccountCardComponent = ({
               {!hideQRCode && (
                 <TwIconButton
                   className="p-0"
-                  icon={<TbQrcode aria-hidden className="h-7 w-7 text-white" />}
+                  icon={<TbQrcode aria-hidden className="size-7 text-white" />}
                   onPress={handlePressQRCode}
                 />
               )}
@@ -175,7 +175,7 @@ const AccountCardComponent = ({
               'mt-auto': isCompacted,
             })}
           >
-            {account.type === 'watch' && <TbBinocularsFilled className="h-8 w-8 text-white" />}
+            {account.type === 'watch' && <TbBinocularsFilled className="size-8 text-white" />}
 
             <View className="flex-shrink flex-grow gap-0.5">
               {!isCompacted && !isStack && (
