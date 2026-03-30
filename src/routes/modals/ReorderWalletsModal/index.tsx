@@ -15,9 +15,9 @@ import TbGripVertical from '@/assets/images/tb-grip-vertical.svg'
 
 import { walletReducerActions } from '@/store/reducers/wallet'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
-const renderItem: SortableGridRenderItem<IWalletState> = ({ item }) => {
+const renderItem: SortableGridRenderItem<TWallet> = ({ item }) => {
   return (
     <View className="flex-row items-center justify-between rounded-md bg-gray-300/15 px-5 py-5">
       <Text className="font-sans-medium text-lg capitalize text-white">{item.name}</Text>
@@ -32,7 +32,7 @@ export const ReorderWalletsModal = ({ navigation }: TRootStackScreenProps<'Reord
   const { t } = useTranslation('modals', { keyPrefix: 'reorderWalletsModal' })
   const { t: commonT } = useTranslation('common')
 
-  const [reorderedWallets, setReorderedWallets] = useState<IWalletState[]>(wallets)
+  const [reorderedWallets, setReorderedWallets] = useState<TWallet[]>(wallets)
 
   const scrollViewRef = useAnimatedRef<Animated.ScrollView>()
 

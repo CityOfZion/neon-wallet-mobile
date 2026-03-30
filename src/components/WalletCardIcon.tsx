@@ -8,10 +8,10 @@ import { SkinHelper } from '@/helpers/SkinHelper'
 
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
 
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 type Props = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export const WalletCardIcon = ({ wallet }: Props) => {

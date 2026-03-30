@@ -42,8 +42,8 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
   const { t: commonT } = useTranslation('common')
 
   const { actionData, actionState, setData, setError, handleAct } = useActions<TActionData>({
-    addresses: contact?.addresses ?? addresses ?? [],
-    name: contact?.name ?? '',
+    addresses: contact?.addresses || addresses || [],
+    name: contact?.name || '',
   })
 
   const handleAddAddress = () => {
@@ -154,7 +154,7 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
                 className="flex-row items-center gap-3 py-3"
                 onPress={() => handleEditAddress(index, address)}
               >
-                <TwBlockchainIcon blockchain={address.blockchain} className="h-5 w-5" />
+                <TwBlockchainIcon blockchain={address.blockchain} className="size-5" />
 
                 <Text className="flex-1 font-sans-regular text-lg text-neon" numberOfLines={1} ellipsizeMode="middle">
                   {address.address}

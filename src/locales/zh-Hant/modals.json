@@ -402,15 +402,15 @@
   "languageSelectionModal": {
     "title": "語言"
   },
-  "nodeSelectionModal": {
+  "networkUrlSelectionModal": {
     "antiMevLabel": "反MEV",
     "blockHeightLabel": "區塊高度：",
-    "description": "如果您遇到效能問題，請嘗試在下方選擇自訂節點",
+    "description": "如果您遇到效能問題，請嘗試在下方選擇自訂網路",
     "latencyLabel": "{{latency}}毫秒",
-    "nodesListLabel": "節點",
+    "listLabel": "網路 URL 清單",
     "refreshButtonLabel": "重新整理",
     "selectAutomaticallyCheckboxLabel": "自動選擇",
-    "title": "節點選擇"
+    "title": "網路 URL 選擇"
   },
   "notificationContextModal": {
     "markAsReadButtonLabel": "標記為已讀",
@@ -480,7 +480,7 @@
     "inputLabels": {
       "name": "網路名稱",
       "nameDescription": "（最多 20 個字）",
-      "url": "新的 RPC URL"
+      "url": "新的 URL"
     },
     "inputPlaceholder": {
       "name": "輸入網路名稱",
@@ -599,25 +599,13 @@
     "title": "存款"
   },
   "sellTokensDepositSuccessModal": {
-    "amount": {
-      "label": "金額"
-    },
-    "details": {
-      "label": "交易詳情"
-    },
-    "recipient": {
-      "copy": "複製收件人",
-      "label": "收件人"
-    },
+    "amountLabel": "金額",
+    "detailsLabel": "交易詳情",
+    "recipientLabel": "收件人",
     "subtitle": "您的代幣已成功發送！",
     "title": "存款",
-    "transaction": {
-      "label": "交易"
-    },
-    "transactionHash": {
-      "copy": "複製交易雜湊值",
-      "label": "交易雜湊值"
-    }
+    "transactionHashLabel": "交易雜湊值",
+    "transactionLabel": "交易"
   },
   "sendConfirmModal": {
     "amountLabel": "金額",

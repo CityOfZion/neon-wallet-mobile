@@ -100,7 +100,7 @@ const fixBalanceResult = (
 ): TBalance => {
   const tokensBalancesMapClone = cloneDeep(result.tokensBalancesMap)
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[result.blockchain]
-  const mandatorySymbols = TokenHelper.mandatorySymbolsMap.get(result.blockchain) ?? []
+  const mandatorySymbols = TokenHelper.mandatorySymbolsMap.get(result.blockchain) || []
 
   mandatorySymbols.forEach(symbol => {
     const token = TokenHelper.getTokenBySymbol(symbol, result.blockchain)
@@ -155,7 +155,7 @@ export function useBalances(params: TUseBalancesParams[], options?: TUseBalances
   const { isLoading: isCurrencyRatioLoading, data: currencyRatio } = useCurrencyRatio()
   const { hiddenTokensByBlockchain } = useHiddenTokensByBlockchainSelector()
 
-  const { showType = 'active', queryOptions } = options ?? {}
+  const { showType = 'active', queryOptions } = options || {}
 
   return useQueries({
     queries: params.map(param => {
@@ -180,7 +180,7 @@ export function useBalances(params: TUseBalancesParams[], options?: TUseBalances
           data.push(fixBalanceResult(result.data, showType, hiddenTokensByBlockchain))
         })
 
-        exchangeTotal = data.reduce((acc, result) => acc + (result.exchangeTotal ?? 0), 0)
+        exchangeTotal = data.reduce((accumulator, result) => accumulator + (result.exchangeTotal || 0), 0)
       }
 
       return {
@@ -206,9 +206,9 @@ export function useBalance(
   const { isLoading: isCurrencyRatioLoading, data: currencyRatio } = useCurrencyRatio()
   const { hiddenTokensByBlockchain } = useHiddenTokensByBlockchainSelector()
 
-  const params = balanceParams ?? { address: '', blockchain: 'neo3' }
+  const params = balanceParams || { address: '', blockchain: 'neo3' }
   const network = selectedNetworkByBlockchain[params.blockchain]
-  const { showType = 'active', queryOptions } = options ?? {}
+  const { showType = 'active', queryOptions } = options || {}
 
   const query = useQuery({
     queryKey: buildQueryKeyBalance(params.address, params.blockchain, network, currency),
@@ -237,7 +237,7 @@ export const useLazyBalance = () => {
 
   const getBalance = useCallback(
     async (accountParams: TUseBalancesParams, options?: TUseBalancesOptions) => {
-      const { showType = 'active', queryOptions } = options ?? {}
+      const { showType = 'active', queryOptions } = options || {}
       const network = selectedNetworkByBlockchain[accountParams.blockchain]
 
       const data = await queryClient.ensureQueryData({

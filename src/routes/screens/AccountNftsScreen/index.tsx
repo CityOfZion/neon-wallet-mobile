@@ -50,9 +50,11 @@ const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
           </Text>
         </View>
 
-        <Text className="font-sans-bold text-lg capitalize text-white" numberOfLines={1}>
-          {item.name}
-        </Text>
+        {item.name && (
+          <Text className="font-sans-bold text-lg capitalize text-white" numberOfLines={1}>
+            {item.name}
+          </Text>
+        )}
       </View>
 
       {item.explorerUri && <DoraIcon aria-hidden className="size-6 text-neon" />}
@@ -100,7 +102,7 @@ export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsS
 
   return (
     <TwScreenLayout withoutScroll title={t('title')}>
-      <AccountSubTitle account={account} />
+      <AccountSubTitle account={account} className="mb-2" />
 
       {isLoading ? (
         <ScreenLoader />
@@ -114,7 +116,7 @@ export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsS
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
             isLoading || isFetchingNextPage ? (
-              <Skeleton.Root>
+              <Skeleton.Root className="mb-8">
                 <Skeleton.Group>
                   {Array.from({ length: 2 }).map((_, index) => (
                     <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-16 w-full rounded-lg" />

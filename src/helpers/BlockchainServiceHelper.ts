@@ -1,15 +1,16 @@
 import type { TBSAccount } from '@cityofzion/blockchain-service'
 import { BSKeychainHelper, hasLedger } from '@cityofzion/blockchain-service'
+import { BSBitcoinConstants } from '@cityofzion/bs-bitcoin'
 import type { BSAggregator } from '@cityofzion/bs-multichain'
 
 import { AppError } from './ErrorHelper'
 import { I18nextHelper } from './I18nextHelper'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TGetServiceAccountParams = {
-  account: IAccountState
+  account: TAccount
   key: string
 }
 
@@ -31,21 +32,28 @@ export class BlockchainServiceHelper {
   static async setup() {
     if (this.bsAggregator) return
 
-    const [{ BSAggregator }, { BSNeo3 }, { BSNeoLegacy }, { BSNeoX }, { BSEthereum }, { BSSolana }] = await Promise.all(
-      [
+    const [{ BSAggregator }, { BSNeo3 }, { BSNeoLegacy }, { BSNeoX }, { BSBitcoin }, { BSSolana }, { BSEthereum }] =
+      await Promise.all([
         import('@cityofzion/bs-multichain'),
         import('@cityofzion/bs-neo3'),
         import('@cityofzion/bs-neo-legacy'),
         import('@cityofzion/bs-neox'),
-        import('@cityofzion/bs-ethereum'),
+        import('@cityofzion/bs-bitcoin'),
         import('@cityofzion/bs-solana'),
-      ]
-    )
+        import('@cityofzion/bs-ethereum'),
+      ])
 
     const services = await Promise.all([
       Promise.resolve(new BSNeo3('neo3', undefined, this.#getHardwareWalletTransport.bind(this))),
       Promise.resolve(new BSNeoLegacy('neoLegacy', undefined, this.#getHardwareWalletTransport.bind(this))),
       Promise.resolve(new BSNeoX('neox', undefined, this.#getHardwareWalletTransport.bind(this))),
+      Promise.resolve(
+        new BSBitcoin(
+          'bitcoin',
+          __DEV__ ? BSBitcoinConstants.TESTNET_NETWORK : undefined,
+          this.#getHardwareWalletTransport.bind(this)
+        )
+      ),
       Promise.resolve(new BSSolana('solana', undefined, this.#getHardwareWalletTransport.bind(this))),
       Promise.resolve(new BSEthereum('ethereum', 'ethereum', undefined, this.#getHardwareWalletTransport.bind(this))),
       Promise.resolve(new BSEthereum('polygon', 'polygon', undefined, this.#getHardwareWalletTransport.bind(this))),
@@ -63,8 +71,9 @@ export class BlockchainServiceHelper {
 
     if (account.type === 'hardware' && hasLedger(service)) {
       serviceAccount = await service.generateAccountFromPublicKey(key)
+
       serviceAccount.isHardware = true
-      serviceAccount.bip44Path = BSKeychainHelper.getBip44Path(service.bip44DerivationPath, account.order)
+      serviceAccount.bipPath = BSKeychainHelper.getBipPath(service.bipDerivationPath, account.order)
     } else {
       serviceAccount = await service.generateAccountFromKey(key)
     }

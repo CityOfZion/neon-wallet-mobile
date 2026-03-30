@@ -6,6 +6,7 @@ import type { GestureResponderEvent, TextProps, TouchableOpacityProps, ViewProps
 import { Text, TouchableOpacity, View } from 'react-native'
 import { match } from 'ts-pattern'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
@@ -225,7 +226,7 @@ const BaseButton = ({
               cloneElement(leftElement, {
                 ...leftElement.props,
                 className: StyleHelper.mergeStyles(
-                  'w-6 h-6',
+                  'size-6',
                   {
                     'text-neon': colorSchema === 'neon',
                     'text-pink': colorSchema === 'pink',
@@ -236,7 +237,7 @@ const BaseButton = ({
                 ),
               })}
 
-            {typeof label === 'string' ? (
+            {ElementHelper.isTextContentValid(label) ? (
               <Text
                 {...labelProps}
                 className={StyleHelper.mergeStyles(
@@ -262,7 +263,7 @@ const BaseButton = ({
               cloneElement(rightElement, {
                 ...rightElement.props,
                 className: StyleHelper.mergeStyles(
-                  'w-6 h-6',
+                  'size-6',
                   {
                     'text-neon': colorSchema === 'neon',
                     'text-pink': colorSchema === 'pink',

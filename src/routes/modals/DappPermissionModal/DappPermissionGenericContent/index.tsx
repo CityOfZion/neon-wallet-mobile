@@ -78,7 +78,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
             <Details.HeaderSeparator />
 
             <Details.Item contentClassName="bg-gray-700/60 px-5 py-2.5 rounded whitespace-pre-wrap break-words">
-              {typeof value === 'string' ? value : JSON.stringify(value, null, 2)}
+              {content}
             </Details.Item>
           </Details.Root>
         )

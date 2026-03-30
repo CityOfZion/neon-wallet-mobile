@@ -13,7 +13,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-import { usePingNodes } from '@/hooks/useNodes'
+import { usePingNetworks } from '@/hooks/usePingNetworks'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
@@ -23,33 +23,26 @@ import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLay
 import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-export const NodeSelectionModal = ({ route }: TRootStackScreenProps<'NodeSelectionModal'>) => {
+export const NetworkUrlSelectionModal = ({ route }: TRootStackScreenProps<'NetworkUrlSelectionModal'>) => {
   const { blockchain } = route.params
-
-  const { t } = useTranslation('modals', { keyPrefix: 'nodeSelectionModal' })
-
+  const { t } = useTranslation('modals', { keyPrefix: 'networkUrlSelectionModal' })
+  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
   const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
+  const pingNetworksQuery = usePingNetworks(blockchain, { refetchInterval: 5000 })
   const dispatch = useAppDispatch()
-  const pingNodesQuery = usePingNodes(blockchain, { refetchInterval: 5000 })
 
   const handlePress = (url: string) => {
-    dispatch(
-      settingsReducerActions.setSelectedNetworkUrl({
-        blockchain,
-        url,
-        isAutomatic: false,
-      })
-    )
+    dispatch(settingsReducerActions.setSelectedNetworkUrl({ blockchain, url, isAutomatic: false }))
   }
 
-  const handleIsAutomaticChange = (checked: boolean) => {
-    const firstNode = pingNodesQuery.data?.[0]
+  const handleIsAutomaticChange = (isAutomatic: boolean) => {
+    const firstNetwork = pingNetworksQuery.data?.[0]
 
     dispatch(
       settingsReducerActions.setSelectedNetworkUrl({
         blockchain,
-        url: checked && firstNode ? firstNode.url : selectedNetwork.url,
-        isAutomatic: checked,
+        url: isAutomatic && firstNetwork ? firstNetwork.url : selectedNetwork.url,
+        isAutomatic,
       })
     )
   }
@@ -61,9 +54,9 @@ export const NodeSelectionModal = ({ route }: TRootStackScreenProps<'NodeSelecti
         <View className="flex-row">
           <TwIconButton
             aria-label={t('refreshButtonLabel')}
-            onPress={() => pingNodesQuery.refetch()}
-            disabled={pingNodesQuery.isRefetching || pingNodesQuery.isLoading}
-            icon={<Loader paused={!pingNodesQuery.isRefetching} className="text-neon" />}
+            onPress={() => pingNetworksQuery.refetch()}
+            disabled={pingNetworksQuery.isRefetching || pingNetworksQuery.isLoading}
+            icon={<Loader paused={!pingNetworksQuery.isRefetching} className="text-neon" />}
           />
           <TwModalLayoutCloseIconButton />
         </View>
@@ -71,15 +64,15 @@ export const NodeSelectionModal = ({ route }: TRootStackScreenProps<'NodeSelecti
     >
       <Text className="font-sans-regular text-lg text-white">{t('description')}</Text>
 
-      {pingNodesQuery.isLoading ? (
-        <Loader containerClassName="mt-6" className="h-10 w-10" />
+      {pingNetworksQuery.isLoading ? (
+        <Loader containerClassName="mt-6" className="size-10" />
       ) : (
         <Radio.Root
           value={selectedNetwork.url}
           onValueChange={handlePress}
           label={
             <View className="mt-4 flex-row justify-between">
-              <Text className="font-sans-semibold text-sm uppercase text-gray-100">{t('nodesListLabel')}</Text>
+              <Text className="font-sans-semibold text-sm uppercase text-gray-100">{t('listLabel')}</Text>
 
               <TwCheckbox
                 label={t('selectAutomaticallyCheckboxLabel')}
@@ -90,23 +83,23 @@ export const NodeSelectionModal = ({ route }: TRootStackScreenProps<'NodeSelecti
           }
           className="mb-8 mt-6"
         >
-          {pingNodesQuery.data?.map((node, index, array) => {
+          {pingNetworksQuery.data?.map((network, index, array) => {
             const isNeoxAntiMev =
               blockchain === 'neox' &&
-              BSNeoXConstants.ANTI_MEV_RPC_LIST_BY_NETWORK_ID[selectedNetwork.id].some(url => url === node.url)
+              BSNeoXConstants.ANTI_MEV_RPC_LIST_BY_NETWORK_ID[selectedNetwork.id].some(url => url === network.url)
 
             return (
-              <Fragment key={`node-selection-${node.url}-${index}`}>
+              <Fragment key={network.url}>
                 <Radio.Item
-                  value={node.url}
-                  id={`node-selection-${node.url}`}
+                  value={network.url}
+                  id={network.url}
                   className="py-3"
                   leftElement={
                     <View className="w-14 items-center justify-center">
                       <View
                         className={StyleHelper.mergeStyles(
                           'h-[0.375rem] min-h-[0.375rem] w-[0.375rem] min-w-[0.375rem] rounded-full',
-                          match(node.latency)
+                          match(network.latency)
                             .with(undefined, () => 'bg-gray-300')
                             .with(
                               P.when(value => value < 400),
@@ -121,7 +114,9 @@ export const NodeSelectionModal = ({ route }: TRootStackScreenProps<'NodeSelecti
                       />
 
                       <Text className="font-sans-regular text-sm text-gray-300">
-                        {node.latency ? t('latencyLabel', { latency: node.latency }) : '--'}
+                        {typeof network.latency === 'number'
+                          ? t('latencyLabel', { latency: network.latency })
+                          : tCommon('emptyData')}
                       </Text>
                     </View>
                   }
@@ -134,7 +129,7 @@ export const NodeSelectionModal = ({ route }: TRootStackScreenProps<'NodeSelecti
                       )}
 
                       <Text className="font-sans-regular text-base text-white" numberOfLines={1}>
-                        {node.url}
+                        {network.url}
                       </Text>
 
                       <View className="flex-1 flex-row gap-1">
@@ -143,7 +138,7 @@ export const NodeSelectionModal = ({ route }: TRootStackScreenProps<'NodeSelecti
                         </Text>
 
                         <Text className="font-sans-regular text-sm text-gray-300" numberOfLines={1}>
-                          {node.height ?? '--'}
+                          {typeof network.height === 'number' ? network.height : tCommon('emptyData')}
                         </Text>
                       </View>
                     </View>

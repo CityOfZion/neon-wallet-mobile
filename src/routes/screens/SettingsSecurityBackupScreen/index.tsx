@@ -23,10 +23,10 @@ import TbChevronRight from '@/assets/images/tb-chevron-right.svg'
 import TbAlertTriangleFilled from '@/assets/images/tb-filled-alert-triangle.svg'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 type TItem = {
-  wallet: IWalletState
+  wallet: TWallet
   onPress: () => Promise<void>
   success: boolean
 }
@@ -102,7 +102,7 @@ export const SettingsSecurityBackupScreen = ({ navigation }: TMoreStackScreenPro
           <View className="items-center">
             {success ? (
               <Fragment>
-                <Image className="h-40 w-40" source={require('@/assets/images/backup-info-feature.png')} />
+                <Image className="size-40" source={require('@/assets/images/backup-info-feature.png')} />
                 <Text className="px-8 text-center font-sans-bold text-lg text-neon">
                   {t('withoutAccountsToBackup.description')}
                 </Text>
@@ -110,7 +110,7 @@ export const SettingsSecurityBackupScreen = ({ navigation }: TMoreStackScreenPro
               </Fragment>
             ) : (
               <Fragment>
-                <TbAlertTriangleFilled className="h-12 w-12 text-neon" aria-hidden />
+                <TbAlertTriangleFilled className="size-12 text-neon" aria-hidden />
 
                 <Text className="mt-6 text-center font-sans-bold text-lg text-white">
                   {t('withAccountsToBackup.description_1')}

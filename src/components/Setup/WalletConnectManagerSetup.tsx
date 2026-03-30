@@ -13,11 +13,11 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 
-import { useAccountMapSelector } from '@/hooks/useAccountSelector'
+import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useMount } from '@/hooks/useMount'
 
 export const WalletConnectManagerSetup = () => {
-  const { accountsMapRef } = useAccountMapSelector()
+  const { accountsMapRef } = useAccountsMapSelector()
   const navigation = useNavigation()
 
   const { t } = useTranslation('components', { keyPrefix: 'setup.walletConnectManagerSetup' })
@@ -42,7 +42,7 @@ export const WalletConnectManagerSetup = () => {
             topic: request.topic,
             response: BSWalletKitHelper.formatRequestError(
               request,
-              reason ?? BSWalletKitHelper.getError('USER_REJECTED')
+              reason || BSWalletKitHelper.getError('USER_REJECTED')
             ),
           })
           .catch(error => LoggerHelper.error(error, { where: 'WalletConnectManagerSetup', operation: 'handleReject' }))
@@ -50,10 +50,13 @@ export const WalletConnectManagerSetup = () => {
 
       async function handleAccept() {
         try {
-          const key = await SecureStoreHelper.getKey(sessionAccount!)
+          if (!sessionAccount) return
+
+          const key = await SecureStoreHelper.getKey(sessionAccount)
+
           if (!key) throw new AppError(commonT('errors.noKey'))
 
-          const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: sessionAccount!, key })
+          const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: sessionAccount, key })
 
           const response = await BSWalletKitHelper.processRequest({
             account: serviceAccount,

@@ -1,4 +1,4 @@
-import type { IBlockchainService, TBridgeToken } from '@cityofzion/blockchain-service'
+import type { IBlockchainService, TBridgeToken, TTransferIntent } from '@cityofzion/blockchain-service'
 import type { TWalletKitHelperSessionDetails } from '@cityofzion/bs-multichain'
 import type { TVoteServiceCandidate } from '@cityofzion/bs-neo3'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -16,19 +16,19 @@ import type { TBlockchainServiceKey, TNetwork } from './blockchain'
 import type { TTokenBalance, TUseBalanceOptionShowType } from './query'
 import type { TRootStackScreenProps } from './stacks'
 import type {
-  IAccountState,
-  IContactState,
-  IWalletState,
+  TAccount,
   TAccountType,
+  TContact,
   TContactAddress,
   TNotification,
   TSwapRecord,
   TUseTransactionsTransaction,
+  TWallet,
   TWalletType,
 } from './store'
 
 export type TOnboardingBackupMnemonicModalParams = {
-  wallet: IWalletState
+  wallet: TWallet
   onSuccess: () => void
 }
 
@@ -37,19 +37,19 @@ export type TOnboardingImportModalParams = {
 }
 
 export type TEditAccountModalParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TAccountQRCodeModalParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TWalletContextModalParams = {
-  wallet?: IWalletState
+  wallet?: TWallet
 }
 
 export type TPersistContactModalParams = {
-  contact?: IContactState
+  contact?: TContact
   addresses?: TContactAddress[]
 }
 
@@ -67,7 +67,7 @@ export type TBlockchainSelectionModalParams = {
 }
 
 export type TEditWalletModalParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TPersistNetworkModalParams = {
@@ -76,11 +76,11 @@ export type TPersistNetworkModalParams = {
 }
 
 export type TExportKeyModalParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TBackupAlertModalParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TQRCodeAddressContextModalParams = {
@@ -88,7 +88,7 @@ export type TQRCodeAddressContextModalParams = {
 }
 
 export type TWalletSelectionModalParams = {
-  onSelect: (wallet: IWalletState) => void
+  onSelect: (wallet: TWallet) => void
   onRequestClose?: () => void
   blockchains?: TBlockchainServiceKey[]
   title?: string
@@ -105,36 +105,37 @@ export type TTokenSelectionModalToken = {
   blockchain?: TBlockchainServiceKey
   amount?: string
 }
-export interface TTokenSelectionModalParams<T extends TTokenSelectionModalToken = TTokenSelectionModalToken> {
+
+export type TTokenSelectionModalParams<T extends TTokenSelectionModalToken = TTokenSelectionModalToken> = {
   tokens: T[]
   selectedToken?: T
   onSelect(token: T): void
-  account?: IAccountState
+  account?: TAccount
   title?: string
   blockchain?: TBlockchainServiceKey
 }
 
 export type TCreateAccountBlockchainSelectionModalParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TDappConnectionModalParams = {
   uri?: string
   fromDeeplink?: boolean
-  account?: IAccountState
+  account?: TAccount
 }
 
 export type TDappConnectionRequestModalParams = {
   proposal: ProposalTypes.Struct
-  account: IAccountState
+  account: TAccount
   fromDeeplink?: boolean
 }
 
 export type TAccountStackListSelectionModalParams = {
-  wallet: IWalletState
+  wallet: TWallet
   title: string
   description: string
-  onSelect(account: IAccountState): void
+  onSelect(account: TAccount): void
   blockchains?: TBlockchainServiceKey[]
   onRequestClose?: () => void
   accountTypes?: TAccountType[]
@@ -148,7 +149,7 @@ export type TDappPermissionModalParams = {
   session: SessionTypes.Struct
   request: PendingRequestTypes.Struct
   sessionDetails: TWalletKitHelperSessionDetails<TBlockchainServiceKey>
-  sessionAccount: IAccountState
+  sessionAccount: TAccount
   onReject: (reason?: ErrorResponse) => Promise<void>
   onAccept: () => Promise<any>
 }
@@ -172,15 +173,15 @@ export type TSendTipUncheckedConfirmationModalParams = {
 }
 
 export type TSendConfirmModalParams = {
-  onConfirm: (navigation: TRootStackScreenProps<'SendConfirmModal'>['navigation']) => Promise<void>
-  transactions: TUseTransactionsTransaction[]
+  intents: TTransferIntent[]
   fee?: string
   service: IBlockchainService<TBlockchainServiceKey>
+  onConfirm: (navigation: TRootStackScreenProps<'SendConfirmModal'>['navigation']) => Promise<void>
 }
 
 export type TAccountSelectionModalParams = {
   title?: string
-  onSelect: (account: IAccountState, wallet: IWalletState) => void
+  onSelect: (account: TAccount, wallet: TWallet) => void
   blockchains?: TBlockchainServiceKey[]
 }
 
@@ -227,13 +228,13 @@ export type TErrorModalParams = {
 }
 
 export type TBuyAndSellTokensAccountsModalParams = {
-  account?: IAccountState
+  account?: TAccount
 }
 
 export type TSellTokensDepositModalParams = {
   depositActionsData: TDepositActionsData | null
   setDepositActionsData: Dispatch<TDepositActionsData | null>
-  account?: IAccountState
+  account?: TAccount
 }
 
 export type TSellTokensDepositSuccessModalParams = {
@@ -250,16 +251,16 @@ export type TAccountAssetTokenActionsModalParams = {
 }
 
 export type TAccountAssetActionsModalParams = {
-  account: IAccountState
-  wallet: IWalletState
+  account: TAccount
+  wallet: TWallet
 }
 
-export type TNodeSelectionModalParams = {
+export type TNetworkUrlSelectionModalParams = {
   blockchain: TBlockchainServiceKey
 }
 
 export type TExportFullTransactionsModalParams = {
-  account?: IAccountState
+  account?: TAccount
 }
 
 export type TDateSelectionModalParams = {
@@ -272,17 +273,17 @@ export type TDateSelectionModalParams = {
 }
 
 export type TVoteNeo3SupportUsModalParams = {
-  neo3Account: IAccountState
+  neo3Account: TAccount
   cozCandidate: TVoteServiceCandidate
 }
 
 export type TVoteNeo3ConfirmationModalParams = {
-  neo3Account: IAccountState
+  neo3Account: TAccount
   candidate: TVoteServiceCandidate
 }
 
 export type TVoteNeo3CandidateDetailsModalParams = {
-  neo3Account?: IAccountState
+  neo3Account?: TAccount
   candidate: TVoteServiceCandidate
   candidateVotePercentage: string
 }
@@ -307,14 +308,14 @@ export type TRemoveNfiModalParams = {
 }
 
 export type THideFraudulentTokenModalParams = {
-  account: IAccountState
+  account: TAccount
   hash: string
 }
 
 export type TBridgeNeo3NeoXConfirmationModalParams = {
   tokenToUse: TBridgeToken<TBlockchainServiceKey>
   tokenToReceive: TBridgeToken<TBlockchainServiceKey>
-  accountToUse: IAccountState
+  accountToUse: TAccount
   amountToUse: string
   amountToReceive: string
   addressToReceive: string
@@ -346,7 +347,7 @@ export type TImportEncryptedKeySelectionModalParams = {
 export type TBridgeNeo3NeoXDetailsModalParams = {
   tokenToUse: TBridgeToken<TBlockchainServiceKey>
   tokenToReceive: TBridgeToken<TBlockchainServiceKey>
-  accountToUse: IAccountState
+  accountToUse: TAccount
   amountToUse: string
   amountToReceive: string
   addressToReceive: string

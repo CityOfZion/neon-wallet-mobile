@@ -9,7 +9,7 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { useSelectedNetworkSelector } from './useSettingsSelector'
 
 import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 const buildUniqueQueryKey = (
   blockchain: TBlockchainServiceKey,
@@ -19,7 +19,7 @@ const buildUniqueQueryKey = (
 ) => ['nft', blockchain, network, tokenHash, collectionHash]
 
 async function fetchNfts(
-  account: IAccountState,
+  account: TAccount,
   network: TNetwork,
   queryClient: QueryClient,
   pageParam: string | undefined
@@ -30,7 +30,7 @@ async function fetchNfts(
 
   const response = await blockchainService.nftDataService.getNftsByAddress({
     address: account.address,
-    cursor: pageParam,
+    nextPageParams: pageParam,
   })
 
   const queryCache = queryClient.getQueryCache()
@@ -53,7 +53,7 @@ async function fetchNft(blockchain: TBlockchainServiceKey, tokenHash?: string, c
   return await blockchainService.nftDataService.getNft({ tokenHash, collectionHash })
 }
 
-export const useNftsQuery = (account: IAccountState) => {
+export const useNftsQuery = (account: TAccount) => {
   const { selectedNetwork } = useSelectedNetworkSelector(account.blockchain)
   const queryClient = useQueryClient()
 
@@ -64,9 +64,7 @@ export const useNftsQuery = (account: IAccountState) => {
     getNextPageParam: lastPage => lastPage.nextPageParams,
   })
 
-  const aggregatedData = useMemo(() => {
-    return query.data?.pages?.flatMap(page => page.items) ?? []
-  }, [query.data])
+  const aggregatedData = useMemo(() => query.data?.pages?.flatMap(page => page.items) || [], [query.data])
 
   return { aggregatedData, ...query }
 }

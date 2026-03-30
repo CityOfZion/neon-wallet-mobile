@@ -2,10 +2,10 @@ import { AccountHelper } from '@/helpers/AccountHelper'
 
 import { createAppSelector, useAppSelector } from './useRedux'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
-const selectHasClaimPendingTransaction = (account: IAccountState) =>
-  createAppSelector([state => state.utility.inMemoryData.pendingTransactions], pendingTransactions => {
+const selectHasClaimPendingTransaction = (account: TAccount) =>
+  createAppSelector([state => state.utility.memoryData.pendingTransactions], pendingTransactions => {
     return pendingTransactions.some(
       transaction => transaction.type === 'claim' && AccountHelper.predicate(account)(transaction.account)
     )
@@ -17,7 +17,7 @@ const selectSwapRecord = (txId: string) =>
   })
 
 export const useIsConnectedSelector = () => {
-  const { value } = useAppSelector(state => state.utility.inMemoryData.isConnected)
+  const { value } = useAppSelector(state => state.utility.memoryData.isConnected)
 
   return {
     isConnecting: value === undefined,
@@ -27,7 +27,7 @@ export const useIsConnectedSelector = () => {
 }
 
 export const usePendingTransactionsSelector = () => {
-  const { value, ref } = useAppSelector(state => state.utility.inMemoryData.pendingTransactions)
+  const { value, ref } = useAppSelector(state => state.utility.memoryData.pendingTransactions)
 
   return {
     pendingTransactions: value,
@@ -35,8 +35,8 @@ export const usePendingTransactionsSelector = () => {
   }
 }
 
-export const useHasClaimPendingTransactionSelector = (account: IAccountState) => {
-  const { ref, value } = useAppSelector(selectHasClaimPendingTransaction(account))
+export const useHasClaimPendingTransactionSelector = (account: TAccount) => {
+  const { value, ref } = useAppSelector(selectHasClaimPendingTransaction(account))
 
   return {
     hasClaimPendingTransaction: value,
@@ -45,7 +45,7 @@ export const useHasClaimPendingTransactionSelector = (account: IAccountState) =>
 }
 
 export const useHiddenTokensByBlockchainSelector = () => {
-  const { ref, value } = useAppSelector(state => {
+  const { value, ref } = useAppSelector(state => {
     return state.utility.data.hiddenTokensByBlockchain
   })
 
@@ -56,7 +56,7 @@ export const useHiddenTokensByBlockchainSelector = () => {
 }
 
 export const useLastIndexesByWallet = () => {
-  const { ref, value } = useAppSelector(state => state.utility.data.lastIndexesByWallet)
+  const { value, ref } = useAppSelector(state => state.utility.data.lastIndexesByWallet)
 
   return {
     lastIndexesByWallet: value,
@@ -65,7 +65,7 @@ export const useLastIndexesByWallet = () => {
 }
 
 export const useSwapRecordsSelector = () => {
-  const { ref: swapRecordsRef, value: swapRecords } = useAppSelector(state => state.utility.data.swapRecords)
+  const { value: swapRecords, ref: swapRecordsRef } = useAppSelector(state => state.utility.data.swapRecords)
 
   return { swapRecords, swapRecordsRef }
 }

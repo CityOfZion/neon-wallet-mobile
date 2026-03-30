@@ -26,7 +26,7 @@ import TbPackages from '@/assets/images/tb-packages.svg'
 
 import { VoteNeo3ListNotFound } from './VoteNeo3ListNotFound'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TItem = {
   candidate: TVoteServiceCandidate
@@ -40,7 +40,7 @@ type TItem = {
 }
 
 type TProps = {
-  neo3Account?: IAccountState
+  neo3Account?: TAccount
   search: string
   voteErrorMessage?: string
   canVote: boolean
@@ -66,9 +66,9 @@ const renderItem: ListRenderItem<TItem> = ({
   const { position } = candidate
 
   const icon = match({ isCurrentVote, type: candidate.type })
-    .with({ isCurrentVote: true }, () => <PiSealCheckFill className="h-5 w-5 text-blue" />)
-    .with({ type: 'consensus' }, () => <TbPackages className="h-5 w-5" />)
-    .otherwise(() => <MdCircle className="h-2 w-2" />)
+    .with({ isCurrentVote: true }, () => <PiSealCheckFill className="size-5 text-blue" />)
+    .with({ type: 'consensus' }, () => <TbPackages className="size-5" />)
+    .otherwise(() => <MdCircle className="size-2" />)
 
   return (
     <View className="flex w-full flex-col" role="listitem">

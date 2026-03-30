@@ -3,7 +3,7 @@ import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { SkinHelper } from '@/helpers/SkinHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export function getAccountsMigrations() {
   return {
@@ -45,9 +45,9 @@ export function getAccountsMigrations() {
       return state
     },
     3: async (state: any) => {
-      const fixedAccounts: IAccountState[] = []
+      const fixedAccounts: TAccount[] = []
 
-      for (const account of state.data as IAccountState[]) {
+      for (const account of state.data as TAccount[]) {
         if (account.type) {
           fixedAccounts.push(account)
           continue

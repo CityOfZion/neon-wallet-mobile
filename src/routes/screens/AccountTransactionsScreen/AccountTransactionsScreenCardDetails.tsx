@@ -5,6 +5,8 @@ import { Text } from 'react-native'
 import { PressableScale } from '@/components/PressableScale'
 import { Tooltip } from '@/components/Tooltip'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
+
 type TProps = {
   value: ReactNode
   label: string
@@ -17,7 +19,11 @@ export const AccountTransactionsScreenCardDetails = ({ value, icon, label }: TPr
       <Tooltip.Trigger>
         <PressableScale className="flex-row items-center gap-1 rounded bg-gray-800 px-2.5 py-1">
           {cloneElement(icon, { className: 'text-gray-300 size-4' })}
-          {typeof value === 'object' ? value : <Text className="font-sans-regular text-sm text-white">{value}</Text>}
+          {ElementHelper.isTextContentValid(value) ? (
+            <Text className="font-sans-regular text-sm text-white">{value}</Text>
+          ) : (
+            value
+          )}
         </PressableScale>
       </Tooltip.Trigger>
 

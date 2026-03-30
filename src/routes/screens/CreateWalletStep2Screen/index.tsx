@@ -49,7 +49,7 @@ export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'C
   }
 
   const handlePressCopy = () => {
-    ClipboardHelper.write(mnemonic ?? '')
+    ClipboardHelper.write(mnemonic)
   }
 
   const handlePressPrint = () => {

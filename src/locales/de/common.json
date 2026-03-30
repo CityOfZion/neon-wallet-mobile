@@ -10,10 +10,10 @@
       "id": "Base",
       "label": "Base"
     },
-    "bnb": {
-      "accountName": "BNB Konto",
-      "id": "BNB",
-      "label": "BNB"
+    "bitcoin": {
+      "accountName": "Bitcoin Konto",
+      "id": "Bitcoin",
+      "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "Ethereum Konto",
@@ -41,7 +41,7 @@
       "label": "Polygon"
     },
     "solana": {
-      "accountName": "Solana-Konto",
+      "accountName": "Solana Konto",
       "id": "Solana",
       "label": "Solana"
     }
@@ -76,6 +76,7 @@
     "disconnect": "Trennen",
     "done": "Fertig",
     "edit": "Bearbeiten",
+    "emptyData": "--",
     "errorOpenLink": "Beim Öffnen dieses Links ist ein Problem aufgetreten",
     "next": "Weiter",
     "no": "Nein",
@@ -94,7 +95,7 @@
       "disconnectFirst": "Bitte trennen Sie zuerst die aktuell angeschlossene Hardware-Wallet.",
       "hardwareWalletIsNotConnectOrUnlocked": "Ihre Hardware-Wallet ist nicht verbunden oder gesperrt. Überprüfen Sie Ihr Gerät und versuchen Sie es erneut.",
       "hardwareWalletNotFound": "Es ist kein Hardware Wallet verbunden",
-      "missingBip44Path": "Der BIP44-Pfad fehlt für das Hardware-Wallet-Konto."
+      "missingBipPath": "Der BIP-Pfad fehlt für das Hardware-Wallet-Konto."
     }
   },
   "overTheAir": {

@@ -37,7 +37,7 @@ export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetail
         if (response.log) finalLog = response.log
       }
 
-      return JSON.stringify(JSON.parse(finalLog ?? ''), null, 1)
+      return finalLog ? JSON.stringify(JSON.parse(finalLog), null, 1) : ''
     },
   })
 
@@ -71,7 +71,7 @@ export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetail
         label={t('copySwapLog')}
         rightElement={<TbCopy aria-hidden />}
         disabled={!log}
-        onPress={() => ClipboardHelper.write(log ?? '')}
+        onPress={() => ClipboardHelper.write(log!)}
       />
     </TwModalLayout>
   )

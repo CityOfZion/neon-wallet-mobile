@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -77,10 +79,12 @@ export const WalletSettingsScreen = ({ navigation, route }: TWalletsStackScreenP
     <TwScreenLayout title={t('title')}>
       <TwMenuButton label={t('customize')} leftElement={<TbPencil aria-hidden />} onPress={handlePressEdit} />
 
-      <TwSeparator />
-
       {wallet.type === 'standard' && (
-        <TwMenuButton label={t('backup')} leftElement={<TbFileExport aria-hidden />} onPress={handlePressOnBackup} />
+        <Fragment>
+          <TwSeparator />
+
+          <TwMenuButton label={t('backup')} leftElement={<TbFileExport aria-hidden />} onPress={handlePressOnBackup} />
+        </Fragment>
       )}
 
       <View className="mt-auto items-center">

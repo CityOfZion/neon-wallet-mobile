@@ -12,23 +12,23 @@ import { useIsConnectedSelector } from '@/hooks/useUtilitySelector'
 import TbCircleOff from '@/assets/images/tb-circle-off.svg'
 import TbAlertTriangleFilled from '@/assets/images/tb-filled-alert-triangle.svg'
 
-const CustomModeBar = () => {
+const CustomBar = () => {
   const { t } = useTranslation('components', { keyPrefix: 'screenLayoutBars' })
 
   return (
     <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-magenta bg-black p-4">
-      <TbAlertTriangleFilled aria-hidden className="h-6 w-6 text-magenta" />
+      <TbAlertTriangleFilled aria-hidden className="size-6 text-magenta" />
       <Text className="font-sans-regular text-lg leading-5 text-white">{t('customMode')}</Text>
     </View>
   )
 }
 
-const TestnetModeBar = () => {
+const TestnetBar = () => {
   const { t } = useTranslation('components', { keyPrefix: 'screenLayoutBars' })
 
   return (
     <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-magenta bg-black p-4">
-      <TbAlertTriangleFilled aria-hidden className="h-6 w-6 text-magenta" />
+      <TbAlertTriangleFilled aria-hidden className="size-6 text-magenta" />
       <Text className="font-sans-regular text-lg leading-5 text-white">{t('testnetMode')}</Text>
     </View>
   )
@@ -39,7 +39,7 @@ const OfflineBar = () => {
 
   return (
     <View className="w-full flex-row items-center justify-center gap-2 border-b border-neon bg-gray-900 p-4">
-      <TbCircleOff aria-hidden className="h-8.5 w-8.5 text-neon" />
+      <TbCircleOff aria-hidden className="size-8.5 text-neon" />
       <View>
         <Text className="font-sans-regular text-1xs uppercase text-neon">{t('warning')}</Text>
         <Text className="font-sans-regular text-xs text-white">{t('noInternet')}</Text>
@@ -71,8 +71,8 @@ export const TwScreenLayoutBars = () => {
         style={{ height: top }}
       />
 
-      {hasCustom && <CustomModeBar />}
-      {hasTestnet && <TestnetModeBar />}
+      {hasCustom && <CustomBar />}
+      {hasTestnet && <TestnetBar />}
       {isNotConnected && <OfflineBar />}
     </Fragment>
   )

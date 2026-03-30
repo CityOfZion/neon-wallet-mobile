@@ -53,7 +53,7 @@ export const DappConnectionRequestModal = ({
 
   const [isRejecting, startReject] = usePressOnce(async (reason?: ErrorResponse) => {
     await WalletKitHelper.kit
-      .rejectSession({ id: proposal.id, reason: reason ?? BSWalletKitHelper.getError('USER_REJECTED') })
+      .rejectSession({ id: proposal.id, reason: reason || BSWalletKitHelper.getError('USER_REJECTED') })
       .catch(error => LoggerHelper.error(error, { where: 'DappConnectionRequestModal', operation: 'rejectSession' }))
 
     await WalletKitHelper.redirect({

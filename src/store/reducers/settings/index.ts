@@ -11,15 +11,15 @@ import { LanguageHelper } from '@/helpers/LanguageHelper'
 import { getSettingsMigrations } from './migrations'
 import { settingsSliceReducers } from './reducers'
 
-import type { TCurrency, TCustomNetwork, TLanguage, TSecurity, TSelectedNetworks, TSurveyInfo } from '@/types/store'
+import type { TCurrency, TCustomNetworks, TLanguage, TSecurity, TSelectedNetworks, TSurveyInfo } from '@/types/store'
 
-export interface ISettingsReducer {
+export type TSettingsReducer = {
   data: {
     currency: TCurrency
     security: TSecurity
     isFirstTime: boolean
     isOnboardingCompleted: boolean
-    customNetworksByBlockchain: TCustomNetwork
+    customNetworksByBlockchain: TCustomNetworks
     selectedNetworkByBlockchain: TSelectedNetworks
     language: TLanguage
     canShowVoteNeo3SupportUsModal: boolean
@@ -32,44 +32,46 @@ export let settingsReducerActions: CaseReducerActions<typeof settingsSliceReduce
 export function getSettingsReducer() {
   const settingsMigrations = getSettingsMigrations()
 
-  const settingsReducerInitialState = {
+  const settingsReducerInitialState: TSettingsReducer = {
     data: {
       currency: CurrencyHelper.defaultCurrency,
       isFirstTime: true,
       isOnboardingCompleted: false,
       security: { type: 'disabled' },
       customNetworksByBlockchain: {
-        ethereum: [],
         neo3: [],
         neoLegacy: [],
         neox: [],
+        bitcoin: [],
+        solana: [],
+        ethereum: [],
         polygon: [],
         base: [],
         arbitrum: [],
-        solana: [],
       },
       selectedNetworkByBlockchain: {
         neo3: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3.defaultNetwork,
         neoLegacy: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neoLegacy.defaultNetwork,
-        ethereum: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.ethereum.defaultNetwork,
         neox: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neox.defaultNetwork,
+        bitcoin: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.bitcoin.defaultNetwork,
+        solana: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.solana.defaultNetwork,
+        ethereum: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.ethereum.defaultNetwork,
         polygon: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.polygon.defaultNetwork,
         base: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.base.defaultNetwork,
         arbitrum: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.arbitrum.defaultNetwork,
-        solana: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.solana.defaultNetwork,
       },
       language: LanguageHelper.defaultLanguage,
       canShowVoteNeo3SupportUsModal: true,
       surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
     },
-  } as ISettingsReducer
+  }
 
-  const settingsReducerConfig: PersistConfig<ISettingsReducer> = {
+  const settingsReducerConfig: PersistConfig<TSettingsReducer> = {
     key: 'settingsReducer',
     storage,
     timeout: 0,
     migrate: createMigrate(settingsMigrations),
-    version: 11,
+    version: 12,
   }
 
   const settingsSlice = createSlice({

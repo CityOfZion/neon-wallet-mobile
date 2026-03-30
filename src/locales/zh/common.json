@@ -10,10 +10,10 @@
       "id": "Base",
       "label": "Base"
     },
-    "bnb": {
-      "accountName": "BNB 账户",
-      "id": "BNB",
-      "label": "BNB"
+    "bitcoin": {
+      "accountName": "比特币账户",
+      "id": "Bitcoin",
+      "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "以太坊账户",
@@ -76,6 +76,7 @@
     "disconnect": "断开连接",
     "done": "完成",
     "edit": "编辑",
+    "emptyData": "--",
     "errorOpenLink": "打开此链接时出现问题",
     "next": "下一步",
     "no": "否",
@@ -94,7 +95,7 @@
       "disconnectFirst": "请先断开当前连接的硬件钱包。",
       "hardwareWalletIsNotConnectOrUnlocked": "硬件钱包未连接或已锁定，请验证您的设备并重试。",
       "hardwareWalletNotFound": "未连接任何硬件钱包",
-      "missingBip44Path": "硬件钱包账户缺少 BIP44 路径"
+      "missingBipPath": "硬件钱包账户缺少 BIP 路径"
     }
   },
   "overTheAir": {

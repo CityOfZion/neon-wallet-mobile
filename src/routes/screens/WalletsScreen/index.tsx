@@ -22,18 +22,18 @@ import { WalletsScreenWalletInfo } from './WalletsScreenWalletInfo'
 
 import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 export const WalletsScreen = ({ navigation }: TWalletsStackScreenProps<'WalletsScreen'>) => {
   const { wallets } = useWalletsSelector()
   const { refetch, isRefetching } = useRefetch()
   const dispatch = useAppDispatch()
 
-  const [selectedWallet, setSelectedWallet] = useState<IWalletState | undefined>(wallets[0])
+  const [selectedWallet, setSelectedWallet] = useState<TWallet | undefined>(wallets[0])
 
-  const { accountsByWalletId } = useAccountsByWalletIdSelector(selectedWallet?.id ?? '')
+  const { accountsByWalletId } = useAccountsByWalletIdSelector(selectedWallet?.id)
 
-  const handlePress = async (pressedWallet: IWalletState, ref: TWalletCardRef) => {
+  const handlePress = async (pressedWallet: TWallet, ref: TWalletCardRef) => {
     ref.runOutAnimation(async () => {
       navigation.navigate('WalletScreen', { wallet: pressedWallet })
 

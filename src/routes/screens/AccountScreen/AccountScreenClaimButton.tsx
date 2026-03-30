@@ -16,10 +16,10 @@ import { useUnclaimed, useUnclaimedMutation } from '@/hooks/useUnclaimedQuery'
 import { AccountScreenWarningClaimModal } from './AccountScreenWarningClaimModal'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
 }
 
 export const AccountScreenClaimButton = ({ account }: TProps) => {
@@ -99,7 +99,7 @@ export const AccountScreenClaimButton = ({ account }: TProps) => {
 
   const handleClaimGas = () => {
     setShowWarning(false)
-    unclaimedMutation.mutate({ account, data: unclaimedQuery.data! })
+    unclaimedMutation.mutate(account)
   }
 
   return (

@@ -4,6 +4,7 @@ import type { JSX, ReactNode } from 'react'
 import type { ViewProps } from 'react-native'
 import { Text, View } from 'react-native'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 type TProps = ViewProps & {
@@ -47,7 +48,7 @@ export const ActionStep = ({
       )}
     >
       {leftElement && (
-        <View className="h-6 w-6 items-center justify-center">
+        <View className="size-6 items-center justify-center">
           {cloneElement(leftElement, {
             ...leftElement.props,
             className: StyleHelper.mergeStyles(
@@ -60,7 +61,7 @@ export const ActionStep = ({
       )}
 
       <View className="flex-shrink flex-grow">
-        {typeof title === 'string' ? (
+        {ElementHelper.isTextContentValid(title) ? (
           <Text
             className={StyleHelper.mergeStyles(
               'w-full font-sans-regular text-lg text-white',

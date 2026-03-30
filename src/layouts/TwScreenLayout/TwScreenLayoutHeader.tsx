@@ -5,6 +5,7 @@ import { match, P } from 'ts-pattern'
 
 import { TwIconButton } from '@/components/TwIconButton'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import TbArrowLeft from '@/assets/images/tb-arrow-left.svg'
@@ -39,7 +40,7 @@ export const TwScreenLayoutHeader = ({
 
   return (
     <View className={StyleHelper.mergeStyles(`relative h-[44px] flex-row items-center justify-center`, className)}>
-      {title && typeof title === 'string' ? (
+      {ElementHelper.isTextContentValid(title) ? (
         <Text className="max-w-[55%] flex-1 text-center font-sans-medium text-xl text-white" numberOfLines={1}>
           {title}
         </Text>
@@ -50,7 +51,7 @@ export const TwScreenLayoutHeader = ({
       {match({ leftElement, withoutBackButton })
         .with({ leftElement: P.nonNullable }, { withoutBackButton: false }, () => (
           <View className="absolute left-0">
-            {leftElement ?? (
+            {leftElement || (
               <TwIconButton icon={<TbArrowLeft aria-hidden className="text-white" />} onPress={handleBack} />
             )}
           </View>

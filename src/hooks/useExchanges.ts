@@ -77,7 +77,7 @@ export async function fetchExchange(
 
     const queryData: TExchange = {
       usdPrice: nextUsdPrice,
-      token: tokenPrice?.token ?? token,
+      token: tokenPrice?.token || token,
       convertedPrice: nextUsdPrice * currencyRatio,
     }
 
@@ -142,7 +142,7 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
       }
     }),
     combine: result => {
-      const data = lodash.assign(emptyObject, ...result.map(query => query.data ?? {})) as TMultiExchange
+      const data = lodash.assign(emptyObject, ...result.map(query => query.data || {})) as TMultiExchange
 
       return {
         isLoading: isCurrencyRatioLoading || result.some(query => query.isLoading),

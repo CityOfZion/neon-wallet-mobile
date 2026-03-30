@@ -10,7 +10,7 @@ import { TwModalLayout } from '@/layouts/TwModalLayout'
 import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export const AccountStackListSelectionModal = ({
   navigation,
@@ -29,7 +29,7 @@ export const AccountStackListSelectionModal = ({
   const { accountsByWalletId } = useAccountsByWalletIdSelector(wallet.id)
 
   const filteredAccounts = useMemo(() => {
-    const filtered: IAccountState[] = []
+    const filtered: TAccount[] = []
 
     accountsByWalletId.forEach(account => {
       if (!accountTypes.includes(account.type)) return
@@ -41,14 +41,14 @@ export const AccountStackListSelectionModal = ({
     return filtered
   }, [accountTypes, accountsByWalletId, blockchains])
 
-  const handlePress = (account: IAccountState) => {
+  const handlePress = (account: TAccount) => {
     onSelect(account)
   }
 
   return (
     <TwModalLayout
       title={title}
-      rightElement={<TwModalLayoutCloseIconButton onPress={onRequestClose ?? navigation.goBack} />}
+      rightElement={<TwModalLayoutCloseIconButton onPress={onRequestClose || navigation.goBack} />}
       withoutScroll
       contentContainerClassName="pb-0 px-0 items-center"
       onRequestClose={onRequestClose}
