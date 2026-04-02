@@ -9,10 +9,10 @@ import { useBalances } from '@/hooks/useBalances'
 
 import { Skeleton } from '../Skeleton'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  accounts: IAccountState[]
+  accounts: TAccount[]
 }
 
 const MIN_WEIGHT = 5
@@ -56,8 +56,8 @@ export const WalletCardBalanceBar = React.memo(({ accounts }: TProps) => {
         'gap-1 bg-gray-700 px-1': !isBarsLoading,
       })}
     >
-      <Skeleton.Group className="h-full w-full">
-        <Skeleton.Item className="h-full w-full" />
+      <Skeleton.Group className="size-full">
+        <Skeleton.Item className="size-full" />
       </Skeleton.Group>
 
       <Skeleton.Content

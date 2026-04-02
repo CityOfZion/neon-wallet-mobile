@@ -402,15 +402,15 @@
   "languageSelectionModal": {
     "title": "Language"
   },
-  "nodeSelectionModal": {
+  "networkUrlSelectionModal": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Block height:",
-    "description": "If you’re experiencing performance issues, try selecting a custom node below",
+    "description": "If you’re experiencing performance issues, try selecting a custom network below",
     "latencyLabel": "{{latency}}ms",
-    "nodesListLabel": "Nodes",
+    "listLabel": "Network URLs list",
     "refreshButtonLabel": "Refresh",
     "selectAutomaticallyCheckboxLabel": "Select automatically",
-    "title": "Node selection"
+    "title": "Network URL selection"
   },
   "notificationContextModal": {
     "markAsReadButtonLabel": "Mark as read",
@@ -480,7 +480,7 @@
     "inputLabels": {
       "name": "Network Name",
       "nameDescription": "(Max 20 Character)",
-      "url": "New RPC URL"
+      "url": "New URL"
     },
     "inputPlaceholder": {
       "name": "Enter Network Name",
@@ -599,25 +599,13 @@
     "title": "Make a deposit"
   },
   "sellTokensDepositSuccessModal": {
-    "amount": {
-      "label": "Amount"
-    },
-    "details": {
-      "label": "Transaction details"
-    },
-    "recipient": {
-      "copy": "Copy recipient",
-      "label": "Recipient"
-    },
+    "amountLabel": "Amount",
+    "detailsLabel": "Transaction details",
+    "recipientLabel": "Recipient",
     "subtitle": "Your tokens have been sent successfully!",
     "title": "Make a deposit",
-    "transaction": {
-      "label": "Transaction"
-    },
-    "transactionHash": {
-      "copy": "Copy transaction hash",
-      "label": "Transaction hash"
-    }
+    "transactionHashLabel": "Transaction hash",
+    "transactionLabel": "Transaction"
   },
   "sendConfirmModal": {
     "amountLabel": "Amount",

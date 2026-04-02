@@ -84,4 +84,4 @@ export type TUseBalancesFetchResult = {
   tokensBalancesMap: Map<string, TTokenBalance>
 }
 
-export type TNode = Optional<TPingNetworkResponse, 'height' | 'latency'>
+export type TPingNetwork = Optional<TPingNetworkResponse, 'height' | 'latency'>

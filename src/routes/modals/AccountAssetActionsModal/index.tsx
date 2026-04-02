@@ -21,7 +21,8 @@ export const AccountAssetActionsModal = ({ navigation, route }: TRootStackScreen
   const { isNotConnected } = useIsConnectedSelector()
   const balanceQuery = useBalance(account)
 
-  const tokenBalances = balanceQuery.data?.tokensBalances ?? []
+  const tokenBalances = balanceQuery.data?.tokensBalances || []
+
   const isSendDisabled =
     isNotConnected ||
     account.type === 'watch' ||

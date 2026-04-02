@@ -1,7 +1,8 @@
 import { useAppSelector } from './useRedux'
 
 export const useContactsSelector = () => {
-  const { ref, value } = useAppSelector(state => state.contact.data)
+  const { value, ref } = useAppSelector(state => state.contact.data)
+
   return {
     contacts: value,
     contactsRef: ref,

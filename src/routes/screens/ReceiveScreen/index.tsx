@@ -23,10 +23,10 @@ import TbStepInto from '@/assets/images/tb-step-into.svg'
 import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
 
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TActionData = {
-  selectedAccount?: IAccountState
+  selectedAccount?: TAccount
 }
 
 const { theme } = resolveConfig(tailwindConfig)
@@ -75,7 +75,7 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
 
         <ActionStep
           title={t('qrCodeStepTitle')}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
           className="items-start"
         />
 
@@ -99,7 +99,7 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
 
         <View className="mt-8 items-center justify-center rounded-lg bg-asphalt px-6 py-3">
           <Text className="text-center font-sans-regular text-[1.125rem] text-gray-300">
-            {actionData.selectedAccount?.address ?? t('addressInputPlaceholder')}
+            {actionData.selectedAccount?.address || t('addressInputPlaceholder')}
           </Text>
         </View>
 

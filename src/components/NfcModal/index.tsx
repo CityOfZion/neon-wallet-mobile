@@ -84,12 +84,13 @@ const NfcModal = () => {
           exiting={SlideOutDown}
         >
           <Text className="text-center font-sans-bold text-3xl text-gray-700 dark:text-white">{t('title')}</Text>
+
           <Text className="mt-1 text-center font-sans-regular text-lg text-gray-300 dark:text-white">
-            {showOptions.current?.message ?? t('description')}
+            {showOptions.current?.message || t('description')}
           </Text>
 
-          <View className="relative my-12 h-28 w-28 items-center justify-center overflow-hidden rounded-full border-8 border-blue">
-            {status === 'success' ? <NfcModalAnimatedCheck /> : <NfcModalAnimatedPhone />}
+          <View className="relative my-12 size-28 items-center justify-center overflow-hidden rounded-full border-8 border-blue">
+            {status === 'success' ? <NfcModalAnimatedCheck aria-hidden /> : <NfcModalAnimatedPhone aria-hidden />}
           </View>
 
           <TwButton

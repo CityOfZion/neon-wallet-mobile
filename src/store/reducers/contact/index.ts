@@ -6,20 +6,20 @@ import { persistReducer } from 'redux-persist'
 
 import { contactSliceReducers } from './reducers'
 
-import type { IContactState } from '@/types/store'
+import type { TContact } from '@/types/store'
 
-export interface IContactReducer {
-  data: IContactState[]
+export type TContactReducer = {
+  data: TContact[]
 }
 
 export let contactReducerActions: CaseReducerActions<typeof contactSliceReducers, string>
 
 export function getContactReducer() {
-  const contactReducerInitialState = {
+  const contactReducerInitialState: TContactReducer = {
     data: [],
-  } as IContactReducer
+  }
 
-  const contactReducerConfig: PersistConfig<IContactReducer> = { key: 'contactReducer', storage, timeout: 0 }
+  const contactReducerConfig: PersistConfig<TContactReducer> = { key: 'contactReducer', storage, timeout: 0 }
 
   const contactSlice = createSlice({
     name: contactReducerConfig.key,
@@ -29,7 +29,5 @@ export function getContactReducer() {
 
   contactReducerActions = contactSlice.actions
 
-  const persistedAccountReducer = persistReducer(contactReducerConfig, contactSlice.reducer)
-
-  return persistedAccountReducer
+  return persistReducer(contactReducerConfig, contactSlice.reducer)
 }

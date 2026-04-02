@@ -4,32 +4,35 @@ import type { SvgProps } from 'react-native-svg'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-import ArbitrumDefault from '@/assets/blockchain/arbitrum_default.svg'
-import ArbitrumGray from '@/assets/blockchain/arbitrum_gray.svg'
-import ArbitrumWhite from '@/assets/blockchain/arbitrum_white.svg'
-import BaseDefault from '@/assets/blockchain/base_default.svg'
-import BaseGray from '@/assets/blockchain/base_gray.svg'
-import BaseWhite from '@/assets/blockchain/base_white.svg'
-import EthereumDefault from '@/assets/blockchain/ethereum_default.svg'
-import EthereumGray from '@/assets/blockchain/ethereum_gray.svg'
-import EthereumWhite from '@/assets/blockchain/ethereum_white.svg'
-import NeoLegacyDefault from '@/assets/blockchain/neo_legacy_default.svg'
-import NeoLegacyGray from '@/assets/blockchain/neo_legacy_gray.svg'
-import NeoLegacyWhite from '@/assets/blockchain/neo_legacy_white.svg'
-import Neo3Default from '@/assets/blockchain/neo3_default.svg'
-import Neo3Gray from '@/assets/blockchain/neo3_gray.svg'
-import Neo3White from '@/assets/blockchain/neo3_white.svg'
-import NeoxDefault from '@/assets/blockchain/neox_default.svg'
-import NeoxGray from '@/assets/blockchain/neox_gray.svg'
-import NeoxWhite from '@/assets/blockchain/neox_white.svg'
-import PolygonDefault from '@/assets/blockchain/polygon_default.svg'
-import PolygonGray from '@/assets/blockchain/polygon_gray.svg'
-import PolygonWhite from '@/assets/blockchain/polygon_white.svg'
-import SolanaDefault from '@/assets/blockchain/solana_default.svg'
-import SolanaGray from '@/assets/blockchain/solana_gray.svg'
-import SolanaWhite from '@/assets/blockchain/solana_white.svg'
+import ArbitrumDefault from '@/assets/blockchains/arbitrum-default.svg'
+import ArbitrumGray from '@/assets/blockchains/arbitrum-gray.svg'
+import ArbitrumWhite from '@/assets/blockchains/arbitrum-white.svg'
+import BaseDefault from '@/assets/blockchains/base-default.svg'
+import BaseGray from '@/assets/blockchains/base-gray.svg'
+import BaseWhite from '@/assets/blockchains/base-white.svg'
+import BitcoinDefault from '@/assets/blockchains/bitcoin-default.svg'
+import BitcoinGray from '@/assets/blockchains/bitcoin-gray.svg'
+import BitcoinWhite from '@/assets/blockchains/bitcoin-white.svg'
+import EthereumDefault from '@/assets/blockchains/ethereum-default.svg'
+import EthereumGray from '@/assets/blockchains/ethereum-gray.svg'
+import EthereumWhite from '@/assets/blockchains/ethereum-white.svg'
+import NeoLegacyDefault from '@/assets/blockchains/neo-legacy-default.svg'
+import NeoLegacyGray from '@/assets/blockchains/neo-legacy-gray.svg'
+import NeoLegacyWhite from '@/assets/blockchains/neo-legacy-white.svg'
+import Neo3Default from '@/assets/blockchains/neo3-default.svg'
+import Neo3Gray from '@/assets/blockchains/neo3-gray.svg'
+import Neo3White from '@/assets/blockchains/neo3-white.svg'
+import NeoxDefault from '@/assets/blockchains/neox-default.svg'
+import NeoxGray from '@/assets/blockchains/neox-gray.svg'
+import NeoxWhite from '@/assets/blockchains/neox-white.svg'
+import PolygonDefault from '@/assets/blockchains/polygon-default.svg'
+import PolygonGray from '@/assets/blockchains/polygon-gray.svg'
+import PolygonWhite from '@/assets/blockchains/polygon-white.svg'
+import SolanaDefault from '@/assets/blockchains/solana-default.svg'
+import SolanaGray from '@/assets/blockchains/solana-gray.svg'
+import SolanaWhite from '@/assets/blockchains/solana-white.svg'
 
-import type { TBlockchainImageColor, TBlockchainServiceKey } from '../types/blockchain'
+import type { TBlockchainImageColor, TBlockchainServiceKey } from '@/types/blockchain'
 
 export const ICONS_BY_BLOCKCHAIN: Record<TBlockchainServiceKey, Record<TBlockchainImageColor, React.FC<SvgProps>>> = {
   neo3: {
@@ -42,15 +45,25 @@ export const ICONS_BY_BLOCKCHAIN: Record<TBlockchainServiceKey, Record<TBlockcha
     gray: NeoLegacyGray,
     white: NeoLegacyWhite,
   },
-  ethereum: {
-    default: EthereumDefault,
-    gray: EthereumGray,
-    white: EthereumWhite,
-  },
   neox: {
     default: NeoxDefault,
     gray: NeoxGray,
     white: NeoxWhite,
+  },
+  bitcoin: {
+    default: BitcoinDefault,
+    gray: BitcoinGray,
+    white: BitcoinWhite,
+  },
+  solana: {
+    default: SolanaDefault,
+    gray: SolanaGray,
+    white: SolanaWhite,
+  },
+  ethereum: {
+    default: EthereumDefault,
+    gray: EthereumGray,
+    white: EthereumWhite,
   },
   polygon: {
     default: PolygonDefault,
@@ -67,11 +80,6 @@ export const ICONS_BY_BLOCKCHAIN: Record<TBlockchainServiceKey, Record<TBlockcha
     gray: ArbitrumGray,
     white: ArbitrumWhite,
   },
-  solana: {
-    default: SolanaDefault,
-    gray: SolanaGray,
-    white: SolanaWhite,
-  },
 }
 
 type Props = SvgProps & {
@@ -82,5 +90,5 @@ type Props = SvgProps & {
 export const TwBlockchainIcon = ({ blockchain, type = 'default', ...props }: Props) => {
   const Component = ICONS_BY_BLOCKCHAIN[blockchain][type]
 
-  return <Component {...props} className={StyleHelper.mergeStyles('h-8.5 w-8.5 object-contain', props.className)} />
+  return <Component {...props} className={StyleHelper.mergeStyles('size-8.5 object-contain', props.className)} />
 }

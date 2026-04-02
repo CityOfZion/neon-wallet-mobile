@@ -19,7 +19,7 @@ import { TwModalLayout } from '@/layouts/TwModalLayout'
 import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProps<'WalletSelectionModal'>) => {
   const {
@@ -56,12 +56,12 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
     return true
   })
 
-  const [selectedWallet, setSelectedWallet] = useState<IWalletState | undefined>(wallets[0])
-  const { accountsByWalletId } = useAccountsByWalletIdSelector(selectedWallet?.id ?? '')
+  const [selectedWallet, setSelectedWallet] = useState<TWallet | undefined>(wallets[0])
+  const { accountsByWalletId } = useAccountsByWalletIdSelector(selectedWallet?.id || '')
 
   const balances = useBalances(accountsByWalletId)
 
-  const handlePress = (wallet: IWalletState, ref: TWalletCardRef) => {
+  const handlePress = (wallet: TWallet, ref: TWalletCardRef) => {
     ref.runOutAnimation(async () => {
       onSelect(wallet)
 
@@ -73,14 +73,14 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
 
   return (
     <TwModalLayout
-      title={title ?? t('title')}
-      rightElement={<TwModalLayoutCloseIconButton onPress={onRequestClose ?? navigation.goBack} />}
+      title={title || t('title')}
+      rightElement={<TwModalLayoutCloseIconButton onPress={onRequestClose || navigation.goBack} />}
       contentContainerClassName="px-0"
       onRequestClose={onRequestClose}
       withoutScroll
     >
       <Text className="mb-5 px-5 text-center font-sans-medium text-lg text-white">
-        {description ?? t('description')}
+        {description || t('description')}
       </Text>
 
       <WalletCarousel

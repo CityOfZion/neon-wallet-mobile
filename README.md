@@ -1,25 +1,36 @@
 # Neon Wallet Mobile
 
 ## Description
-An open source cross-platform light wallet for the NEO blockchain.
+Everything a self-custodial wallet should be with everything you need to explore and make transactions in the Neo 3, Neo Legacy, Neo X, Bitcoin, Solana, Ethereum, EVMs and other blockchains.
 
 ## Installation
-- [Android Play Store](https://play.google.com/store/apps/details?id=io.cityofzion.neon&hl=en)
-- [iOS App Store](https://apps.apple.com/us/app/neon-wallet-mobile/id1530111452)
+- [Play Store (Android)](https://play.google.com/store/apps/details?id=io.cityofzion.neon)
+- [App Store (iOS)](https://apps.apple.com/us/app/neon-wallet-mobile/id1530111452)
+
+## Development
+Run the development mode:
+```bash
+# Install dependencies
+npm i
+
+# Open application in Android
+npm run android
+
+# Open application in iOS
+npm run ios
+```
 
 ## Environment Configuration
 Create a `.env` file in the project root with the following variables:
-
 ```env
 EXPO_PUBLIC_UNLIMIT_MERCHANT_ID=00000000-0000-0000-0000-000000000000
 EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL=https://onramp.com
 EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL=https://offramp.com
 
-EXPO_PUBLIC_CLICK_UP_KEY=pk_123456789
+EXPO_PUBLIC_CLICK_UP_API_KEY=pk_123456789
 EXPO_PUBLIC_CLICK_UP_LIST_ID=123456789
 EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID=123456789
 ```
-
 
 ## Technologies Used
 - **React Native**
@@ -29,16 +40,14 @@ EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID=123456789
 - **Swift** (for iOS native code)
 
 # Translation Script Guide (Optional)
-
 This project includes an automated translation script to keep all locale files up-to-date across supported languages using the Google Cloud Translation API v3.
 
 ## Prerequisites
-
-- **Google Cloud Project** with the Cloud Translation API enabled
-- **Service Account Key** (JSON) with permissions for the Translation API
+- **Google Cloud Project** with the Cloud Translation API enabled.
+- **Service Account Key** (JSON) with permissions for the Translation API.
 
 ### Google Cloud Setup
-- Go to the [Google Cloud Console](https://console.cloud.google.com/)
+- Go to the [Google Cloud Console](https://console.cloud.google.com).
 - Create a new project or select an existing one.
 - Enable the Cloud Translation API for your project.
 - Create a Service Account with the "Cloud Translation API User" role.
@@ -49,7 +58,7 @@ This project includes an automated translation script to keep all locale files u
 To ensure you never exceed the free tier of the Google Cloud Translation API and avoid unexpected charges, you can set a budget and configure alerts in your Google Cloud project.
 
 ### How to Set Up a Budget and Alerts
-- Go to [Google Cloud Billing Budgets & Alerts](https://console.cloud.google.com/billing/budgets)
+- Go to [Google Cloud Billing Budgets & Alerts](https://console.cloud.google.com/billing/budgets).
 - Make sure you are in the correct billing account for your project.
 - Click **"CREATE BUDGET"**.
 - Name your budget (e.g., "Translation API Free Tier Limit").
@@ -60,9 +69,8 @@ To ensure you never exceed the free tier of the Google Cloud Translation API and
 - Review your settings and click **"Finish"**.
 
 ### Important Notes
-
-- Only modify translation files in the `en` (English) locale directory
-- The script will fail if there are uncommitted changes in other locale directories to prevent accidental overwrites
-- New translation keys are automatically added to all languages
-- Removed keys are automatically deleted from all languages
-- Updated translations are re-translated to maintain consistency
+- Only modify translation files in the `en` (English) locale directory.
+- The script will fail if there are uncommitted changes in other locale directories to prevent accidental overwrites.
+- New translation keys are automatically added to all languages.
+- Removed keys are automatically deleted from all languages.
+- Updated translations are re-translated to maintain consistency.

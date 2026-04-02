@@ -1,24 +1,26 @@
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit'
 
-import type { IContactReducer } from './index'
+import type { TContactReducer } from './index'
 
-import type { IContactState } from '@/types/store'
+import type { TContact } from '@/types/store'
 
-const saveContact: CaseReducer<IContactReducer, PayloadAction<IContactState>> = (state, action) => {
+const saveContact: CaseReducer<TContactReducer, PayloadAction<TContact>> = (state, action) => {
   const contact = action.payload
+  const foundIndex = state.data.findIndex(({ id }) => id === contact.id)
 
-  const findIndex = state.data.findIndex(it => it.id === contact.id)
-  if (findIndex < 0) {
+  if (foundIndex < 0) {
     state.data = [...state.data, contact]
+
     return
   }
 
-  state.data[findIndex] = contact
+  state.data[foundIndex] = contact
 }
 
-const deleteContact: CaseReducer<IContactReducer, PayloadAction<string>> = (state, action) => {
-  const idContact = action.payload
-  state.data = state.data.filter(contact => contact.id !== idContact)
+const deleteContact: CaseReducer<TContactReducer, PayloadAction<string>> = (state, action) => {
+  const contactId = action.payload
+
+  state.data = state.data.filter(contact => contact.id !== contactId)
 }
 
 export const contactSliceReducers = {

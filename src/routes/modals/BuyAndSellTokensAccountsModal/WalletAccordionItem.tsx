@@ -15,12 +15,12 @@ import WalletBlueIcon from '@/assets/images/wallet-blue-icon.svg'
 
 import { AccountAccordionItem } from './AccountAccordionItem'
 
-import type { IAccountState, IWalletState } from '@/types/store'
+import type { TAccount, TWallet } from '@/types/store'
 
 type TProps = {
   defaultOpened: boolean
-  wallet: IWalletState
-  accounts: IAccountState[]
+  wallet: TWallet
+  accounts: TAccount[]
 }
 
 export const WalletAccordionItem = ({ wallet, accounts, defaultOpened }: TProps) => {
@@ -30,7 +30,7 @@ export const WalletAccordionItem = ({ wallet, accounts, defaultOpened }: TProps)
   return (
     <TwAccordion.Root defaultValue={defaultOpened}>
       <TwAccordion.Trigger
-        leftElement={<WalletBlueIcon aria-hidden className="h-7 w-7" />}
+        leftElement={<WalletBlueIcon aria-hidden className="size-7" />}
         label={
           <Fragment>
             <Text className="flex-shrink flex-grow font-sans-medium text-lg text-white" numberOfLines={1}>

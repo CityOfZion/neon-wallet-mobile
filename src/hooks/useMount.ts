@@ -29,7 +29,7 @@ export const useMount = (effect: TEffect, changingStateVars?: DependencyList, de
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, changingStateVars ?? [])
+  }, changingStateVars || [])
 
   return { isMounting }
 }

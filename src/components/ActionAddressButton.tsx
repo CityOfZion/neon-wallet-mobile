@@ -15,7 +15,7 @@ type TProps = Omit<TTwButtonProps, 'leftElement'> & {
 
 export const ActionAddressButton = ({ label, className, address, blockchain, error, ...props }: TProps) => (
   <TwButton
-    label={address ?? label}
+    label={address || label}
     variant="contained-darker"
     className={StyleHelper.mergeStyles('h-11 w-32', { 'bg-gray-300/15': !!address }, className)}
     style={{ boxShadow: undefined }}
@@ -26,7 +26,7 @@ export const ActionAddressButton = ({ label, className, address, blockchain, err
         : undefined
     }
     leftElement={
-      blockchain ? <TwBlockchainIcon blockchain={blockchain} type="gray" className="ml-2 h-3.5 w-3.5" /> : undefined
+      blockchain ? <TwBlockchainIcon blockchain={blockchain} type="gray" className="ml-2 size-3.5" /> : undefined
     }
     {...props}
   />

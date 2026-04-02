@@ -5,14 +5,14 @@ import type {
   TValidationSchemaHelperBackupWalletSchema,
 } from './ValidationSchemaHelper'
 
-import type { IAccountState, IWalletState, TAccountType, TSkin } from '@/types/store'
+import type { TAccount, TAccountType, TSkin, TWallet } from '@/types/store'
 
 export class NeonBackupHelper {
   static readonly fileExtension = 'neonbkp'
   static readonly version = 1
   static readonly algorithm = 'aes-192-cbc'
 
-  static fixAccountProperties(backupAccount: TValidationSchemaHelperBackupAccountSchema): IAccountState | undefined {
+  static fixAccountProperties(backupAccount: TValidationSchemaHelperBackupAccountSchema): TAccount | undefined {
     if (!BlockchainServiceHelper.doesBlockchainSupported(backupAccount.blockchain)) return
 
     const type: TAccountType = backupAccount.type === 'hardware' ? 'watch' : backupAccount.type
@@ -36,7 +36,7 @@ export class NeonBackupHelper {
     }
   }
 
-  static fixWalletProperties(backupWallet: TValidationSchemaHelperBackupWalletSchema): IWalletState {
+  static fixWalletProperties(backupWallet: TValidationSchemaHelperBackupWalletSchema): TWallet {
     const type = !backupWallet.mnemonic ? 'non-standard' : backupWallet.type
 
     return {

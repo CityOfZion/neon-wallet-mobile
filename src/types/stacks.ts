@@ -33,7 +33,7 @@ import type {
   TImportEncryptedKeySelectionModalParams,
   TImportKeySelectionModalParams,
   TImportMnemonicSelectionModalParams,
-  TNodeSelectionModalParams,
+  TNetworkUrlSelectionModalParams,
   TNotificationContextModalParams,
   TOnboardingBackupMnemonicModalParams,
   TOnboardingImportModalParams,
@@ -188,7 +188,7 @@ export type TRootStackParamList = {
   AddressSelectionModal: TAddressSelectionModalParams
   WalletSelectionModal: TWalletSelectionModalParams
   TokenSelectionModal: TTokenSelectionModalParams
-  NodeSelectionModal: TNodeSelectionModalParams
+  NetworkUrlSelectionModal: TNetworkUrlSelectionModalParams
 
   EditAccountModal: TEditAccountModalParams
   AccountQRCodeModal: TAccountQRCodeModalParams

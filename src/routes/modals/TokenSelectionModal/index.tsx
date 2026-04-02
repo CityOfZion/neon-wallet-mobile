@@ -55,7 +55,7 @@ const renderItem: ListRenderItem<TItem> = ({ item, index }) => {
           ellipsizeMode="tail"
           numberOfLines={1}
         >
-          {item.amount ?? '0.00'}
+          {item.amount || '0.00'}
         </Text>
       )}
     </Pressable>
@@ -103,7 +103,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
       filtered.push(item)
     })
 
-    filtered.sort((a, b) => NumberHelper.number(a.amount ?? 0) - NumberHelper.number(b.amount ?? 0))
+    filtered.sort((a, b) => NumberHelper.number(a.amount || 0) - NumberHelper.number(b.amount || 0))
 
     return filtered
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,7 +120,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
   }, [filter, filteredAndSortedTokens])
 
   return (
-    <TwModalLayout title={title ?? t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
+    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
       <TwInput
         className="placeholder:text-neon"
         placeholder={t('inputPlaceholder')}
@@ -154,7 +154,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
             windowSize={11}
             ListHeaderComponent={
               filteredTokensByText.length > 0 ? (
-                <View className="flex-row justify-between px-4.5">
+                <View className="mb-1 flex-row justify-between px-4.5">
                   <Text className="font-sans-bold text-sm text-gray-300">{t('tokenLabel')}</Text>
                   {!hideBalance && <Text className="font-sans-bold text-sm text-gray-300">{t('balanceLabel')}</Text>}
                 </View>

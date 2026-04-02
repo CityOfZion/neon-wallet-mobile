@@ -5,10 +5,10 @@ import { Skeleton } from '@/components/Skeleton'
 
 import { useBlockHeightQuery } from '@/hooks/useBlockHeightQuery'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
 }
 
 export const AccountScreenTitle = ({ account: { blockchain } }: TProps) => {

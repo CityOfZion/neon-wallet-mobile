@@ -36,10 +36,10 @@ import { VoteNeo3AvailableVotes } from './VoteNeo3AvailableVotes'
 import { VoteNeo3List } from './VoteNeo3List'
 
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TActionsData = {
-  neo3Account?: IAccountState
+  neo3Account?: TAccount
   search: string
 }
 
@@ -64,6 +64,7 @@ export const VoteNeo3Screen = ({ navigation, route }: TWalletsStackScreenProps<'
     neo3Account,
     candidatePubKey: ConstantsHelper.voteNeo3CozPubKey,
   })
+
   const candidatesToVoteQuery = useVoteNeo3GetCandidatesToVote()
   const voteDetailsByAddressQuery = useVoteNeo3GetVoteDetailsByAddress(neo3Account?.address)
   const balanceQuery = useBalance(neo3Account)
@@ -89,7 +90,7 @@ export const VoteNeo3Screen = ({ navigation, route }: TWalletsStackScreenProps<'
   const hasNeo3Accounts = neo3Accounts.length > 0
   const isSearchDisabled = candidatesToVoteQuery.isLoading || !hasNeo3Accounts || !isMainnet
   const isWatchAccount = neo3Account?.type === 'watch'
-  const neoAmount = voteDetailsByAddressQuery.data?.neoBalance ?? 0
+  const neoAmount = voteDetailsByAddressQuery.data?.neoBalance || 0
   const hasNeoAmount = !!neo3Account && neoAmount > 0
   const canVote = !isLoading && isMainnet && !isWatchAccount && hasNeoAmount && !!hasEnoughGasToPayFee
 
@@ -113,7 +114,7 @@ export const VoteNeo3Screen = ({ navigation, route }: TWalletsStackScreenProps<'
     navigation.navigate('VoteNeo3HowItWorksModal')
   }
 
-  const handleSelectNeo3Account = (neo3Account: IAccountState) => {
+  const handleSelectNeo3Account = (neo3Account: TAccount) => {
     shouldOpenVoteNeo3SupportUsModalRef.current = false
     canScrollToCandidateRef.current = true
 
@@ -158,7 +159,7 @@ export const VoteNeo3Screen = ({ navigation, route }: TWalletsStackScreenProps<'
       {!isLoading && !!voteErrorMessage && (
         <TwAlertErrorBanner
           className="w-full gap-x-2 px-3"
-          iconClassName="h-5 w-5"
+          iconClassName="size-5"
           messageClassName="text-md"
           message={voteErrorMessage}
         />

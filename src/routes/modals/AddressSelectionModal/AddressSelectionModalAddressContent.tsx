@@ -19,6 +19,7 @@ type TProps = {
 
 export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TProps) => {
   const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
+  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
 
   const [addressInput, setAddressInput] = useState('')
   const { validateAddressOrNS, validatedAddress, isValidatingAddressOrDomainAddress, isValidAddressOrDomainAddress } =
@@ -57,7 +58,7 @@ export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TP
         onChangeText={handleChange}
         error={
           hasInvalidAddress
-            ? t('errors.invalidAddress', { blockchain: StringHelper.capitalize(blockchain) })
+            ? t('errors.invalidAddress', { blockchain: tCommonBlockchainServices(`${blockchain}.label`) })
             : undefined
         }
         loading={isValidatingAddressOrDomainAddress}

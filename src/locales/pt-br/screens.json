@@ -378,7 +378,7 @@
     "addCustomNetworkButtonLabel": "Adicionar rede customizada",
     "default": "(Padrão)",
     "editCustomNetworkButtonLabel": "Editar rede customizada",
-    "selectNodeButtonLabel": "Selecionar nó"
+    "selectNetworkUrlButtonLabel": "Selecionar URL de rede"
   },
   "settingsProtocolsScreen": {
     "title": "Protocolos"

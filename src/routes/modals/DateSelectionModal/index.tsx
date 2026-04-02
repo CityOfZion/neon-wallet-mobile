@@ -33,11 +33,11 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
   const { language } = useLanguageSelector()
 
   const today = new Date()
-  const maxMonths = route.params.maxMonths ?? 12
+  const maxMonths = route.params.maxMonths || 12
 
   const { actionDataRef, actionData, setData, setDataWrapper, reset } = useActions<TActionData>({
-    dateFrom: route.params.dateFrom ?? dateFns.sub(today, { weeks: 1 }),
-    dateTo: route.params.dateTo ?? today,
+    dateFrom: route.params.dateFrom || dateFns.sub(today, { weeks: 1 }),
+    dateTo: route.params.dateTo || today,
     dateFromSelectAccordionIsOpen: true,
     dateToSelectAccordionIsOpen: false,
   })
@@ -69,9 +69,9 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
   }
 
   return (
-    <TwModalLayout title={route.params.title ?? t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
+    <TwModalLayout title={route.params.title || t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
       <Text className="text-center font-sans-regular text-lg text-white">
-        {route.params.description ?? t('description')}
+        {route.params.description || t('description')}
       </Text>
 
       <Text className="text-center font-sans-italic text-lg text-gray-100">
@@ -86,7 +86,7 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
       >
         <SelectAccordion.Trigger
           label={t('startDateAccordionLabel')}
-          leftElement={<MdCircleMedium aria-hidden className="h-6 w-6 text-blue" />}
+          leftElement={<MdCircleMedium aria-hidden className="size-6 text-blue" />}
         />
         <SelectAccordion.Content>
           <Calendar
@@ -106,7 +106,7 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
       >
         <SelectAccordion.Trigger
           label={t('endDateAccordionLabel')}
-          leftElement={<MdCircleMedium aria-hidden className="h-6 w-6 text-blue" />}
+          leftElement={<MdCircleMedium aria-hidden className="size-6 text-blue" />}
         />
 
         <SelectAccordion.Content>

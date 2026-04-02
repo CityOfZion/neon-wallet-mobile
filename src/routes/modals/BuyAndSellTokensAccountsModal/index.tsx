@@ -12,9 +12,9 @@ import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLay
 
 import { WalletAccordionItem } from './WalletAccordionItem'
 
-import type { IAccountState, IWalletState } from '@/types/store'
+import type { TAccount, TWallet } from '@/types/store'
 
-type TItem = { accounts: IAccountState[]; wallet: IWalletState }
+type TItem = { accounts: TAccount[]; wallet: TWallet }
 
 const renderItem: ListRenderItem<TItem> = ({ item, index }) => (
   <WalletAccordionItem defaultOpened={index === 0} wallet={item.wallet} accounts={item.accounts} />

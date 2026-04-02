@@ -8,7 +8,7 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
 import { notificationReducerActions } from '@/store/reducers/notification'
-import type { IWalletState, TNotification } from '@/types/store'
+import type { TNotification, TWallet } from '@/types/store'
 
 const useBackupReminderNotificationProcess = () => {
   const dispatch = useAppDispatch()
@@ -30,7 +30,7 @@ const useBackupReminderNotificationProcess = () => {
     }
   }
 
-  const processWallet = (wallet: IWalletState) => {
+  const processWallet = (wallet: TWallet) => {
     try {
       if (hasUnreadNotification.current || hasWalletWithoutBackup.current || wallet.backupStatus === 'successful')
         return

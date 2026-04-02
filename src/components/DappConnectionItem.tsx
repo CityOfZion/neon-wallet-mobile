@@ -12,10 +12,9 @@ import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { DateHelper } from '@/helpers/DateHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-import { useAccountMapSelector } from '@/hooks/useAccountSelector'
+import { useAccountsWithWalletMapSelector } from '@/hooks/useAccountSelector'
 import { useImageError } from '@/hooks/useImageError'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
-import { useWalletsMapSelector } from '@/hooks/useWalletSelector'
 
 import { Loader } from './Loader'
 import { TwMenuButton } from './TwMenuButton'
@@ -26,8 +25,7 @@ type Props = {
 
 export const DappConnectionItem = ({ session }: Props) => {
   const navigation = useNavigation()
-  const { accountsMapRef } = useAccountMapSelector()
-  const { walletsMapRef } = useWalletsMapSelector()
+  const { accountsWithWalletMapRef } = useAccountsWithWalletMapSelector()
   const { language } = useLanguageSelector()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -37,8 +35,8 @@ export const DappConnectionItem = ({ session }: Props) => {
     services: BlockchainServiceHelper.bsAggregator.blockchainServices,
   })
 
-  const account = accountsMapRef.current.get(AccountHelper.buildAccountKey(info))
-  const wallet = walletsMapRef.current.get(account?.idWallet ?? '')
+  const account = accountsWithWalletMapRef.current.get(AccountHelper.buildAccountKey(info))
+  const wallet = account?.wallet
 
   const { handleError, imageSource } = useImageError({
     source: {
@@ -58,7 +56,7 @@ export const DappConnectionItem = ({ session }: Props) => {
   return (
     <TwMenuButton
       onPress={handlePress}
-      leftElementContainerClassName="w-10 h-10"
+      leftElementContainerClassName="size-10"
       leftElement={
         <View className="relative size-10 items-center justify-center overflow-hidden rounded-full bg-gray-800 p-1">
           <Image
@@ -74,11 +72,9 @@ export const DappConnectionItem = ({ session }: Props) => {
       }
       label={
         <View>
-          {session.expiry && (
-            <Text className="font-sans-regular text-xs text-gray-300">
-              {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PP, p', language })}
-            </Text>
-          )}
+          <Text className="font-sans-regular text-xs text-gray-300">
+            {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PP, p', language })}
+          </Text>
 
           <Text className="font-sans-medium text-lg text-white" numberOfLines={1} ellipsizeMode="tail">
             {session.peer.metadata.name}
@@ -90,7 +86,7 @@ export const DappConnectionItem = ({ session }: Props) => {
 
               {account.skin.type === 'color' && (
                 <View
-                  className="h-2 w-2 rounded-full"
+                  className="size-2 rounded-full"
                   style={{
                     backgroundColor: account.skin.id,
                   }}

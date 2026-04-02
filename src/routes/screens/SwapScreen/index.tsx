@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 
 import type {
-  TBSToken,
   TSwapLoadableValue,
   TSwapMinMaxAmount,
   TSwapToken,
@@ -61,12 +60,12 @@ import { utilityReducerActions } from '@/store/reducers/utility'
 import { thunks } from '@/store/thunks'
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState, TSwapRecord } from '@/types/store'
+import type { TAccount, TSwapRecord } from '@/types/store'
 
 type TActionsData = {
   availableTokensToUse: TSwapLoadableValue<TSwapToken<TBlockchainServiceKey>[]>
   selectedTokenToUse: TSwapLoadableValue<TSwapToken<TBlockchainServiceKey>>
-  selectedAccountToUse: TSwapValidateValue<IAccountState>
+  selectedAccountToUse: TSwapValidateValue<TAccount>
   selectedAmountToUse: TSwapLoadableValue<string>
   availableTokensToReceive: TSwapLoadableValue<TSwapToken<TBlockchainServiceKey>[]>
   selectedTokenToReceive: TSwapLoadableValue<TSwapToken<TBlockchainServiceKey>>
@@ -89,7 +88,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
     {
       availableTokensToUse: { loading: true, value: [] },
       selectedTokenToUse: { loading: false, value: null },
-      selectedAccountToUse: { loading: false, value: route.params?.account ?? null, valid: null },
+      selectedAccountToUse: { loading: false, value: route.params?.account || null, valid: null },
       selectedAmountToUse: { loading: false, value: null },
       availableTokensToReceive: { loading: false, value: [] },
       selectedTokenToReceive: { loading: false, value: null },
@@ -124,7 +123,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
   const isExtraIdToReceiveWrong = hasExtraIdToReceive && actionData.selectedExtraIdToReceive.valid === false
 
   const errorMessage = useMemo(() => {
-    const message = actionState.errors.selectedAmountToUse ?? actionState.errors.fee ?? ''
+    const message = actionState.errors.selectedAmountToUse || actionState.errors.fee || ''
 
     if (message) return message
     if (actionData.selectedAddressToReceive.valid === false) return t('form.errors.invalidAddress')
@@ -135,7 +134,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actionData, actionState, isExtraIdToReceiveWrong])
 
-  const balanceQuery = useBalance(actionData.selectedAccountToUse.value ?? undefined)
+  const balanceQuery = useBalance(actionData.selectedAccountToUse.value || undefined)
 
   const swapChainsByServiceName = useMemo(
     () => SwapHelper.getNetworks(selectedNetworkByBlockchain),
@@ -187,7 +186,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
         ? accountsRef.current.find(AccountHelper.predicate(accountToUse.value))
         : undefined
 
-      setData({ selectedAccountToUse: { ...accountToUse, value: account ?? null } })
+      setData({ selectedAccountToUse: { ...accountToUse, value: account || null } })
     })
 
     swapService.eventEmitter.on('amountToUse', amountToUse => {
@@ -236,7 +235,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
     swapOrchestratorRef.current!.setTokenToUse(token)
   }
 
-  const handleSelectAccountToUse = async (account: IAccountState) => {
+  const handleSelectAccountToUse = async (account: TAccount) => {
     const key = await SecureStoreHelper.getKey(account)
     if (!key) return
 
@@ -264,6 +263,8 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
   }
 
   const handleSubmit = async () => {
+    const account = actionData.selectedAccountToUse.value
+
     if (
       !swapOrchestratorRef.current ||
       !service ||
@@ -273,7 +274,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
       !actionData.selectedTokenToReceive.value ||
       !actionData.selectedAmountToUse.value ||
       !actionData.selectedAmountToReceive.value ||
-      !actionData.selectedAccountToUse.value ||
+      !account ||
       !actionData.selectedAddressToReceive.value ||
       !actionData.selectedAddressToReceive.valid ||
       !actionData.selectAmountToUseMinMax.value ||
@@ -283,9 +284,9 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
     }
 
     const swapRecord: TSwapRecord = {
-      account: actionData.selectedAccountToUse.value,
+      account,
       addressTo: actionData.selectedAddressToReceive.value,
-      extraIdTo: actionData.selectedExtraIdToReceive.value ?? undefined,
+      extraIdTo: actionData.selectedExtraIdToReceive.value || undefined,
       amountFrom: actionData.selectedAmountToUse.value,
       amountTo: actionData.selectedAmountToReceive.value,
       tokenFrom: actionData.selectedTokenToUse.value,
@@ -296,33 +297,30 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
     }
 
     try {
-      await authenticate(actionData.selectedAccountToUse.value)
+      await authenticate(account)
 
-      const swapResponse = await swapOrchestratorRef.current.swap()
+      const { id, transaction, log } = await swapOrchestratorRef.current.swap()
 
-      swapRecord.swapId = swapResponse.id
-      swapRecord.txFrom = swapResponse.txFrom
-      swapRecord.log = swapResponse.log
-
-      if (swapRecord.txFrom) {
-        const transaction = TransactionHelper.buildPendingTransaction({
-          fromAccount: actionData.selectedAccountToUse.value,
-          txId: swapRecord.txFrom,
-          events: [
-            {
-              amount: actionData.selectedAmountToUse.value,
-              token: actionData.selectedTokenToUse.value as TBSToken,
-              toAddress: swapRecord.addressTo,
-            },
-          ],
+      if (transaction) {
+        const pendingTransaction = TransactionHelper.buildPendingTransaction({
+          transaction,
+          account,
+          senderAccount: account,
         })
 
-        dispatch(thunks.waitTransaction({ transaction }))
-      } else {
-        swapRecord.swapStatus = 'refunded'
+        dispatch(thunks.waitPendingTransaction({ pendingTransaction }))
       }
 
-      dispatch(utilityReducerActions.saveSwapRecord(swapRecord))
+      swapRecord.swapId = id
+      swapRecord.txFrom = transaction?.txId
+      swapRecord.log = log
+
+      dispatch(
+        utilityReducerActions.saveSwapRecord({
+          ...swapRecord,
+          swapStatus: swapRecord.txFrom ? swapRecord.swapStatus : 'refunded',
+        })
+      )
 
       navigation.navigate('SwapDetailsModal', { swapRecord })
 
@@ -428,14 +426,14 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
         let totalFeeAmount = NumberHelper.number(fee)
         const feeTokenHash = service.feeToken.hash
 
-        if (service.tokenService.predicateByHash(feeTokenHash, actionData.selectedTokenToUse.value?.hash ?? '')) {
+        if (service.tokenService.predicateByHash(feeTokenHash, actionData.selectedTokenToUse.value?.hash || '')) {
           totalFeeAmount += NumberHelper.number(actionData.selectedAmountToUse.value)
         }
 
         const feeBalanceNumber =
           balanceQuery.data?.tokensBalances?.find(({ token }) =>
             service.tokenService.predicateByHash(feeTokenHash, token)
-          )?.amountNumber ?? 0
+          )?.amountNumber || 0
 
         if (totalFeeAmount > feeBalanceNumber) {
           throw new AppError(t('form.errors.insufficientFundsFee'))
@@ -509,9 +507,9 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
             onPress={() =>
               navigation.navigate('TokenSelectionModal', {
                 onSelect: handleSelectTokenToUse,
-                account: actionData.selectedAccountToUse.value ?? undefined,
+                account: actionData.selectedAccountToUse.value || undefined,
                 blockchain: actionData.selectedAccountToUse.value?.blockchain,
-                selectedToken: actionData.selectedTokenToUse.value ?? undefined,
+                selectedToken: actionData.selectedTokenToUse.value || undefined,
                 title: t('form.tokenToUseModalTitle'),
                 tokens: actionData.availableTokensToUse.value!,
               })
@@ -523,7 +521,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
 
         <ActionStep
           title={t('form.tokenToReceiveTitle')}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <ActionTokenButton
             label={t('form.selectPlaceholder')}
@@ -533,7 +531,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
             onPress={() =>
               navigation.navigate('TokenSelectionModal', {
                 onSelect: handleSelectTokenToReceive,
-                selectedToken: actionData.selectedTokenToReceive.value ?? undefined,
+                selectedToken: actionData.selectedTokenToReceive.value || undefined,
                 title: t('form.tokenToReceiveModalTitle'),
                 tokens: actionData.availableTokensToReceive.value!,
               })
@@ -555,7 +553,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
 
         <ActionStep
           title={t('form.accountToUseTitle')}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
         >
           <ActionAddressButton
             label={t('form.selectPlaceholder')}
@@ -581,7 +579,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
 
         <ActionStep
           title={t('form.addressToReceiveTitle')}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
           error={actionData.selectedAddressToReceive.valid === false}
         >
           <ActionAddressButton
@@ -620,12 +618,12 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
                     className="-ml-1.5"
                     aria-label={t('form.openAboutExtraIdToReceiveModal')}
                     size="md"
-                    icon={<TbHelp aria-hidden className="mt-1 h-5 w-5 text-neon" />}
+                    icon={<TbHelp aria-hidden className="mt-1 size-5 text-neon" />}
                     onPress={() => navigation.navigate('AboutExtraIdToReceiveModal')}
                   />
                 </View>
               }
-              leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+              leftElement={<VscCircleFilled aria-hidden className="size-2" />}
               error={isExtraIdToReceiveWrong}
             >
               <TwInput
@@ -634,7 +632,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
                 containerProps={{ className: 'w-[36%] max-w-36' }}
                 inputContainerProps={{ className: 'h-11 px-3' }}
                 disabled={isReceiveAddressDisabled}
-                value={actionData.selectedExtraIdToReceive.value ?? ''}
+                value={actionData.selectedExtraIdToReceive.value || ''}
                 onChangeText={handleChangeExtraIdToReceive}
               />
             </ActionStep>
@@ -656,9 +654,9 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
         <ActionStep
           title={t('form.amountToUseTitle')}
           description={t('form.minimumAmountTitle', {
-            amount: BSBigNumberHelper.format(actionData.selectAmountToUseMinMax.value?.min ?? 0, { decimals: 6 }),
+            amount: BSBigNumberHelper.format(actionData.selectAmountToUseMinMax.value?.min || 0, { decimals: 6 }),
           })}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
           className="items-start"
           error={!!actionState.errors.selectedAmountToUse}
         >
@@ -667,7 +665,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
               <ActionInput
                 onChangeText={handleChangeAmountToUse}
                 placeholder={t('form.amountPlaceholder')}
-                value={actionData.selectedAmountToUse.value ?? ''}
+                value={actionData.selectedAmountToUse.value || ''}
                 disabled={isAmountsDisabled}
                 editable
                 autoCorrect={false}
@@ -691,7 +689,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
         <View className="-mt-1 flex-row justify-between pb-4 pl-9.5 pr-3">
           <Text className="font-sans-regular text-sm italic text-gray-300">{t('form.balanceLabel')}</Text>
           <Text className="font-sans-regular text-sm italic text-gray-300">
-            {selectedTokenBalance?.amount ?? '0.00'}
+            {selectedTokenBalance?.amount || '0.00'}
           </Text>
         </View>
 
@@ -700,7 +698,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
         <ActionStep
           title={t('form.amountToReceiveTitle')}
           description={t('form.amountToReceiveDescription')}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
+          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
           className="mb-5"
         >
           {actionData.selectedAmountToReceive.loading ? (
@@ -711,7 +709,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
                 'opacity-50': !actionData.selectedTokenToUse.value,
               })}
             >
-              {BSBigNumberHelper.format(actionData.selectedAmountToReceive.value ?? 0, { decimals: 10 })}
+              {BSBigNumberHelper.format(actionData.selectedAmountToReceive.value || 0, { decimals: 10 })}
             </Text>
           )}
         </ActionStep>

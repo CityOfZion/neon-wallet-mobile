@@ -27,7 +27,7 @@ import type { TMoreStackScreenProps } from '@/types/stacks'
 
 export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScreen'>) => {
   const textToImport = route.params?.textToImport
-  const [helpAccordionOpen, setHelpAccordionOpen] = useState(route.params?.isHelpAccordionOpen ?? false)
+  const [helpAccordionOpen, setHelpAccordionOpen] = useState(route.params?.isHelpAccordionOpen || false)
 
   const { t } = useTranslation('screens', { keyPrefix: 'moreScreen' })
 
@@ -139,7 +139,7 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
             className="px-3.5"
             leftElement={
               <View className="size-6 items-center justify-center">
-                <MdCircle aria-hidden className="h-2 w-2 text-yellow" />
+                <MdCircle aria-hidden className="size-2 text-yellow" />
               </View>
             }
             onPress={handlePressDiscord}
@@ -150,7 +150,7 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
             className="px-3.5"
             leftElement={
               <View className="size-6 items-center justify-center">
-                <MdCircle aria-hidden className="h-2 w-2 text-yellow" />
+                <MdCircle aria-hidden className="size-2 text-yellow" />
               </View>
             }
             onPress={handlePressOpenTicket}

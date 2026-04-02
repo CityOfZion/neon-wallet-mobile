@@ -8,12 +8,12 @@ import { TwScreenLayout } from '@/layouts/TwScreenLayout'
 import TbPlus from '@/assets/images/tb-plus.svg'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
-import type { IContactState } from '@/types/store'
+import type { TContact } from '@/types/store'
 
 export const ContactsScreen = ({ navigation }: TMoreStackScreenProps<'ContactsScreen'>) => {
   const { t } = useTranslation('screens', { keyPrefix: 'contactsScreen' })
 
-  const handleContactPress = (contact?: IContactState) => {
+  const handleContactPress = (contact?: TContact) => {
     if (!contact) return
 
     navigation.navigate('ContactScreen', {

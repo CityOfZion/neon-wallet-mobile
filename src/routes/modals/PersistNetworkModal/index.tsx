@@ -70,7 +70,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
       try {
         const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
-        await service.pingNode(url)
+        await service.pingNetwork(url)
 
         clearErrors('url')
         setData({ isUrlValid: true })
@@ -119,12 +119,8 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
   const handleDelete = () => {
     if (!network) return
 
-    dispatch(
-      settingsReducerActions.deleteCustomNetwork({
-        blockchain,
-        network,
-      })
-    )
+    dispatch(settingsReducerActions.deleteCustomNetwork({ blockchain, network }))
+
     navigation.goBack()
   }
 
@@ -132,10 +128,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
     if (!network) return
 
     validateURL(network.url)
-    setData({
-      name: network.name,
-      url: network.url,
-    })
+    setData({ name: network.name, url: network.url })
   }, [network, setData, validateURL])
 
   return (
