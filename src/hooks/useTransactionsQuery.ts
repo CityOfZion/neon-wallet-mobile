@@ -1,6 +1,9 @@
 import { useMemo } from 'react'
 
+import type { TGetTransactionsByAddressResponse } from '@cityofzion/blockchain-service'
+import { hasFullTransactions } from '@cityofzion/blockchain-service'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import * as dateFns from 'date-fns'
 import { cloneDeep } from 'lodash'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
@@ -12,20 +15,61 @@ import { useLanguageSelector, useSelectedNetworkSelector } from '@/hooks/useSett
 import { useAccountsMapSelector } from './useAccountSelector'
 import { useHiddenTokensByBlockchainSelector, usePendingTransactionsSelector } from './useUtilitySelector'
 
-import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
-import type { TAccount, TUseTransactionsGroupedTransactionsByDate, TUseTransactionsTransaction } from '@/types/store'
+import type { TBlockchainServiceKey } from '@/types/blockchain'
+import type {
+  TUseTransactionsQueryBuildTransactionsQueryKeyParams,
+  TUseTransactionsQueryFetchTransactionParams,
+  TUseTransactionsQueryParams,
+} from '@/types/hooks'
+import type { TUseTransactionsGroupedTransactionsByDate, TUseTransactionsTransaction } from '@/types/store'
 
-export const buildTransactionsQueryKey = (blockchain: TBlockchainServiceKey, address: string, network: TNetwork) => {
-  return ['transactions', blockchain, address, network]
+export const buildTransactionsQueryKey = ({
+  blockchain,
+  address,
+  network,
+  dateFrom,
+  dateTo,
+}: TUseTransactionsQueryBuildTransactionsQueryKeyParams) => {
+  const queryKey: any[] = ['transactions', blockchain, address, network]
+
+  if (dateFrom) {
+    queryKey.push(DateHelper.format(dateFrom, 'yyyy-MM-dd'))
+  }
+
+  if (dateTo) {
+    queryKey.push(DateHelper.format(dateTo, 'yyyy-MM-dd'))
+  }
+
+  return queryKey
 }
 
-async function fetchTransaction(account: TAccount, pageParam: any, accountsMap: Map<string, TAccount>) {
+async function fetchTransaction({
+  account,
+  dateFrom,
+  dateTo,
+  page,
+  accountsMap,
+}: TUseTransactionsQueryFetchTransactionParams) {
   const blockchainService = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
 
-  const response = await blockchainService.blockchainDataService.getTransactionsByAddress({
-    address: account.address,
-    nextPageParams: pageParam,
-  })
+  let response: TGetTransactionsByAddressResponse<TBlockchainServiceKey>
+
+  if (dateFrom && dateTo && hasFullTransactions(blockchainService)) {
+    const dateNow = new Date()
+
+    response = await blockchainService.fullTransactionsDataService.getFullTransactionsByAddress({
+      address: account.address,
+      dateFrom: dateFrom.toJSON(),
+      dateTo: (dateFns.isSameDay(dateTo, dateNow) ? dateNow : dateTo).toJSON(),
+      nextPageParams: page,
+      pageSize: 50,
+    })
+  } else {
+    response = await blockchainService.blockchainDataService.getTransactionsByAddress({
+      address: account.address,
+      nextPageParams: page,
+    })
+  }
 
   const blockchain = account.blockchain
   const transactionsMap = new Map<string, TUseTransactionsTransaction>()
@@ -61,7 +105,7 @@ async function fetchTransaction(account: TAccount, pageParam: any, accountsMap: 
   return { transactionsMap, nextPageParams: response.nextPageParams }
 }
 
-export const useTransactionsQuery = (account: TAccount) => {
+export const useTransactionsQuery = ({ account, dateFrom, dateTo }: TUseTransactionsQueryParams) => {
   const { selectedNetwork } = useSelectedNetworkSelector(account.blockchain)
   const { pendingTransactions } = usePendingTransactionsSelector()
   const { accountsMapRef } = useAccountsMapSelector()
@@ -69,8 +113,15 @@ export const useTransactionsQuery = (account: TAccount) => {
   const { language } = useLanguageSelector()
 
   const query = useInfiniteQuery({
-    queryKey: buildTransactionsQueryKey(account.blockchain, account.address, selectedNetwork),
-    queryFn: async ({ pageParam }) => fetchTransaction(account, pageParam, accountsMapRef.current),
+    queryKey: buildTransactionsQueryKey({
+      blockchain: account.blockchain,
+      address: account.address,
+      network: selectedNetwork,
+      dateFrom,
+      dateTo,
+    }),
+    queryFn: async ({ pageParam: page }) =>
+      fetchTransaction({ account, dateFrom, dateTo, page, accountsMap: accountsMapRef.current }),
     initialPageParam: undefined,
     getNextPageParam: lastPage => lastPage.nextPageParams,
   })

@@ -64,26 +64,15 @@
     "title": "账户设置"
   },
   "accountTransactionsScreen": {
-    "blockToolTipLabel": "区块：{{block}}",
-    "bridgeNeo3NeoXDetailsButtonLabel": "桥接",
+    "contextButtonLabel": "上下文",
     "emptyList": "暂无交易",
-    "exportButtonLabel": "导出",
-    "feeTooltipLabel": "网络费：{{networkFee}} | 系统费：{{systemFee}}",
-    "invocationsLabel": "调用",
-    "invocationsToolTipLabel": "调用：{{invocations}}",
-    "notificationToolTipLabel": "通知：{{notifications}}",
-    "notificationsLabel": "通知",
-    "processingLabel": "加工…",
-    "receivedFromLabel": "接收自",
-    "seeOnExplorerButtonLabel": "在浏览器中查看",
-    "sentToLabel": "发送至",
-    "swapDetailsButtonLabel": "查看兑换详情",
+    "fromLabel": "从",
+    "inputLabel": "{{ value }} 个输入",
+    "inputsLabel": "{{ value }} 个输入",
+    "outputLabel": "{{ value }} 个输出",
+    "outputsLabel": "{{ value }} 个输出",
     "title": "交易",
-    "txidLabel": "交易 ID：",
-    "type": {
-      "nft": "NFT",
-      "token": "资产"
-    }
+    "toLabel": "到"
   },
   "bridgeNeo3NeoXScreen": {
     "aboutButtonLabel": "关于",

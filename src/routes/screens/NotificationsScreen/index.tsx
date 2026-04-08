@@ -72,9 +72,9 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 
       <View className="ml-3 w-full flex-shrink">
         <View className="mb-0.5 flex-row items-center gap-2.5">
-          <Text className="text-md font-sans-regular text-gray-300">{item.localizedDate}</Text>
+          <Text className="font-sans-regular text-base text-gray-300">{item.localizedDate}</Text>
 
-          <Text className="text-md rounded-full bg-gray-800 px-2.5 py-0.5 font-sans-regular capitalize text-gray-300">
+          <Text className="rounded-full bg-gray-800 px-2.5 py-0.5 font-sans-regular text-base capitalize text-gray-300">
             {item.notification.provider}
           </Text>
         </View>

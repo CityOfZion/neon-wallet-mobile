@@ -11,7 +11,7 @@ type TProps = {
 
 export const AccountSubTitle = ({ account, className }: TProps) => {
   return (
-    <View className={StyleHelper.mergeStyles('flex-row items-center justify-center gap-2.5', className)}>
+    <View className={StyleHelper.mergeStyles('flex-row items-center justify-center gap-2', className)}>
       <View
         className={StyleHelper.mergeStyles('size-3 rounded-full bg-neon')}
         style={{

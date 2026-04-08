@@ -7,7 +7,6 @@ import { SelectAccordion } from '@/components/SelectAccordion'
 import { TwButton } from '@/components/TwButton'
 
 import { DateHelper } from '@/helpers/DateHelper'
-import { ExportTransactionsHelper } from '@/helpers/ExportTransactionsHelper'
 
 import { useActions } from '@/hooks/useActions'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
@@ -20,7 +19,7 @@ import TbX from '@/assets/images/tb-x.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   dateFrom: Date
   dateTo: Date
   dateFromSelectAccordionIsOpen: boolean
@@ -29,22 +28,21 @@ type TActionData = {
 
 export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<'DateSelectionModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'dateSelectionModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
   const { language } = useLanguageSelector()
 
-  const today = new Date()
-  const maxMonths = route.params.maxMonths || 12
-
-  const { actionDataRef, actionData, setData, setDataWrapper, reset } = useActions<TActionData>({
-    dateFrom: route.params.dateFrom || dateFns.sub(today, { weeks: 1 }),
-    dateTo: route.params.dateTo || today,
+  const { actionDataRef, actionData, setData, setDataWrapper, reset } = useActions<TActionsData>({
+    dateFrom: route.params.dateFrom,
+    dateTo: route.params.dateTo,
     dateFromSelectAccordionIsOpen: true,
     dateToSelectAccordionIsOpen: false,
   })
 
+  const dateNow = new Date()
+
   const handleDateFromChange = (dateFrom: Date) => {
     setData({
-      ...ExportTransactionsHelper.calculateDateFromSelectionMaxOneYear({
+      ...DateHelper.calculateDateFromSelectionMaxOneYear({
         dateFrom,
         dateTo: actionDataRef.current.dateTo,
       }),
@@ -55,7 +53,7 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
 
   const handleDateToChange = (dateTo: Date) => {
     setData({
-      ...ExportTransactionsHelper.calculateDateToSelectionMaxOneYear({
+      ...DateHelper.calculateDateToSelectionMaxOneYear({
         dateFrom: actionDataRef.current.dateFrom,
         dateTo,
       }),
@@ -64,22 +62,19 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
   }
 
   const handleSave = () => {
-    route.params.onSelect?.(actionData.dateFrom, actionData.dateTo)
+    route.params.onSelect(actionData.dateFrom, actionData.dateTo)
+
     navigation.goBack()
   }
 
   return (
-    <TwModalLayout title={route.params.title || t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <Text className="text-center font-sans-regular text-lg text-white">
-        {route.params.description || t('description')}
-      </Text>
+    <TwModalLayout title={route.params.title} rightElement={<TwModalLayoutCloseIconButton />}>
+      <Text className="text-center font-sans-regular text-lg text-white">{route.params.description}</Text>
 
-      <Text className="text-center font-sans-italic text-lg text-gray-100">
-        {t('maxMonthLabel', { months: maxMonths })}
-      </Text>
+      <Text className="mt-0.5 text-center font-sans-italic text-base text-gray-100">{t('maxMonthLabel')}</Text>
 
       <SelectAccordion.Root
-        className="mt-6"
+        className="mt-8"
         value={DateHelper.formatLocalized(actionData.dateFrom, { format: 'PPP', language })}
         open={actionData.dateFromSelectAccordionIsOpen}
         onOpenChange={setDataWrapper('dateFromSelectAccordionIsOpen')}
@@ -88,18 +83,20 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
           label={t('startDateAccordionLabel')}
           leftElement={<MdCircleMedium aria-hidden className="size-6 text-blue" />}
         />
+
         <SelectAccordion.Content>
           <Calendar
+            className="mt-2"
             mode="single"
             date={actionData.dateFrom}
+            disabledDates={date => dateFns.isAfter(date as Date, dateNow)}
             onChange={handleDateFromChange}
-            disabledDates={date => dateFns.isAfter(date as Date, today)}
           />
         </SelectAccordion.Content>
       </SelectAccordion.Root>
 
       <SelectAccordion.Root
-        className="mt-8"
+        className="mt-4"
         value={DateHelper.formatLocalized(actionData.dateTo, { format: 'PPP', language })}
         open={actionData.dateToSelectAccordionIsOpen}
         onOpenChange={setDataWrapper('dateToSelectAccordionIsOpen')}
@@ -111,29 +108,25 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
 
         <SelectAccordion.Content>
           <Calendar
+            className="mt-2"
             mode="single"
             date={actionData.dateTo}
+            disabledDates={date => dateFns.isAfter(date as Date, dateNow)}
             onChange={handleDateToChange}
-            disabledDates={date => dateFns.isAfter(date as Date, today)}
           />
         </SelectAccordion.Content>
       </SelectAccordion.Root>
 
-      <View className="mt-auto flex-row gap-5 pt-8">
+      <View className="mt-auto flex-row gap-3 pt-12">
         <TwButton
+          label={tCommon('reset')}
           variant="outline"
           colorSchema="pink"
-          label={commonT('general.clear')}
           leftElement={<TbX aria-hidden />}
           onPress={reset}
         />
 
-        <TwButton
-          className="flex-1"
-          variant="contained-light"
-          label={commonT('general.saveAndContinue')}
-          onPress={handleSave}
-        />
+        <TwButton label={tCommon('continue')} variant="contained-light" className="flex-1" onPress={handleSave} />
       </View>
     </TwModalLayout>
   )

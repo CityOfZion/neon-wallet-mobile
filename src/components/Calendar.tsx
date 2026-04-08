@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react'
 import DateTimePicker from 'react-native-ui-datepicker'
 
+import { StyleHelper } from '@/helpers/StyleHelper'
+
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 
 import TbChevronLeft from '@/assets/images/tb-chevron-left.svg'
@@ -10,7 +12,7 @@ type TProps = Omit<ComponentProps<typeof DateTimePicker>, 'onChange' | 'classNam
   onChange?: (date: Date) => void
 }
 
-export const Calendar = ({ onChange, ...props }: TProps) => {
+export const Calendar = ({ className, onChange, ...props }: TProps) => {
   const { language } = useLanguageSelector()
 
   const handleChange = ({ date }: any) => {
@@ -23,10 +25,8 @@ export const Calendar = ({ onChange, ...props }: TProps) => {
       showOutsideDays
       containerHeight={320}
       weekdaysHeight={44}
-      className="w-full border-none bg-transparent"
-      firstDayOfWeek={1}
       {...props}
-      onChange={handleChange}
+      className={StyleHelper.mergeStyles('w-full border-none bg-transparent', className)}
       classNames={{
         day_cell: 'my-1',
         weekdays: 'mt-2',
@@ -46,7 +46,6 @@ export const Calendar = ({ onChange, ...props }: TProps) => {
         hidden: 'invisible flex-1',
         range_start_label: 'text-asphalt font-sans-bold',
         range_end_label: 'text-asphalt font-sans-bold',
-
         range_middle: 'bg-gray-100/10 rounded-none',
         month: 'rounded-md',
         month_label: 'text-white font-sans-regular text-lg',
@@ -61,6 +60,7 @@ export const Calendar = ({ onChange, ...props }: TProps) => {
         IconNext: <TbChevronRight aria-hidden className="text-gray-100" />,
         IconPrev: <TbChevronLeft aria-hidden className="text-gray-100" />,
       }}
+      onChange={handleChange}
     />
   )
 }

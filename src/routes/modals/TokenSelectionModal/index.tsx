@@ -120,12 +120,17 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
   }, [filter, filteredAndSortedTokens])
 
   return (
-    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
+    <TwModalLayout
+      title={title || t('title')}
+      titleClassName="text-xl"
+      rightElement={<TwModalLayoutCloseIconButton />}
+      withoutScroll
+    >
       <TwInput
         className="placeholder:text-neon"
         placeholder={t('inputPlaceholder')}
         containerProps={{
-          className: 'mt-6 mx-4.5',
+          className: 'mt-4 mx-4.5',
         }}
         value={filter}
         disabled={isLoading || filteredAndSortedTokens.length === 0}
@@ -134,7 +139,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
         autoCapitalize="none"
       />
 
-      <Skeleton.Root loading={isLoading} className="mt-9">
+      <Skeleton.Root loading={isLoading} className="mt-8">
         <Skeleton.Group>
           {Array.from({ length: 6 }).map((_, index) => (
             <Skeleton.Item key={`token-skeleton-${index}`} className="h-12 w-full rounded-md" />

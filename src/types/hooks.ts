@@ -1,6 +1,6 @@
 import type { ImageURISource } from 'react-native'
 
-import type { TBlockchainServiceKey } from './blockchain'
+import type { TBlockchainServiceKey, TNetwork } from './blockchain'
 import type { TAccount, TAccountType, TSkin, TWallet, TWalletBackupStatus, TWalletType } from './store'
 
 export type TUseActionsData = Record<string, any>
@@ -71,4 +71,26 @@ export type TUseImageErrorProps = {
   source?: ImageURISource
   defaultSource?: ImageURISource
   errorSource?: ImageURISource
+}
+
+export type TUseTransactionsQueryBuildTransactionsQueryKeyParams = {
+  blockchain: TBlockchainServiceKey
+  address: string
+  network: TNetwork
+  dateFrom?: Date
+  dateTo?: Date
+}
+
+export type TUseTransactionsQueryFetchTransactionParams = {
+  account: TAccount
+  dateFrom?: Date
+  dateTo?: Date
+  page: any
+  accountsMap: Map<string, TAccount>
+}
+
+export type TUseTransactionsQueryParams = {
+  account: TAccount
+  dateFrom?: Date
+  dateTo?: Date
 }
