@@ -1,4 +1,5 @@
 import { hasFullTransactions } from '@cityofzion/blockchain-service'
+import * as dateFns from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
@@ -27,10 +28,10 @@ import { ExportFullTransactionsSuccessModalContent } from './ExportFullTransacti
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TAccount } from '@/types/store'
 
-type TActionData = {
+type TActionsData = {
   selectedAccount?: TAccount
-  dateFrom?: Date
-  dateTo?: Date
+  dateFrom: Date
+  dateTo: Date
 }
 
 export const ExportFullTransactionsModal = ({
@@ -41,12 +42,18 @@ export const ExportFullTransactionsModal = ({
   const { language } = useLanguageSelector()
   const { writeFile } = useFileSystem()
 
+  const dateNow = new Date()
+
   const {
     actionData: { selectedAccount, dateFrom, dateTo },
     actionState,
     handleAct,
     setData,
-  } = useActions<TActionData>({ selectedAccount: route.params?.account })
+  } = useActions<TActionsData>({
+    selectedAccount: route.params?.account,
+    dateFrom: dateFns.sub(dateNow, { weeks: 1 }),
+    dateTo: dateNow,
+  })
 
   const formattedDateFrom = dateFrom ? DateHelper.formatLocalized(dateFrom, { format: 'LLL do', language }) : undefined
   const formattedDateTo = dateTo ? DateHelper.formatLocalized(dateTo, { format: 'LLL do', language }) : undefined
@@ -73,13 +80,13 @@ export const ExportFullTransactionsModal = ({
 
   const handleTimePeriodSelectionPress = () => {
     navigation.navigate('DateSelectionModal', {
-      onSelect: (dateFrom, dateTo) => {
-        setData({ dateFrom, dateTo })
-      },
       title: t('dateSelectionModalTitle'),
       description: t('dateSelectionModalDescription'),
       dateFrom,
       dateTo,
+      onSelect: (dateFrom, dateTo) => {
+        setData({ dateFrom, dateTo })
+      },
     })
   }
 
@@ -94,17 +101,8 @@ export const ExportFullTransactionsModal = ({
       })
 
       const format = 'yyyyMMdd'
-
-      const localizedFileDateFrom = DateHelper.formatLocalized(dateFrom, {
-        language,
-        format,
-      })
-
-      const localizedFileDateTo = DateHelper.formatLocalized(dateTo, {
-        language,
-        format,
-      })
-
+      const localizedFileDateFrom = DateHelper.formatLocalized(dateFrom, { language, format })
+      const localizedFileDateTo = DateHelper.formatLocalized(dateTo, { language, format })
       const filename = `NWM-transactions-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
 
       await writeFile(filename, result, 'text/csv')

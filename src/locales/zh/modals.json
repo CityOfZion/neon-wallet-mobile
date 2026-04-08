@@ -32,6 +32,25 @@
     "title": "选择账户",
     "walletsAccordionLabel": "钱包"
   },
+  "accountTransactionsContextModal": {
+    "dateSelectionModal": {
+      "description": "您需要选择日期以筛选交易记录。",
+      "title": "选择日期"
+    },
+    "exportButtonLabel": "导出",
+    "filtersButtonLabel": "筛选"
+  },
+  "accountTransactionsUtxoDetailsModal": {
+    "fromLabel": "从",
+    "inputTitle": "{{ value }} 个输入",
+    "inputsLabel": "输入",
+    "inputsTitle": "{{ value }} 个输入",
+    "outputTitle": "{{ value }} 个输出",
+    "outputsLabel": "输出",
+    "outputsTitle": "{{ value }} 个输出",
+    "title": "交易详情",
+    "toLabel": "至"
+  },
   "addressSelectionModal": {
     "accountsTabLabel": "我的账户",
     "addressTabLabel": "输入地址",
@@ -302,11 +321,9 @@
     "title": "签名范围"
   },
   "dateSelectionModal": {
-    "description": "选择时间段",
     "endDateAccordionLabel": "结束日期",
-    "maxMonthLabel": "（最多 {{months}} 个月）",
-    "startDateAccordionLabel": "开始日期",
-    "title": "选择日期"
+    "maxMonthLabel": "（最多 12 个月）",
+    "startDateAccordionLabel": "开始日期"
   },
   "editAccountModal": {
     "accountInput": {

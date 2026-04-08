@@ -196,7 +196,7 @@ export const SendRecipient = ({
           onChangeText={handleChangeAmount}
           editable={!isAmountDisabled}
           containerClassName="justify-end"
-          className="text-md w-24"
+          className="w-24 text-base"
           maxButtonProps={{
             isLoading: isLoadingMaxAmount,
             disabled: isAmountDisabled,

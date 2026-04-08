@@ -73,24 +73,24 @@ export const HideFraudulentTokenModal = ({
           .otherwise(() => (
             <View className="flex w-full flex-col gap-y-2.5">
               <View className="w-full break-all border-b border-gray-600 pb-2.5">
-                <Text className="text-md font-sans-regular text-white">
+                <Text className="font-sans-regular text-base text-white">
                   <Text className="font-sans-semibold">{t('tokenHashLabel')}</Text> {hash}
                 </Text>
               </View>
               <View className="w-full border-b border-gray-600 pb-2.5">
-                <Text className="text-md font-sans-regular text-white">
+                <Text className="font-sans-regular text-base text-white">
                   <Text className="font-sans-semibold">{t('tokenNameLabel')}</Text> {tokenBalance!.token.name} (
                   {tokenBalance!.token.symbol})
                 </Text>
               </View>
               <View className="w-full border-b border-gray-600 pb-2.5">
-                <Text className="text-md font-sans-regular text-white">
+                <Text className="font-sans-regular text-base text-white">
                   <Text className="font-sans-semibold">{t('blockchainLabel')}</Text>{' '}
                   {tCommonBlockchain(`${account.blockchain}.label`)}
                 </Text>
               </View>
               <View className="w-full">
-                <Text className="text-md font-sans-regular text-white">
+                <Text className="font-sans-regular text-base text-white">
                   <Text className="font-sans-semibold">{t('amountLabel')}</Text> {tokenBalance!.amount}
                 </Text>
               </View>

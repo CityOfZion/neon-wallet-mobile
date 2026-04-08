@@ -156,7 +156,7 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
 
   if (accounts.length === 0)
     return (
-      <Text className="text-md mx-auto px-6 text-center font-sans-regular leading-5 text-gray-100">
+      <Text className="mx-auto px-6 text-center font-sans-regular text-base leading-5 text-gray-100">
         {t('notFoundLabel')}
       </Text>
     )

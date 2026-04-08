@@ -257,6 +257,18 @@ export const RootStack = () => {
           getComponent={() => require('@/routes/modals/AccountAssetTokenActionsModal').AccountAssetTokenActionsModal}
         />
         <RootNavigator.Screen
+          name="AccountTransactionsContextModal"
+          getComponent={() =>
+            require('@/routes/modals/AccountTransactionsContextModal').AccountTransactionsContextModal
+          }
+        />
+        <RootNavigator.Screen
+          name="AccountTransactionsUtxoDetailsModal"
+          getComponent={() =>
+            require('@/routes/modals/AccountTransactionsUtxoDetailsModal').AccountTransactionsUtxoDetailsModal
+          }
+        />
+        <RootNavigator.Screen
           name="AccountAssetActionsModal"
           getComponent={() => require('@/routes/modals/AccountAssetActionsModal').AccountAssetActionsModal}
         />

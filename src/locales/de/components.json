@@ -8,6 +8,28 @@
     "notFoundLabel": "Keine Kontos gefunden oder bereits vorhanden. Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es später erneut.",
     "selectedOfTotal": "{{selectedCount}} von {{totalCount}} Adressen ausgewählt"
   },
+  "accountTransactionsTransactionCard": {
+    "blockToolTipLabel": "Block: {{ block }}",
+    "bridgeNeo3NeoXButtonLabel": "Bridge",
+    "detailsButtonLabel": "Details öffnen",
+    "feeTooltipLabel": "Netzwerkgebühr: {{ networkFee }} | Systemgebühr: {{ systemFee }}",
+    "invocationsToolTipLabel": "Aufrufe: {{ invocations }}",
+    "nftsTooltipLabel": "NFTs: {{ nfts }}",
+    "notificationToolTipLabel": "Benachrichtigungen: {{ notifications }}",
+    "pendingLabel": "Ausstehend…",
+    "seeOnExplorerButtonLabel": "Auf Explorer ansehen",
+    "swapButtonLabel": "Swap",
+    "totalAmountTooltipLabel": "Gesamt: {{ totalAmount }}",
+    "txIdLabel": "Tx ID:"
+  },
+  "accountTransactionsTransactionDefaultEvent": {
+    "fromLabel": "Von",
+    "toLabel": "Nach",
+    "type": {
+      "nft": "NFT",
+      "token": "Token"
+    }
+  },
   "actionInput": {
     "maxButtonLabel": "Max"
   },
