@@ -64,26 +64,15 @@
     "title": "Account Settings"
   },
   "accountTransactionsScreen": {
-    "blockToolTipLabel": "Block: {{block}}",
-    "bridgeNeo3NeoXDetailsButtonLabel": "Bridge",
+    "contextButtonLabel": "Context",
     "emptyList": "No transaction to list",
-    "exportButtonLabel": "Export",
-    "feeTooltipLabel": "Network fee: {{networkFee}} | System fee: {{systemFee}}",
-    "invocationsLabel": "Invocations",
-    "invocationsToolTipLabel": "Invocations: {{invocations}}",
-    "notificationToolTipLabel": "Notifications: {{notifications}}",
-    "notificationsLabel": "Notifications",
-    "processingLabel": "Processing…",
-    "receivedFromLabel": "Received from",
-    "seeOnExplorerButtonLabel": "See on explorer",
-    "sentToLabel": "Sent to",
-    "swapDetailsButtonLabel": "Go to swap details",
+    "fromLabel": "From",
+    "inputLabel": "{{ value }} input",
+    "inputsLabel": "{{ value }} inputs",
+    "outputLabel": "{{ value }} output",
+    "outputsLabel": "{{ value }} outputs",
     "title": "Transactions",
-    "txidLabel": "Tx id:",
-    "type": {
-      "nft": "NFT",
-      "token": "Asset"
-    }
+    "toLabel": "To"
   },
   "bridgeNeo3NeoXScreen": {
     "aboutButtonLabel": "About",

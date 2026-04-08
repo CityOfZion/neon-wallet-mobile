@@ -90,7 +90,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
   return (
     <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
       <SelectAccordion.Root
-        className="mt-8"
+        className="mt-4"
         value={selectedWallet?.name}
         open={walletAccordionIsOpen}
         onOpenChange={handleToggleWalletAccordion}
@@ -111,7 +111,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
       </SelectAccordion.Root>
 
       <SelectAccordion.Root
-        className="mt-8"
+        className="mt-4"
         value={selectedAccount?.address}
         disabled={!selectedWallet}
         open={accountAccordionIsOpen}
@@ -157,7 +157,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
         </SelectAccordion.Content>
       </SelectAccordion.Root>
 
-      <View className="mt-auto flex-row gap-5 pt-8">
+      <View className="mt-auto flex-row gap-3 pt-8">
         <TwButton
           variant="outline"
           colorSchema="pink"

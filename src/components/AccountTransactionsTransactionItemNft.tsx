@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { TTransactionNftEvent } from '@cityofzion/blockchain-service'
+import type { TNftResponse } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
 import { Text, View } from 'react-native'
 
@@ -8,31 +8,30 @@ import { Skeleton } from '@/components/Skeleton'
 
 import { useNftQuery } from '@/hooks/useNftsQuery'
 
-import type { TAccount } from '@/types/store'
+import type { TBlockchainServiceKey } from '@/types/blockchain'
 
 type TProps = {
-  account: TAccount
-  event: TTransactionNftEvent
+  blockchain: TBlockchainServiceKey
+  nft: TNftResponse
 }
 
-export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TProps) => {
-  const hash = event.nft?.hash
-  const { data, isLoading } = useNftQuery(account.blockchain, hash, event.nft?.collection?.hash)
+export const AccountTransactionsTransactionItemNft = ({ blockchain, nft }: TProps) => {
+  const { data, isLoading } = useNftQuery(blockchain, nft.hash, nft.collection?.hash)
 
   return (
-    <Skeleton.Root loading={isLoading} className="mt-4 items-start gap-2.5">
+    <Skeleton.Root loading={isLoading} className="mt-2 items-start gap-2">
       <Skeleton.Group className="flex-row">
-        <Skeleton.Item className="size-7" />
-        <Skeleton.Item className="h-9 w-32" />
+        <Skeleton.Item className="size-9 rounded bg-gray-800" />
+        <Skeleton.Item className="h-9 w-44 rounded bg-gray-800" />
       </Skeleton.Group>
 
       <Skeleton.Content className="flex-row gap-2.5">
         {data?.image && (
-          <Image contentFit="contain" className="size-7 rounded bg-gray-800" source={{ uri: data.image }} />
+          <Image contentFit="contain" className="size-9 rounded bg-gray-800" source={{ uri: data.image }} />
         )}
 
         <View>
-          {data?.name && <Text className="font-sans-regular text-sm capitalize text-white">{data.name}</Text>}
+          {data?.name && <Text className="font-sans-medium text-base capitalize text-white">{data.name}</Text>}
 
           <View className="flex-row">
             {data?.collection?.name && (
@@ -42,7 +41,7 @@ export const AccountTransactionsScreenTransferNFTItem = ({ account, event }: TPr
             )}
 
             <Text className="max-w-36 font-sans-regular text-xs text-gray-100" numberOfLines={1}>
-              #{hash}
+              #{nft.hash}
             </Text>
           </View>
         </View>

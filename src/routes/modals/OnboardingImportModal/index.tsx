@@ -50,7 +50,7 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
 
     await UtilsHelper.sleep(1000)
 
-    navigation.navigate('OnboardingCompletedScreen', { isImport: true })
+    navigation.replace('OnboardingCompletedScreen', { isImport: true })
   }
 
   const handleSubmitAddress = async (address: string) => {
@@ -141,7 +141,7 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
   }, [backupFile])
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
+    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
       <View className="mb-8">
         <Text className="my-6 text-center font-sans-regular text-lg text-white">{t('importDescription')}</Text>
 
@@ -202,31 +202,30 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
 
       <TwSeparator />
 
-      <View className="mt-8 gap-y-6">
+      <View className="mt-8 gap-y-3">
         <Text className="text-center font-sans-regular text-lg text-gray-100">{t('backupImportDescription')}</Text>
         <TwButton
           label={t('locateButtonLabel')}
           variant="card"
+          className="mt-3"
           leftElement={<TbEyeSearch aria-hidden />}
           onPress={handleBrowseClick}
         />
 
-        {backupFile && (
-          <TwBanner className="mt-2" type="success">
-            {t('messages.successFile')}
-          </TwBanner>
-        )}
+        {backupFile && <TwBanner type="success">{t('messages.successFile')}</TwBanner>}
       </View>
 
-      <TwButton
-        className="mb-3 mt-auto"
-        variant="contained-light"
-        label={tCommon('general.next')}
-        disabled={isSubmitDisabled}
-        onPress={handleSubmitPress}
-        isLoading={actionState.isActing}
-        rightElement={<TbArrowRight aria-hidden />}
-      />
+      <View className="mb-3 mt-auto">
+        <TwButton
+          className="mt-8"
+          variant="contained-light"
+          label={tCommon('general.next')}
+          disabled={isSubmitDisabled}
+          onPress={handleSubmitPress}
+          isLoading={actionState.isActing}
+          rightElement={<TbArrowRight aria-hidden />}
+        />
+      </View>
     </TwModalLayout>
   )
 }

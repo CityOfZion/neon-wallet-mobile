@@ -23,6 +23,7 @@ import type {
   TNotification,
   TSwapRecord,
   TUseTransactionsTransaction,
+  TUseTransactionsTransactionUtxo,
   TWallet,
   TWalletType,
 } from './store'
@@ -250,6 +251,17 @@ export type TAccountAssetTokenActionsModalParams = {
   showType: TUseBalanceOptionShowType
 }
 
+export type TAccountTransactionsContextModalParams = {
+  account: TAccount
+  dateFrom: Date
+  dateTo: Date
+  onDatesChange: (dateFrom: Date, dateTo: Date) => void
+}
+
+export type TAccountTransactionsUtxoDetailsModalParams = {
+  transaction: TUseTransactionsTransactionUtxo
+}
+
 export type TAccountAssetActionsModalParams = {
   account: TAccount
   wallet: TWallet
@@ -264,12 +276,11 @@ export type TExportFullTransactionsModalParams = {
 }
 
 export type TDateSelectionModalParams = {
-  dateFrom?: Date
-  dateTo?: Date
-  onSelect?: (dateFrom: Date, dateTo: Date) => void
-  title?: string
-  description?: string
-  maxMonths?: number
+  title: string
+  description: string
+  dateFrom: Date
+  dateTo: Date
+  onSelect: (dateFrom: Date, dateTo: Date) => void
 }
 
 export type TVoteNeo3SupportUsModalParams = {

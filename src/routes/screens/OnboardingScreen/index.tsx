@@ -188,7 +188,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
           <View className="w-full flex-col items-center justify-evenly">
             <OnboardingScreenProgress progress={PROGRESS_BY_STEP['finalizing']} />
             <Text className="mt-10 text-center font-sans-medium text-base text-gray-100">
-              {t(`screens:onboardingScreen.messagesByActions.finalizing`)}
+              {t('screens:onboardingScreen.messagesByActions.finalizing')}
             </Text>
           </View>
         )}

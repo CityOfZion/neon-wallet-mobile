@@ -160,7 +160,7 @@ export const VoteNeo3Screen = ({ navigation, route }: TWalletsStackScreenProps<'
         <TwAlertErrorBanner
           className="w-full gap-x-2 px-3"
           iconClassName="size-5"
-          messageClassName="text-md"
+          messageClassName="text-base"
           message={voteErrorMessage}
         />
       )}
