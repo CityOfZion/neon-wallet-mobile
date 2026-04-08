@@ -8,6 +8,28 @@
     "notFoundLabel": "找不到帳戶或已存在，請檢查您的輸入並稍後再試。",
     "selectedOfTotal": "已選擇 {{selectedCount}} / 共 {{totalCount}} 個地址"
   },
+  "accountTransactionsTransactionCard": {
+    "blockToolTipLabel": "區塊：{{ block }}",
+    "bridgeNeo3NeoXButtonLabel": "跨鏈橋",
+    "detailsButtonLabel": "開啟詳情",
+    "feeTooltipLabel": "網路費：{{ networkFee }} | 系統費：{{ systemFee }}",
+    "invocationsToolTipLabel": "呼叫：{{ invocations }}",
+    "nftsTooltipLabel": "NFTs：{{ nfts }}",
+    "notificationToolTipLabel": "通知：{{ notifications }}",
+    "pendingLabel": "處理中…",
+    "seeOnExplorerButtonLabel": "在瀏覽器中查看",
+    "swapButtonLabel": "兌換",
+    "totalAmountTooltipLabel": "總計：{{ totalAmount }}",
+    "txIdLabel": "交易 ID："
+  },
+  "accountTransactionsTransactionDefaultEvent": {
+    "fromLabel": "從",
+    "toLabel": "到",
+    "type": {
+      "nft": "NFT",
+      "token": "代幣"
+    }
+  },
   "actionInput": {
     "maxButtonLabel": "最大"
   },

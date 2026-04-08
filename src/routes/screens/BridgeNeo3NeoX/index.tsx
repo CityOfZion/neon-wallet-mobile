@@ -408,8 +408,8 @@ export const BridgeNeo3NeoXScreen = ({
           <ActionTokenButton
             label={t('form.selectPlaceholder')}
             className="bg-asphalt"
-            tokenClassName="text-md text-neon"
-            blockchainClassName="text-md text-neon"
+            tokenClassName="text-base text-neon"
+            blockchainClassName="text-base text-neon"
             token={actionData.tokenToUse.value}
             isLoading={actionData.availableTokensToUse.loading || actionData.tokenToUse.loading}
             contentProps={{ className: 'px-1 gap-2' }}
@@ -438,8 +438,8 @@ export const BridgeNeo3NeoXScreen = ({
         >
           <ActionTokenButton
             label={t('form.selectPlaceholder')}
-            tokenClassName="text-md"
-            blockchainClassName="text-md"
+            tokenClassName="text-base"
+            blockchainClassName="text-base"
             variant="card"
             token={actionData.tokenToReceive.value}
             isLoading={actionData.tokenToReceive.loading}
@@ -477,7 +477,7 @@ export const BridgeNeo3NeoXScreen = ({
             labelProps={
               !!actionData.accountToUse.value?.address
                 ? {
-                    className: StyleHelper.mergeStyles('text-md', { 'text-pink': hasAccountToUseError }),
+                    className: StyleHelper.mergeStyles('text-base', { 'text-pink': hasAccountToUseError }),
                     ellipsizeMode: 'middle',
                   }
                 : undefined
@@ -504,7 +504,7 @@ export const BridgeNeo3NeoXScreen = ({
             labelProps={
               !!actionData.addressToReceive.value
                 ? {
-                    className: StyleHelper.mergeStyles('text-md', { 'text-pink': hasAddressToReceiveError }),
+                    className: StyleHelper.mergeStyles('text-base', { 'text-pink': hasAddressToReceiveError }),
                     ellipsizeMode: 'middle',
                   }
                 : undefined
@@ -540,7 +540,7 @@ export const BridgeNeo3NeoXScreen = ({
             aria-label={t('form.amountToUseLabel')}
             placeholder={t('form.amountPlaceholder')}
             keyboardType="decimal-pad"
-            className="text-md w-24"
+            className="w-24 text-base"
             containerClassName="mt-6"
             value={actionData.amountToUse.value || ''}
             disabled={isAmountsDisabled}
@@ -549,7 +549,7 @@ export const BridgeNeo3NeoXScreen = ({
             maxButtonProps={{
               isLoading: actionData.amountToUseMax.loading,
               disabled: !actionData.amountToUseMax.value || isAmountsDisabled,
-              labelProps: { className: 'text-md' },
+              labelProps: { className: 'text-base' },
               onPress: handleApplyMaxAmountToUse,
             }}
             onChangeText={handleChangeAmountToUse}

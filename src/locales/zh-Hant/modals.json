@@ -32,6 +32,25 @@
     "title": "選擇帳戶",
     "walletsAccordionLabel": "錢包"
   },
+  "accountTransactionsContextModal": {
+    "dateSelectionModal": {
+      "description": "您需要選擇日期以篩選交易記錄。",
+      "title": "選擇日期"
+    },
+    "exportButtonLabel": "匯出",
+    "filtersButtonLabel": "篩選"
+  },
+  "accountTransactionsUtxoDetailsModal": {
+    "fromLabel": "從",
+    "inputTitle": "{{ value }} 個輸入",
+    "inputsLabel": "輸入",
+    "inputsTitle": "{{ value }} 個輸入",
+    "outputTitle": "{{ value }} 個輸出",
+    "outputsLabel": "輸出",
+    "outputsTitle": "{{ value }} 個輸出",
+    "title": "交易詳情",
+    "toLabel": "至"
+  },
   "addressSelectionModal": {
     "accountsTabLabel": "我的帳戶",
     "addressTabLabel": "輸入地址",
@@ -302,11 +321,9 @@
     "title": "簽名範圍"
   },
   "dateSelectionModal": {
-    "description": "選擇期間",
     "endDateAccordionLabel": "結束日期",
-    "maxMonthLabel": "(最多 {{months}} 個月)",
-    "startDateAccordionLabel": "開始日期",
-    "title": "選擇日期"
+    "maxMonthLabel": "(最多 12 個月)",
+    "startDateAccordionLabel": "開始日期"
   },
   "editAccountModal": {
     "accountInput": {

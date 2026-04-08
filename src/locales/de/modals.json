@@ -32,6 +32,25 @@
     "title": "Konto auswählen",
     "walletsAccordionLabel": "Wallets"
   },
+  "accountTransactionsContextModal": {
+    "dateSelectionModal": {
+      "description": "Sie müssen die Daten auswählen, um die Transaktionen zu filtern.",
+      "title": "Daten auswählen"
+    },
+    "exportButtonLabel": "Exportieren",
+    "filtersButtonLabel": "Filter"
+  },
+  "accountTransactionsUtxoDetailsModal": {
+    "fromLabel": "Von",
+    "inputTitle": "{{ value }} Eingabe",
+    "inputsLabel": "Eingaben",
+    "inputsTitle": "{{ value }} Eingaben",
+    "outputTitle": "{{ value }} Ausgabe",
+    "outputsLabel": "Ausgaben",
+    "outputsTitle": "{{ value }} Ausgaben",
+    "title": "Transaktionsdetails",
+    "toLabel": "An"
+  },
   "addressSelectionModal": {
     "accountsTabLabel": "Meine Kontos",
     "addressTabLabel": "Adresse eingeben",
@@ -302,11 +321,9 @@
     "title": "Signaturbereich"
   },
   "dateSelectionModal": {
-    "description": "Wählen Sie einen Zeitraum",
     "endDateAccordionLabel": "Enddatum",
-    "maxMonthLabel": "(max. {{months}} Monate)",
-    "startDateAccordionLabel": "Startdatum",
-    "title": "Datum auswählen"
+    "maxMonthLabel": "(max. 12 Monate)",
+    "startDateAccordionLabel": "Startdatum"
   },
   "editAccountModal": {
     "accountInput": {

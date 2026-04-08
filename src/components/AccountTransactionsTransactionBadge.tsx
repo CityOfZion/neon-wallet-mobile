@@ -13,14 +13,15 @@ type TProps = {
   icon: JSX.Element
 }
 
-export const AccountTransactionsScreenCardDetails = ({ value, icon, label }: TProps) => {
+export const AccountTransactionsTransactionBadge = ({ value, icon, label }: TProps) => {
   return (
     <Tooltip.Root type="press">
       <Tooltip.Trigger>
-        <PressableScale className="flex-row items-center gap-1 rounded bg-gray-800 px-2.5 py-1">
-          {cloneElement(icon, { className: 'text-gray-300 size-4' })}
+        <PressableScale className="flex-row items-center gap-1 rounded bg-gray-800 px-1.5 py-1">
+          {cloneElement(icon, { className: 'text-gray-100 size-4' })}
+
           {ElementHelper.isTextContentValid(value) ? (
-            <Text className="font-sans-regular text-sm text-white">{value}</Text>
+            <Text className="font-sans-regular text-base leading-4 text-gray-100">{value}</Text>
           ) : (
             value
           )}

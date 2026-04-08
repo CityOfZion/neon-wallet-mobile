@@ -8,6 +8,8 @@ import type {
   TAccountQRCodeModalParams,
   TAccountSelectionModalParams,
   TAccountStackListSelectionModalParams,
+  TAccountTransactionsContextModalParams,
+  TAccountTransactionsUtxoDetailsModalParams,
   TAddressSelectionModalParams,
   TBackupAlertModalParams,
   TBlockchainSelectionModalParams,
@@ -239,6 +241,9 @@ export type TRootStackParamList = {
   SellTokensDepositSuccessModal: TSellTokensDepositSuccessModalParams
 
   NotificationContextModal: TNotificationContextModalParams
+
+  AccountTransactionsContextModal: TAccountTransactionsContextModalParams
+  AccountTransactionsUtxoDetailsModal: TAccountTransactionsUtxoDetailsModalParams
 
   AccountAssetTokenActionsModal: TAccountAssetTokenActionsModalParams
   AccountAssetActionsModal: TAccountAssetActionsModalParams

@@ -155,7 +155,7 @@ export const BalanceList = ({ onItemPress, onItemLongPress, accounts, className,
         ) : undefined
       }
       ListFooterComponent={
-        <Skeleton.Root loading={balances.isLoading}>
+        <Skeleton.Root loading={balances.isLoading} className="mb-6">
           <Skeleton.Group>
             {Array.from({ length: 3 }).map((_, index) => (
               <Skeleton.Item key={`balance-skeleton-${index}`} className="h-12 w-full rounded-md" />
