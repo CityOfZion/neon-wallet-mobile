@@ -26,8 +26,8 @@ import MdMoreHoriz from '@/assets/images/md-more-horiz.svg'
 import { AccountTransactionsScreenTransactionDefault } from './AccountTransactionsScreenTransactionDefault'
 import { AccountTransactionsScreenTransactionUtxo } from './AccountTransactionsScreenTransactionUtxo'
 
+import type { TUseTransactionsGroupedTransactionsByDate, TUseTransactionsTransaction } from '@/types/hooks'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { TUseTransactionsGroupedTransactionsByDate, TUseTransactionsTransaction } from '@/types/store'
 
 type TActionsData = {
   dateFrom?: Date
@@ -123,7 +123,7 @@ const AccountTransactionsScreen = ({ navigation, route }: TWalletsStackScreenPro
     >
       <View className="mb-2 flex w-full flex-row items-center justify-between px-1">
         <View className="flex flex-row items-center gap-x-2">
-          <TwBlockchainIcon blockchain={blockchain} type="default" className="size-4" />
+          <TwBlockchainIcon blockchain={blockchain} className="size-4" />
 
           <Text className="font-sans-regular text-base uppercase text-white">
             {tBlockchainServices(`${blockchain}.label`)}

@@ -30,7 +30,7 @@ export const AccountAccordionItem = ({ account }: TProps) => {
 
   return (
     <View className="my-2 flex flex-row items-center gap-x-3 gap-y-1.5">
-      <TwBlockchainIcon blockchain={account.blockchain} type="gray" className="mt-1 size-4.5 self-start" />
+      <TwBlockchainIcon blockchain={account.blockchain} className="mt-1 size-4.5 self-start text-gray-300" />
 
       <View className="flex flex-shrink flex-grow flex-col">
         <Text className="max-w-[80%] font-sans-medium text-lg text-white" numberOfLines={1}>

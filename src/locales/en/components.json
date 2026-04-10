@@ -11,7 +11,6 @@
   "accountTransactionsTransactionCard": {
     "blockToolTipLabel": "Block: {{ block }}",
     "bridgeNeo3NeoXButtonLabel": "Bridge",
-    "detailsButtonLabel": "Open details",
     "feeTooltipLabel": "Network fee: {{ networkFee }} | System fee: {{ systemFee }}",
     "invocationsToolTipLabel": "Invocations: {{ invocations }}",
     "nftsTooltipLabel": "NFTs: {{ nfts }}",

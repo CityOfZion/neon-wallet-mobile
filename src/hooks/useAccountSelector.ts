@@ -1,7 +1,4 @@
-import { useRef } from 'react'
-
 import _ from 'lodash'
-import { useSelector } from 'react-redux'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
@@ -10,7 +7,6 @@ import { SelectorHelper } from '@/helpers/SelectorHelper'
 import { createAppSelector, useAppSelector } from './useRedux'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { TRootState } from '@/types/redux'
 import type { TAccount, TAccountWithWallet } from '@/types/store'
 
 const orderAccounts = <T extends TAccount = TAccount>(accounts: T[]): T[] =>
@@ -77,6 +73,22 @@ export const selectAccountsByBlockchains = (blockchains: TBlockchainServiceKey[]
     )
   })
 
+const selectAccountsWithWalletMap = createAppSelector([selectAccountsWithWallet], accountsWithWallet => {
+  const map = new Map<string, TAccountWithWallet>()
+  accountsWithWallet.forEach(account => {
+    map.set(AccountHelper.buildAccountKey(account), account)
+  })
+  return map
+})
+
+const selectAccountsMap = createAppSelector([selectAccounts], accounts => {
+  const map = new Map<string, TAccount>()
+  accounts.forEach(account => {
+    map.set(AccountHelper.buildAccountKey(account), account)
+  })
+  return map
+})
+
 export const useAccountsSelector = () => {
   const { value, ref } = useAppSelector(selectAccounts)
 
@@ -122,33 +134,11 @@ export const useAccountsByBlockchainsSelector = (blockchains: TBlockchainService
 }
 
 export const useAccountsWithWalletMapSelector = () => {
-  const accountsWithWalletMapRef = useRef<Map<string, TAccountWithWallet>>(new Map())
-
-  useSelector((state: TRootState) => {
-    const result = selectAccountsWithWallet(state)
-
-    accountsWithWalletMapRef.current = new Map<string, TAccountWithWallet>()
-
-    result.forEach(account => {
-      accountsWithWalletMapRef.current.set(AccountHelper.buildAccountKey(account), account)
-    })
-  })
-
-  return { accountsWithWalletMapRef }
+  const { ref: accountsWithWalletMapRef, value: accountsWithWalletMap } = useAppSelector(selectAccountsWithWalletMap)
+  return { accountsWithWalletMapRef, accountsWithWalletMap }
 }
 
 export const useAccountsMapSelector = () => {
-  const accountsMapRef = useRef<Map<string, TAccount>>(new Map())
-
-  useSelector((state: TRootState) => {
-    const result = selectAccounts(state)
-
-    accountsMapRef.current = new Map<string, TAccount>()
-
-    result.forEach(account => {
-      accountsMapRef.current.set(AccountHelper.buildAccountKey(account), account)
-    })
-  })
-
-  return { accountsMapRef }
+  const { ref: accountsMapRef, value: accountsMap } = useAppSelector(selectAccountsMap)
+  return { accountsMapRef, accountsMap }
 }

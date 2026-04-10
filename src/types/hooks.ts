@@ -1,3 +1,5 @@
+import type { TBSToken, TTransactionDefault, TTransactionUtxo } from '@cityofzion/blockchain-service'
+import type { TBSStellarName } from '@cityofzion/bs-stellar'
 import type { ImageURISource } from 'react-native'
 
 import type { TBlockchainServiceKey, TNetwork } from './blockchain'
@@ -73,6 +75,8 @@ export type TUseImageErrorProps = {
   errorSource?: ImageURISource
 }
 
+//* useTransactions types *//
+
 export type TUseTransactionsQueryBuildTransactionsQueryKeyParams = {
   blockchain: TBlockchainServiceKey
   address: string
@@ -86,11 +90,28 @@ export type TUseTransactionsQueryFetchTransactionParams = {
   dateFrom?: Date
   dateTo?: Date
   page: any
-  accountsMap: Map<string, TAccount>
 }
 
 export type TUseTransactionsQueryParams = {
   account: TAccount
   dateFrom?: Date
   dateTo?: Date
+}
+
+export type TUseTransactionsTransaction = TBlockchainServiceKey extends infer N
+  ? N extends TBlockchainServiceKey
+    ? TTransactionDefault<N> | TTransactionUtxo<N>
+    : never
+  : never
+
+export type TUseTransactionsGroupedTransactionsByDate = {
+  date: string
+  formattedDate: string
+  data: TUseTransactionsTransaction[]
+}
+
+export type TUseStellarPersistTrustlineMutationParams = {
+  stellarAccount: TAccount<TBSStellarName>
+  token: TBSToken
+  limit?: string
 }

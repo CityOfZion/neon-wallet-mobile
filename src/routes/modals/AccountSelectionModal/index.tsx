@@ -145,7 +145,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
                   }
                   leftElement={
                     <View className="h-full pt-1.5">
-                      <TwBlockchainIcon blockchain={account.blockchain} type="gray" className="size-4" />
+                      <TwBlockchainIcon blockchain={account.blockchain} className="size-4 text-gray-300" />
                     </View>
                   }
                 />
