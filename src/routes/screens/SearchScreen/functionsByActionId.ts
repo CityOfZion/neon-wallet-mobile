@@ -101,16 +101,16 @@ export const functionsByActionId: TFunctionsByActionId = {
     })
     navigation.navigate('ExportFullTransactionsModal')
   },
-  voteNeo3: async ({ navigation }) => {
+  neo3Vote: async ({ navigation }) => {
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
-      params: { screen: 'VoteNeo3Screen', params: { defaultNeo3Account: undefined } },
+      params: { screen: 'Neo3VoteScreen', params: { defaultNeo3Account: undefined } },
     })
   },
-  bridgeNeo3NeoX: async ({ navigation }) => {
+  neo3NeoXBridge: async ({ navigation }) => {
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
-      params: { screen: 'BridgeNeo3NeoXScreen', params: { account: undefined } },
+      params: { screen: 'Neo3NeoXBridgeScreen', params: { account: undefined } },
     })
   },
 }

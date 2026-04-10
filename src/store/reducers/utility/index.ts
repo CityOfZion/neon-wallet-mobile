@@ -7,12 +7,8 @@ import { createMigrate, getStoredState, persistReducer } from 'redux-persist'
 import { getUtilityMigrations } from './migrations'
 import { utilitySliceReducers } from './reducers'
 
-import type {
-  THiddenTokenByBlockchain,
-  TLastIndexesByWallet,
-  TSwapRecord,
-  TUseTransactionsTransaction,
-} from '@/types/store'
+import type { TUseTransactionsTransaction } from '@/types/hooks'
+import type { THiddenTokenByBlockchain, TLastIndexesByWallet, TSwapRecord } from '@/types/store'
 
 export type TUtilityReducer = {
   memoryData: {

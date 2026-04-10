@@ -100,6 +100,7 @@ export const WalletScreen = ({ navigation, route }: TWalletsStackScreenProps<'Wa
       title={wallet.name}
       withoutScroll
       headerClassName="h-[46px]"
+      contentContainerClassName="pb-0"
       rightElement={
         <TwIconButton icon={<MdMoreHoriz aria-hidden className="text-white" />} size="md" onPress={handleMorePress} />
       }

@@ -28,6 +28,7 @@ const accountSchema = zod.object({
     zod.literal('polygon'),
     zod.literal('base'),
     zod.literal('arbitrum'),
+    zod.literal('stellar'),
   ]),
   order: zod.number(),
   skin: zod.union([

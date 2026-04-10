@@ -72,7 +72,7 @@ export const ActionFeeStep = ({
         {service && !isCalculatingFee && fee && (
           <View className="flex-row">
             <Text className="font-sans-regular text-lg text-white">{service.feeToken.symbol}</Text>
-            <Text className="font-sans-regular text-lg text-gray-100">{` | ${tCommon(`${service.name}.id`)}`}</Text>
+            <Text className="font-sans-regular text-lg text-gray-100">{` | ${tCommon(`${service.name}.label`)}`}</Text>
           </View>
         )}
       </View>

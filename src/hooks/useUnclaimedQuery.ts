@@ -5,9 +5,7 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
-import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { TransactionHelper } from '@/helpers/TransactionHelper'
 
 import { useAppDispatch } from './useRedux'
 import { useSelectedNetworkByBlockchainSelector } from './useSettingsSelector'
@@ -35,7 +33,7 @@ const getUnclaimedInfos = async (
   let unclaimed = '0'
 
   if (!hasClaimPendingTransaction) {
-    unclaimed = await blockchainService.claimDataService.getUnclaimed(account.address)
+    unclaimed = await blockchainService.claimService.getUnclaimed(account.address)
   }
 
   const unclaimedNumber = parseFloat(unclaimed)
@@ -43,16 +41,12 @@ const getUnclaimedInfos = async (
   let fee = '0'
 
   if (unclaimedNumber > 0) {
-    const key = await SecureStoreHelper.getKey(account)
+    const serviceAccount = await BlockchainServiceHelper.getServiceAccount(account)
 
-    if (key) {
-      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
-
-      try {
-        fee = await blockchainService.calculateClaimFee(serviceAccount)
-      } catch {
-        /* empty */
-      }
+    try {
+      fee = await blockchainService.claimService.calculateFee(serviceAccount)
+    } catch {
+      /* empty */
     }
   }
 
@@ -84,21 +78,8 @@ export const useUnclaimedMutation = () => {
         throw new AppError(t('common:errors.blockchainIsNotClaimable'))
       }
 
-      const key = await SecureStoreHelper.getKey(account)
-
-      if (!key) {
-        throw new AppError(t('common:errors.noKey', { address: account.address }))
-      }
-
-      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
-      const transaction = await blockchainService.claim(serviceAccount)
-
-      const pendingTransaction = TransactionHelper.buildPendingTransaction({
-        transaction,
-        account,
-        senderAccount: account,
-        receiverAccounts: [account],
-      })
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount(account)
+      const transaction = await blockchainService.claimService.claim(serviceAccount)
 
       const notificationPrefix = 'hooks:useUnclaimedMutation'
       const notificationSuccessPrefix = `${notificationPrefix}.successNotification`
@@ -106,7 +87,7 @@ export const useUnclaimedMutation = () => {
 
       dispatch(
         thunks.waitPendingTransaction({
-          pendingTransaction,
+          pendingTransaction: transaction,
           successNotification: {
             title: `${notificationSuccessPrefix}.title`,
             previewBody: `${notificationSuccessPrefix}.previewBody`,

@@ -31,12 +31,10 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { NumberHelper } from '@/helpers/NumberHelper'
-import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { StringHelper } from '@/helpers/StringHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { SwapHelper } from '@/helpers/SwapHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { TransactionHelper } from '@/helpers/TransactionHelper'
 
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
@@ -163,7 +161,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
   }, [actionData.selectedTokenToUse.value, balanceQuery.data, service])
 
   const selectedAmountToUseInputRef = useRef<TextInput>(null)
-  const swapOrchestratorRef = useRef<SimpleSwapOrchestrator<TBlockchainServiceKey>>(undefined)
+  const swapOrchestratorRef = useRef<SimpleSwapOrchestrator>(undefined)
 
   const initializeOrRestartService = async () => {
     const swapService = new SimpleSwapOrchestrator({
@@ -236,11 +234,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
   }
 
   const handleSelectAccountToUse = async (account: TAccount) => {
-    const key = await SecureStoreHelper.getKey(account)
-    if (!key) return
-
-    const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
-
+    const serviceAccount = await BlockchainServiceHelper.getServiceAccount(account)
     swapOrchestratorRef.current?.setAccountToUse(serviceAccount)
   }
 
@@ -300,15 +294,8 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
       await authenticate(account)
 
       const { id, transaction, log } = await swapOrchestratorRef.current.swap()
-
       if (transaction) {
-        const pendingTransaction = TransactionHelper.buildPendingTransaction({
-          transaction,
-          account,
-          senderAccount: account,
-        })
-
-        dispatch(thunks.waitPendingTransaction({ pendingTransaction }))
+        dispatch(thunks.waitPendingTransaction({ pendingTransaction: transaction }))
       }
 
       swapRecord.swapId = id

@@ -125,23 +125,23 @@ export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickTool
     )
   }
 
-  const handlePressBridgeNeo3NeoX = () => {
+  const handlePressNeo3NeoXBridge = () => {
     navigation.navigate(
       'TabStack',
       {
         screen: 'WalletsStack',
-        params: { screen: 'BridgeNeo3NeoXScreen', params: { account: undefined } },
+        params: { screen: 'Neo3NeoXBridgeScreen', params: { account: undefined } },
       },
       { pop: true }
     )
   }
 
-  const handlePressVoteNeo3 = () => {
+  const handlePressNeo3Vote = () => {
     navigation.navigate(
       'TabStack',
       {
         screen: 'WalletsStack',
-        params: { screen: 'VoteNeo3Screen', params: { defaultNeo3Account: undefined } },
+        params: { screen: 'Neo3VoteScreen', params: { defaultNeo3Account: undefined } },
       },
       { pop: true }
     )
@@ -198,17 +198,17 @@ export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickTool
       <TwSeparator />
 
       <TwMenuButton
-        label={t('bridgeNeo3NeoX.title')}
+        label={t('neo3NeoXBridge.title')}
         leftElement={<TbReplace2 aria-hidden />}
-        onPress={handlePressBridgeNeo3NeoX}
+        onPress={handlePressNeo3NeoXBridge}
       />
 
       <TwSeparator />
 
       <TwMenuButton
-        label={t('voteNeo3.title')}
+        label={t('neo3Vote.title')}
         leftElement={<TbChartBarPopular aria-hidden />}
-        onPress={handlePressVoteNeo3}
+        onPress={handlePressNeo3Vote}
       />
 
       <TwSeparator />

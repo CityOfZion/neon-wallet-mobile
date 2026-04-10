@@ -1,4 +1,3 @@
-import type { TTransaction } from '@cityofzion/blockchain-service'
 import type { NavigationProp } from '@react-navigation/native'
 import type { Event } from '@sentry/react-native'
 import type { CoreTypes } from '@walletconnect/types'
@@ -91,11 +90,4 @@ export type TLoggerHelperOptions = {
 
 export type TSentryHelperOptions = TLoggerHelperOptions & {
   level: Event['level']
-}
-
-export type TTransactionHelperBuildPendingTransactionParams = {
-  transaction: TTransaction<TBlockchainServiceKey>
-  account: TAccount
-  senderAccount?: TAccount
-  receiverAccounts?: (TAccount | undefined)[]
 }
