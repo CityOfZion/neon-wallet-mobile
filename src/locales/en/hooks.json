@@ -76,6 +76,18 @@
     },
     "wrongPasswordError": "Wrong password. Please try again."
   },
+  "usePersistTrustlineMutation": {
+    "errorToastMessage": "Failed to persist trustline",
+    "failureNotification": {
+      "previewBody": "We couldn't verify the completion of your trustline",
+      "title": "Change Trustline failed"
+    },
+    "successNotification": {
+      "previewBody": "Your trustline has been changed successfully",
+      "title": "Change Trustline completed"
+    },
+    "successToastMessage": "Trustline persisted successfully"
+  },
   "useUnclaimedMutation": {
     "errors": {
       "claimError": "There was an error trying to claim. Please, try again."

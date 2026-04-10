@@ -7,8 +7,9 @@ import { ReactQueryHelper } from '@/helpers/ReactQueryHelper'
 import { notificationReducerActions } from '../reducers/notification'
 import { utilityReducerActions } from '../reducers/utility'
 
+import type { TUseTransactionsTransaction } from '@/types/hooks'
 import type { TRootState } from '@/types/redux'
-import type { TNotification, TSaveNotification, TUseTransactionsTransaction } from '@/types/store'
+import type { TNotification, TSaveNotification } from '@/types/store'
 
 type TParams = {
   pendingTransaction: TUseTransactionsTransaction
@@ -21,8 +22,9 @@ export const waitPendingTransaction = createAsyncThunk<void, TParams>(
   async (params, { getState, dispatch }) => {
     const state = getState() as TRootState
     const { pendingTransaction, successNotification, failureNotification } = params
-    const { txId, account } = pendingTransaction
-    const { address, blockchain } = account
+    const { txId, blockchain, relatedAddress } = pendingTransaction
+    const address = relatedAddress!
+
     const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
     const network = state.settings.data.selectedNetworkByBlockchain[blockchain]
     const hasNotifications = !!successNotification && !!failureNotification
@@ -54,7 +56,7 @@ export const waitPendingTransaction = createAsyncThunk<void, TParams>(
       // Empty block
     }
 
-    ReactQueryHelper.invalidateTransactionQueries(account, network)
+    ReactQueryHelper.invalidateTransactionQueries(address, blockchain, network)
 
     if (notification) dispatch(notificationReducerActions.saveNotification(notification))
 

@@ -1,3 +1,7 @@
+import type { TBSBridgeName } from '@cityofzion/blockchain-service'
+import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
+import type { TBSStellarName } from '@cityofzion/bs-stellar'
+
 import type { EBuyAndSellTokensScreenTabValue } from '@/routes/screens/BuyAndSellTokensScreen'
 import type { TSettingsTab } from '@/routes/screens/SettingsScreen'
 
@@ -114,12 +118,12 @@ export type TBuyAndSellTokensScreenParams = {
   screenType?: EBuyAndSellTokensScreenTabValue
 }
 
-export type TVoteNeo3ScreenParams = {
-  defaultNeo3Account?: TAccount
+export type TNeo3VoteScreenParams = {
+  defaultNeo3Account?: TAccount<TBSNeo3Name>
 }
 
-export type TBridgeNeo3NeoXScreenParams = {
-  account?: TAccount
+export type TNeo3NeoXBridgeScreenParams = {
+  account?: TAccount<TBSBridgeName>
 }
 
 export type TSettingsScreenParams = {
@@ -128,4 +132,8 @@ export type TSettingsScreenParams = {
 
 export type TReceiveScreenParams = {
   account: TAccount
+}
+
+export type TStellarTrustlineScreenParams = {
+  stellarAccount: TAccount<TBSStellarName>
 }

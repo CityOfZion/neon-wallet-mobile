@@ -46,7 +46,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
             )}
           >
             <View className="flex-shrink flex-grow flex-row items-center gap-3">
-              <TwBlockchainIcon blockchain={contactAddress.blockchain} type="gray" className="mt-0.5 size-3.5" />
+              <TwBlockchainIcon blockchain={contactAddress.blockchain} className="mt-0.5 size-3.5 text-gray-300" />
 
               <Text className="flex-shrink font-sans-medium text-lg text-white" numberOfLines={1}>
                 {item.name}

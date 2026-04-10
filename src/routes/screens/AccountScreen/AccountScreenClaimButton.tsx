@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useState } from 'react'
 
-import type { IBlockchainService, IBSWithClaim, TBSToken } from '@cityofzion/blockchain-service'
+import type { TBSToken } from '@cityofzion/blockchain-service'
 import { BSBigNumberHelper, isClaimable } from '@cityofzion/blockchain-service'
 import type { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -15,7 +15,6 @@ import { useUnclaimed, useUnclaimedMutation } from '@/hooks/useUnclaimedQuery'
 
 import { AccountScreenWarningClaimModal } from './AccountScreenWarningClaimModal'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount } from '@/types/store'
 
 type TProps = {
@@ -43,20 +42,6 @@ export const AccountScreenClaimButton = ({ account }: TProps) => {
     [blockchainService, balanceData]
   )
 
-  const getClaimAssetValues = () => {
-    const bsService = blockchainService as IBlockchainService<TBlockchainServiceKey> &
-      IBSWithClaim<TBlockchainServiceKey>
-    const unclaimedData = unclaimedQuery.data
-    const claimToken = bsService?.claimToken
-
-    if (!unclaimedData || !claimToken) return { amount: '0', symbol: '' }
-
-    return {
-      amount: BSBigNumberHelper.format(unclaimedData.unclaimedNumber, { decimals: claimToken.decimals }),
-      symbol: claimToken.symbol,
-    }
-  }
-
   let text: ReactNode
   let disabled: boolean
   let warning: boolean = false
@@ -66,6 +51,8 @@ export const AccountScreenClaimButton = ({ account }: TProps) => {
     text = t('gasUnavailable')
     disabled = true
   } else {
+    claimToken = blockchainService.claimService.claimToken
+
     if (
       account.type === 'watch' ||
       unclaimedQuery.data.unclaimedNumber <= 0 ||
@@ -75,13 +62,19 @@ export const AccountScreenClaimButton = ({ account }: TProps) => {
     } else if (unclaimedQuery.data.unclaimedNumber < unclaimedQuery.data.feeNumber) {
       disabled = false
       warning = true
-      claimToken = blockchainService.claimToken
     } else {
       disabled = false
     }
 
     text = (
-      <Trans t={t} i18nKey="claimAsset" values={getClaimAssetValues()}>
+      <Trans
+        t={t}
+        i18nKey="claimAsset"
+        values={{
+          amount: BSBigNumberHelper.format(unclaimedQuery.data.unclaimedNumber, { decimals: claimToken.decimals }),
+          symbol: claimToken.symbol,
+        }}
+      >
         end
         <Text className="text-neon">start</Text>
       </Trans>

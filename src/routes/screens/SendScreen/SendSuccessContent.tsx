@@ -13,8 +13,9 @@ import { useWalletByIdSelector } from '@/hooks/useWalletSelector'
 import TbExternalLink from '@/assets/images/tb-external-link.svg'
 import TbEye from '@/assets/images/tb-eye.svg'
 
+import type { TUseTransactionsTransaction } from '@/types/hooks'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { TAccount, TUseTransactionsTransaction } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
   transactions: TUseTransactionsTransaction[]

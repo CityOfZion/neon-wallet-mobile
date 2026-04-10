@@ -26,7 +26,7 @@ type TItem = {
 
 const renderItem: ListRenderItem<TItem> = ({ item }) => (
   <TwMenuButton
-    leftElement={<TwBlockchainIcon blockchain={item.blockchain} className="size-6" />}
+    leftElement={<TwBlockchainIcon blockchain={item.blockchain} className="size-6 text-[none]" />}
     label={item.label}
     subtitle={item.subtitle}
     onPress={item.onPress}
@@ -38,7 +38,7 @@ export const SettingsProtocolsScreen = ({ navigation }: TMoreStackScreenProps<'S
   const { t } = useTranslation('screens', { keyPrefix: 'settingsProtocolsScreen' })
   const { t: commonT } = useTranslation('common')
 
-  const data = useMemo(() => {
+  const data = useMemo<TItem[]>(() => {
     return BlockchainServiceHelper.blockchainNames.map(blockchain => ({
       blockchain,
       label: commonT(`blockchainServices.${blockchain}.label`),

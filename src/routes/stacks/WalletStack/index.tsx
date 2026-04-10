@@ -53,12 +53,12 @@ export const WalletStack = () => {
         getComponent={() => require('@/routes/screens/BuyAndSellTokensScreen').BuyAndSellTokensScreen}
       />
       <WalletNavigator.Screen
-        name="VoteNeo3Screen"
-        getComponent={() => require('@/routes/screens/VoteNeo3Screen').VoteNeo3Screen}
+        name="Neo3VoteScreen"
+        getComponent={() => require('@/routes/screens/Neo3VoteScreen').Neo3VoteScreen}
       />
       <WalletNavigator.Screen
-        name="BridgeNeo3NeoXScreen"
-        getComponent={() => require('@/routes/screens/BridgeNeo3NeoX').BridgeNeo3NeoXScreen}
+        name="Neo3NeoXBridgeScreen"
+        getComponent={() => require('@/routes/screens/Neo3NeoXBridge').Neo3NeoXBridgeScreen}
       />
       <WalletNavigator.Screen
         name="SendScreen"
@@ -68,6 +68,11 @@ export const WalletStack = () => {
       <WalletNavigator.Screen
         name="ReceiveScreen"
         getComponent={() => require('@/routes/screens/ReceiveScreen').ReceiveScreen}
+      />
+
+      <WalletNavigator.Screen
+        name="StellarTrustlineScreen"
+        getComponent={() => require('@/routes/screens/StellarTrustlineScreen').StellarTrustlineScreen}
       />
     </WalletNavigator.Navigator>
   )

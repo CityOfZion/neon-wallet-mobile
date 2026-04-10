@@ -1,32 +1,34 @@
 import React from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigNumberHelper, type TTransactionUtxoInputOutput } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { TwIconButton } from '@/components/TwIconButton'
 
+import { AccountHelper } from '@/helpers/AccountHelper'
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 
+import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useExchange } from '@/hooks/useExchanges'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { TUseTransactionsTransactionInputOutput } from '@/types/store'
 
 type TProps = {
   blockchain: TBlockchainServiceKey
-  inputOutput: TUseTransactionsTransactionInputOutput
+  inputOutput: TTransactionUtxoInputOutput
 }
 
 export const AccountTransactionsUtxoDetailsListItem = ({ blockchain, inputOutput }: TProps) => {
   const { t } = useTranslation('common', { keyPrefix: 'general' })
   const { currency } = useCurrencySelector()
   const { data } = useExchange([{ blockchain, tokens: [inputOutput.token] }])
+  const { accountsMap } = useAccountsMapSelector()
 
   const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(inputOutput.token.hash, blockchain, data)
 
@@ -35,11 +37,15 @@ export const AccountTransactionsUtxoDetailsListItem = ({ blockchain, inputOutput
     { currency }
   )
 
+  const account = inputOutput.address
+    ? accountsMap.get(AccountHelper.buildAccountKey({ address: inputOutput.address, blockchain }))
+    : undefined
+
   return (
     <View className="flex gap-y-1">
       <View className="flex flex-row gap-x-2">
         <Text className="max-w-[92%] font-sans-medium text-sm text-gray-100" numberOfLines={1} ellipsizeMode="middle">
-          {inputOutput.account?.name || inputOutput.address || t('emptyData')}
+          {account?.name || inputOutput.address || t('emptyData')}
         </Text>
 
         {!!inputOutput.address && (

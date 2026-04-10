@@ -23,12 +23,13 @@
   "accountScreen": {
     "blockHeightTitle": "{{ blockchain }} block height",
     "buttons": {
-      "bridgeNeo3NeoX": "Bridge",
       "buyAndSell": "Buy + Sell",
+      "neo3NeoXBridge": "Bridge",
+      "neo3Vote": "Voting Neo 3",
       "receive": "Receive",
       "send": "Send",
-      "swap": "Swap",
-      "voteNeo3": "Voting Neo 3"
+      "stellarTrustline": "Manage Trustline",
+      "swap": "Swap"
     },
     "claimAsset": "<1>Claim</1> {{ amount }} {{ symbol }}",
     "connections": "Connections",
@@ -65,6 +66,7 @@
   },
   "accountTransactionsScreen": {
     "contextButtonLabel": "Context",
+    "detailsButtonLabel": "Open details",
     "emptyList": "No transaction to list",
     "fromLabel": "From",
     "inputLabel": "{{ value }} input",
@@ -73,53 +75,6 @@
     "outputsLabel": "{{ value }} outputs",
     "title": "Transactions",
     "toLabel": "To"
-  },
-  "bridgeNeo3NeoXScreen": {
-    "aboutButtonLabel": "About",
-    "errorsByCode": {
-      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "The selected account is not compatible with the selected token",
-      "AMOUNT_ABOVE_MAXIMUM": "The amount is above the maximum",
-      "AMOUNT_BELOW_MINIMUM": "The amount is below the minimum",
-      "BRIDGE_NOT_READY": "The bridge is not ready yet, please fill all the fields",
-      "INSUFFICIENT_FEE_TOKEN_BALANCE": "Insufficient balance to cover the bridge fee",
-      "NO_AVAILABLE_TOKENS": "No available tokens to bridge",
-      "PAIR_TOKEN_NOT_FOUND": "The pair token was not found",
-      "TOKEN_NOT_AVAILABLE": "The selected token is not available to bridge",
-      "UNEXPECTED_ERROR": "Unexpected error, please try again"
-    },
-    "form": {
-      "accountDetailsStepLabel": "Account details",
-      "accountToUseLabel": "Bridge from here",
-      "accountToUseModalTitle": "Select an account",
-      "addressToReceiveLabel": "Receive here",
-      "addressToReceiveModalTitle": "Select a receiving account",
-      "amountPlaceholder": "0.00",
-      "amountToReceiveAfterFeesLabel": "(after fees)",
-      "amountToReceiveLabel": "Amount you'll get",
-      "amountToReceivePlaceholder": "0.00000000",
-      "amountToUseLabel": "Amount",
-      "amountToUseMinLabel": "Minimum {{amount}}",
-      "amountToUseMinPlaceholder": "0.00000000",
-      "amountsStepLabel": "Amounts",
-      "assetsStepLabel": "Assets",
-      "balanceLabel": "Balance",
-      "balancePlaceholder": "0.00",
-      "bridgeFeeLabel": "Transaction fee",
-      "bridgeFeePlaceholder": "0.00",
-      "selectPlaceholder": "Select…",
-      "submitButtonLabel": "Bridge now",
-      "switchTokensButtonLabel": "Switch tokens",
-      "tokenToReceiveLabel": "Bridge to this",
-      "tokenToUseLabel": "Bridge from this",
-      "tokenToUseModalTitle": "Select a token to bridge"
-    },
-    "messages": {
-      "bridgeError": "There was a problem to bridge, please, try again later",
-      "networksShouldBeMainnet": "Neo 3 and Neo X should be using Mainnet",
-      "selectAccountToUseError": "Problem on select account to use"
-    },
-    "restartButtonLabel": "Restart",
-    "title": "Bridge tokens"
   },
   "buyAndSellTokensScreen": {
     "buttons": {
@@ -237,6 +192,91 @@
     "privatePolicyButtonLabel": "Privacy policy",
     "settingsButtonLabel": "Settings",
     "title": "More options"
+  },
+  "neo3NeoXBridgeScreen": {
+    "aboutButtonLabel": "About",
+    "errorsByCode": {
+      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "The selected account is not compatible with the selected token",
+      "AMOUNT_ABOVE_MAXIMUM": "The amount is above the maximum",
+      "AMOUNT_BELOW_MINIMUM": "The amount is below the minimum",
+      "BRIDGE_NOT_READY": "The bridge is not ready yet, please fill all the fields",
+      "INSUFFICIENT_FEE_TOKEN_BALANCE": "Insufficient balance to cover the bridge fee",
+      "NO_AVAILABLE_TOKENS": "No available tokens to bridge",
+      "PAIR_TOKEN_NOT_FOUND": "The pair token was not found",
+      "TOKEN_NOT_AVAILABLE": "The selected token is not available to bridge",
+      "UNEXPECTED_ERROR": "Unexpected error, please try again"
+    },
+    "form": {
+      "accountDetailsStepLabel": "Account details",
+      "accountToUseLabel": "Bridge from here",
+      "accountToUseModalTitle": "Select an account",
+      "addressToReceiveLabel": "Receive here",
+      "addressToReceiveModalTitle": "Select a receiving account",
+      "amountPlaceholder": "0.00",
+      "amountToReceiveAfterFeesLabel": "(after fees)",
+      "amountToReceiveLabel": "Amount you'll get",
+      "amountToReceivePlaceholder": "0.00000000",
+      "amountToUseLabel": "Amount",
+      "amountToUseMinLabel": "Minimum {{amount}}",
+      "amountToUseMinPlaceholder": "0.00000000",
+      "amountsStepLabel": "Amounts",
+      "assetsStepLabel": "Assets",
+      "balanceLabel": "Balance",
+      "balancePlaceholder": "0.00",
+      "bridgeFeeLabel": "Transaction fee",
+      "bridgeFeePlaceholder": "0.00",
+      "selectPlaceholder": "Select…",
+      "submitButtonLabel": "Bridge now",
+      "switchTokensButtonLabel": "Switch tokens",
+      "tokenToReceiveLabel": "Bridge to this",
+      "tokenToUseLabel": "Bridge from this",
+      "tokenToUseModalTitle": "Select a token to bridge"
+    },
+    "messages": {
+      "bridgeError": "There was a problem to bridge, please, try again later",
+      "networksShouldBeMainnet": "Neo 3 and Neo X should be using Mainnet",
+      "selectAccountToUseError": "Problem on select account to use"
+    },
+    "restartButtonLabel": "Restart",
+    "title": "Bridge tokens"
+  },
+  "neo3VoteScreen": {
+    "account": {
+      "changeLabel": "Change",
+      "noAccountSelectedLabel": "No account selected",
+      "selectLabel": "Select",
+      "selectNeo3AccountTitle": "Select Neo 3 account"
+    },
+    "availableVotes": {
+      "availableVotesLabel": "Available votes",
+      "noAvailableVotesLabel": "No votes"
+    },
+    "howItWorksButtonLabel": "How it works",
+    "list": {
+      "nameColumnLabel": "Candidate",
+      "positionColumnLabel": "Position",
+      "voteColumnLabel": "Vote"
+    },
+    "listItem": {
+      "castVoteButtonLabel": "Cast vote",
+      "detailsButtonLabel": "Candidate information",
+      "votedButtonLabel": "Voted!"
+    },
+    "listNotFound": {
+      "text": "There are no candidates to vote for or there was a problem obtaining them. Verify your Neo 3 network, and please, try again.",
+      "title": "No candidates to display"
+    },
+    "searchLabel": "Search",
+    "searchPlaceholder": "Search for a candidate…",
+    "title": "Voting",
+    "voteErrorMessages": {
+      "accountCanNotBeWatchLabel": "Your Neo 3 account is in watch mode",
+      "noNeo3AccountsLabel": "There isn't any non-watch Neo 3 account",
+      "selectNeo3AccountLabel": "Select a Neo 3 account",
+      "shouldHaveEnoughGasToPayFeeLabel": "You don't have enough GAS to pay the fee",
+      "shouldUseMainnetLabel": "You should use a Mainnet network to vote",
+      "thereIsNoNeoLabel": "Your Neo 3 account should have NEO"
+    }
   },
   "notificationsScreen": {
     "actions": {
@@ -408,6 +448,11 @@
       "description": "All wallets are backed up, please continue to setup security"
     }
   },
+  "stellarTrustlineScreen": {
+    "addTrustlineButtonLabel": "Add trustline",
+    "emptyList": "No trustlines found",
+    "title": "Stellar Trustline"
+  },
   "supportTicketScreen": {
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Describe your issue…",
@@ -466,44 +511,6 @@
     "title": "Swap tokens",
     "tooltips": {
       "experimentHigherAmounts": "Exchange rates are better with higher swap amounts, experiment!"
-    }
-  },
-  "voteNeo3Screen": {
-    "account": {
-      "changeLabel": "Change",
-      "noAccountSelectedLabel": "No account selected",
-      "selectLabel": "Select",
-      "selectNeo3AccountTitle": "Select Neo 3 account"
-    },
-    "availableVotes": {
-      "availableVotesLabel": "Available votes",
-      "noAvailableVotesLabel": "No votes"
-    },
-    "howItWorksButtonLabel": "How it works",
-    "list": {
-      "nameColumnLabel": "Candidate",
-      "positionColumnLabel": "Position",
-      "voteColumnLabel": "Vote"
-    },
-    "listItem": {
-      "castVoteButtonLabel": "Cast vote",
-      "detailsButtonLabel": "Candidate information",
-      "votedButtonLabel": "Voted!"
-    },
-    "listNotFound": {
-      "text": "There are no candidates to vote for or there was a problem obtaining them. Verify your Neo 3 network, and please, try again.",
-      "title": "No candidates to display"
-    },
-    "searchLabel": "Search",
-    "searchPlaceholder": "Search for a candidate…",
-    "title": "Voting",
-    "voteErrorMessages": {
-      "accountCanNotBeWatchLabel": "Your Neo 3 account is in watch mode",
-      "noNeo3AccountsLabel": "There isn't any non-watch Neo 3 account",
-      "selectNeo3AccountLabel": "Select a Neo 3 account",
-      "shouldHaveEnoughGasToPayFeeLabel": "You don't have enough GAS to pay the fee",
-      "shouldUseMainnetLabel": "You should use a Mainnet network to vote",
-      "thereIsNoNeoLabel": "Your Neo 3 account should have NEO"
     }
   },
   "walletBackupStep1Screen": {

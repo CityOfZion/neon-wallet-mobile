@@ -59,7 +59,7 @@ const AccountSelectionAccordionHeader = ({
 
         <View className="flex-shrink flex-grow">
           <Text className="font-sans-medium text-xs text-gray-300">
-            {commonT(`blockchainServices.${blockchain}.id`)}
+            {commonT(`blockchainServices.${blockchain}.label`)}
           </Text>
 
           <Text

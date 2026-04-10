@@ -13,8 +13,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useAccountByIdSelector } from '@/hooks/useAccountSelector'
 import { useBalance } from '@/hooks/useBalances'
-import { useBridgeNeo3NeoXValidations } from '@/hooks/useBridgeNeo3NeoXValidations'
-import { useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
+import { useSelectedNetworkByBlockchainSelector, useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 import { useUnclaimed } from '@/hooks/useUnclaimedQuery'
 import { useIsConnectedSelector } from '@/hooks/useUtilitySelector'
 import { useWalletByIdSelector } from '@/hooks/useWalletSelector'
@@ -31,6 +30,7 @@ import TbChartBarPopular from '@/assets/images/tb-chart-bar-popular.svg'
 import TbDiamond from '@/assets/images/tb-diamond.svg'
 import TbPlug from '@/assets/images/tb-plug.svg'
 import TbReplace2 from '@/assets/images/tb-replace-2.svg'
+import TbShieldCheck from '@/assets/images/tb-shield-check.svg'
 import TbShoppingBag from '@/assets/images/tb-shopping-bag.svg'
 import TbStepInto from '@/assets/images/tb-step-into.svg'
 import TbStepOut from '@/assets/images/tb-step-out.svg'
@@ -47,7 +47,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
   const { wallet } = useWalletByIdSelector(route.params.wallet.id)
   const { selectedNetwork } = useSelectedNetworkSelector(account.blockchain)
   const { isNotConnected } = useIsConnectedSelector()
-  const { canAccountBridge } = useBridgeNeo3NeoXValidations(account)
+  const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
 
   const balanceQuery = useBalance(account)
   const unclaimedQuery = useUnclaimed(account)
@@ -63,13 +63,20 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
   const isCustomNetwork = selectedNetwork.type === 'custom'
   const isWatchAccount = account?.type === 'watch'
 
+  const isAbleToNeo3NeoXBridge =
+    selectedNetworkByBlockchain[account!.blockchain].type === 'mainnet' &&
+    !isWatchAccount &&
+    (account?.blockchain === 'neox' || account?.blockchain === 'neo3')
+
+  const isAbleToNeo3Vote = account?.blockchain === 'neo3'
+
+  const isAbleToStellarTrustline = account?.blockchain === 'stellar'
+
   const isSendDisabled =
     isNotConnected ||
     isWatchAccount ||
     tokenBalances.length === 0 ||
     tokenBalances.every(balance => balance.amountNumber <= 0)
-
-  const isNeo3Account = account?.blockchain === 'neo3'
 
   const handleRefetch = () => {
     balanceQuery.refetch()
@@ -124,16 +131,19 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
     navigation.navigate('SwapScreen', { account })
   }
 
-  const handlePressVoteNeo3Button = () => {
-    if (!isNeo3Account) return
-
-    navigation.navigate('VoteNeo3Screen', { defaultNeo3Account: account })
+  const handlePressNeo3VoteButton = () => {
+    if (!isAbleToNeo3Vote) return
+    navigation.navigate('Neo3VoteScreen', { defaultNeo3Account: account })
   }
 
-  const handlePressBridgeNeo3NeoXButton = () => {
-    if (isWatchAccount || !canAccountBridge) return
+  const handlePressNeo3NeoXBridgeButton = () => {
+    if (!isAbleToNeo3NeoXBridge) return
+    navigation.navigate('Neo3NeoXBridgeScreen', { account })
+  }
 
-    navigation.navigate('BridgeNeo3NeoXScreen', { account })
+  const handlePressStellarTrustlineButton = () => {
+    if (!isAbleToStellarTrustline) return
+    navigation.navigate('StellarTrustlineScreen', { stellarAccount: account })
   }
 
   return (
@@ -190,7 +200,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
         />
       </View>
 
-      {(isAndroid || canAccountBridge) && (
+      {(isAndroid || isAbleToNeo3NeoXBridge) && (
         <View className="mt-3 flex flex-shrink flex-row gap-x-3">
           {isAndroid && (
             <AccountScreenActionButton
@@ -202,25 +212,36 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
             />
           )}
 
-          {canAccountBridge && (
+          {isAbleToNeo3NeoXBridge && (
             <AccountScreenActionButton
-              label={t('buttons.bridgeNeo3NeoX')}
+              label={t('buttons.neo3NeoXBridge')}
               className="w-full"
-              disabled={isWatchAccount}
               icon={<TbReplace2 aria-hidden className="size-5 text-neon" />}
-              onPress={handlePressBridgeNeo3NeoXButton}
+              onPress={handlePressNeo3NeoXBridgeButton}
             />
           )}
         </View>
       )}
 
-      {isNeo3Account && (
+      {isAbleToNeo3Vote && (
         <View className="mt-3 flex flex-shrink flex-row gap-x-3">
           <AccountScreenActionButton
-            label={t('buttons.voteNeo3')}
+            label={t('buttons.neo3Vote')}
             className="w-full"
             icon={<TbChartBarPopular aria-hidden className="size-5 text-neon" />}
-            onPress={handlePressVoteNeo3Button}
+            onPress={handlePressNeo3VoteButton}
+          />
+        </View>
+      )}
+
+      {isAbleToStellarTrustline && (
+        <View className="mt-3 flex flex-shrink flex-row gap-x-3">
+          <AccountScreenActionButton
+            label={t('buttons.stellarTrustline')}
+            className="w-full"
+            disabled={isWatchAccount}
+            icon={<TbShieldCheck aria-hidden className="size-5 text-neon" />}
+            onPress={handlePressStellarTrustlineButton}
           />
         </View>
       )}

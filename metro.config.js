@@ -33,6 +33,26 @@ module.exports = (() => {
       return context.resolveRequest(context, 'readable-stream', platform)
     }
 
+    if (moduleName === 'url') {
+      return context.resolveRequest(context, 'react-native-url-polyfill', platform)
+    }
+
+    if (moduleName === 'events') {
+      return context.resolveRequest(context, 'events', platform)
+    }
+
+    if (moduleName === 'util') {
+      return context.resolveRequest(context, 'util', platform)
+    }
+
+    if (moduleName === 'http') {
+      return context.resolveRequest(context, 'stream-http', platform)
+    }
+
+    if (moduleName === 'https') {
+      return context.resolveRequest(context, 'https-browserify', platform)
+    }
+
     return context.resolveRequest(context, moduleName, platform)
   }
 

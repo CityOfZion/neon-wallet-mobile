@@ -16,19 +16,15 @@ import { TwInput } from '@/components/TwInput'
 import { TwSeparator } from '@/components/TwSeparator'
 import { TwStepSeparator } from '@/components/TwStepSeparator'
 
-import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { NumberHelper } from '@/helpers/NumberHelper'
-import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { StringHelper } from '@/helpers/StringHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { TransactionHelper } from '@/helpers/TransactionHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
-import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useBalance } from '@/hooks/useBalances'
@@ -55,14 +51,12 @@ export const SellTokensDepositModal = ({
   route: { params },
 }: TRootStackScreenProps<'SellTokensDepositModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositModal' })
-  const { t: commonT } = useTranslation('common')
 
   const dispatch = useAppDispatch()
   const { currency } = useCurrencySelector()
   const { authenticate } = useAuthentication()
   const debounceAddress = useDebounceFunction()
   const debounceAmount = useDebounceFunction()
-  const { accountsMapRef } = useAccountsMapSelector()
   const amountTextInputRef = useRef<TextInput>(null)
   const isTransactionCompleted = useRef(false)
 
@@ -83,7 +77,7 @@ export const SellTokensDepositModal = ({
   const service = useMemo(
     () =>
       actionData.account
-        ? BlockchainServiceHelper.bsAggregator.blockchainServicesByName[actionData.account.blockchain]
+        ? BlockchainServiceHelper.bsAggregator.blockchainServicesByNameRecord[actionData.account.blockchain]
         : undefined,
     [actionData.account]
   )
@@ -171,32 +165,14 @@ export const SellTokensDepositModal = ({
     try {
       await authenticate(account)
 
-      const key = await SecureStoreHelper.getKey(account)
-
-      if (!key) throw new AppError(commonT('errors.noKey'))
-
       const token = tokenBalance!.token
       const amount = actionData.amount
       const address = actionData.address
-      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount(account)
 
       const [transaction] = await service.transfer({
         senderAccount: serviceAccount,
         intents: [{ amount, receiverAddress: address, token }],
-      })
-
-      const receiverAccount = accountsMapRef.current.get(
-        AccountHelper.buildAccountKey({
-          address,
-          blockchain: account.blockchain,
-        })
-      )
-
-      const pendingTransaction = TransactionHelper.buildPendingTransaction({
-        transaction,
-        account,
-        senderAccount: account,
-        receiverAccounts: receiverAccount ? [receiverAccount] : undefined,
       })
 
       const notificationPrefix = 'modals:sellTokensDepositModal'
@@ -205,7 +181,7 @@ export const SellTokensDepositModal = ({
 
       dispatch(
         thunks.waitPendingTransaction({
-          pendingTransaction,
+          pendingTransaction: transaction,
           successNotification: {
             title: `${notificationSuccessPrefix}.title`,
             previewBody: `${notificationSuccessPrefix}.previewBody`,
@@ -224,7 +200,7 @@ export const SellTokensDepositModal = ({
 
       await UtilsHelper.sleep(500)
 
-      navigation.navigate('SellTokensDepositSuccessModal', { transaction: pendingTransaction })
+      navigation.navigate('SellTokensDepositSuccessModal', { transaction })
     } catch (error) {
       LoggerHelper.sentry(error, { where: 'SellTokensDepositModal', operation: 'submitDeposit' })
       ToastHelper.error({ message: AppError.wrap(error, t('messages.transactionFailed')).message })
@@ -263,9 +239,6 @@ export const SellTokensDepositModal = ({
 
       try {
         const account = actionData.account!
-        const key = await SecureStoreHelper.getKey(account)
-
-        if (!key) return
 
         const token = tokenBalance?.token
         const amount = actionData.amount
@@ -278,7 +251,7 @@ export const SellTokensDepositModal = ({
           throw new AppError(message)
         }
 
-        const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account, key })
+        const serviceAccount = await BlockchainServiceHelper.getServiceAccount(account)
 
         const fee = await service.calculateTransferFee({
           senderAccount: serviceAccount,

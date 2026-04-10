@@ -26,7 +26,7 @@ export const ActionAddressButton = ({ label, className, address, blockchain, err
         : undefined
     }
     leftElement={
-      blockchain ? <TwBlockchainIcon blockchain={blockchain} type="gray" className="ml-2 size-3.5" /> : undefined
+      blockchain ? <TwBlockchainIcon blockchain={blockchain} className="ml-2 size-3.5 text-gray-300" /> : undefined
     }
     {...props}
   />

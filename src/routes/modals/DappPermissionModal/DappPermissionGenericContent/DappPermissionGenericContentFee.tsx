@@ -8,9 +8,7 @@ import { Details } from '@/components/Details'
 import { Loader } from '@/components/Loader'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
-import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
-import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
@@ -23,16 +21,11 @@ export const DappPermissionGenericContentFee = ({
   onReject,
 }: TDappPermissionProps) => {
   const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
-  const { t: commonT } = useTranslation('common')
 
   const feeQuery = useQuery({
     queryKey: ['fee', request.id],
     queryFn: async () => {
-      const key = await SecureStoreHelper.getKey(sessionAccount)
-      if (!key) throw new AppError(commonT('errors.noKey'))
-
-      const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: sessionAccount, key })
-
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount(sessionAccount)
       return await sessionDetails.service.walletConnectService.calculateRequestFee({
         account: serviceAccount,
         params: request.params.request.params,

@@ -12,7 +12,7 @@ export class ConstantsHelper {
 
   static readonly footerHeight = 66
 
-  static readonly voteNeo3CozPubKey = '02946248f71bdf14933e6735da9867e81cc9eea0b5895329aa7f71e7745cf40659'
+  static readonly neo3VoteCozPubKey = '02946248f71bdf14933e6735da9867e81cc9eea0b5895329aa7f71e7745cf40659'
 
   static readonly surveyExpiryMs = 90 * 24 * 60 * 60 * 1000 // 90 days
 

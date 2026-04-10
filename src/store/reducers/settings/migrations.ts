@@ -147,11 +147,14 @@ export function getSettingsMigrations() {
         customNetworksByBlockchain: {
           ...state.data.customNetworksByBlockchain,
           bitcoin: [],
+          stellar: [],
         },
         selectedNetworkByBlockchain: {
           ...state.data.selectedNetworkByBlockchain,
           bitcoin: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.bitcoin.defaultNetwork,
+          stellar: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.stellar.defaultNetwork,
         },
+        canShowNeo3VoteSupportUsModal: true,
       },
     }),
   }

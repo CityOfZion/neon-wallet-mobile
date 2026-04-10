@@ -124,7 +124,7 @@ export const SendDetails = ({ data, blockchain, fee }: TProps) => {
       <Details.Root>
         <Details.Item label={t('totalFeeLabel')} className="p-0">
           <View className="flex-row items-center">
-            <TwBlockchainIcon blockchain={blockchain} type="gray" className="mr-2 mt-0.5 size-3.5" />
+            <TwBlockchainIcon blockchain={blockchain} className="mr-2 mt-0.5 size-3.5 text-gray-300" />
 
             <Text className="font-sans-regular text-base text-white">{service.feeToken.symbol}</Text>
           </View>

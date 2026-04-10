@@ -21,13 +21,13 @@ export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 
   return (
     <View className="flex-row items-center justify-between gap-2">
       <View className="flex-row items-center gap-2">
-        {blockchain && <TwBlockchainIcon blockchain={blockchain} type="gray" className="size-4" />}
+        {blockchain && <TwBlockchainIcon blockchain={blockchain} className="size-4 text-gray-300" />}
 
         <Text className="font-sans-regular text-lg uppercase text-white">
           {symbol}
           {blockchain && (
             <Text className="font-sans-regular uppercase text-gray-100">
-              {` | ${commonT(`blockchainServices.${blockchain}.id`)}`}
+              {` | ${commonT(`blockchainServices.${blockchain}.label`)}`}
             </Text>
           )}
         </Text>
