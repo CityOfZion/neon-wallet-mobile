@@ -215,7 +215,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
                   {txFrom ? (
                     <Fragment>
                       {tokenFrom.blockchain && (
-                        <TwBlockchainIcon blockchain={tokenFrom.blockchain} type="gray" className="size-3" />
+                        <TwBlockchainIcon blockchain={tokenFrom.blockchain} className="size-3 text-gray-300" />
                       )}
                       {tokenFrom.txTemplateUrl ? (
                         <SwapDetailsModalLinkButton
@@ -249,7 +249,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
                 {match({ txTo, isProcessingStatus, isBadStatus })
                   .with({ txTo: P.string.minLength(1) }, ({ txTo }) => (
                     <View className="flex-row items-center gap-2">
-                      <TwBlockchainIcon blockchain={blockchain} type="gray" className="size-3" />
+                      <TwBlockchainIcon blockchain={blockchain} className="size-3 text-gray-300" />
                       {tokenTo.txTemplateUrl ? (
                         <SwapDetailsModalLinkButton
                           label={txTo}

@@ -1,3 +1,4 @@
+import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
 import { match } from 'ts-pattern'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
@@ -11,7 +12,7 @@ import { selectWalletById } from '@/hooks/useWalletSelector'
 
 import type { TAccountHelperPredicateParams } from '@/types/helpers'
 import type { TMoreStackScreenProps } from '@/types/stacks'
-import type { TNotificationAction } from '@/types/store'
+import type { TAccount, TNotificationAction } from '@/types/store'
 
 type TFunctionParams<T> = {
   navigation: TMoreStackScreenProps<'NotificationsScreen'>['navigation']
@@ -89,7 +90,7 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
           },
         })
       })
-      .with({ to: 'vote-neo3' }, async payload => {
+      .with({ to: 'neo3-vote' }, async payload => {
         const { account } = getAccountAndWallet(payload)
 
         navigation.goBack()
@@ -99,9 +100,9 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
         navigation.navigate('TabStack', {
           screen: 'WalletsStack',
           params: {
-            screen: 'VoteNeo3Screen',
+            screen: 'Neo3VoteScreen',
             params: {
-              defaultNeo3Account: account,
+              defaultNeo3Account: account as TAccount<TBSNeo3Name>,
             },
           },
         })

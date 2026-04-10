@@ -1,11 +1,15 @@
 import React from 'react'
 
+import type { TBSToken } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
-import { match, P } from 'ts-pattern'
 
 import { Details } from '@/components/Details'
 import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
+
+import { AccountHelper } from '@/helpers/AccountHelper'
+
+import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 
 import { TwModalLayout } from '@/layouts/TwModalLayout'
 import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
@@ -14,25 +18,40 @@ import PiSealCheck from '@/assets/images/pi-seal-check.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { TUseTransactionsTransactionEvent, TUseTransactionsTransactionInputOutput } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'SellTokensDepositSuccessModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositSuccessModal' })
   const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
-
+  const { accountsMapRef } = useAccountsMapSelector()
   const { transaction } = route.params
-  const isUtxo = transaction.view === 'utxo'
-  const output = isUtxo ? (transaction.outputs.at(-1) as TUseTransactionsTransactionInputOutput) : undefined
-  const event = !isUtxo ? (transaction.events.at(-1) as TUseTransactionsTransactionEvent) : undefined
-  const amount = isUtxo ? output!.amount : event!.amount
-  const receiverAccount = isUtxo ? output?.account : event?.toAccount
-  const receiverName = receiverAccount?.name
-  const receiverAddress = receiverAccount?.address
 
-  const token = match({ output, event })
-    .with({ output: P.nonNullable }, ({ output }) => output.token)
-    .with({ event: P.when(value => value?.eventType === 'token') }, ({ event }) => event.token)
-    .otherwise(() => undefined)
+  let token: TBSToken | undefined
+  let amount: string | undefined
+  let receiverAddress: string | undefined
+  let receiverAccount: TAccount | undefined
+
+  if (transaction.view === 'utxo') {
+    const output = transaction.outputs.at(-1)
+    token = output?.token
+    amount = output?.amount
+    receiverAddress = output?.address
+    receiverAccount = output?.address
+      ? accountsMapRef.current.get(
+          AccountHelper.buildAccountKey({ address: output.address, blockchain: transaction.blockchain })
+        )
+      : undefined
+  } else {
+    const event = transaction.events.at(-1)
+    token = event?.eventType === 'token' ? event.token : undefined
+    amount = event?.amount
+    receiverAddress = event?.to
+    receiverAccount = event?.to
+      ? accountsMapRef.current.get(
+          AccountHelper.buildAccountKey({ address: event.to, blockchain: transaction.blockchain })
+        )
+      : undefined
+  }
 
   return (
     <TwModalLayout
@@ -56,10 +75,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
 
         <Details.HeaderSeparator />
 
-        <Details.Panel
-          label={t('transactionLabel')}
-          labelClassName="bg-gray-700/60 mt-4 bg-gray-700/60 px-2 font-sans-medium"
-        >
+        <Details.Panel label={t('transactionLabel')} labelClassName="mt-4 bg-gray-700/60 px-2 font-sans-medium">
           <Details.Item
             label={t('recipientLabel')}
             labelClassName="font-sans-medium text-xs"
@@ -68,7 +84,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
             textToCopy={receiverAddress}
           >
             <Text className="flex-shrink flex-grow font-sans-regular text-sm text-white">
-              {receiverName ? `${receiverName} (${receiverAddress})` : receiverAddress}
+              {receiverAccount?.name ? `${receiverAccount.name} (${receiverAccount.address})` : receiverAddress}
             </Text>
           </Details.Item>
 
@@ -80,7 +96,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
             className="flex-col gap-y-2 py-1"
             contentClassName="justify-start w-full"
           >
-            <TwBlockchainIcon blockchain={transaction.blockchain} type="gray" className="size-3" />
+            <TwBlockchainIcon blockchain={transaction.blockchain} className="size-3 text-gray-300" />
 
             <Text
               className="flex-shrink flex-grow font-sans-regular text-sm text-white"

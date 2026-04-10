@@ -72,46 +72,6 @@
   "blockchainSelectionModal": {
     "title": "Select blockchain"
   },
-  "bridgeNeo3NeoXAboutModal": {
-    "description": "Easily bridge your crypto assets between networks, without ever leaving your wallet.",
-    "explanation": "Blockchains are independent of each other, and can’t interact with each other - That's where bridges come in. It’s similar in principle to exchanging money while traveling to different countries, a bridge allows you to transfer assets across various blockchains.",
-    "neonAdvantage": "Directly and immediately bridging tokens in NEON is convenient and allows you to save time and pay lower fees.",
-    "title": "About bridging tokens",
-    "warningLabel": "COZ are not maintainers of this bridging process - Neo Global Development is the maintainer."
-  },
-  "bridgeNeo3NeoXConfirmationModal": {
-    "bridgeFromLabel": "Bridge from",
-    "bridgeToLabel": "Bridge to",
-    "description": "Please review the details below and confirm that you’d like to proceed.",
-    "details": "Transaction details",
-    "receivingAddressLabel": "Receiving address",
-    "sendingAddressLabel": "Sending address",
-    "submitButtonLabel": "Confirm",
-    "title": "Confirm your bridge",
-    "tokenLabel": "Token",
-    "totalFeeLabel": "Total fee",
-    "wantBridgeLabel": "You want to bridge"
-  },
-  "bridgeNeo3NeoXDetailsModal": {
-    "bridgeFromLabel": "Bridge from",
-    "bridgeToLabel": "Bridge to",
-    "details": "Details",
-    "errorsByCode": {
-      "FAILED_TO_GET_NONCE": "Failed to get nonce for that transaction",
-      "FAILED_TO_GET_TRANSACTION_BY_NONCE": "Failed to get transaction by nonce",
-      "INVALID_TRANSACTION": "Transaction was not successfully confirmed by the network",
-      "NONCE_NOT_FOUND": "Nonce not found for the transaction",
-      "TXID_NOT_FOUND": "Transaction ID not found",
-      "UNEXPECTED_ERROR": "Unexpected error occurred. Please contact support if the issue persists."
-    },
-    "helpButtonLabel": "Need help? Chat with us",
-    "receivingAddressLabel": "Receiving address",
-    "sendingAddressLabel": "Sending address",
-    "statusLabel": "Status",
-    "steps": ["Send", "Complete"],
-    "title": "Your bridge details",
-    "tokenLabel": "Token"
-  },
   "buyAndSellTokensAboutDataModal": {
     "description": "Our on/off ramp partner only keeps an ID reference to your data and uses the email you provide to update you about your sales and purchases.",
     "info": "COZ doesn't store any of your data",
@@ -419,6 +379,122 @@
   "languageSelectionModal": {
     "title": "Language"
   },
+  "neo3NeoXBridgeAboutModal": {
+    "description": "Easily bridge your crypto assets between networks, without ever leaving your wallet.",
+    "explanation": "Blockchains are independent of each other, and can’t interact with each other - That's where bridges come in. It’s similar in principle to exchanging money while traveling to different countries, a bridge allows you to transfer assets across various blockchains.",
+    "neonAdvantage": "Directly and immediately bridging tokens in NEON is convenient and allows you to save time and pay lower fees.",
+    "title": "About bridging tokens",
+    "warningLabel": "COZ are not maintainers of this bridging process - Neo Global Development is the maintainer."
+  },
+  "neo3NeoXBridgeConfirmationModal": {
+    "bridgeFromLabel": "Bridge from",
+    "bridgeToLabel": "Bridge to",
+    "description": "Please review the details below and confirm that you’d like to proceed.",
+    "details": "Transaction details",
+    "receivingAddressLabel": "Receiving address",
+    "sendingAddressLabel": "Sending address",
+    "submitButtonLabel": "Confirm",
+    "title": "Confirm your bridge",
+    "tokenLabel": "Token",
+    "totalFeeLabel": "Total fee",
+    "wantBridgeLabel": "You want to bridge"
+  },
+  "neo3NeoXBridgeDetailsModal": {
+    "bridgeFromLabel": "Bridge from",
+    "bridgeToLabel": "Bridge to",
+    "details": "Details",
+    "errorsByCode": {
+      "FAILED_TO_GET_NONCE": "Failed to get nonce for that transaction",
+      "FAILED_TO_GET_TRANSACTION_BY_NONCE": "Failed to get transaction by nonce",
+      "INVALID_TRANSACTION": "Transaction was not successfully confirmed by the network",
+      "NONCE_NOT_FOUND": "Nonce not found for the transaction",
+      "TXID_NOT_FOUND": "Transaction ID not found",
+      "UNEXPECTED_ERROR": "Unexpected error occurred. Please contact support if the issue persists."
+    },
+    "helpButtonLabel": "Need help? Chat with us",
+    "receivingAddressLabel": "Receiving address",
+    "sendingAddressLabel": "Sending address",
+    "statusLabel": "Status",
+    "steps": ["Send", "Complete"],
+    "title": "Your bridge details",
+    "tokenLabel": "Token"
+  },
+  "neo3VoteCandidateDetailsModal": {
+    "accountCanNotBeWatchTitle": "Use a non-watch Neo 3 account",
+    "castVoteButtonLabel": "Cast vote for this candidate",
+    "descriptionLabel": "Description",
+    "insufficientGasDescription": "Transfer GAS to this account, or change account to proceed.",
+    "insufficientGasTitle": "You have insufficient GAS to cover the voting fee.",
+    "nameLabel": "Candidate",
+    "positionLabel": "Current position",
+    "pubKeyLabel": "Public key",
+    "selectNeo3AccountTitle": "Select a Neo 3 account to continue",
+    "thereIsNoNeoTitle": "There isn't NEO in this Neo 3 account",
+    "title": "About this candidate",
+    "voteAlreadyCastButtonLabel": "Vote already cast for this candidate!",
+    "votesLabel": "Total votes"
+  },
+  "neo3VoteConfirmationModal": {
+    "castVoteButtonLabel": "Cast your vote",
+    "detailsFeeLabel": "Total fee",
+    "holderDescription": "As a token holder, you can influence important protocol decisions so the network has a development path that matches community interests.",
+    "messages": {
+      "voteError": "There was an error to vote, try again, please"
+    },
+    "notifications": {
+      "voteFailureNotification": {
+        "previewBody": "We couldn't verify the completion of your vote",
+        "title": "Vote failed"
+      },
+      "voteSuccessNotification": {
+        "previewBody": "Your vote has been completed successfully",
+        "title": "Vote completed"
+      }
+    },
+    "successContent": {
+      "successDescription": "Your vote has been cast!",
+      "successDetailsTitle": "Your vote",
+      "viewTransactionButtonLabel": "View transaction"
+    },
+    "summary": {
+      "detailsAccountAddressLabel": "Address",
+      "detailsAccountNameLabel": "Account name",
+      "detailsCandidateLabel": "Candidate",
+      "detailsPubKeyLabel": "Public key",
+      "detailsVotesLabel": "N. of votes"
+    },
+    "systemDescription": "Detailed proposal research and smart voting practices matter greatly. The system uses reliable verification and clear processes that let individuals meaningfully contribute to the NEO ecosystem’s growth and development.",
+    "title": "Review & confirm your vote",
+    "voteDetailsTitle": "Voting details",
+    "voteErrorMessages": {
+      "canNotPayGasFeeLabel": "You can't pay the GAS fee",
+      "noNeoLabel": "You don't have enough NEO to vote with this Neo 3 account",
+      "watchAccountLabel": "Your Neo 3 account is in watching mode"
+    }
+  },
+  "neo3VoteHowItWorksModal": {
+    "alertLabel": "If you sell your NEO, your votes will be reduced by the number you have sold and your GAS reward will reduce proportionately too",
+    "explanationLabel": "The number of NEO you hold equates to the number of votes you can cast to vote for a candidate.",
+    "noteDescription": "By not voting, you miss will out on this benefit.",
+    "noteTitle": "Note:",
+    "title": "How does it work?",
+    "whyVoteDescription": "By voting, you’re actively participating in the NEO ecosystem and are subsequently eligible to receive GAS as a holder’s benefit.",
+    "whyVoteTitle": "Why vote?"
+  },
+  "neo3VoteSupportUsModal": {
+    "aboutNeonWalletDescription": "As a Neon Wallet user and token holder, you can influence important protocol decisions so the network has a development path that matches your interests.",
+    "cozLogoAlt": "COZ logo",
+    "cozTeamLabel": "The COZ Team.",
+    "dontShowAgainLabel": "Don't show again",
+    "hiLabel": "Hi there!",
+    "importantThingsLabel": "Detailed proposal research and smart voting practices matter greatly.",
+    "scanOurWebsite": "If you don’t know who we are, please take a moment to check <1>our website</1>.",
+    "skipButtonLabel": "Skip",
+    "thankYouLabel": "Thank you!",
+    "title": "Fancy supporting us?",
+    "voteForCozButtonLabel": "Cast your vote for COZ",
+    "youCanSupportUsLabel": "If you like using Neon or any of our other products, you may want to support us with your vote to help drive our development."
+  },
   "networkUrlSelectionModal": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Block height:",
@@ -513,15 +589,18 @@
     "watchButtonLabel": "Add a watch"
   },
   "quickToolsModal": {
-    "bridgeNeo3NeoX": {
-      "title": "Bridge tokens (Neo 3 and Neo X)"
-    },
     "buyAndSellTokens": {
       "title": "Buy + Sell tokens"
     },
     "hardware": {
       "connectTitle": "Connect hardware wallet",
       "disconnectTitle": "Disconnect hardware wallet"
+    },
+    "neo3NeoXBridge": {
+      "title": "Bridge tokens (Neo 3 and Neo X)"
+    },
+    "neo3Vote": {
+      "title": "Voting Neo 3"
     },
     "qrCode": {
       "title": "Scan QR code"
@@ -534,9 +613,6 @@
     },
     "swap": {
       "title": "Swap tokens"
-    },
-    "voteNeo3": {
-      "title": "Voting Neo 3"
     }
   },
   "removeNfiModal": {
@@ -651,6 +727,18 @@
     "subtitle": "Benefits of tipping",
     "title": "Tipping"
   },
+  "stellarPersistTrustlineModal": {
+    "errors": { "invalidLimit": "Invalid limit" },
+    "limitLabel": "Limit (Optional)",
+    "title": "Trustline",
+    "tokenLabel": "Token",
+    "tokenPlaceholder": "Select a token"
+  },
+  "stellarTrustilneTokenSelectionModal": {
+    "noTokensFound": "No tokens found",
+    "placeholderMessage": "Type to search tokens",
+    "title": "Trustline"
+  },
   "surveyModal": {
     "descriptionFeedbackSubmitted": "Your feedback is really appreciated!",
     "detailsInputLabel": "What can we do better?",
@@ -715,83 +803,6 @@
     "inputPlaceholder": "Search for a token…",
     "title": "Tokens",
     "tokenLabel": "Token"
-  },
-  "voteNeo3CandidateDetailsModal": {
-    "accountCanNotBeWatchTitle": "Use a non-watch Neo 3 account",
-    "castVoteButtonLabel": "Cast vote for this candidate",
-    "descriptionLabel": "Description",
-    "insufficientGasDescription": "Transfer GAS to this account, or change account to proceed.",
-    "insufficientGasTitle": "You have insufficient GAS to cover the voting fee.",
-    "nameLabel": "Candidate",
-    "positionLabel": "Current position",
-    "pubKeyLabel": "Public key",
-    "selectNeo3AccountTitle": "Select a Neo 3 account to continue",
-    "thereIsNoNeoTitle": "There isn't NEO in this Neo 3 account",
-    "title": "About this candidate",
-    "voteAlreadyCastButtonLabel": "Vote already cast for this candidate!",
-    "votesLabel": "Total votes"
-  },
-  "voteNeo3ConfirmationModal": {
-    "castVoteButtonLabel": "Cast your vote",
-    "detailsFeeLabel": "Total fee",
-    "holderDescription": "As a token holder, you can influence important protocol decisions so the network has a development path that matches community interests.",
-    "messages": {
-      "invalidKey": "No key found for this account",
-      "voteError": "There was an error to vote, try again, please"
-    },
-    "notifications": {
-      "voteFailureNotification": {
-        "previewBody": "We couldn't verify the completion of your vote",
-        "title": "Vote failed"
-      },
-      "voteSuccessNotification": {
-        "previewBody": "Your vote has been completed successfully",
-        "title": "Vote completed"
-      }
-    },
-    "successContent": {
-      "successDescription": "Your vote has been cast!",
-      "successDetailsTitle": "Your vote",
-      "viewTransactionButtonLabel": "View transaction"
-    },
-    "summary": {
-      "detailsAccountAddressLabel": "Address",
-      "detailsAccountNameLabel": "Account name",
-      "detailsCandidateLabel": "Candidate",
-      "detailsPubKeyLabel": "Public key",
-      "detailsVotesLabel": "N. of votes"
-    },
-    "systemDescription": "Detailed proposal research and smart voting practices matter greatly. The system uses reliable verification and clear processes that let individuals meaningfully contribute to the NEO ecosystem’s growth and development.",
-    "title": "Review & confirm your vote",
-    "voteDetailsTitle": "Voting details",
-    "voteErrorMessages": {
-      "canNotPayGasFeeLabel": "You can't pay the GAS fee",
-      "noNeoLabel": "You don't have enough NEO to vote with this Neo 3 account",
-      "watchAccountLabel": "Your Neo 3 account is in watching mode"
-    }
-  },
-  "voteNeo3HowItWorksModal": {
-    "alertLabel": "If you sell your NEO, your votes will be reduced by the number you have sold and your GAS reward will reduce proportionately too",
-    "explanationLabel": "The number of NEO you hold equates to the number of votes you can cast to vote for a candidate.",
-    "noteDescription": "By not voting, you miss will out on this benefit.",
-    "noteTitle": "Note:",
-    "title": "How does it work?",
-    "whyVoteDescription": "By voting, you’re actively participating in the NEO ecosystem and are subsequently eligible to receive GAS as a holder’s benefit.",
-    "whyVoteTitle": "Why vote?"
-  },
-  "voteNeo3SupportUsModal": {
-    "aboutNeonWalletDescription": "As a Neon Wallet user and token holder, you can influence important protocol decisions so the network has a development path that matches your interests.",
-    "cozLogoAlt": "COZ logo",
-    "cozTeamLabel": "The COZ Team.",
-    "dontShowAgainLabel": "Don't show again",
-    "hiLabel": "Hi there!",
-    "importantThingsLabel": "Detailed proposal research and smart voting practices matter greatly.",
-    "scanOurWebsite": "If you don’t know who we are, please take a moment to check <1>our website</1>.",
-    "skipButtonLabel": "Skip",
-    "thankYouLabel": "Thank you!",
-    "title": "Fancy supporting us?",
-    "voteForCozButtonLabel": "Cast your vote for COZ",
-    "youCanSupportUsLabel": "If you like using Neon or any of our other products, you may want to support us with your vote to help drive our development."
   },
   "walletContextModal": {
     "backup": "Back up wallet",

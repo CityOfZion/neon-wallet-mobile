@@ -58,7 +58,7 @@ export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'Cont
 
   const addresses = contactById?.addresses.map<TItem>(item => ({
     ...item,
-    blockchainLabel: commonT(`blockchainServices.${item.blockchain}.id`),
+    blockchainLabel: commonT(`blockchainServices.${item.blockchain}.label`),
   }))
 
   return (

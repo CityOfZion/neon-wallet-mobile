@@ -13,19 +13,15 @@ import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwStepSeparator } from '@/components/TwStepSeparator'
 
-import { AccountHelper } from '@/helpers/AccountHelper'
 import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
-import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { TransactionHelper } from '@/helpers/TransactionHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
-import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useBalance } from '@/hooks/useBalances'
@@ -44,7 +40,7 @@ import { SendTipCheckbox } from './SendTipCheckbox'
 
 import { thunks } from '@/store/thunks'
 import type { TRootStackScreenProps, TWalletsStackScreenProps } from '@/types/stacks'
-import type { TAccount, TUseTransactionsTransaction } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TActionsData = {
   selectedAccount?: TAccount
@@ -64,7 +60,6 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
   const { t } = useTranslation('screens', { keyPrefix: 'sendScreen' })
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { authenticate } = useAuthentication()
-  const { accountsMapRef } = useAccountsMapSelector()
   const { surveyInfoRef } = useSurveyInfoSelector()
   const dispatch = useAppDispatch()
 
@@ -84,7 +79,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
   const service = useMemo(
     () =>
       actionData.selectedAccount
-        ? BlockchainServiceHelper.bsAggregator.blockchainServicesByName[actionData.selectedAccount.blockchain]
+        ? BlockchainServiceHelper.bsAggregator.blockchainServicesByNameRecord[actionData.selectedAccount.blockchain]
         : undefined,
     [actionData.selectedAccount]
   )
@@ -134,10 +129,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       token: recipient.token!.token,
     }))
 
-    const key = await SecureStoreHelper.getKey(selectedAccount!)
-    if (!key) throw new AppError(t('messages.invalidKey'))
-
-    const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: selectedAccount!, key })
+    const serviceAccount = await BlockchainServiceHelper.getServiceAccount(selectedAccount!)
 
     const { isTipChecked, isTipDisabled, tipAmountBn, tipFiatPriceBn } = actionData
 
@@ -281,11 +273,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
         })
         .filter(recipient => recipient !== null)
 
-      const key = await SecureStoreHelper.getKey(selectedAccount!)
-
-      if (!key || !selectedAccount) throw new AppError(t('messages.invalidKey'))
-
-      const senderAccount = await BlockchainServiceHelper.getServiceAccount({ account: selectedAccount, key })
+      const senderAccount = await BlockchainServiceHelper.getServiceAccount(selectedAccount!)
 
       const fee = await service.calculateTransferFee({ senderAccount, intents })
 
@@ -330,56 +318,25 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       await authenticate(selectedAccount)
 
       const transactions = await service.transfer({ senderAccount: fields.serviceAccount, intents })
-      const pendingTransactions: TUseTransactionsTransaction[] = []
-      const blockchain = service.name
+
       const notificationPrefix = 'screens:sendScreen'
       const notificationSuccessPrefix = `${notificationPrefix}.successNotification`
       const notificationFailurePrefix = `${notificationPrefix}.failureNotification`
 
-      const waitTransactionParams = {
-        successNotification: {
-          title: `${notificationSuccessPrefix}.title`,
-          previewBody: `${notificationSuccessPrefix}.previewBody`,
-        },
-        failureNotification: {
-          title: `${notificationFailurePrefix}.title`,
-          previewBody: `${notificationFailurePrefix}.previewBody`,
-        },
-      }
-
-      if (service.isMultiTransferSupported) {
-        const receiverAccounts = intents.map(({ receiverAddress }) =>
-          accountsMapRef.current.get(AccountHelper.buildAccountKey({ address: receiverAddress, blockchain }))
-        )
-
-        const pendingTransaction = TransactionHelper.buildPendingTransaction({
-          transaction: transactions[0],
-          account: selectedAccount,
-          senderAccount: selectedAccount,
-          receiverAccounts,
-        })
-
-        pendingTransactions.push(pendingTransaction)
-      } else {
-        transactions.forEach((transaction, index) => {
-          const intent = intents[index]
-          const receiverAccount = accountsMapRef.current.get(
-            AccountHelper.buildAccountKey({ address: intent?.receiverAddress, blockchain })
-          )
-
-          const pendingTransaction = TransactionHelper.buildPendingTransaction({
-            transaction,
-            account: selectedAccount,
-            senderAccount: selectedAccount,
-            receiverAccounts: receiverAccount ? [receiverAccount] : undefined,
+      transactions.forEach(transaction =>
+        dispatch(
+          thunks.waitPendingTransaction({
+            pendingTransaction: transaction,
+            successNotification: {
+              title: `${notificationSuccessPrefix}.title`,
+              previewBody: `${notificationSuccessPrefix}.previewBody`,
+            },
+            failureNotification: {
+              title: `${notificationFailurePrefix}.title`,
+              previewBody: `${notificationFailurePrefix}.previewBody`,
+            },
           })
-
-          pendingTransactions.push(pendingTransaction)
-        })
-      }
-
-      pendingTransactions.forEach(pendingTransaction =>
-        dispatch(thunks.waitPendingTransaction({ ...waitTransactionParams, pendingTransaction }))
+        )
       )
 
       AnalyticsHelper.logEvent('transaction_executed')
@@ -393,7 +350,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
         title: t('form.sendSuccessContentTitle'),
         content: (
           <SendSuccessContent
-            transactions={pendingTransactions}
+            transactions={transactions}
             fee={actionData.fee}
             selectedAccount={selectedAccount}
             navigation={navigation}

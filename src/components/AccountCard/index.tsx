@@ -100,7 +100,7 @@ const AccountCardComponent = ({
 
       <View className="h-full w-full px-3.5 py-6">
         <View className="flex-row items-center gap-5">
-          <TwBlockchainIcon className="size-6" blockchain={account.blockchain} type="white" />
+          <TwBlockchainIcon className="size-6 text-white" blockchain={account.blockchain} />
 
           <Text
             className={StyleHelper.mergeStyles('flex-shrink flex-grow font-sans-semibold text-2xl text-white', {
@@ -141,7 +141,9 @@ const AccountCardComponent = ({
         </View>
 
         <View className="flex-row justify-between pl-11">
-          <Text className="font-sans-bold text-sm uppercase text-white/60">{commonT(`${account.blockchain}.id`)}</Text>
+          <Text className="font-sans-bold text-sm uppercase text-white/60">
+            {commonT(`${account.blockchain}.label`)}
+          </Text>
 
           {(isCompacted || isStack) && !hideBalance && (
             <Text className="font-sans-bold text-sm uppercase text-white/60">{t('balance')}</Text>

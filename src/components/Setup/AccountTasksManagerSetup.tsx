@@ -13,9 +13,9 @@ import { useOwnAccountsSelector } from '@/hooks/useAccountSelector'
 import { useLazyBalance } from '@/hooks/useBalances'
 import { useLazyOwnershipOfItemNeo3NftSkin } from '@/hooks/useItemNeo3NftSkins'
 import { useMount } from '@/hooks/useMount'
+import { useLazyNeo3VoteGetVoteDetailsByAddress } from '@/hooks/useNeo3Vote'
 import { useUnreadNotificationsSelector } from '@/hooks/useNotificationSelector'
 import { useAppDispatch } from '@/hooks/useRedux'
-import { useLazyVoteNeo3GetVoteDetailsByAddress } from '@/hooks/useVoteNeo3'
 
 import { notificationReducerActions } from '@/store/reducers/notification'
 import { utilityReducerActions } from '@/store/reducers/utility'
@@ -98,7 +98,7 @@ const useFraudulentTokensNotificationProcess = () => {
 
 const useVotingNeo3NotificationProcess = () => {
   const dispatch = useAppDispatch()
-  const { getVoteDetails } = useLazyVoteNeo3GetVoteDetailsByAddress()
+  const { getVoteDetails } = useLazyNeo3VoteGetVoteDetailsByAddress()
 
   const votingNotificationsSetRef = useRef<Set<string>>(new Set())
 
@@ -110,7 +110,7 @@ const useVotingNeo3NotificationProcess = () => {
     try {
       const payload = notification.action?.payload
 
-      if (payload?.to !== 'vote-neo3' || payload.blockchain !== 'neo3' || !payload.address) return
+      if (payload?.to !== 'neo3-vote' || payload.blockchain !== 'neo3' || !payload.address) return
 
       votingNotificationsSetRef.current.add(generateNotificationKey(payload.blockchain, payload.address))
     } catch (error) {
@@ -137,7 +137,7 @@ const useVotingNeo3NotificationProcess = () => {
           action: {
             type: 'navigate',
             payload: {
-              to: 'vote-neo3',
+              to: 'neo3-vote',
               address: voteDetails.address,
               blockchain: 'neo3',
             },

@@ -1,14 +1,15 @@
 import React, { memo } from 'react'
 
+import type { TTransactionDefault } from '@cityofzion/blockchain-service'
 import { View } from 'react-native'
 
 import { AccountTransactionsTransactionCard } from '@/components/AccountTransactionsTransactionCard'
 import { AccountTransactionsTransactionDefaultEvent } from '@/components/AccountTransactionsTransactionDefaultEvent'
 
-import type { TUseTransactionsTransactionDefault } from '@/types/store'
+import type { TBlockchainServiceKey } from '@/types/blockchain'
 
 type TProps = {
-  transaction: TUseTransactionsTransactionDefault
+  transaction: TTransactionDefault<TBlockchainServiceKey>
 }
 
 export const AccountTransactionsScreenTransactionDefault = memo(({ transaction }: TProps) => (
@@ -18,7 +19,8 @@ export const AccountTransactionsScreenTransactionDefault = memo(({ transaction }
         <AccountTransactionsTransactionDefaultEvent
           key={`${transaction.txId}-event-${index}`}
           event={event}
-          account={transaction.account}
+          blockchain={transaction.blockchain}
+          relatedAddress={transaction.relatedAddress}
         />
       ))}
     </View>

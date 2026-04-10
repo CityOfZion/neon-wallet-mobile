@@ -68,8 +68,7 @@ export const PersistContactAddressModal = ({
 
   const handleAdd = () => {
     navigation.goBack()
-    const newAddress = { blockchain: actionData.blockchain!, address: actionData.address }
-    onAdd?.(newAddress)
+    onAdd?.({ blockchain: actionData.blockchain!, address: actionData.address })
   }
 
   return (
