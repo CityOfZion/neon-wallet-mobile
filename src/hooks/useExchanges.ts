@@ -27,8 +27,13 @@ function buildQueryKey(blockchain: TBlockchainServiceKey, network: TNetwork, cur
   return queryKey
 }
 
-function buildExchangeByBlockchainQueryKey(blockchain: TBlockchainServiceKey, network: TNetwork, currency: TCurrency) {
-  return ['exchange-by-blockchain', blockchain, network, currency]
+function buildExchangeByBlockchainQueryKey(
+  blockchain: TBlockchainServiceKey,
+  network: TNetwork,
+  currency: TCurrency,
+  hasCurrencyRatio: boolean
+) {
+  return ['exchange-by-blockchain', blockchain, network, currency, hasCurrencyRatio]
 }
 
 export async function fetchExchange(
@@ -37,7 +42,7 @@ export async function fetchExchange(
   network: TNetwork,
   queryClient: QueryClient,
   currency: TCurrency,
-  currencyRatio = 0
+  currencyRatio: number
 ) {
   const queryCache = queryClient.getQueryCache()
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
@@ -45,8 +50,9 @@ export async function fetchExchange(
   const tokensToFetch = tokens.filter(token => {
     const queryKey = buildQueryKey(blockchain, network, currency, token)
     const query = queryCache.find({ queryKey, exact: true, stale: false })
+    const data = query?.state?.data as TExchange | undefined
 
-    return !query
+    return !data || (data.convertedPrice === 0 && data.usdPrice > 0)
   })
 
   let tokenPrices: TTokenPricesResponse[] = []
@@ -105,6 +111,8 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
   const { currency } = useCurrencySelector()
   const { isLoading: isCurrencyRatioLoading, data: currencyRatio } = useCurrencyRatio()
 
+  const hasCurrencyRatio = typeof currencyRatio === 'number'
+
   const tokensToFetchByBlockchain = useMemo<Record<TBlockchainServiceKey, TBSToken[]>>(() => {
     if (params.length === 0) return {} as Record<TBlockchainServiceKey, TBSToken[]>
 
@@ -128,7 +136,12 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
       const network = selectedNetworkByBlockchain[blockchain as TBlockchainServiceKey]
 
       return {
-        queryKey: buildExchangeByBlockchainQueryKey(blockchain as TBlockchainServiceKey, network, currency),
+        queryKey: buildExchangeByBlockchainQueryKey(
+          blockchain as TBlockchainServiceKey,
+          network,
+          currency,
+          hasCurrencyRatio
+        ),
         queryFn: fetchExchange.bind(
           null,
           blockchain as TBlockchainServiceKey,
@@ -136,9 +149,9 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
           network,
           queryClient,
           currency,
-          currencyRatio
+          currencyRatio || 0
         ),
-        enabled: !isCurrencyRatioLoading && typeof currencyRatio === 'number',
+        enabled: !isCurrencyRatioLoading && hasCurrencyRatio,
       }
     }),
     combine: result => {
