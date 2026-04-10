@@ -139,7 +139,7 @@ export const BridgeNeo3NeoXDetailsModal = ({
 
             <Details.Item label={t('tokenLabel')}>
               <BlockchainIconWithLabel token={tokenToUse} blockchain={tokenToUse.blockchain} />
-              <Text className="text-md font-sans-regular text-white">{amountToUse}</Text>
+              <Text className="font-sans-regular text-base text-white">{amountToUse}</Text>
             </Details.Item>
           </Details.Panel>
 
@@ -152,7 +152,7 @@ export const BridgeNeo3NeoXDetailsModal = ({
 
             <Details.Item label={t('tokenLabel')}>
               <BlockchainIconWithLabel token={tokenToReceive} blockchain={tokenToReceive.blockchain} />
-              <Text className="text-md font-sans-regular text-white">{amountToReceive}</Text>
+              <Text className="font-sans-regular text-base text-white">{amountToReceive}</Text>
             </Details.Item>
           </Details.Panel>
         </Details.Body>

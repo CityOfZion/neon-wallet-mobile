@@ -18,25 +18,25 @@ export const AboutExtraIdToReceiveModal = () => {
       <TbHelp aria-hidden className="mx-auto h-32 w-32 stroke-1 text-blue" />
 
       <View className="gap-2">
-        <Text className="text-md font-sans-semibold uppercase text-gray-100">{t('what.title')}</Text>
+        <Text className="font-sans-semibold text-base uppercase text-gray-100">{t('what.title')}</Text>
 
-        <Text className="text-md font-sans-regular text-white">{t('what.description')}</Text>
+        <Text className="font-sans-regular text-base text-white">{t('what.description')}</Text>
       </View>
 
       <TwSeparator />
 
       <View className="gap-2">
-        <Text className="text-md font-sans-semibold uppercase text-gray-100">{t('why.title')}</Text>
+        <Text className="font-sans-semibold text-base uppercase text-gray-100">{t('why.title')}</Text>
 
-        <Text className="text-md font-sans-regular text-white">{t('why.description')}</Text>
+        <Text className="font-sans-regular text-base text-white">{t('why.description')}</Text>
       </View>
 
       <TwSeparator />
 
       <View className="gap-2">
-        <Text className="text-md font-sans-semibold uppercase text-gray-100">{t('where.title')}</Text>
+        <Text className="font-sans-semibold text-base uppercase text-gray-100">{t('where.title')}</Text>
 
-        <Text className="text-md font-sans-regular text-white">{t('where.description')}</Text>
+        <Text className="font-sans-regular text-base text-white">{t('where.description')}</Text>
       </View>
     </TwModalLayout>
   )

@@ -8,6 +8,28 @@
     "notFoundLabel": "未找到账户或已存在，请检查输入稍后再试。",
     "selectedOfTotal": "已选择{{selectedCount}}个，共{{totalCount}}个地址"
   },
+  "accountTransactionsTransactionCard": {
+    "blockToolTipLabel": "区块：{{ block }}",
+    "bridgeNeo3NeoXButtonLabel": "跨链桥",
+    "detailsButtonLabel": "打开详情",
+    "feeTooltipLabel": "网络费：{{ networkFee }} | 系统费：{{ systemFee }}",
+    "invocationsToolTipLabel": "调用：{{ invocations }}",
+    "nftsTooltipLabel": "NFTs：{{ nfts }}",
+    "notificationToolTipLabel": "通知：{{ notifications }}",
+    "pendingLabel": "处理中…",
+    "seeOnExplorerButtonLabel": "在浏览器中查看",
+    "swapButtonLabel": "兑换",
+    "totalAmountTooltipLabel": "总计：{{ totalAmount }}",
+    "txIdLabel": "交易 ID："
+  },
+  "accountTransactionsTransactionDefaultEvent": {
+    "fromLabel": "从",
+    "toLabel": "到",
+    "type": {
+      "nft": "NFT",
+      "token": "代币"
+    }
+  },
   "actionInput": {
     "maxButtonLabel": "最大"
   },

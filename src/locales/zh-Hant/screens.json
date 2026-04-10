@@ -64,26 +64,15 @@
     "title": "帳戶設定"
   },
   "accountTransactionsScreen": {
-    "blockToolTipLabel": "區塊：{{block}}",
-    "bridgeNeo3NeoXDetailsButtonLabel": "橋接",
+    "contextButtonLabel": "上下文",
     "emptyList": "沒有可列出的交易",
-    "exportButtonLabel": "匯出",
-    "feeTooltipLabel": "網路費：{{networkFee}} | 系統費：{{systemFee}}",
-    "invocationsLabel": "調用",
-    "invocationsToolTipLabel": "呼叫：{{invocations}}",
-    "notificationToolTipLabel": "通知：{{notifications}}",
-    "notificationsLabel": "通知",
-    "processingLabel": "加工…",
-    "receivedFromLabel": "接收自",
-    "seeOnExplorerButtonLabel": "在瀏覽器中查看",
-    "sentToLabel": "發送至",
-    "swapDetailsButtonLabel": "前往兌換詳情",
+    "fromLabel": "從",
+    "inputLabel": "{{ value }} 個輸入",
+    "inputsLabel": "{{ value }} 個輸入",
+    "outputLabel": "{{ value }} 個輸出",
+    "outputsLabel": "{{ value }} 個輸出",
     "title": "交易",
-    "txidLabel": "交易 ID：",
-    "type": {
-      "nft": "NFT",
-      "token": "資產"
-    }
+    "toLabel": "到"
   },
   "bridgeNeo3NeoXScreen": {
     "aboutButtonLabel": "關於",
