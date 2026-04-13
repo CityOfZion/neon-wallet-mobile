@@ -8,7 +8,6 @@ import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
-import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
@@ -21,7 +20,6 @@ export const WalletConnectManagerSetup = () => {
   const navigation = useNavigation()
 
   const { t } = useTranslation('components', { keyPrefix: 'setup.walletConnectManagerSetup' })
-  const { t: commonT } = useTranslation('common')
 
   useMount(() => {
     async function handleRequest(request: PendingRequestTypes.Struct) {
@@ -52,11 +50,7 @@ export const WalletConnectManagerSetup = () => {
         try {
           if (!sessionAccount) return
 
-          const key = await SecureStoreHelper.getKey(sessionAccount)
-
-          if (!key) throw new AppError(commonT('errors.noKey'))
-
-          const serviceAccount = await BlockchainServiceHelper.getServiceAccount({ account: sessionAccount, key })
+          const serviceAccount = await BlockchainServiceHelper.getServiceAccount(sessionAccount)
 
           const response = await BSWalletKitHelper.processRequest({
             account: serviceAccount,

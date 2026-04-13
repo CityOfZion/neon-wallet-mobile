@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BSBigNumberHelper, type TTransactionTokenEvent } from '@cityofzion/blockchain-service'
+import { BSBigNumberHelper, type TTransactionDefaultTokenEvent } from '@cityofzion/blockchain-service'
 import { Text, View } from 'react-native'
 
 import { Skeleton } from '@/components/Skeleton'
@@ -16,7 +16,7 @@ import type { TBlockchainServiceKey } from '@/types/blockchain'
 
 type TProps = {
   blockchain: TBlockchainServiceKey
-  event: TTransactionTokenEvent
+  event: TTransactionDefaultTokenEvent
 }
 
 export const AccountTransactionsTransactionDefaultEventToken = ({ blockchain, event }: TProps) => {
@@ -28,7 +28,6 @@ export const AccountTransactionsTransactionDefaultEventToken = ({ blockchain, ev
 
   if (event.token) {
     const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(event.token.hash, blockchain, exchange.data)
-
     fiatAmount = BSBigNumberHelper.fromNumber(convertedPrice)
       .multipliedBy(event.amount || 0)
       .toNumber()

@@ -1,61 +1,68 @@
 import React from 'react'
 
+import type { TTransactionDefaultEvent } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
-import { match, P } from 'ts-pattern'
 
+import { AccountHelper } from '@/helpers/AccountHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
+import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
+
+import { AccountTransactionsTransactionDefaultEventGeneric } from './AccountTransactionsTransactionDefaultEventGeneric'
 import { AccountTransactionsTransactionDefaultEventToken } from './AccountTransactionsTransactionDefaultEventToken'
 import { AccountTransactionsTransactionItemNft } from './AccountTransactionsTransactionItemNft'
 
-import type { TAccount, TUseTransactionsTransactionEvent } from '@/types/store'
+import type { TBlockchainServiceKey } from '@/types/blockchain'
 
 type TProps = {
-  event: TUseTransactionsTransactionEvent
-  account: TAccount
+  event: TTransactionDefaultEvent
+  relatedAddress?: string
+  blockchain: TBlockchainServiceKey
 }
 
-export const AccountTransactionsTransactionDefaultEvent = ({ event, account }: TProps) => {
+export const AccountTransactionsTransactionDefaultEvent = ({ event, relatedAddress, blockchain }: TProps) => {
   const { t } = useTranslation('components', { keyPrefix: 'accountTransactionsTransactionDefaultEvent' })
-  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommon } = useTranslation('common')
+  const { accountsMap } = useAccountsMapSelector()
 
-  const isSender = event.from === account.address
+  const isSender = event.from === relatedAddress
   const label = isSender ? t('toLabel') : t('fromLabel')
   const address = isSender ? event.to : event.from
+  const account = address ? accountsMap.get(AccountHelper.buildAccountKey({ address, blockchain })) : undefined
+
+  const eventTypeLabel = t(`type.${event.eventType}`, event.methodName || '')
 
   return (
     <View>
-      <View className="flex-row items-center justify-between">
-        <Text className="font-sans-regular text-base uppercase text-gray-300">{label}</Text>
-        <Text className="font-sans-regular text-base uppercase text-gray-300">{t(`type.${event.eventType}`)}</Text>
+      <View className="flex-row justify-between">
+        <View>
+          <Text className="font-sans-regular text-base uppercase text-gray-300">{label}</Text>
+
+          <Text
+            className={StyleHelper.mergeStyles('w-40 font-sans-medium text-base', {
+              'text-neon': !!address,
+              'text-white': !address,
+            })}
+            ellipsizeMode="middle"
+            numberOfLines={1}
+          >
+            {account?.name || address || tCommon('general.emptyData')}
+          </Text>
+        </View>
+
+        <Text className="grow text-right font-sans-regular text-base uppercase text-gray-300">{eventTypeLabel}</Text>
       </View>
 
-      <Text
-        className={StyleHelper.mergeStyles('w-40 font-sans-medium text-base', {
-          'text-neon': !!address,
-          'text-white': !address,
-        })}
-        ellipsizeMode="middle"
-        numberOfLines={1}
-      >
-        {address || tCommon('emptyData')}
-      </Text>
+      {event.eventType === 'token' && (
+        <AccountTransactionsTransactionDefaultEventToken blockchain={blockchain} event={event} />
+      )}
 
-      {match(event)
-        .with(
-          P.when(value => value.eventType === 'token'),
-          currentEvent => (
-            <AccountTransactionsTransactionDefaultEventToken blockchain={account.blockchain} event={currentEvent} />
-          )
-        )
-        .with(
-          P.when(value => value.eventType === 'nft' && !!value.nft),
-          currentEvent => (
-            <AccountTransactionsTransactionItemNft blockchain={account.blockchain} nft={currentEvent.nft!} />
-          )
-        )
-        .otherwise(() => null)}
+      {event.eventType === 'nft' && !!event.nft && (
+        <AccountTransactionsTransactionItemNft blockchain={blockchain} nft={event.nft} />
+      )}
+
+      {event.eventType === 'generic' && <AccountTransactionsTransactionDefaultEventGeneric event={event} />}
     </View>
   )
 }

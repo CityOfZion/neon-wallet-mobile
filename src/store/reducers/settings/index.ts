@@ -22,7 +22,7 @@ export type TSettingsReducer = {
     customNetworksByBlockchain: TCustomNetworks
     selectedNetworkByBlockchain: TSelectedNetworks
     language: TLanguage
-    canShowVoteNeo3SupportUsModal: boolean
+    canShowNeo3VoteSupportUsModal: boolean
     surveyInfo: TSurveyInfo
   }
 }
@@ -48,6 +48,7 @@ export function getSettingsReducer() {
         polygon: [],
         base: [],
         arbitrum: [],
+        stellar: [],
       },
       selectedNetworkByBlockchain: {
         neo3: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3.defaultNetwork,
@@ -59,9 +60,10 @@ export function getSettingsReducer() {
         polygon: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.polygon.defaultNetwork,
         base: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.base.defaultNetwork,
         arbitrum: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.arbitrum.defaultNetwork,
+        stellar: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.stellar.defaultNetwork,
       },
       language: LanguageHelper.defaultLanguage,
-      canShowVoteNeo3SupportUsModal: true,
+      canShowNeo3VoteSupportUsModal: true,
       surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
     },
   }

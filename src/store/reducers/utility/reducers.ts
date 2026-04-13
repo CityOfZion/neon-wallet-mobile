@@ -9,7 +9,8 @@ import { TokenHelper } from '@/helpers/TokenHelper'
 import type { TUtilityReducer } from './index'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { TSwapRecord, TUseTransactionsTransaction } from '@/types/store'
+import type { TUseTransactionsTransaction } from '@/types/hooks'
+import type { TSwapRecord } from '@/types/store'
 
 type THiddenTokenParams = {
   hash: string

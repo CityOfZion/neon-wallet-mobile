@@ -112,8 +112,8 @@ const deleteCustomNetwork = <T extends TBlockchainServiceKey>(
   }
 }
 
-const dontShowVoteNeo3SupportUsModalAgain: CaseReducer<TSettingsReducer> = ({ data }) => {
-  data.canShowVoteNeo3SupportUsModal = false
+const dontShowNeo3VoteSupportUsModalAgain: CaseReducer<TSettingsReducer> = ({ data }) => {
+  data.canShowNeo3VoteSupportUsModal = false
 }
 
 const setIsOnboardingCompleted: CaseReducer<TSettingsReducer, PayloadAction<boolean>> = (state, action) => {
@@ -130,7 +130,7 @@ export const settingsSliceReducers = {
   saveCustomNetwork,
   deleteCustomNetwork,
   setSelectedNetworkUrl,
-  dontShowVoteNeo3SupportUsModalAgain,
+  dontShowNeo3VoteSupportUsModalAgain,
   setSelectedNetworkByBlockchain,
   setIsOnboardingCompleted,
 }
