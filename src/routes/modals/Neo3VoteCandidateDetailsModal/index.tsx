@@ -34,7 +34,7 @@ export const Neo3VoteCandidateDetailsModal = ({
     params: { neo3Account, candidate, candidateVotePercentage },
   },
 }: TRootStackScreenProps<'Neo3VoteCandidateDetailsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteCandidateDetailsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteCandidateDetails' })
 
   const { position, name, votes, logoUrl, pubKey, description } = candidate
 

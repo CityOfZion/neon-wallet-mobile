@@ -29,7 +29,7 @@ export const HideFraudulentTokenModal = ({
     params: { account, hash },
   },
 }: TRootStackScreenProps<'HideFraudulentTokenModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'hideFraudulentTokenModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'hideFraudulentToken' })
   const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const balanceQuery = useBalance(account, { showType: 'active' })
   const dispatch = useAppDispatch()

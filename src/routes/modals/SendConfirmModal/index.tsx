@@ -15,7 +15,7 @@ import TbCheck from '@/assets/images/tb-check.svg'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const SendConfirmModal = ({ navigation, route }: TRootStackScreenProps<'SendConfirmModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'sendConfirmModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'sendConfirm' })
   const { intents, fee, service, onConfirm } = route.params
 
   const [isLoading, handleSubmit] = usePressOnce(async () => {

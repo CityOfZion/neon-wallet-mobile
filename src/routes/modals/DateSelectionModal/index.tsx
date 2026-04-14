@@ -27,7 +27,7 @@ type TActionsData = {
 }
 
 export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<'DateSelectionModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dateSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dateSelection' })
   const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
   const { language } = useLanguageSelector()
 

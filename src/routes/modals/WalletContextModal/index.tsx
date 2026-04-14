@@ -25,7 +25,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const WalletContextModal = ({ navigation, route }: TRootStackScreenProps<'WalletContextModal'>) => {
   const { wallet } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'walletContextModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'walletContext' })
   const { t: commonT } = useTranslation('common')
 
   const { wallets } = useWalletsSelector()

@@ -17,7 +17,7 @@ type TProps = {
 }
 
 export const AddressSelectionModalContactsContent = ({ onSelect, blockchain }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'addressSelection' })
   const { validateAddressOrNS } = useNameServiceLazy()
 
   const [selectedContact, setSelectedContact] = useState<TContact>()

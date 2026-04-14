@@ -38,7 +38,7 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
   const addresses = route.params?.addresses
 
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('modals', { keyPrefix: 'persistContactModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'persistContact' })
   const { t: commonT } = useTranslation('common')
 
   const { actionData, actionState, setData, setError, handleAct } = useActions<TActionData>({

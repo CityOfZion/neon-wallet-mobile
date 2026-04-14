@@ -11,7 +11,7 @@ import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLay
 import TbHelp from '@/assets/images/tb-help.svg'
 
 export const Neo3NeoXBridgeAboutModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3NeoXBridgeAboutModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3NeoXBridgeAbout' })
 
   return (
     <TwModalLayout

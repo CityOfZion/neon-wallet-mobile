@@ -21,7 +21,7 @@ const renderItem: ListRenderItem<TItem> = ({ item, index }) => (
 )
 
 export const BuyAndSellTokensAccountsModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAccountsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAccounts' })
   const { wallets } = useWalletsSelector()
   const { accounts } = useAccountsSelector()
 

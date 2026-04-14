@@ -21,7 +21,7 @@ type TProps = {
 }
 
 export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDateFrom, formattedDateTo }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactionsModal.successModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactions.success' })
   const { t: commonT } = useTranslation('common')
 
   const handlePressDiscord = () => {

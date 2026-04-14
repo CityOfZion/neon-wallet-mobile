@@ -29,7 +29,7 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
   const { mnemonic, onConfirm } = route.params
 
   const { accountsRef } = useAccountsSelector()
-  const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelection' })
   const { t: commonT } = useTranslation('common')
   const { lastIndexesByWallet } = useLastIndexesByWallet()
   const { createWallet } = useCreateWallet()

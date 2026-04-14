@@ -30,7 +30,7 @@ type TProps = {
 }
 
 export const PremiumSkinSelector = ({ selectedSkin, onPress, account }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'editAccountModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'editAccount' })
   const { unlockedSkinIds } = useUnlockedSkinIdsSelector()
   const { data, isLoading } = useItemNeo3NftSkins(account)
 

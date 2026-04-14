@@ -18,7 +18,7 @@ type TProps = {
 }
 
 export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'addressSelection' })
   const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
 
   const [addressInput, setAddressInput] = useState('')

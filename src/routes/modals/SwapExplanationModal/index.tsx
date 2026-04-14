@@ -15,7 +15,7 @@ import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
 import TbReplace from '@/assets/images/tb-replace.svg'
 
 export const SwapExplanationModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'swapExplanationModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'swapExplanation' })
 
   const handleOpenDiscord = async () => {
     await LinkHelper.open(ConstantsHelper.cozDiscordUrl)

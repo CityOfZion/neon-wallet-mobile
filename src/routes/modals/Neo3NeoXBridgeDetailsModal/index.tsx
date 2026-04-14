@@ -49,7 +49,7 @@ export const Neo3NeoXBridgeDetailsModal = ({
     },
   },
 }: TRootStackScreenProps<'Neo3NeoXBridgeDetailsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3NeoXBridgeDetailsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3NeoXBridgeDetails' })
 
   const [status, setStatus] = useState<TStatus>('confirming')
   const [errorMessage, setErrorMessage] = useState<string>()

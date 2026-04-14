@@ -18,7 +18,7 @@ export const DappPermissionSignatureScopeModal = ({
 }: TRootStackScreenProps<'DappPermissionSignatureScopeModal'>) => {
   const { scope, session, allowedList } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionSignatureScopeModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionSignatureScope' })
 
   return (
     <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>

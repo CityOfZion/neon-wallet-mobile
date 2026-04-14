@@ -21,7 +21,7 @@ import TbFileImport from '@/assets/images/tb-file-import.svg'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const ImportBackupModal = ({ navigation }: TRootStackScreenProps<'ImportBackupModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'importBackupModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'importBackup' })
   const { t: tCommon } = useTranslation('common')
 
   const { handleBrowserFile, handleTryDecryptData, handleImportBackupData } = useNeonImportBackup()
@@ -37,13 +37,13 @@ export const ImportBackupModal = ({ navigation }: TRootStackScreenProps<'ImportB
     navigation.navigate('PasswordModal', {
       title: t('title'),
       buttonProps: {
-        label: t('passwordModal.buttonLabel'),
+        label: t('password.buttonLabel'),
         leftElement: <TbFileImport aria-hidden />,
       },
       inputProps: {
-        label: t('passwordModal.inputLabel'),
+        label: t('password.inputLabel'),
       },
-      description: t('passwordModal.description'),
+      description: t('password.description'),
       async onConfirm(password) {
         const backupData = handleTryDecryptData(backupFile!, password)
         await handleImportBackupData(backupData)
@@ -51,8 +51,8 @@ export const ImportBackupModal = ({ navigation }: TRootStackScreenProps<'ImportB
       onSuccess() {
         navigation.navigate('SuccessModal', {
           title: t('title'),
-          content: t('successModal.description'),
-          buttonLabel: t('successModal.submitButtonLabel'),
+          content: t('success.description'),
+          buttonLabel: t('success.submitButtonLabel'),
         })
       },
     })

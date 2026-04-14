@@ -30,7 +30,7 @@ export const DappConnectionRequestModal = ({
 }: TRootStackScreenProps<'DappConnectionRequestModal'>) => {
   const { account, proposal, fromDeeplink } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionRequestModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionRequest' })
   const { t: commonT } = useTranslation('common')
 
   const [proposalDetails, setProposalDetails] = useState<TWalletKitHelperProposalDetails>()

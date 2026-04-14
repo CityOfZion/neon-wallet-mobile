@@ -21,7 +21,7 @@ export const QRCodeAddressContextModal = ({
 }: TRootStackScreenProps<'QRCodeAddressContextModal'>) => {
   const { address } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'qrCodeAddressContextModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'qrCodeAddressContext' })
 
   const handlePressSend = () => {
     navigation.navigate('TabStack', {

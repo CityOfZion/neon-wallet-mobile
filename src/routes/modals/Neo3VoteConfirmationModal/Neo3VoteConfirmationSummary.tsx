@@ -21,7 +21,7 @@ type TProps = {
 }
 
 export const Neo3VoteConfirmationSummary = ({ title, neo3Account, candidate, neoAmount, isLoading }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteConfirmationModal.summary' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteConfirmation.summary' })
 
   return (
     <View className="flex w-full flex-col gap-y-3">

@@ -33,7 +33,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 }
 
 export const CurrencySelectionModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'currencySelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'currencySelection' })
   const dispatch = useAppDispatch()
   const { currency } = useCurrencySelector()
 

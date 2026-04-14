@@ -17,7 +17,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const NotificationContextModal = ({ navigation, route }: TRootStackScreenProps<'NotificationContextModal'>) => {
   const { notification } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'notificationContextModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'notificationContext' })
   const { t: commonT } = useTranslation('common')
   const dispatch = useAppDispatch()
 

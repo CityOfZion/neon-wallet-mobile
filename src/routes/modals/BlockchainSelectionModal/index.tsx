@@ -21,7 +21,7 @@ type TActionData = {
 export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'BlockchainSelectionModal'>) => {
   const { onSelect, isMulti = false, description, title, buttonProps } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelection' })
   const { t: commonT } = useTranslation('common')
   const { actionData, setData, handleAct } = useActions<TActionData>({
     blockchains: ['neo3'],

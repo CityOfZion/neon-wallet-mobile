@@ -16,7 +16,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const RemoveNfiModal = ({ route, navigation }: TRootStackScreenProps<'RemoveNfiModal'>) => {
   const { onSuccess, onError } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'removeNfiModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'removeNfi' })
   const { removeNfiByNfi, removeNfiByPassword } = useItemNfiAuthentication()
 
   const handleClose = () => {
