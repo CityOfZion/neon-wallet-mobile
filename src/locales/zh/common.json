@@ -2,48 +2,43 @@
   "blockchainServices": {
     "arbitrum": {
       "accountName": "Arbitrum 账户",
-      "id": "Arbitrum",
       "label": "Arbitrum"
     },
     "base": {
       "accountName": "Base 账户",
-      "id": "Base",
       "label": "Base"
     },
     "bitcoin": {
       "accountName": "比特币账户",
-      "id": "Bitcoin",
       "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "以太坊账户",
-      "id": "Ethereum",
       "label": "以太坊"
     },
     "neo3": {
       "accountName": "NEO 账户",
-      "id": "Neo N3",
       "label": "Neo（N3）"
     },
     "neoLegacy": {
       "accountName": "Neo 传统账户",
-      "id": "Neo Legacy",
       "label": "Neo 传统版"
     },
     "neox": {
       "accountName": "NeoX 账户",
-      "id": "NeoX",
       "label": "NeoX"
     },
     "polygon": {
       "accountName": "Polygon 账户",
-      "id": "Polygon",
       "label": "Polygon"
     },
     "solana": {
       "accountName": "Solana 账户",
-      "id": "索拉纳",
       "label": "索拉纳"
+    },
+    "stellar": {
+      "accountName": "Stellar 账户",
+      "label": "Stellar"
     }
   },
   "deeplink": {

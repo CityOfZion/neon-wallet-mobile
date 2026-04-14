@@ -38,7 +38,7 @@ export const ExportFullTransactionsModal = ({
   navigation,
   route,
 }: TRootStackScreenProps<'ExportFullTransactionsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactionsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactions' })
   const { language } = useLanguageSelector()
   const { writeFile } = useFileSystem()
 
@@ -108,7 +108,7 @@ export const ExportFullTransactionsModal = ({
       await writeFile(filename, result, 'text/csv')
 
       navigation.navigate('SuccessModal', {
-        title: t('successModal.title'),
+        title: t('success.title'),
         content: (
           <ExportFullTransactionsSuccessModalContent
             account={selectedAccount}

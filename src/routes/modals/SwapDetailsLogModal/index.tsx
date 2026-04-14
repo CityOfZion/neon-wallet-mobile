@@ -20,7 +20,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 const swapService = new SimpleSwapService()
 
 export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetailsLogModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsLogModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsLog' })
 
   const {
     swapRecord: { swapId, ...swapRecord },

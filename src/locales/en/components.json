@@ -40,11 +40,11 @@
   "blockchainList": {
     "xExisting": "{{amount}} existing"
   },
-  "nfcModal": {
+  "nfc": {
     "description": "Please tap NFC tags",
     "title": "Ready to Scan"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "Close qrcode scanner",
     "permissionOffMessage": "Camera permission is required to scan QR codes. Please grant permission in your device settings.",
     "permissionOffTitle": "Camera Access Required"

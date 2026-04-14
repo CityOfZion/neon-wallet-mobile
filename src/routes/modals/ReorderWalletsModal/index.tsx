@@ -29,7 +29,7 @@ const renderItem: SortableGridRenderItem<TWallet> = ({ item }) => {
 export const ReorderWalletsModal = ({ navigation }: TRootStackScreenProps<'ReorderWalletsModal'>) => {
   const { wallets } = useWalletsSelector()
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('modals', { keyPrefix: 'reorderWalletsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'reorderWallets' })
   const { t: commonT } = useTranslation('common')
 
   const [reorderedWallets, setReorderedWallets] = useState<TWallet[]>(wallets)

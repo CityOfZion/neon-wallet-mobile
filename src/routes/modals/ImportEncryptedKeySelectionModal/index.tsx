@@ -34,7 +34,7 @@ export const ImportEncryptedKeySelectionModal = ({
 }: TRootStackScreenProps<'ImportEncryptedKeySelectionModal'>) => {
   const { encryptedKey, onConfirm } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'importEncryptedKeySelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'importEncryptedKeySelection' })
   const { t: tCommon } = useTranslation('common')
   const { createWallet } = useCreateWallet()
   const { importAccount } = useImportAccount()

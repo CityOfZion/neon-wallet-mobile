@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 import TbBluetoothOff from '@/assets/images/tb-bluetooth-off.svg'
 
 export const ConnectHardwareBluetoothModalBluetoothOff = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetoothModal.bluetoothDisabled' })
+  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetooth.bluetoothDisabled' })
 
   return (
     <View className="w-full flex-grow items-center">

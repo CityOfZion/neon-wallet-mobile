@@ -24,7 +24,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const BuyAndSellTokensAboutDataModal = ({
   navigation,
 }: TRootStackScreenProps<'BuyAndSellTokensAboutDataModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAboutDataModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAboutData' })
 
   const handleBack = () => {
     navigation.goBack()

@@ -21,7 +21,7 @@ export const ConnectHardwareBluetoothModalPermission = ({
   bluetoothPermissionIsGranted,
   locationPermissionIsGranted,
 }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetoothModal.permissionsRequired' })
+  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetooth.permissionsRequired' })
   return (
     <View className="w-full flex-grow items-center">
       <Text className="text-center font-sans-medium text-2xl text-white">{t('title')}</Text>

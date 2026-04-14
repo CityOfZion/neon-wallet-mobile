@@ -34,7 +34,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
   const { blockchain, network } = route.params
 
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('modals', { keyPrefix: 'persistNetworkModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'persistNetwork' })
   const { t: commonT } = useTranslation('common')
 
   const { actionData, actionState, setData, setError, clearErrors } = useActions<TActionData>({

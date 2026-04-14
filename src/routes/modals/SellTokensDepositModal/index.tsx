@@ -50,7 +50,7 @@ export const SellTokensDepositModal = ({
   navigation,
   route: { params },
 }: TRootStackScreenProps<'SellTokensDepositModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDeposit' })
 
   const dispatch = useAppDispatch()
   const { currency } = useCurrencySelector()
@@ -175,7 +175,7 @@ export const SellTokensDepositModal = ({
         intents: [{ amount, receiverAddress: address, token }],
       })
 
-      const notificationPrefix = 'modals:sellTokensDepositModal'
+      const notificationPrefix = 'modals:sellTokensDeposit'
       const notificationSuccessPrefix = `${notificationPrefix}.successNotification`
       const notificationFailurePrefix = `${notificationPrefix}.failureNotification`
 

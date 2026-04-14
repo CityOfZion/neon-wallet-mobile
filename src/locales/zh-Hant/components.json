@@ -11,7 +11,6 @@
   "accountTransactionsTransactionCard": {
     "blockToolTipLabel": "區塊：{{ block }}",
     "bridgeNeo3NeoXButtonLabel": "跨鏈橋",
-    "detailsButtonLabel": "開啟詳情",
     "feeTooltipLabel": "網路費：{{ networkFee }} | 系統費：{{ systemFee }}",
     "invocationsToolTipLabel": "呼叫：{{ invocations }}",
     "nftsTooltipLabel": "NFTs：{{ nfts }}",
@@ -41,11 +40,11 @@
   "blockchainList": {
     "xExisting": "已有 {{amount}} 個"
   },
-  "nfcModal": {
+  "nfc": {
     "description": "請輕觸 NFC 標籤",
     "title": "準備掃描"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "關閉二維碼掃描器",
     "permissionOffMessage": "掃描二維碼需要相機權限。請在設備設定中授予權限。",
     "permissionOffTitle": "需要攝影機存取權限"

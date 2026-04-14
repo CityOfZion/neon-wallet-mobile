@@ -31,7 +31,7 @@ const resolveSigner = (scope: string | number) => {
 }
 
 export const DappPermissionInvokeNeo3ContentSigner = ({ signer, session }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal.customContents.invokeNeo3' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission.customContents.invokeNeo3' })
   const navigation = useNavigation()
 
   const scope = resolveSigner(signer.scopes)

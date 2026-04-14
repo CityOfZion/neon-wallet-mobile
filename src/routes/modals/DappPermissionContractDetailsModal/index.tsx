@@ -92,7 +92,7 @@ export const DappPermissionContractDetailsModal = ({
 }: TRootStackScreenProps<'DappPermissionContractDetailsModal'>) => {
   const { blockchain, operation, hash, values, session } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionContractDetailsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionContractDetails' })
 
   const contractQuery = useContractQuery({ blockchain, hash })
 

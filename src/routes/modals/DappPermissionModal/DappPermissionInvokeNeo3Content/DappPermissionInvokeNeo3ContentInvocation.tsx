@@ -26,7 +26,7 @@ type TProps = {
 } & TDappPermissionProps
 
 export const DappPermissionInvokeNeo3ContentInvocation = ({ invocation, sessionDetails, session }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal.customContents.invokeNeo3' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission.customContents.invokeNeo3' })
   const navigation = useNavigation()
 
   const contractQuery = useContractQuery({ blockchain: sessionDetails.blockchain, hash: invocation.scriptHash })

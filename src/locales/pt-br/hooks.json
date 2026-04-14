@@ -17,7 +17,7 @@
   "useItemNfiAuthentication": {
     "authenticateMessage": "Escaneie seu objeto NFI ATUAL",
     "confirmLinkMessage": "Por favor, reconfirme seu objeto NFI",
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "Confirme seu código",
       "confirmPasswordInputPlaceholder": "Digite seu código…",
       "description": "Se você perder seu NFI, este código permitirá que você conclua transações ou registre um novo NFI.",
@@ -33,7 +33,7 @@
     "nfcNotEnabledError": "Por favor, ative NFC nas configurações do seu dispositivo",
     "nfcRequestNotFoundError": "Requisição NFC cancelada ou falhou",
     "noNfiObjectError": "Nenhum objeto NFI encontrado",
-    "passwordModal": {
+    "password": {
       "alert": "Você precisa de um código para alterar/remover seu NFI",
       "description": "Se você perdeu seu NFI, digite seu código para removê-lo",
       "inputLabel": "Digite o código",
@@ -54,7 +54,7 @@
     }
   },
   "usePasswordAuthentication": {
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "Confirme sua senha",
       "confirmPasswordInputPlaceholder": "Digite sua senha…",
       "description": "Esta senha permitirá proteger sua carteira e autorizar ações.",
@@ -66,7 +66,7 @@
       "title": "Senha"
     },
     "getPasswordError": "Erro ao obter a senha. Entre em contato com o suporte.",
-    "passwordModal": {
+    "password": {
       "alert": "Você precisa de uma senha para autorizar esta ação",
       "description": "Para autenticar, forneça sua senha",
       "inputLabel": "Digite a senha",
@@ -75,6 +75,18 @@
       "title": "Senha"
     },
     "wrongPasswordError": "Senha incorreta. Tente novamente."
+  },
+  "usePersistTrustlineMutation": {
+    "errorToastMessage": "Falha ao salvar trustline",
+    "failureNotification": {
+      "previewBody": "Não foi possível verificar a conclusão da sua trustline",
+      "title": "Alteração de Trustline falhou"
+    },
+    "successNotification": {
+      "previewBody": "Sua trustline foi alterada com sucesso",
+      "title": "Alteração de Trustline concluída"
+    },
+    "successToastMessage": "Trustline salva com sucesso"
   },
   "useUnclaimedMutation": {
     "errors": {

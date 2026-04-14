@@ -26,7 +26,7 @@ export const OnboardingBackupMnemonicModal = ({
 }: TRootStackScreenProps<'OnboardingBackupMnemonicModal'>) => {
   const { wallet, onSuccess } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'onboardingBackupMnemonicModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'onboardingBackupMnemonic' })
   const dispatch = useAppDispatch()
   const { saveMnemonicToTextFile } = useExportMnemonic()
 
