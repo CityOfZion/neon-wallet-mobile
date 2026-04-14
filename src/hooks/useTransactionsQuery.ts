@@ -98,7 +98,8 @@ export const useTransactionsQuery = ({ account, dateFrom, dateTo }: TUseTransact
     pendingTransactions.forEach(transaction => {
       if (
         transaction.relatedAddress &&
-        AccountHelper.predicate({ address: transaction.relatedAddress, blockchain: transaction.blockchain })(account)
+        AccountHelper.predicate({ address: transaction.relatedAddress, blockchain: transaction.blockchain })(account) &&
+        (!dateFrom || !dateTo || dateFns.isWithinInterval(transaction.date, { start: dateFrom, end: dateTo }))
       ) {
         groupedTransactionsMap.set(transaction.txId, transaction)
       }
@@ -155,7 +156,7 @@ export const useTransactionsQuery = ({ account, dateFrom, dateTo }: TUseTransact
     })
 
     return Array.from(groupedDataByDates.values())
-  }, [account, hiddenTokensByBlockchain, language, pendingTransactions, query.data, query.isLoading])
+  }, [account, dateFrom, dateTo, hiddenTokensByBlockchain, language, pendingTransactions, query.data, query.isLoading])
 
   return { ...query, aggregatedData }
 }

@@ -60,6 +60,7 @@ export type TContact = {
 }
 
 export type TAvailableCurrency = 'USD' | 'BRL' | 'EUR' | 'GBP' | 'CNY'
+
 export type TCurrency = {
   symbol: string
   label: TAvailableCurrency
