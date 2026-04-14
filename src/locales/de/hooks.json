@@ -17,7 +17,7 @@
   "useItemNfiAuthentication": {
     "authenticateMessage": "Scannen Sie Ihr AKTUELLES NFI Objekt",
     "confirmLinkMessage": "Bitte bestätigen Sie Ihr NFI Objekt erneut",
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "Passcode bestätigen",
       "confirmPasswordInputPlaceholder": "Geben Sie Ihren Passcode ein…",
       "description": "Wenn Sie Ihr NFI verlieren, ermöglicht Ihnen dieser Passcode, Transaktionen abzuschließen oder ein neues NFI zu registrieren.",
@@ -33,7 +33,7 @@
     "nfcNotEnabledError": "Bitte aktivieren Sie NFC in Ihren Geräteeinstellungen",
     "nfcRequestNotFoundError": "NFC Anfrage abgebrochen oder fehlgeschlagen",
     "noNfiObjectError": "Kein NFI Objekt gefunden",
-    "passwordModal": {
+    "password": {
       "alert": "Sie benötigen einen Passcode, um Ihr NFI zu ändern/entfernen",
       "description": "Wenn Sie Ihr NFI verloren haben, geben Sie Ihren Passcode ein, um es zu entfernen",
       "inputLabel": "Passcode eingeben",
@@ -54,7 +54,7 @@
     }
   },
   "usePasswordAuthentication": {
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "Passwort bestätigen",
       "confirmPasswordInputPlaceholder": "Geben Sie Ihr Passwort ein…",
       "description": "Dieses Passwort schützt Ihr Wallet und autorisiert Aktionen.",
@@ -66,7 +66,7 @@
       "title": "Passwort"
     },
     "getPasswordError": "Fehler beim Abrufen des Passworts. Bitte kontaktieren Sie den Support.",
-    "passwordModal": {
+    "password": {
       "alert": "Sie benötigen einen Passcode, um diese Aktion zu autorisieren",
       "description": "Um sich zu authentifizieren, geben Sie bitte Ihr Passwort ein",
       "inputLabel": "Passwort eingeben",
@@ -75,6 +75,18 @@
       "title": "Passwort"
     },
     "wrongPasswordError": "Falsches Passwort. Bitte versuchen Sie es erneut."
+  },
+  "usePersistTrustlineMutation": {
+    "errorToastMessage": "Trustline konnte nicht gespeichert werden",
+    "failureNotification": {
+      "previewBody": "Wir konnten den Abschluss Ihrer Trustline nicht bestätigen",
+      "title": "Trustline-Änderung fehlgeschlagen"
+    },
+    "successNotification": {
+      "previewBody": "Ihre Trustline wurde erfolgreich geändert",
+      "title": "Trustline-Änderung abgeschlossen"
+    },
+    "successToastMessage": "Trustline erfolgreich gespeichert"
   },
   "useUnclaimedMutation": {
     "errors": {

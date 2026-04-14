@@ -19,7 +19,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const AccountQRCodeModal = ({ route }: TRootStackScreenProps<'AccountQRCodeModal'>) => {
   const { account } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'accountQRCodeModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'accountQRCode' })
   const { t: commonT } = useTranslation('common')
 
   const handleCopy = () => {

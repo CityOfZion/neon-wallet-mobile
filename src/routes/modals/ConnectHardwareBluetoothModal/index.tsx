@@ -15,7 +15,7 @@ import { ConnectHardwareBluetoothModalPermission } from './ConnectHardwareBlueto
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const ConnectHardwareBluetoothModal = (props: TRootStackScreenProps<'ConnectHardwareBluetoothModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetoothModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetooth' })
   const { bluetoothState, bluetoothPermissionIsGranted, locationPermissionIsGranted, isLoading } = useBluetooth()
 
   return (

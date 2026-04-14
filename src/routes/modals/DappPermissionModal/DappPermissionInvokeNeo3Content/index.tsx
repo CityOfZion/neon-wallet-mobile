@@ -20,7 +20,7 @@ import { DappPermissionInvokeNeo3ContentSigner } from './DappPermissionInvokeNeo
 export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => {
   const { session, onAccept, onReject, isAccepting, isRejecting, request } = props
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
   const { t: commonT } = useTranslation('common')
 
   const params = request.params.request.params as ContractInvocationMulti

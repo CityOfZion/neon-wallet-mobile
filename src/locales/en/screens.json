@@ -37,7 +37,7 @@
     "nfts": "NFTs",
     "tokens": "Tokens",
     "transactions": "Transactions",
-    "warningClaimModal": {
+    "warningClaim": {
       "buttons": {
         "no": "No",
         "yes": "Yes"
@@ -498,7 +498,7 @@
       "extraIdToReceivePlaceholder": "Enter…",
       "feePlaceholder": "0.00",
       "minimumAmountTitle": "Minimum {{amount}}",
-      "openAboutExtraIdToReceiveModal": "Open destination tag/memo about modal",
+      "openAboutExtraIdToReceive": "Open destination tag/memo about modal",
       "selectPlaceholder": "Select…",
       "source": "Account details",
       "tokenToReceiveModalTitle": "Select a token to receive",

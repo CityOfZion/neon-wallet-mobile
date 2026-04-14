@@ -25,7 +25,7 @@ type TProps = {
 }
 
 export const SendSuccessContent = ({ transactions, selectedAccount, fee, navigation }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'sendConfirmModal.successContent' })
+  const { t } = useTranslation('modals', { keyPrefix: 'sendConfirm.successContent' })
   const { wallet } = useWalletByIdSelector(selectedAccount.idWallet)
   const { handleErase } = useModalErase()
 

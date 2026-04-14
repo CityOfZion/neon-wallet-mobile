@@ -38,7 +38,7 @@ export const CreatePasswordModal = ({ navigation, route }: TRootStackScreenProps
     onRequestClose,
   } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'createPasswordModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'createPassword' })
 
   const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionData>(
     {

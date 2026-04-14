@@ -80,7 +80,7 @@ const SmallContent = ({ title, children }: TSmallContentProps) => (
 )
 
 export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'SwapDetailsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'swapDetails' })
   const dispatch = useAppDispatch()
   const { contacts } = useContactsSelector()
   const timeoutRef = useRef<NodeJS.Timeout>(undefined)

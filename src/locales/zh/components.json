@@ -11,7 +11,6 @@
   "accountTransactionsTransactionCard": {
     "blockToolTipLabel": "区块：{{ block }}",
     "bridgeNeo3NeoXButtonLabel": "跨链桥",
-    "detailsButtonLabel": "打开详情",
     "feeTooltipLabel": "网络费：{{ networkFee }} | 系统费：{{ systemFee }}",
     "invocationsToolTipLabel": "调用：{{ invocations }}",
     "nftsTooltipLabel": "NFTs：{{ nfts }}",
@@ -41,11 +40,11 @@
   "blockchainList": {
     "xExisting": "已有{{amount}}个"
   },
-  "nfcModal": {
+  "nfc": {
     "description": "请轻触NFC标签",
     "title": "准备扫描"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "关闭二维码扫描器",
     "permissionOffMessage": "扫描二维码需要相机权限。请在设备设置中授予权限。",
     "permissionOffTitle": "需要摄像头访问权限"

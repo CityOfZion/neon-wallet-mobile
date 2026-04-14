@@ -35,7 +35,7 @@ type TActionsData = {
 }
 
 export const SurveyModal = ({ navigation }: TRootStackScreenProps<'SurveyModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'surveyModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'survey' })
   const dispatch = useAppDispatch()
 
   const { actionData, handleAct, actionState, setData, setDataWrapper } = useActions<TActionsData>({

@@ -29,7 +29,7 @@ type TActionData = {
 }
 
 export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps<'DappConnectionModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappConnection' })
   const { isNotConnected } = useIsConnectedSelector()
   const { walletsRef } = useOwnWalletsSelector()
 

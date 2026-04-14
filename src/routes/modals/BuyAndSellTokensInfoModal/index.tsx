@@ -19,7 +19,7 @@ import TbHelp from '@/assets/images/tb-help.svg'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const BuyAndSellTokensInfoModal = ({ navigation }: TRootStackScreenProps<'BuyAndSellTokensInfoModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensInfoModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensInfo' })
 
   const handleAboutData = () => {
     navigation.navigate('BuyAndSellTokensAboutDataModal')

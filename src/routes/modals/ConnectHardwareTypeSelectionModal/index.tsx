@@ -15,7 +15,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const ConnectHardwareTypeSelectionModal = ({
   navigation,
 }: TRootStackScreenProps<'ConnectHardwareTypeSelectionModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareTypeSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareTypeSelection' })
 
   return (
     <TwModalLayout

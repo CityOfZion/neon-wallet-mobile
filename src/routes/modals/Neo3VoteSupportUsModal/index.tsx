@@ -32,7 +32,7 @@ export const Neo3VoteSupportUsModal = ({
     params: { neo3Account, cozCandidate },
   },
 }: TRootStackScreenProps<'Neo3VoteSupportUsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteSupportUsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteSupportUs' })
   const dispatch = useAppDispatch()
 
   const {

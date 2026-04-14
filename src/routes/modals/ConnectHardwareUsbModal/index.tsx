@@ -27,7 +27,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 type TStatus = 'searching' | 'connected' | 'not-connected'
 
 export const ConnectHardwareUsbModal = ({ navigation }: TRootStackScreenProps<'ConnectHardwareUsbModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareUsbModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareUsb' })
   const { t: commonT } = useTranslation('common')
   const { createHardwareWallet } = useCreateHardwareWallet()
 

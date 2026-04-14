@@ -49,7 +49,7 @@ export const Neo3VoteConfirmationModal = ({
 }: TRootStackScreenProps<'Neo3VoteConfirmationModal'>) => {
   const { neo3Account, candidate } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteConfirmationModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteConfirmation' })
   const dispatch = useAppDispatch()
   const { authenticate } = useAuthentication()
   const { currency } = useCurrencySelector()
@@ -135,7 +135,7 @@ export const Neo3VoteConfirmationModal = ({
       const serviceAccount = await BlockchainServiceHelper.getServiceAccount(neo3Account)
       const transaction = await service.voteService.vote({ account: serviceAccount, candidatePubKey: candidate.pubKey })
 
-      const notificationPrefix = 'modals:neo3VoteConfirmationModal.notifications'
+      const notificationPrefix = 'modals:neo3VoteConfirmation.notifications'
       const notificationSuccessPrefix = `${notificationPrefix}.voteSuccessNotification`
       const notificationFailurePrefix = `${notificationPrefix}.voteFailureNotification`
 

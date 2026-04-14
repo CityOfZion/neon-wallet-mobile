@@ -17,7 +17,7 @@ export const SendTipUncheckedConfirmationModal = ({
 }: TRootStackScreenProps<'SendTipUncheckedConfirmationModal'>) => {
   const { onConfirmation } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'sendTipUncheckedConfirmationModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'sendTipUncheckedConfirmation' })
 
   const handlePress = (value: boolean) => {
     navigation.goBack()

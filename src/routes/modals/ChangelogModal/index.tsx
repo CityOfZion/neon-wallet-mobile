@@ -48,7 +48,7 @@ const renderItem: ListRenderItem<TNote> = ({ item }) => {
 }
 
 export const ChangelogModal = () => {
-  const { t, i18n } = useTranslation('modals', { keyPrefix: 'changelogModal' })
+  const { t, i18n } = useTranslation('modals', { keyPrefix: 'changelog' })
   const { language } = useLanguageSelector()
 
   const notes = i18n.t('changelog:notes', { returnObjects: true })

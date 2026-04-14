@@ -37,7 +37,7 @@ export const Neo3NeoXBridgeConfirmationModal = ({
     },
   },
 }: TRootStackScreenProps<'Neo3NeoXBridgeConfirmationModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3NeoXBridgeConfirmationModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3NeoXBridgeConfirmation' })
   const { currency } = useCurrencySelector()
 
   const exchange = useExchange([

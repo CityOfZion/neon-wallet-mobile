@@ -30,7 +30,7 @@ type TActionData = {
 const EditAccountModal = ({ navigation, route }: TRootStackScreenProps<'EditAccountModal'>) => {
   const { account } = route.params
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('modals', { keyPrefix: 'editAccountModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'editAccount' })
   const { t: commonT } = useTranslation('common')
 
   const { actionData, setData, setDataWrapper, setError, actionState, handleAct } = useActions<TActionData>({

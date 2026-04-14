@@ -32,7 +32,7 @@ import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenProps<'OnboardingImportModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'onboardingImportModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'onboardingImport' })
   const { t: tCommon } = useTranslation('common')
   const dispatch = useAppDispatch()
   const { handleBrowserFile, handleTryDecryptData, handleImportBackupData } = useNeonImportBackup()

@@ -14,7 +14,7 @@ type TProps = {
 }
 
 export const CreateBackupModalSuccessContent = ({ password }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'createBackupModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'createBackup' })
 
   const [qrCodeText, setQrCodeText] = useState('')
 
@@ -42,12 +42,12 @@ export const CreateBackupModalSuccessContent = ({ password }: TProps) => {
         />
       </View>
 
-      <Text className="font-sans-medium text-2xl text-white">{t('successModal.description')}</Text>
+      <Text className="font-sans-medium text-2xl text-white">{t('success.description')}</Text>
 
       {qrCodeText && (
         <TwButton
           variant="outline"
-          label={t('successModal.savePasswordButtonLabel')}
+          label={t('success.savePasswordButtonLabel')}
           leftElement={<TbDeviceFloppy aria-hidden />}
           onPress={handleSavePassword}
         />

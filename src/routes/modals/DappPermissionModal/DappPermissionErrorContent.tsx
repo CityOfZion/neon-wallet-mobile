@@ -6,7 +6,7 @@ type TProps = {
 }
 
 export const DappPermissionErrorContent = ({ error }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal.errorContent' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission.errorContent' })
 
   return (
     <View className="w-full items-center">

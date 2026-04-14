@@ -2,48 +2,43 @@
   "blockchainServices": {
     "arbitrum": {
       "accountName": "Arbitrum Konto",
-      "id": "Arbitrum",
       "label": "Arbitrum"
     },
     "base": {
       "accountName": "Base Konto",
-      "id": "Base",
       "label": "Base"
     },
     "bitcoin": {
       "accountName": "Bitcoin Konto",
-      "id": "Bitcoin",
       "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "Ethereum Konto",
-      "id": "Ethereum",
       "label": "Ethereum"
     },
     "neo3": {
       "accountName": "NEO Konto",
-      "id": "Neo N3",
       "label": "Neo (N3)"
     },
     "neoLegacy": {
       "accountName": "Neo Legacy Konto",
-      "id": "Neo Legacy",
       "label": "Neo Legacy"
     },
     "neox": {
       "accountName": "NeoX Konto",
-      "id": "NeoX",
       "label": "NeoX"
     },
     "polygon": {
       "accountName": "Polygon Konto",
-      "id": "Polygon",
       "label": "Polygon"
     },
     "solana": {
       "accountName": "Solana Konto",
-      "id": "Solana",
       "label": "Solana"
+    },
+    "stellar": {
+      "accountName": "Stellar Konto",
+      "label": "Stellar"
     }
   },
   "deeplink": {

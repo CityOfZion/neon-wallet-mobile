@@ -52,7 +52,7 @@ const CUSTOM_CONTENT_BY_REQUEST: Partial<
 export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps<'DappPermissionModal'>) => {
   const { session, request, onAccept, onReject, sessionAccount, sessionDetails } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
   const { handleErase } = useModalErase()
   const { authenticate } = useAuthentication()
 

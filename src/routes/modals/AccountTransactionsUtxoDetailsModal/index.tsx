@@ -25,7 +25,7 @@ export const AccountTransactionsUtxoDetailsModal = ({
   route,
   navigation,
 }: TRootStackScreenProps<'AccountTransactionsUtxoDetailsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'accountTransactionsUtxoDetailsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'accountTransactionsUtxoDetails' })
   const { language } = useLanguageSelector()
   const { pendingTransactions } = usePendingTransactionsSelector()
   const [tab, setTab] = useState<TTab>('from')

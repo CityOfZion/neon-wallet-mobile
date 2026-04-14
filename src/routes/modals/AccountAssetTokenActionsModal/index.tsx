@@ -22,7 +22,7 @@ export const AccountAssetTokenActionsModal = ({
   route,
 }: TRootStackScreenProps<'AccountAssetTokenActionsModal'>) => {
   const { t: commonT } = useTranslation('common')
-  const { t } = useTranslation('modals', { keyPrefix: 'accountAssetTokenActionsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'accountAssetTokenActions' })
 
   const dispatch = useAppDispatch()
 
