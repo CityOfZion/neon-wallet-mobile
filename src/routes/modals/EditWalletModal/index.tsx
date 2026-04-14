@@ -21,7 +21,7 @@ export const EditWalletModal = ({ navigation, route }: TRootStackScreenProps<'Ed
   const { wallet } = route.params
 
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('modals', { keyPrefix: 'editWalletModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'editWallet' })
   const { t: commonT } = useTranslation('common')
 
   const { actionData, actionState, handleAct, setData, setError } = useActions<TActionData>({

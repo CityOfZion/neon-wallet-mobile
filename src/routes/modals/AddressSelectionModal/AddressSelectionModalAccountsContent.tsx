@@ -15,7 +15,7 @@ type TProps = {
 }
 
 export const AddressSelectionModalAccountsContent = ({ onSelect, blockchain }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'addressSelection' })
 
   const [selectedAccount, setSelectedAccount] = useState<TAccount>()
 

@@ -12,7 +12,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const BackupAlertModal = ({ navigation, route }: TRootStackScreenProps<'BackupAlertModal'>) => {
   const { wallet } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'backupAlertModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'backupAlert' })
 
   const handlePress = () => {
     navigation.replace('TabStack', {

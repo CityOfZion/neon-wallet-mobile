@@ -27,7 +27,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TSecurityType } from '@/types/store'
 
 export const SecuritySelectionModal = ({ navigation }: TRootStackScreenProps<'SecuritySelectionModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'securitySelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'securitySelection' })
   const { security } = useSecuritySelector()
   const { walletsRef } = useStandardWalletsSelector()
   const { linkNfi, isNfiAuthenticationAvailable, removeNfi } = useItemNfiAuthentication()

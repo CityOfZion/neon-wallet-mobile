@@ -32,7 +32,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 const isIos = Platform.OS === 'ios'
 
 export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickToolsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'quickToolsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'quickTools' })
   const { hasHardwareAccount } = useHasHardwareAccountSelector()
 
   const handlePressQrCode = async () => {

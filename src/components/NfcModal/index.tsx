@@ -26,7 +26,7 @@ export type TNfcModalThis = {
 export let activatedNfcModal: TNfcModalThis | undefined
 
 const NfcModal = () => {
-  const { t } = useTranslation('components', { keyPrefix: 'nfcModal' })
+  const { t } = useTranslation('components', { keyPrefix: 'nfc' })
   const { t: commonT } = useTranslation('common')
 
   const [visible, setVisible] = useState(false)

@@ -35,7 +35,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 }
 
 export const LanguageSelectionModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'languageSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'languageSelection' })
   const dispatch = useAppDispatch()
   const { language } = useLanguageSelector()
 

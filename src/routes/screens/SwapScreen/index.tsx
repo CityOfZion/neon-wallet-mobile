@@ -603,7 +603,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
 
                   <TwIconButton
                     className="-ml-1.5"
-                    aria-label={t('form.openAboutExtraIdToReceiveModal')}
+                    aria-label={t('form.openAboutExtraIdToReceive')}
                     size="md"
                     icon={<TbHelp aria-hidden className="mt-1 size-5 text-neon" />}
                     onPress={() => navigation.navigate('AboutExtraIdToReceiveModal')}

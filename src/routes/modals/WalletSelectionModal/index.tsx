@@ -32,7 +32,7 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
     walletTypes = ['hardware', 'standard', 'non-standard'],
   } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'walletSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'walletSelection' })
 
   const { wallets } = useWalletsSelector()
   const { accounts } = useAccountsSelector()

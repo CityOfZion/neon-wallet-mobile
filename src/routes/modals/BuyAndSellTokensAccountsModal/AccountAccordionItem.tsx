@@ -22,7 +22,7 @@ type TProps = {
 }
 
 export const AccountAccordionItem = ({ account }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAccountsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAccounts' })
   const { isLoading, data } = useBalance(account)
   const { currency } = useCurrencySelector()
 

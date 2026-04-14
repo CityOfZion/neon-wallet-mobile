@@ -9,7 +9,7 @@ import { TwModalLayout } from '@/layouts/TwModalLayout'
 import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
 
 export const Neo3VoteHowItWorksModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteHowItWorksModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteHowItWorks' })
 
   return (
     <TwModalLayout

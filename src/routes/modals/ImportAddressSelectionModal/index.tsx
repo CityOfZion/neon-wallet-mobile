@@ -27,7 +27,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const ImportAddressSelectionModal = ({ route }: TRootStackScreenProps<'ImportAddressSelectionModal'>) => {
   const { address, onConfirm } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelection' })
   const { t: tCommon } = useTranslation('common')
   const { accountsRef } = useAccountsSelector()
 

@@ -31,7 +31,7 @@ export const DappConnectionDetailsModal = ({
 }: TRootStackScreenProps<'DappConnectionDetailsModal'>) => {
   const { session } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionDetailsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionDetails' })
   const { t: commonT } = useTranslation('common')
   const { accountsWithWalletMapRef } = useAccountsWithWalletMapSelector()
   const { language } = useLanguageSelector()

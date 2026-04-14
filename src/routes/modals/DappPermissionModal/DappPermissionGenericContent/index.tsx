@@ -23,7 +23,7 @@ import { DappPermissionGenericContentFee } from './DappPermissionGenericContentF
 export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
   const { session, onAccept, onReject, isAccepting, isRejecting, request, sessionDetails } = props
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
   const { t: commonT } = useTranslation('common')
 
   const parsedParams = useMemo(() => {
