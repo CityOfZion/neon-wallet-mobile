@@ -121,5 +121,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         selectIdentifiers: ['D2760000850100', 'D2760000850101'],
       },
     ],
+    'expo-localization',
   ],
 })

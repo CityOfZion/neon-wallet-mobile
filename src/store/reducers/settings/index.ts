@@ -62,7 +62,7 @@ export function getSettingsReducer() {
         arbitrum: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.arbitrum.defaultNetwork,
         stellar: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.stellar.defaultNetwork,
       },
-      language: LanguageHelper.defaultLanguage,
+      language: LanguageHelper.detectDeviceLanguage(),
       canShowNeo3VoteSupportUsModal: true,
       surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
     },
