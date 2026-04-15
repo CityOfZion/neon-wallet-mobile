@@ -20,7 +20,13 @@ type TProps = {
   isLoading?: boolean
 }
 
-export const Neo3VoteConfirmationSummary = ({ title, neo3Account, candidate, neoAmount, isLoading }: TProps) => {
+export const Neo3VoteConfirmationSummary = ({
+  title,
+  neo3Account,
+  candidate,
+  neoAmount,
+  isLoading = false,
+}: TProps) => {
   const { t } = useTranslation('modals', { keyPrefix: 'neo3VoteConfirmation.summary' })
 
   return (
@@ -32,7 +38,7 @@ export const Neo3VoteConfirmationSummary = ({ title, neo3Account, candidate, neo
           <Skeleton.Item className="h-[27rem] w-full" />
         </Skeleton.Group>
         <Skeleton.Content>
-          <Details.Root className="bg-asphalt/50">
+          <Details.Root className="bg-asphalt/50 py-4">
             <Details.Body>
               <Details.Item
                 label={
@@ -75,7 +81,7 @@ export const Neo3VoteConfirmationSummary = ({ title, neo3Account, candidate, neo
               <Details.Item
                 label={<Neo3VoteConfirmationDetailsLabel>{t('detailsVotesLabel')}</Neo3VoteConfirmationDetailsLabel>}
               >
-                {neoAmount} {BSNeo3Constants.NEO_TOKEN.symbol}
+                {`${neoAmount} ${BSNeo3Constants.NEO_TOKEN.symbol}`}
               </Details.Item>
             </Details.Body>
           </Details.Root>
