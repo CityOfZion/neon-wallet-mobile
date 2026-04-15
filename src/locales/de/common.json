@@ -17,16 +17,16 @@
       "label": "Ethereum"
     },
     "neo3": {
-      "accountName": "NEO Konto",
-      "label": "Neo (N3)"
+      "accountName": "Neo 3 Konto",
+      "label": "Neo 3"
     },
     "neoLegacy": {
       "accountName": "Neo Legacy Konto",
       "label": "Neo Legacy"
     },
     "neox": {
-      "accountName": "NeoX Konto",
-      "label": "NeoX"
+      "accountName": "Neo X Konto",
+      "label": "Neo X"
     },
     "polygon": {
       "accountName": "Polygon Konto",

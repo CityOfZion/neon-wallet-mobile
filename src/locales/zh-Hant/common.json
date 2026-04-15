@@ -17,16 +17,16 @@
       "label": "以太坊"
     },
     "neo3": {
-      "accountName": "NEO 帳戶",
-      "label": "Neo（N3）"
+      "accountName": "Neo 3 帳戶",
+      "label": "Neo 3"
     },
     "neoLegacy": {
       "accountName": "Neo 傳統帳戶",
       "label": "Neo 傳統版"
     },
     "neox": {
-      "accountName": "NeoX 帳戶",
-      "label": "NeoX"
+      "accountName": "Neo X 帳戶",
+      "label": "Neo X"
     },
     "polygon": {
       "accountName": "Polygon 帳戶",
