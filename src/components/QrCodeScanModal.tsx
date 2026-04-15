@@ -21,7 +21,7 @@ const DEFAULT_WIDTH = 120
 const DEFAULT_HEIGHT = 120
 
 const QrCodeScanModal = () => {
-  const { t } = useTranslation('components', { keyPrefix: 'qrCodeScanModal' })
+  const { t } = useTranslation('components', { keyPrefix: 'qrCodeScan' })
   const { width, height } = useWindowDimensions()
   const [permission, requestPermission] = useCameraPermissions()
   const { top, left } = useSafeAreaInsets()

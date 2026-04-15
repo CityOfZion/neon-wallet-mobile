@@ -18,7 +18,7 @@ export const AccountTransactionsContextModal = ({
   navigation,
   route,
 }: TRootStackScreenProps<'AccountTransactionsContextModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'accountTransactionsContextModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'accountTransactionsContext' })
   const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
 
   const { account, dateFrom, dateTo, onDatesChange } = route.params
@@ -29,8 +29,8 @@ export const AccountTransactionsContextModal = ({
     if (!hasServiceFullTransactions) return
 
     navigation.replace('DateSelectionModal', {
-      title: t('dateSelectionModal.title'),
-      description: t('dateSelectionModal.description'),
+      title: t('dateSelection.title'),
+      description: t('dateSelection.description'),
       dateFrom,
       dateTo,
       onSelect: (dateFrom: Date, dateTo: Date) => onDatesChange(dateFrom, dateTo),

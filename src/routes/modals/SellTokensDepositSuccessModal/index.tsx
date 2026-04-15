@@ -21,7 +21,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TAccount } from '@/types/store'
 
 export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'SellTokensDepositSuccessModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositSuccessModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositSuccess' })
   const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const { accountsMapRef } = useAccountsMapSelector()
   const { transaction } = route.params

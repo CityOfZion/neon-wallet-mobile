@@ -16,7 +16,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const AddressSelectionModal = ({ navigation, route }: TRootStackScreenProps<'AddressSelectionModal'>) => {
   const { onSelect, title, blockchain } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'addressSelection' })
 
   const [value, setValue] = useState('address')
 

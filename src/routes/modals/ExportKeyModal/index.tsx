@@ -26,7 +26,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const ExportKeyModal = ({ navigation, route }: TRootStackScreenProps<'ExportKeyModal'>) => {
   const { account } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'exportKeyModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'exportKey' })
   const { t: commonT } = useTranslation('common')
 
   const [key, setKey] = useState<string>()

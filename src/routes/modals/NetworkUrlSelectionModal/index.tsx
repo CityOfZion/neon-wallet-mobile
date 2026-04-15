@@ -25,7 +25,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const NetworkUrlSelectionModal = ({ route }: TRootStackScreenProps<'NetworkUrlSelectionModal'>) => {
   const { blockchain } = route.params
-  const { t } = useTranslation('modals', { keyPrefix: 'networkUrlSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'networkUrlSelection' })
   const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
   const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
   const pingNetworksQuery = usePingNetworks(blockchain, { refetchInterval: 5000 })

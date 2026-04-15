@@ -30,7 +30,7 @@ export const PersistContactAddressModal = ({
   const onAdd = route.params?.onAdd
   const address = route.params?.address
 
-  const { t } = useTranslation('modals', { keyPrefix: 'persistContactAddressModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'persistContactAddress' })
   const { t: commonT } = useTranslation('common')
 
   const {

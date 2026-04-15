@@ -23,12 +23,13 @@
   "accountScreen": {
     "blockHeightTitle": "Altura do bloco {{ blockchain }}",
     "buttons": {
-      "bridgeNeo3NeoX": "Bridge",
       "buyAndSell": "Comprar + Vender",
+      "neo3NeoXBridge": "Bridge",
+      "neo3Vote": "Votação Neo 3",
       "receive": "Receber",
       "send": "Enviar",
-      "swap": "Swap",
-      "voteNeo3": "Votação Neo 3"
+      "stellarTrustline": "Gerenciar Trustline",
+      "swap": "Swap"
     },
     "claimAsset": "<1>Fazer claim</1> {{ amount }} {{ symbol }}",
     "connections": "Conexões",
@@ -36,7 +37,7 @@
     "nfts": "NFTs",
     "tokens": "Tokens",
     "transactions": "Transações",
-    "warningClaimModal": {
+    "warningClaim": {
       "buttons": {
         "no": "Não",
         "yes": "Sim"
@@ -65,6 +66,7 @@
   },
   "accountTransactionsScreen": {
     "contextButtonLabel": "Contexto",
+    "detailsButtonLabel": "Abrir detalhes",
     "emptyList": "Nenhuma transação para listar",
     "fromLabel": "De",
     "inputLabel": "{{ value }} entrada",
@@ -73,53 +75,6 @@
     "outputsLabel": "{{ value }} saídas",
     "title": "Transações",
     "toLabel": "Para"
-  },
-  "bridgeNeo3NeoXScreen": {
-    "aboutButtonLabel": "Sobre",
-    "errorsByCode": {
-      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "A conta selecionada não é compatível com o token selecionado",
-      "AMOUNT_ABOVE_MAXIMUM": "A quantidade está acima do máximo",
-      "AMOUNT_BELOW_MINIMUM": "A quantidade está abaixo do mínimo",
-      "BRIDGE_NOT_READY": "O bridge não está pronto ainda, por favor, preencha todos os campos",
-      "INSUFFICIENT_FEE_TOKEN_BALANCE": "Saldo insuficiente para cobrir a taxa de bridge",
-      "NO_AVAILABLE_TOKENS": "Nenhum token disponível para bridge",
-      "PAIR_TOKEN_NOT_FOUND": "O token de par não foi encontrado",
-      "TOKEN_NOT_AVAILABLE": "O token selecionado não está disponível para bridge",
-      "UNEXPECTED_ERROR": "Erro inesperado, por favor, tente novamente"
-    },
-    "form": {
-      "accountDetailsStepLabel": "Detalhes da conta",
-      "accountToUseLabel": "Bridge daqui",
-      "accountToUseModalTitle": "Selecione uma conta",
-      "addressToReceiveLabel": "Receber aqui",
-      "addressToReceiveModalTitle": "Selecione uma conta de recebimento",
-      "amountPlaceholder": "0.00",
-      "amountToReceiveAfterFeesLabel": "(depois das taxas)",
-      "amountToReceiveLabel": "Quantidade que você receberá",
-      "amountToReceivePlaceholder": "0.00000000",
-      "amountToUseLabel": "Quantidade",
-      "amountToUseMinLabel": "Mínimo {{amount}}",
-      "amountToUseMinPlaceholder": "0.00000000",
-      "amountsStepLabel": "Quantidades",
-      "assetsStepLabel": "Ativos",
-      "balanceLabel": "Saldo",
-      "balancePlaceholder": "0.00",
-      "bridgeFeeLabel": "Taxa de transação",
-      "bridgeFeePlaceholder": "0.00",
-      "selectPlaceholder": "Selecionar…",
-      "submitButtonLabel": "Fazer bridge agora",
-      "switchTokensButtonLabel": "Trocar tokens",
-      "tokenToReceiveLabel": "Bridge para este",
-      "tokenToUseLabel": "Bridge deste",
-      "tokenToUseModalTitle": "Selecione um token para fazer bridge"
-    },
-    "messages": {
-      "bridgeError": "Houve um problema ao fazer bridge, por favor, tente novamente mais tarde",
-      "networksShouldBeMainnet": "Neo 3 e Neo X devem estar usando Mainnet",
-      "selectAccountToUseError": "Problema ao selecionar conta a usar"
-    },
-    "restartButtonLabel": "Reiniciar",
-    "title": "Bridge de tokens"
   },
   "buyAndSellTokensScreen": {
     "buttons": {
@@ -237,6 +192,91 @@
     "privatePolicyButtonLabel": "Política de privacidade",
     "settingsButtonLabel": "Configurações",
     "title": "Mais opções"
+  },
+  "neo3NeoXBridgeScreen": {
+    "aboutButtonLabel": "Sobre",
+    "errorsByCode": {
+      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "A conta selecionada não é compatível com o token selecionado",
+      "AMOUNT_ABOVE_MAXIMUM": "A quantidade está acima do máximo",
+      "AMOUNT_BELOW_MINIMUM": "A quantidade está abaixo do mínimo",
+      "BRIDGE_NOT_READY": "O bridge não está pronto ainda, por favor, preencha todos os campos",
+      "INSUFFICIENT_FEE_TOKEN_BALANCE": "Saldo insuficiente para cobrir a taxa de bridge",
+      "NO_AVAILABLE_TOKENS": "Nenhum token disponível para bridge",
+      "PAIR_TOKEN_NOT_FOUND": "O token de par não foi encontrado",
+      "TOKEN_NOT_AVAILABLE": "O token selecionado não está disponível para bridge",
+      "UNEXPECTED_ERROR": "Erro inesperado, por favor, tente novamente"
+    },
+    "form": {
+      "accountDetailsStepLabel": "Detalhes da conta",
+      "accountToUseLabel": "Bridge daqui",
+      "accountToUseModalTitle": "Selecione uma conta",
+      "addressToReceiveLabel": "Receber aqui",
+      "addressToReceiveModalTitle": "Selecione uma conta de recebimento",
+      "amountPlaceholder": "0.00",
+      "amountToReceiveAfterFeesLabel": "(depois das taxas)",
+      "amountToReceiveLabel": "Quantidade que você receberá",
+      "amountToReceivePlaceholder": "0.00000000",
+      "amountToUseLabel": "Quantidade",
+      "amountToUseMinLabel": "Mínimo {{amount}}",
+      "amountToUseMinPlaceholder": "0.00000000",
+      "amountsStepLabel": "Quantidades",
+      "assetsStepLabel": "Ativos",
+      "balanceLabel": "Saldo",
+      "balancePlaceholder": "0.00",
+      "bridgeFeeLabel": "Taxa de transação",
+      "bridgeFeePlaceholder": "0.00",
+      "selectPlaceholder": "Selecionar…",
+      "submitButtonLabel": "Fazer bridge agora",
+      "switchTokensButtonLabel": "Trocar tokens",
+      "tokenToReceiveLabel": "Bridge para este",
+      "tokenToUseLabel": "Bridge deste",
+      "tokenToUseModalTitle": "Selecione um token para fazer bridge"
+    },
+    "messages": {
+      "bridgeError": "Houve um problema ao fazer bridge, por favor, tente novamente mais tarde",
+      "networksShouldBeMainnet": "Neo 3 e Neo X devem estar usando Mainnet",
+      "selectAccountToUseError": "Problema ao selecionar conta a usar"
+    },
+    "restartButtonLabel": "Reiniciar",
+    "title": "Bridge de tokens"
+  },
+  "neo3VoteScreen": {
+    "account": {
+      "changeLabel": "Mudar",
+      "noAccountSelectedLabel": "Nenhuma conta selecionada",
+      "selectLabel": "Selecionar",
+      "selectNeo3AccountTitle": "Selecione conta Neo 3"
+    },
+    "availableVotes": {
+      "availableVotesLabel": "Votos disponíveis",
+      "noAvailableVotesLabel": "Nenhum voto"
+    },
+    "howItWorksButtonLabel": "Como funciona",
+    "list": {
+      "nameColumnLabel": "Candidato",
+      "positionColumnLabel": "Posição",
+      "voteColumnLabel": "Voto"
+    },
+    "listItem": {
+      "castVoteButtonLabel": "Dar voto",
+      "detailsButtonLabel": "Informações do candidato",
+      "votedButtonLabel": "Votado!"
+    },
+    "listNotFound": {
+      "text": "Não há candidatos para votar ou houve um problema ao obtê-los. Verifique sua rede Neo 3 e, por favor, tente novamente.",
+      "title": "Nenhum candidato para exibir"
+    },
+    "searchLabel": "Procurar",
+    "searchPlaceholder": "Procure por um candidato…",
+    "title": "Votação",
+    "voteErrorMessages": {
+      "accountCanNotBeWatchLabel": "Sua conta Neo 3 está no modo watch",
+      "noNeo3AccountsLabel": "Não há nenhuma conta Neo 3 que não seja watch",
+      "selectNeo3AccountLabel": "Selecione uma conta Neo 3",
+      "shouldHaveEnoughGasToPayFeeLabel": "Você não tem GAS suficiente para pagar a taxa",
+      "shouldUseMainnetLabel": "Você deve usar uma rede Mainnet para votar",
+      "thereIsNoNeoLabel": "Sua conta Neo 3 deve ter NEO"
+    }
   },
   "notificationsScreen": {
     "actions": {
@@ -408,6 +448,11 @@
       "description": "Backup já realizado para todas as carteiras, continue para configurar segurança"
     }
   },
+  "stellarTrustlineScreen": {
+    "addTrustlineButtonLabel": "Adicionar trustline",
+    "emptyList": "Nenhuma trustline encontrada",
+    "title": "Stellar Trustline"
+  },
   "supportTicketScreen": {
     "descriptionLabel": "Descrição",
     "descriptionPlaceholder": "Descreva seu problema…",
@@ -453,7 +498,7 @@
       "extraIdToReceivePlaceholder": "Digite…",
       "feePlaceholder": "0.00",
       "minimumAmountTitle": "Mínimo {{amount}}",
-      "openAboutExtraIdToReceiveModal": "Abrir modal sobre tag de destino/memo",
+      "openAboutExtraIdToReceive": "Abrir modal sobre tag de destino/memo",
       "selectPlaceholder": "Selecionar…",
       "source": "Detalhes da conta",
       "tokenToReceiveModalTitle": "Selecione um token a receber",
@@ -466,44 +511,6 @@
     "title": "Fazer swap de tokens",
     "tooltips": {
       "experimentHigherAmounts": "As taxas de câmbio são melhores com valores de swap maiores, experimente!"
-    }
-  },
-  "voteNeo3Screen": {
-    "account": {
-      "changeLabel": "Mudar",
-      "noAccountSelectedLabel": "Nenhuma conta selecionada",
-      "selectLabel": "Selecionar",
-      "selectNeo3AccountTitle": "Selecione conta Neo 3"
-    },
-    "availableVotes": {
-      "availableVotesLabel": "Votos disponíveis",
-      "noAvailableVotesLabel": "Nenhum voto"
-    },
-    "howItWorksButtonLabel": "Como funciona",
-    "list": {
-      "nameColumnLabel": "Candidato",
-      "positionColumnLabel": "Posição",
-      "voteColumnLabel": "Voto"
-    },
-    "listItem": {
-      "castVoteButtonLabel": "Dar voto",
-      "detailsButtonLabel": "Informações do candidato",
-      "votedButtonLabel": "Votado!"
-    },
-    "listNotFound": {
-      "text": "Não há candidatos para votar ou houve um problema ao obtê-los. Verifique sua rede Neo 3 e, por favor, tente novamente.",
-      "title": "Nenhum candidato para exibir"
-    },
-    "searchLabel": "Procurar",
-    "searchPlaceholder": "Procure por um candidato…",
-    "title": "Votação",
-    "voteErrorMessages": {
-      "accountCanNotBeWatchLabel": "Sua conta Neo 3 está no modo watch",
-      "noNeo3AccountsLabel": "Não há nenhuma conta Neo 3 que não seja watch",
-      "selectNeo3AccountLabel": "Selecione uma conta Neo 3",
-      "shouldHaveEnoughGasToPayFeeLabel": "Você não tem GAS suficiente para pagar a taxa",
-      "shouldUseMainnetLabel": "Você deve usar uma rede Mainnet para votar",
-      "thereIsNoNeoLabel": "Sua conta Neo 3 deve ter NEO"
     }
   },
   "walletBackupStep1Screen": {

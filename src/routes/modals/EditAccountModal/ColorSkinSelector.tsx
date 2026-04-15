@@ -17,7 +17,7 @@ type TProps = {
 }
 
 export const ColorSkinSelector = ({ selectedSkin, onPress }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'editAccountModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'editAccount' })
 
   return (
     <Fragment>

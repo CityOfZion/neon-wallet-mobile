@@ -35,7 +35,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 export const ConnectHardwareBluetoothModalList = ({
   navigation,
 }: TRootStackScreenProps<'ConnectHardwareBluetoothModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetoothModal.list' })
+  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetooth.list' })
   const { t: commonT } = useTranslation('common')
   const { createHardwareWallet } = useCreateHardwareWallet()
 

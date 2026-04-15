@@ -43,7 +43,7 @@ const selectOwnAccountsByWalletId = (walletId?: string, blockchains?: TBlockchai
 export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenProps<'AccountSelectionModal'>) => {
   const { onSelect, blockchains, title } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'accountSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'accountSelection' })
   const { t: commonT } = useTranslation('common')
   const { wallets } = useOwnWalletsSelector()
 

@@ -14,7 +14,7 @@ type TProps = {
 }
 
 export const DappPermissionSuccessContent = ({ response }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal.successContent' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission.successContent' })
   const { t: commonT } = useTranslation('common')
 
   const stringifiedResponse = typeof response === 'string' ? response : JSON.stringify(response, null, 2)

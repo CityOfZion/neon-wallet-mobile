@@ -26,7 +26,7 @@ export const SecuritySelectionModalButton = ({
   onRemove,
   currentSecurity,
 }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'securitySelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'securitySelection' })
   const isSelected = currentSecurity.type === securityType
 
   return (

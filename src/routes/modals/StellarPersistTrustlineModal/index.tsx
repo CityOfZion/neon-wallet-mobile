@@ -32,7 +32,7 @@ export const StellarPersistTrustlineModal = ({
 }: TRootStackScreenProps<'StellarPersistTrustlineModal'>) => {
   const { stellarAccount, token, limit } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'stellarPersistTrustlineModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'stellarPersistTrustline' })
   const { t: tCommon } = useTranslation('common')
   const trustlineMutation = usePersistTrustlineMutation()
   const { wallet } = useWalletByIdSelector(stellarAccount.idWallet)

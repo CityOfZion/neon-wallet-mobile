@@ -31,7 +31,7 @@ export const CreateAccountBlockchainSelectionModal = ({
   const { wallet } = route.params
 
   const { t: commonT } = useTranslation('common')
-  const { t } = useTranslation('modals', { keyPrefix: 'createAccountBlockchainSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'createAccountBlockchainSelection' })
   const { createAccount } = useCreateAccount()
   const { accountsByWalletId } = useAccountsByWalletIdSelector(wallet.id)
 

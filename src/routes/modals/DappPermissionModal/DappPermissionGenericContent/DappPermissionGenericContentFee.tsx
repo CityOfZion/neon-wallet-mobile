@@ -20,7 +20,7 @@ export const DappPermissionGenericContentFee = ({
   sessionAccount,
   onReject,
 }: TDappPermissionProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
 
   const feeQuery = useQuery({
     queryKey: ['fee', request.id],

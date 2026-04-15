@@ -29,7 +29,7 @@ type TActionData = {
 }
 
 export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateBackupModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'createBackupModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'createBackup' })
   const { handleCreateBackup } = useNeonCreateBackup()
 
   const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionData>(
@@ -48,7 +48,7 @@ export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateB
     navigation.navigate('SuccessModal', {
       title: t('title'),
       content: <CreateBackupModalSuccessContent password={actionData.password} />,
-      buttonLabel: t('successModal.submitButtonLabel'),
+      buttonLabel: t('success.submitButtonLabel'),
     })
   }
 

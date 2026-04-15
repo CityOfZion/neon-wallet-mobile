@@ -11,7 +11,7 @@ import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLay
 import TbHelp from '@/assets/images/tb-help.svg'
 
 export const AboutExtraIdToReceiveModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'aboutExtraIdToReceiveModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'aboutExtraIdToReceive' })
 
   return (
     <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} contentContainerClassName="gap-6">

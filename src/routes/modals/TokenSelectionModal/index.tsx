@@ -63,7 +63,7 @@ const renderItem: ListRenderItem<TItem> = ({ item, index }) => {
 }
 
 export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps<'TokenSelectionModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'tokenSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'tokenSelection' })
   const { onSelect, tokens, account, blockchain, title, selectedToken } = route.params
   const hideBalance = !account
   const balance = useBalance(hideBalance ? undefined : account)

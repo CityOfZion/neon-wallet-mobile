@@ -61,7 +61,7 @@ export const StellarTrustilneTokenSelectionModal = ({
   route,
   navigation,
 }: TRootStackScreenProps<'StellarTrustilneTokenSelectionModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'stellarTrustilneTokenSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'stellarTrustilneTokenSelection' })
   const { getTrustlinesTokens } = useLazyStellarGetTrustlineTokens()
 
   const { actionData, actionState, setData } = useActions<TActionsData>({

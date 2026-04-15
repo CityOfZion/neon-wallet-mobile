@@ -11,7 +11,6 @@
   "accountTransactionsTransactionCard": {
     "blockToolTipLabel": "Block: {{ block }}",
     "bridgeNeo3NeoXButtonLabel": "Bridge",
-    "detailsButtonLabel": "Details öffnen",
     "feeTooltipLabel": "Netzwerkgebühr: {{ networkFee }} | Systemgebühr: {{ systemFee }}",
     "invocationsToolTipLabel": "Aufrufe: {{ invocations }}",
     "nftsTooltipLabel": "NFTs: {{ nfts }}",
@@ -41,11 +40,11 @@
   "blockchainList": {
     "xExisting": "{{amount}} vorhanden"
   },
-  "nfcModal": {
+  "nfc": {
     "description": "Bitte NFC-Tags antippen",
     "title": "Bereit zum Scannen"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "QR-Code-Scanner schließen",
     "permissionOffMessage": "Zum Scannen von QR-Codes ist die Kameraberechtigung erforderlich. Bitte erteilen Sie diese in den Geräteeinstellungen.",
     "permissionOffTitle": "Kamerazugriff erforderlich"

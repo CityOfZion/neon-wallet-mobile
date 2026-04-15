@@ -23,12 +23,13 @@
   "accountScreen": {
     "blockHeightTitle": "{{ blockchain }} 區塊高度",
     "buttons": {
-      "bridgeNeo3NeoX": "橋接",
       "buyAndSell": "買 + 賣",
+      "neo3NeoXBridge": "橋接",
+      "neo3Vote": "投票 Neo 3",
       "receive": "接收",
       "send": "發送",
-      "swap": "兌換",
-      "voteNeo3": "投票 Neo 3"
+      "stellarTrustline": "管理信任線",
+      "swap": "兌換"
     },
     "claimAsset": "<1>領取</1> {{ amount }} {{ symbol }}",
     "connections": "連線",
@@ -36,7 +37,7 @@
     "nfts": "NFT",
     "tokens": "代幣",
     "transactions": "交易",
-    "warningClaimModal": {
+    "warningClaim": {
       "buttons": {
         "no": "否",
         "yes": "是"
@@ -65,6 +66,7 @@
   },
   "accountTransactionsScreen": {
     "contextButtonLabel": "上下文",
+    "detailsButtonLabel": "開啟詳情",
     "emptyList": "沒有可列出的交易",
     "fromLabel": "從",
     "inputLabel": "{{ value }} 個輸入",
@@ -73,53 +75,6 @@
     "outputsLabel": "{{ value }} 個輸出",
     "title": "交易",
     "toLabel": "到"
-  },
-  "bridgeNeo3NeoXScreen": {
-    "aboutButtonLabel": "關於",
-    "errorsByCode": {
-      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "選擇的帳戶與選擇的代幣不相容",
-      "AMOUNT_ABOVE_MAXIMUM": "金額超過最高限額",
-      "AMOUNT_BELOW_MINIMUM": "金額低於最低限額",
-      "BRIDGE_NOT_READY": "橋接尚未準備就緒，請填寫所有欄位",
-      "INSUFFICIENT_FEE_TOKEN_BALANCE": "餘額不足以支付橋接手續費",
-      "NO_AVAILABLE_TOKENS": "沒有可用於橋接的代幣",
-      "PAIR_TOKEN_NOT_FOUND": "未找到配對代幣",
-      "TOKEN_NOT_AVAILABLE": "選擇的代幣不可用於橋接",
-      "UNEXPECTED_ERROR": "意外錯誤，請重試"
-    },
-    "form": {
-      "accountDetailsStepLabel": "帳戶詳情",
-      "accountToUseLabel": "從此處橋接",
-      "accountToUseModalTitle": "選擇帳戶",
-      "addressToReceiveLabel": "接收到此處",
-      "addressToReceiveModalTitle": "選擇接收帳戶",
-      "amountPlaceholder": "0.00",
-      "amountToReceiveAfterFeesLabel": "（扣除手續費後）",
-      "amountToReceiveLabel": "您將獲得的金額",
-      "amountToReceivePlaceholder": "0.00000000",
-      "amountToUseLabel": "金額",
-      "amountToUseMinLabel": "最低 {{amount}}",
-      "amountToUseMinPlaceholder": "0.00000000",
-      "amountsStepLabel": "金額",
-      "assetsStepLabel": "資產",
-      "balanceLabel": "餘額",
-      "balancePlaceholder": "0.00",
-      "bridgeFeeLabel": "交易手續費",
-      "bridgeFeePlaceholder": "0.00",
-      "selectPlaceholder": "選擇…",
-      "submitButtonLabel": "立即橋接",
-      "switchTokensButtonLabel": "切換代幣",
-      "tokenToReceiveLabel": "橋接到此",
-      "tokenToUseLabel": "從此橋接",
-      "tokenToUseModalTitle": "選擇要橋接的代幣"
-    },
-    "messages": {
-      "bridgeError": "橋接時出現問題，請稍後重試",
-      "networksShouldBeMainnet": "Neo 3 和 Neo X 應使用主網",
-      "selectAccountToUseError": "選擇使用帳戶時出現問題"
-    },
-    "restartButtonLabel": "重新開始",
-    "title": "橋接代幣"
   },
   "buyAndSellTokensScreen": {
     "buttons": {
@@ -237,6 +192,91 @@
     "privatePolicyButtonLabel": "隱私政策",
     "settingsButtonLabel": "設定",
     "title": "更多選項"
+  },
+  "neo3NeoXBridgeScreen": {
+    "aboutButtonLabel": "關於",
+    "errorsByCode": {
+      "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "選擇的帳戶與選擇的代幣不相容",
+      "AMOUNT_ABOVE_MAXIMUM": "金額超過最高限額",
+      "AMOUNT_BELOW_MINIMUM": "金額低於最低限額",
+      "BRIDGE_NOT_READY": "橋接尚未準備就緒，請填寫所有欄位",
+      "INSUFFICIENT_FEE_TOKEN_BALANCE": "餘額不足以支付橋接手續費",
+      "NO_AVAILABLE_TOKENS": "沒有可用於橋接的代幣",
+      "PAIR_TOKEN_NOT_FOUND": "未找到配對代幣",
+      "TOKEN_NOT_AVAILABLE": "選擇的代幣不可用於橋接",
+      "UNEXPECTED_ERROR": "意外錯誤，請重試"
+    },
+    "form": {
+      "accountDetailsStepLabel": "帳戶詳情",
+      "accountToUseLabel": "從此處橋接",
+      "accountToUseModalTitle": "選擇帳戶",
+      "addressToReceiveLabel": "接收到此處",
+      "addressToReceiveModalTitle": "選擇接收帳戶",
+      "amountPlaceholder": "0.00",
+      "amountToReceiveAfterFeesLabel": "（扣除手續費後）",
+      "amountToReceiveLabel": "您將獲得的金額",
+      "amountToReceivePlaceholder": "0.00000000",
+      "amountToUseLabel": "金額",
+      "amountToUseMinLabel": "最低 {{amount}}",
+      "amountToUseMinPlaceholder": "0.00000000",
+      "amountsStepLabel": "金額",
+      "assetsStepLabel": "資產",
+      "balanceLabel": "餘額",
+      "balancePlaceholder": "0.00",
+      "bridgeFeeLabel": "交易手續費",
+      "bridgeFeePlaceholder": "0.00",
+      "selectPlaceholder": "選擇…",
+      "submitButtonLabel": "立即橋接",
+      "switchTokensButtonLabel": "切換代幣",
+      "tokenToReceiveLabel": "橋接到此",
+      "tokenToUseLabel": "從此橋接",
+      "tokenToUseModalTitle": "選擇要橋接的代幣"
+    },
+    "messages": {
+      "bridgeError": "橋接時出現問題，請稍後重試",
+      "networksShouldBeMainnet": "Neo 3 和 Neo X 應使用主網",
+      "selectAccountToUseError": "選擇使用帳戶時出現問題"
+    },
+    "restartButtonLabel": "重新開始",
+    "title": "橋接代幣"
+  },
+  "neo3VoteScreen": {
+    "account": {
+      "changeLabel": "更換",
+      "noAccountSelectedLabel": "尚未選擇帳戶",
+      "selectLabel": "選擇",
+      "selectNeo3AccountTitle": "選擇 Neo 3 帳戶"
+    },
+    "availableVotes": {
+      "availableVotesLabel": "可用票數",
+      "noAvailableVotesLabel": "無票數"
+    },
+    "howItWorksButtonLabel": "運作方式",
+    "list": {
+      "nameColumnLabel": "候選人",
+      "positionColumnLabel": "排名",
+      "voteColumnLabel": "投票"
+    },
+    "listItem": {
+      "castVoteButtonLabel": "投票",
+      "detailsButtonLabel": "候選人資訊",
+      "votedButtonLabel": "已投票！"
+    },
+    "listNotFound": {
+      "text": "沒有可供投票的候選人，或取得資料時發生錯誤。請確認您的 Neo 3 網路，然後再試一次。",
+      "title": "無候選人可顯示"
+    },
+    "searchLabel": "搜尋",
+    "searchPlaceholder": "搜尋候選人…",
+    "title": "投票",
+    "voteErrorMessages": {
+      "accountCanNotBeWatchLabel": "您的 Neo 3 帳戶處於觀察模式",
+      "noNeo3AccountsLabel": "沒有任何非觀察模式的 Neo 3 帳戶",
+      "selectNeo3AccountLabel": "請選擇一個 Neo 3 帳戶",
+      "shouldHaveEnoughGasToPayFeeLabel": "您的 GAS 餘額不足以支付手續費",
+      "shouldUseMainnetLabel": "您應該使用主網來進行投票",
+      "thereIsNoNeoLabel": "您的 Neo 3 帳戶應該持有 NEO"
+    }
   },
   "notificationsScreen": {
     "actions": {
@@ -408,6 +448,11 @@
       "description": "所有錢包都已備份，請繼續設定安全性"
     }
   },
+  "stellarTrustlineScreen": {
+    "addTrustlineButtonLabel": "添加信任線",
+    "emptyList": "未找到信任線",
+    "title": "Stellar 信任線"
+  },
   "supportTicketScreen": {
     "descriptionLabel": "描述",
     "descriptionPlaceholder": "描述你的問題…",
@@ -453,7 +498,7 @@
       "extraIdToReceivePlaceholder": "請輸入…",
       "feePlaceholder": "0.00",
       "minimumAmountTitle": "最低 {{amount}}",
-      "openAboutExtraIdToReceiveModal": "開啟目的標籤/備註說明",
+      "openAboutExtraIdToReceive": "開啟目的標籤/備註說明",
       "selectPlaceholder": "請選擇…",
       "source": "帳戶詳情",
       "tokenToReceiveModalTitle": "選擇要接收的代幣",
@@ -466,44 +511,6 @@
     "title": "兌換代幣",
     "tooltips": {
       "experimentHigherAmounts": "兌換較高金額時，匯率會更優惠，快來試試看！"
-    }
-  },
-  "voteNeo3Screen": {
-    "account": {
-      "changeLabel": "更換",
-      "noAccountSelectedLabel": "尚未選擇帳戶",
-      "selectLabel": "選擇",
-      "selectNeo3AccountTitle": "選擇 Neo 3 帳戶"
-    },
-    "availableVotes": {
-      "availableVotesLabel": "可用票數",
-      "noAvailableVotesLabel": "無票數"
-    },
-    "howItWorksButtonLabel": "運作方式",
-    "list": {
-      "nameColumnLabel": "候選人",
-      "positionColumnLabel": "排名",
-      "voteColumnLabel": "投票"
-    },
-    "listItem": {
-      "castVoteButtonLabel": "投票",
-      "detailsButtonLabel": "候選人資訊",
-      "votedButtonLabel": "已投票！"
-    },
-    "listNotFound": {
-      "text": "沒有可供投票的候選人，或取得資料時發生錯誤。請確認您的 Neo 3 網路，然後再試一次。",
-      "title": "無候選人可顯示"
-    },
-    "searchLabel": "搜尋",
-    "searchPlaceholder": "搜尋候選人…",
-    "title": "投票",
-    "voteErrorMessages": {
-      "accountCanNotBeWatchLabel": "您的 Neo 3 帳戶處於觀察模式",
-      "noNeo3AccountsLabel": "沒有任何非觀察模式的 Neo 3 帳戶",
-      "selectNeo3AccountLabel": "請選擇一個 Neo 3 帳戶",
-      "shouldHaveEnoughGasToPayFeeLabel": "您的 GAS 餘額不足以支付手續費",
-      "shouldUseMainnetLabel": "您應該使用主網來進行投票",
-      "thereIsNoNeoLabel": "您的 Neo 3 帳戶應該持有 NEO"
     }
   },
   "walletBackupStep1Screen": {

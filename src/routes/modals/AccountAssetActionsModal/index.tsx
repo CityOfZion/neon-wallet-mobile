@@ -16,7 +16,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const AccountAssetActionsModal = ({ navigation, route }: TRootStackScreenProps<'AccountAssetActionsModal'>) => {
   const { account } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'accountAssetActionsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'accountAssetActions' })
   const { t: commonT } = useTranslation('common')
   const { isNotConnected } = useIsConnectedSelector()
   const balanceQuery = useBalance(account)
