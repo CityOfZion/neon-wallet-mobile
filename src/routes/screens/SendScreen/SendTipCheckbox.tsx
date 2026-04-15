@@ -33,7 +33,7 @@ export const SendTipCheckbox = ({
   onCheckChange,
 }: TProps) => {
   const navigation = useNavigation()
-  const { t } = useTranslation('screens', { keyPrefix: 'sendScreen.tipCheckbox' })
+  const { t } = useTranslation('screens', { keyPrefix: 'send.tipCheckbox' })
   const { currency } = useCurrencySelector()
 
   const isInternalDisabled = isDisabled || isLoading

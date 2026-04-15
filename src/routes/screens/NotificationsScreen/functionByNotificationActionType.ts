@@ -31,12 +31,12 @@ const getAccountAndWallet = (params: TAccountHelperPredicateParams) => {
   const account = accounts.find(AccountHelper.predicate(params))
 
   if (!account) {
-    throw new AppError(t('screens:notificationsScreen.actions.error.accountNotFound'))
+    throw new AppError(t('screens:notifications.actions.error.accountNotFound'))
   }
 
   const wallet = selectWalletById(account.idWallet)(state)
   if (!wallet) {
-    throw new AppError(t('screens:notificationsScreen.actions.error.walletNotFound'))
+    throw new AppError(t('screens:notifications.actions.error.walletNotFound'))
   }
 
   return { account, wallet }

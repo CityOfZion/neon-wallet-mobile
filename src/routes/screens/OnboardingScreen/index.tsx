@@ -38,24 +38,24 @@ const { t } = I18nextHelper.get()
 
 const DATA = [
   {
-    header: t('screens:onboardingScreen.feature1.header'),
+    header: t('screens:onboarding.feature1.header'),
     image: require('@/assets/images/onboarding-1.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature1.subtitle'),
+    subtitle: t('screens:onboarding.feature1.subtitle'),
   },
   {
-    header: t('screens:onboardingScreen.feature2.header'),
+    header: t('screens:onboarding.feature2.header'),
     image: require('@/assets/images/onboarding-2.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature2.subtitle'),
+    subtitle: t('screens:onboarding.feature2.subtitle'),
   },
   {
-    header: t('screens:onboardingScreen.feature3.header'),
+    header: t('screens:onboarding.feature3.header'),
     image: require('@/assets/images/onboarding-3.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature3.subtitle'),
+    subtitle: t('screens:onboarding.feature3.subtitle'),
   },
   {
-    header: t('screens:onboardingScreen.feature4.header'),
+    header: t('screens:onboarding.feature4.header'),
     image: require('@/assets/images/onboarding-4.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature4.subtitle'),
+    subtitle: t('screens:onboarding.feature4.subtitle'),
   },
 ]
 
@@ -91,8 +91,8 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
 
   const handleSelectBlockchains = () => {
     navigation.navigate('BlockchainSelectionModal', {
-      title: t('screens:onboardingScreen.selectBlockchainsModalTitle'),
-      description: t('screens:onboardingScreen.selectBlockchainsModalDescription'),
+      title: t('screens:onboarding.selectBlockchainsModalTitle'),
+      description: t('screens:onboarding.selectBlockchainsModalDescription'),
       isMulti: true,
       onSelect: async selectedBlockchains => {
         if (accounts.length > 0) {
@@ -174,12 +174,12 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
           <View className="w-full flex-col gap-y-4">
             <TwButton
               variant="card"
-              label={t('screens:onboardingScreen.importWalletButtonLabel')}
+              label={t('screens:onboarding.importWalletButtonLabel')}
               onPress={handleImportWallet}
             />
             <TwButton
               variant="contained-light"
-              label={t('screens:onboardingScreen.createWalletButtonLabel')}
+              label={t('screens:onboarding.createWalletButtonLabel')}
               onPress={handleSelectBlockchains}
               rightElement={<MdOutlineAutoAwesome aria-hidden />}
             />
@@ -188,7 +188,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
           <View className="w-full flex-col items-center justify-evenly">
             <OnboardingScreenProgress progress={PROGRESS_BY_STEP['finalizing']} />
             <Text className="mt-10 text-center font-sans-medium text-base text-gray-100">
-              {t('screens:onboardingScreen.messagesByActions.finalizing')}
+              {t('screens:onboarding.messagesByActions.finalizing')}
             </Text>
           </View>
         )}

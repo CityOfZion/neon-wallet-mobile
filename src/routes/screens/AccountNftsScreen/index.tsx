@@ -64,7 +64,7 @@ const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
 
 export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsScreen'>) => {
   const { account } = props.route.params
-  const { t } = useTranslation('screens', { keyPrefix: 'accountNftsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'accountNfts' })
   const { aggregatedData, hasNextPage, isLoading, isFetchingNextPage, fetchNextPage, refetch, isRefetching } =
     useNftsQuery(account)
 

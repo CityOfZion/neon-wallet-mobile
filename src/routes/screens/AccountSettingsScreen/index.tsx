@@ -27,7 +27,7 @@ import type { TWalletsStackScreenProps } from '@/types/stacks'
 export const AccountSettingsScreen = ({ navigation, route }: TWalletsStackScreenProps<'AccountSettingsScreen'>) => {
   const { account } = useAccountByIdSelector(route.params.account.id)
   const { authenticate } = useAuthentication()
-  const { t } = useTranslation('screens', { keyPrefix: 'accountSettingsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'accountSettings' })
   const { deleteAccount } = useDeleteAccount()
 
   const handleDelete = async () => {

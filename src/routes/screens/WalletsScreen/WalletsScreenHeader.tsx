@@ -26,7 +26,7 @@ type Props = {
 export const WalletsScreenHeader = ({ selectedWallet }: Props) => {
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
-  const { t } = useTranslation('screens', { keyPrefix: 'walletsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'wallets' })
 
   const handlePressMore = () => {
     navigation.navigate('WalletContextModal', { wallet: selectedWallet })

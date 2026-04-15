@@ -11,7 +11,7 @@ import type { TMoreStackScreenProps } from '@/types/stacks'
 import type { TContact } from '@/types/store'
 
 export const ContactsScreen = ({ navigation }: TMoreStackScreenProps<'ContactsScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'contactsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'contacts' })
 
   const handleContactPress = (contact?: TContact) => {
     if (!contact) return

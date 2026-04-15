@@ -22,7 +22,7 @@ import TbPrinter from '@/assets/images/tb-printer.svg'
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
 export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'CreateWalletStep2Screen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep2Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep2' })
   const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
 
   const [words, setWords] = useState<string[]>([])

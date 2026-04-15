@@ -1,26 +1,5 @@
 {
-  "accountAssetsScreen": {
-    "balanceLabel": "Saldo",
-    "lastUpdatedLabel": "Última atualização",
-    "tabs": {
-      "activeLabel": "Ativo",
-      "hiddenLabel": "Oculto"
-    },
-    "title": "Tokens"
-  },
-  "accountConnectionsScreen": {
-    "connectDappLabel": "Conectar um dApp",
-    "emptyList": "Nenhum dApp conectado",
-    "labels": {
-      "addConnection": "Adicionar conexão"
-    },
-    "title": "Conexões"
-  },
-  "accountNftsScreen": {
-    "emptyList": "Nenhum NFT para listar",
-    "title": "NFTS"
-  },
-  "accountScreen": {
+  "account": {
     "blockHeightTitle": "Altura do bloco {{ blockchain }}",
     "buttons": {
       "buyAndSell": "Comprar + Vender",
@@ -51,7 +30,28 @@
       }
     }
   },
-  "accountSettingsScreen": {
+  "accountAssets": {
+    "balanceLabel": "Saldo",
+    "lastUpdatedLabel": "Última atualização",
+    "tabs": {
+      "activeLabel": "Ativo",
+      "hiddenLabel": "Oculto"
+    },
+    "title": "Tokens"
+  },
+  "accountConnections": {
+    "connectDappLabel": "Conectar um dApp",
+    "emptyList": "Nenhum dApp conectado",
+    "labels": {
+      "addConnection": "Adicionar conexão"
+    },
+    "title": "Conexões"
+  },
+  "accountNfts": {
+    "emptyList": "Nenhum NFT para listar",
+    "title": "NFTS"
+  },
+  "accountSettings": {
     "customize": "Personalizar conta",
     "deleteAlert": "Tem certeza que deseja deletar esta conta?",
     "deleteButton": "Deletar Conta",
@@ -64,7 +64,7 @@
     },
     "title": "Configurações da Conta"
   },
-  "accountTransactionsScreen": {
+  "accountTransactions": {
     "contextButtonLabel": "Contexto",
     "detailsButtonLabel": "Abrir detalhes",
     "emptyList": "Nenhuma transação para listar",
@@ -76,7 +76,7 @@
     "title": "Transações",
     "toLabel": "Para"
   },
-  "buyAndSellTokensScreen": {
+  "buyAndSellTokens": {
     "buttons": {
       "accounts": "Contas",
       "deposit": "Depósito",
@@ -109,14 +109,14 @@
     },
     "title": "Comprar + Vender"
   },
-  "contactScreen": {
+  "contact": {
     "title": "Contato",
     "walletAddressLabel": "Endereços da carteira"
   },
-  "contactsScreen": {
+  "contacts": {
     "title": "Contatos"
   },
-  "createWalletStep1Screen": {
+  "createWalletStep1": {
     "body_1": "Este conjunto de palavras secretas facilita o backup e a restauração de sua conta. Isso torna sua carteira realmente segura",
     "body_2": "É muito importante que você lembre sua frase corretamente, então iremos ajudá-lo com isso. Se estiver com pressa, pode fazer isso em outro momento.",
     "body_3": "Dê à sua carteira um nome memorável e está pronto para começar!",
@@ -126,7 +126,7 @@
     "label_3": "Dê um nome à sua carteira",
     "title": "Criar Carteira"
   },
-  "createWalletStep2Screen": {
+  "createWalletStep2": {
     "body_1": "Abaixo você encontrará sua frase secreta",
     "body_2": "Anote esta frase em um pedaço de papel ou registre em uma nota digital segura. Você também pode baixá-la acima, mas certifique-se de mantê-la segura.",
     "body_3": "Qualquer pessoa com esta frase poderá roubar seus ativos conquistados e você não conseguirá recuperá-los!",
@@ -137,7 +137,7 @@
     "oneOfThree": "1 de 3",
     "title": "Criar Carteira"
   },
-  "createWalletStep3Screen": {
+  "createWalletStep3": {
     "body_1": "Por favor, selecione cada frase na ordem correta para garantir que você acertou.",
     "dialog_1_body": "Confirmar que você fez backup corretamente de sua frase de segurança é altamente recomendado",
     "dialog_1_title": "Tem certeza que deseja pular a confirmação de backup?",
@@ -147,7 +147,7 @@
     "title": "Criar Carteira",
     "twoOfThree": "2 de 3"
   },
-  "createWalletStep4Screen": {
+  "createWalletStep4": {
     "body_1": "Dê à sua carteira um nome memorável, talvez pudesse ser relacionado ao que você quer usar a carteira, como \"trading\" ou \"investimentos\".",
     "errors": {
       "name": "Deve ter no mínimo 1 caractere e menos de 21 caracteres"
@@ -157,32 +157,32 @@
     "threeOfThree": "3 de 3",
     "title": "Criar Carteira"
   },
-  "createWalletStep5Screen": {
+  "createWalletStep5": {
     "continueButtonLabel": "Criar Agora",
     "subtitle": "Selecione a blockchain desejada para sua nova conta",
     "title": "Criar Carteira"
   },
-  "createWalletStep6Screen": {
+  "createWalletStep6": {
     "body_1": "Lembre-se de manter sua frase secreta segura, ter vários backups é sempre uma boa ideia.",
     "body_2": "Se você precisar descobrir a frase secreta de uma carteira, você pode encontrá-la na página de configurações dessa carteira.",
     "label_1": "Parabéns, você é o orgulhoso proprietário de uma carteira nova e brilhante!",
     "title": "Criar Carteira",
     "viewWallet": "Ver carteira"
   },
-  "dappConnectionsScreen": {
+  "dappConnections": {
     "connectDappLabel": "Conectar um dApp",
     "connectNewDappLabel": "Conectar um novo dApp",
     "noDappsConnected": "Nenhum dApp conectado",
     "title": "Conexões"
   },
-  "importScreen": {
+  "import": {
     "enterAnAddress": "Digite um endereço, chave criptografada, chave privada ou palavras mnemônicas",
     "mnemonicComplete": "Mnemônico completo",
     "mnemonicIncorrect": "Mnemônico incorreto",
     "placeholder": "Digite aqui…",
     "title": "Importar"
   },
-  "moreScreen": {
+  "more": {
     "chatWithUsButtonLabel": "Converse conosco",
     "contactsButtonLabel": "Contatos",
     "createWalletButtonLabel": "Criar carteira",
@@ -193,7 +193,7 @@
     "settingsButtonLabel": "Configurações",
     "title": "Mais opções"
   },
-  "neo3NeoXBridgeScreen": {
+  "neo3NeoXBridge": {
     "aboutButtonLabel": "Sobre",
     "errorsByCode": {
       "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "A conta selecionada não é compatível com o token selecionado",
@@ -240,7 +240,7 @@
     "restartButtonLabel": "Reiniciar",
     "title": "Bridge de tokens"
   },
-  "neo3VoteScreen": {
+  "neo3Vote": {
     "account": {
       "changeLabel": "Mudar",
       "noAccountSelectedLabel": "Nenhuma conta selecionada",
@@ -278,7 +278,7 @@
       "thereIsNoNeoLabel": "Sua conta Neo 3 deve ter NEO"
     }
   },
-  "notificationsScreen": {
+  "notifications": {
     "actions": {
       "error": {
         "accountNotFound": "Não conseguimos encontrar a conta para esta notificação",
@@ -292,15 +292,7 @@
     "relatedAddressLabel": "Endereço:",
     "title": "Notificações"
   },
-  "onboardingCompletedScreen": {
-    "backupMnemonicButtonLabel": "Fazer backup da carteira",
-    "subtitleImport": "Sua carteira e contas importadas agora estão prontas para usar!",
-    "subtitleNew": "Sua nova carteira e contas agora estão prontas para usar!",
-    "titleImport": "Importação Concluída",
-    "titleNew": "Configuração Concluída",
-    "viewWalletButtonLabel": "Ver Carteira"
-  },
-  "onboardingScreen": {
+  "onboarding": {
     "cancelAllButtonLabel": "Cancelar tudo",
     "createWalletButtonLabel": "Criar uma nova carteira",
     "feature1": {
@@ -328,7 +320,15 @@
     "selectBlockchainsModalDescription": "Selecione as blockchains para as quais você deseja criar contas",
     "selectBlockchainsModalTitle": "Selecionar Blockchains"
   },
-  "receiveScreen": {
+  "onboardingCompleted": {
+    "backupMnemonicButtonLabel": "Fazer backup da carteira",
+    "subtitleImport": "Sua carteira e contas importadas agora estão prontas para usar!",
+    "subtitleNew": "Sua nova carteira e contas agora estão prontas para usar!",
+    "titleImport": "Importação Concluída",
+    "titleNew": "Configuração Concluída",
+    "viewWalletButtonLabel": "Ver Carteira"
+  },
+  "receive": {
     "accountSelectPlaceholder": "Selecione…",
     "accountSelectionModalTitle": "Selecione uma conta de recebimento.",
     "accountStepTitle": "Conta de recebimento",
@@ -339,7 +339,7 @@
     "successfulDownloadMessage": "Código QR salvo na sua galeria!",
     "title": "Receba fichas"
   },
-  "searchScreen": {
+  "search": {
     "emptyResultDescription": "Nada encontrado!",
     "errors": {
       "execute": "Houve um erro ao tentar executar a ação. Por favor, contate nosso suporte.",
@@ -351,7 +351,7 @@
     "resultDescription": "Você pode estar interessado nestes tópicos:",
     "title": "Procurar na Neon"
   },
-  "sendScreen": {
+  "send": {
     "failureNotification": {
       "previewBody": "Não conseguimos verificar a conclusão de sua transferência",
       "title": "Transferência falhou"
@@ -403,16 +403,7 @@
     },
     "title": "Enviar tokens"
   },
-  "settingsProtocolEditScreen": {
-    "addCustomNetworkButtonLabel": "Adicionar rede customizada",
-    "default": "(Padrão)",
-    "editCustomNetworkButtonLabel": "Editar rede customizada",
-    "selectNetworkUrlButtonLabel": "Selecionar URL de rede"
-  },
-  "settingsProtocolsScreen": {
-    "title": "Protocolos"
-  },
-  "settingsScreen": {
+  "settings": {
     "tabs": {
       "personalisation": {
         "currencyButtonLabel": "Moeda",
@@ -435,7 +426,16 @@
     },
     "title": "Configurações"
   },
-  "settingsSecurityBackupScreen": {
+  "settingsProtocolEdit": {
+    "addCustomNetworkButtonLabel": "Adicionar rede customizada",
+    "default": "(Padrão)",
+    "editCustomNetworkButtonLabel": "Editar rede customizada",
+    "selectNetworkUrlButtonLabel": "Selecionar URL de rede"
+  },
+  "settingsProtocols": {
+    "title": "Protocolos"
+  },
+  "settingsSecurityBackup": {
     "title": "Segurança",
     "withAccountsToBackup": {
       "description_1": "Um requisito para proteger sua carteira através de autenticação de senha ou biométrica é fazer backup de suas carteiras primeiro.",
@@ -448,12 +448,12 @@
       "description": "Backup já realizado para todas as carteiras, continue para configurar segurança"
     }
   },
-  "stellarTrustlineScreen": {
+  "stellarTrustline": {
     "addTrustlineButtonLabel": "Adicionar trustline",
     "emptyList": "Nenhuma trustline encontrada",
     "title": "Stellar Trustline"
   },
-  "supportTicketScreen": {
+  "supportTicket": {
     "descriptionLabel": "Descrição",
     "descriptionPlaceholder": "Descreva seu problema…",
     "emailLabel": "Email",
@@ -471,7 +471,7 @@
     "successToast": "Recebemos seu ticket de suporte e entraremos em contato em breve.",
     "title": "Abrir ticket de suporte"
   },
-  "swapScreen": {
+  "swap": {
     "form": {
       "accountToUseModalTitle": "Selecione uma conta de origem",
       "accountToUseTitle": "Enviar daqui",
@@ -513,7 +513,10 @@
       "experimentHigherAmounts": "As taxas de câmbio são melhores com valores de swap maiores, experimente!"
     }
   },
-  "walletBackupStep1Screen": {
+  "wallet": {
+    "addNewAccount": "Adicionar nova conta"
+  },
+  "walletBackupStep1": {
     "body_1": "Abaixo você encontrará sua frase secreta",
     "body_2": "Anote esta frase em um pedaço de papel ou registre em uma nota digital segura. Você também pode baixá-la acima, mas certifique-se de mantê-la segura.",
     "body_3": "Qualquer pessoa com esta frase poderá roubar seus ativos conquistados e você não conseguirá recuperá-los!",
@@ -524,7 +527,7 @@
     "oneOfThree": "1 de 3",
     "title": "Fazer backup da carteira"
   },
-  "walletBackupStep2Screen": {
+  "walletBackupStep2": {
     "body_1": "Para confirmar que fez backup de suas palavras-chave, por favor, selecione suas palavras na ordem correta da lista abaixo.",
     "errors": {
       "incorrectWordOrder": "Ordem das palavras incorreta. Tente novamente para confirmar seu backup."
@@ -533,14 +536,11 @@
     "title": "Fazer backup da carteira",
     "twoOfThree": "2 de 3"
   },
-  "walletBackupStep3Screen": {
+  "walletBackupStep3": {
     "label_1": "Parabéns, você confirmou seu backup",
     "title": "Fazer backup da carteira"
   },
-  "walletScreen": {
-    "addNewAccount": "Adicionar nova conta"
-  },
-  "walletSettingsScreen": {
+  "walletSettings": {
     "backup": "Backup de Mnemônico",
     "customize": "Personalizar carteira",
     "deleteAlert": "Tem certeza que deseja deletar esta carteira?",
@@ -553,7 +553,7 @@
     },
     "title": "Configurações da Carteira"
   },
-  "walletsScreen": {
+  "wallets": {
     "createFirstWallet": "Criar primeira carteira",
     "incompleteBalanceWarningButton": "OK, eu entendo",
     "incompleteBalanceWarningText": "Não conseguimos recuperar dados de preço para todos os seus tokens, portanto o total pode não ser preciso",

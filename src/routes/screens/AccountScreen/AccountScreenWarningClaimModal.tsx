@@ -48,7 +48,7 @@ export const AccountScreenWarningClaimModal = ({
   onReject,
   onConfirm,
 }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'accountScreen.warningClaim' })
+  const { t } = useTranslation('screens', { keyPrefix: 'account.warningClaim' })
 
   const handleContentPress = (event: GestureResponderEvent) => {
     event.stopPropagation()

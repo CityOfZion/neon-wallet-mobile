@@ -20,7 +20,7 @@ type TProps = {
 }
 
 export const Neo3VoteAccount = ({ neo3Account, isDisabled, onSelect }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'neo3VoteScreen.account' })
+  const { t } = useTranslation('screens', { keyPrefix: 'neo3Vote.account' })
   const navigation = useNavigation()
 
   const handleGoToAccountSelectionModal = () => {

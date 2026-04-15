@@ -27,7 +27,7 @@ import type { TWalletsStackScreenProps } from '@/types/stacks'
 const AccountAssetScreen = ({ route, navigation }: TWalletsStackScreenProps<'AccountAssetsScreen'>) => {
   const { account, wallet } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'accountAssetsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'accountAssets' })
   const { currency } = useCurrencySelector()
   const { language } = useLanguageSelector()
 

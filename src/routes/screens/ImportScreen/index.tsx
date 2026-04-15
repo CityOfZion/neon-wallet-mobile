@@ -20,7 +20,7 @@ import type { TMoreStackScreenProps } from '@/types/stacks'
 export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'ImportScreen'>) => {
   const data = route.params?.data
 
-  const { t } = useTranslation('screens', { keyPrefix: 'importScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'import' })
   const { t: commonT } = useTranslation('common')
 
   const handleNavigateToWalletsScreen = () => {

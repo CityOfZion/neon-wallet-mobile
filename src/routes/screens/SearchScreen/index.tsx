@@ -76,7 +76,7 @@ const renderItem: ListRenderItem<TSearchAction> = ({ item }) => {
 }
 
 export const SearchScreen = ({ navigation }: TSearchStackScreenProps<'SearchScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'searchScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'search' })
   const { t: tSearch } = useTranslation('search')
 
   const { actionData, setData, reset } = useActions<TActionData>({
