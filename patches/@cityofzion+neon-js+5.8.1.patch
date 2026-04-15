@@ -1,0 +1,14 @@
+diff --git a/node_modules/@cityofzion/neon-js/package.json b/node_modules/@cityofzion/neon-js/package.json
+index 84edad3..99d5808 100644
+--- a/node_modules/@cityofzion/neon-js/package.json
++++ b/node_modules/@cityofzion/neon-js/package.json
+@@ -17,8 +17,7 @@
+   ],
+   "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+   "license": "MIT",
+-  "main": "dist/index.js",
+-  "browser": "dist/browser.js",
++  "main": "lib/index.js",
+   "types": "lib/index.d.ts",
+   "scripts": {
+     "ae": "api-extractor run --local",

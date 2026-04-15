@@ -1,0 +1,12 @@
+--- a/node_modules/@cityofzion/neon-core-legacy/package.json
++++ b/node_modules/@cityofzion/neon-core-legacy/package.json
+@@ -17,8 +17,7 @@
+   ],
+   "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+   "license": "MIT",
+-  "main": "dist/index.js",
+-  "browser": "dist/browser.js",
++  "main": "lib/index.js",
+   "module": "lib/index.js",
+   "types": "lib/index.d.ts",
+   "scripts": {
