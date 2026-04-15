@@ -40,7 +40,7 @@ export enum EBuyAndSellTokensScreenTabValue {
 export const BuyAndSellTokensScreen = ({ navigation, route }: TWalletsStackScreenProps<'BuyAndSellTokensScreen'>) => {
   const { account, screenType } = route.params || {}
 
-  const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokensScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokens' })
   const [tabValue, setTabValue] = useState(screenType || EBuyAndSellTokensScreenTabValue.BUY_TOKENS)
   const [depositActionsData, setDepositActionsData] = useState<TDepositActionsData | null>(null)
   const nextActionRef = useRef<NavigationAction | null>(null)

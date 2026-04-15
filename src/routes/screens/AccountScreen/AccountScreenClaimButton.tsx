@@ -22,7 +22,7 @@ type TProps = {
 }
 
 export const AccountScreenClaimButton = ({ account }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'accountScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'account' })
   const unclaimedQuery = useUnclaimed(account)
   const unclaimedMutation = useUnclaimedMutation()
   const { data: balanceData } = useBalance(account)

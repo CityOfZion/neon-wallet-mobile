@@ -22,7 +22,7 @@ type Props = {
 
 export const WalletsScreenWalletInfo = ({ selectedWalletAccounts }: Props) => {
   const { currency } = useCurrencySelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'walletsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'wallets' })
   const balances = useBalances(selectedWalletAccounts)
 
   const showBalanceAlert = balances.data.some(item =>

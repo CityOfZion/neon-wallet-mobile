@@ -26,7 +26,7 @@ export type TSettingsTab = 'personalisation' | 'security'
 export const SettingsScreen = ({ navigation, route }: TMoreStackScreenProps<'SettingsScreen'>) => {
   const { currency } = useCurrencySelector()
   const { language } = useLanguageSelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'settingsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'settings' })
   const { security } = useSecuritySelector()
 
   const [selectedTab, setSelectedTab] = useState<TSettingsTab>(route?.params?.tab || 'personalisation')

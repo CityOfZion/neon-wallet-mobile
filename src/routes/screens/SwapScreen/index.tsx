@@ -76,7 +76,7 @@ type TActionsData = {
 }
 
 export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'SwapScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'swapScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'swap' })
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { accountsRef } = useAccountsSelector()
   const dispatch = useAppDispatch()

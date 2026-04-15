@@ -28,7 +28,7 @@ export const SettingsWalletBackupStep1Screen = ({
 }: TMoreStackScreenProps<'SettingsWalletBackupStep1Screen'>) => {
   const { wallet } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep1Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep1' })
   const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
   const [mnemonic, setMnemonic] = useState<string>('')
 

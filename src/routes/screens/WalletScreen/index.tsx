@@ -33,7 +33,7 @@ import type { TAccount } from '@/types/store'
 const accountCardDimensions = getAccountCardDimensions()
 
 export const WalletScreen = ({ navigation, route }: TWalletsStackScreenProps<'WalletScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'walletScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'wallet' })
   const dispatch = useAppDispatch()
 
   const { wallet } = useWalletByIdSelector(route.params.wallet.id)

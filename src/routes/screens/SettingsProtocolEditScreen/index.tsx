@@ -43,7 +43,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
     <TwMenuButton
       label={item.network.name}
       labelProps={{ className: 'capitalize' }}
-      subtitle={item.isDefault ? t('screens:settingsProtocolEditScreen.default') : undefined}
+      subtitle={item.isDefault ? t('screens:settingsProtocolEdit.default') : undefined}
       subtitleClassName="flex-grow"
       rightElement={isSelected ? <TbCheck aria-hidden className="size-6 text-neon" /> : undefined}
       onPress={item.onPress}
@@ -129,7 +129,7 @@ export const SettingsProtocolEditScreen = ({
       <TwSeparator />
 
       <TwMenuButton
-        label={t('screens:settingsProtocolEditScreen.selectNetworkUrlButtonLabel')}
+        label={t('screens:settingsProtocolEdit.selectNetworkUrlButtonLabel')}
         description={selectedNetwork.url}
         disabled={service.networkUrls.length <= 1}
         leftElement={<TbCube3dSphere aria-hidden />}
@@ -143,8 +143,8 @@ export const SettingsProtocolEditScreen = ({
           <TwMenuButton
             label={
               isSelectedNetworkCustom
-                ? t('screens:settingsProtocolEditScreen.editCustomNetworkButtonLabel')
-                : t('screens:settingsProtocolEditScreen.addCustomNetworkButtonLabel')
+                ? t('screens:settingsProtocolEdit.editCustomNetworkButtonLabel')
+                : t('screens:settingsProtocolEdit.addCustomNetworkButtonLabel')
             }
             leftElement={isSelectedNetworkCustom ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
             onPress={isSelectedNetworkCustom ? handleEditCustomNetwork : handleAddCustomNetwork}

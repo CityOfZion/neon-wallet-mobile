@@ -55,7 +55,7 @@ const renderItem: SectionListRenderItem<TUseTransactionsTransaction, TUseTransac
 
 const AccountTransactionsScreen = ({ navigation, route }: TWalletsStackScreenProps<'AccountTransactionsScreen'>) => {
   const { account } = route.params
-  const { t } = useTranslation('screens', { keyPrefix: 'accountTransactionsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'accountTransactions' })
   const { t: tBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
 
   const blockchain = account.blockchain

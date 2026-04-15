@@ -29,7 +29,7 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
   const textToImport = route.params?.textToImport
   const [helpAccordionOpen, setHelpAccordionOpen] = useState(route.params?.isHelpAccordionOpen || false)
 
-  const { t } = useTranslation('screens', { keyPrefix: 'moreScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'more' })
 
   const handlePressContacts = () => {
     navigation.navigate('ContactsScreen')

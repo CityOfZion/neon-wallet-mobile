@@ -12,7 +12,7 @@ import { CreateWalletStep1ScreenItem } from './CreateWalletStep1ScreenItem'
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
 export const CreateWalletStep1Screen = ({ navigation }: TMoreStackScreenProps<'CreateWalletStep1Screen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep1Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep1' })
 
   const handlePressContinue = () => {
     navigation.navigate('CreateWalletStep2Screen')
