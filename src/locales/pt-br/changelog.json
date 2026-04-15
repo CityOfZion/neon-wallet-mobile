@@ -11,7 +11,7 @@
         "Validação de entrada aprimorada para permitir explicitamente caracteres especiais.",
         "Lembretes de backup mais robustos para ajudar a proteger os ativos do usuário.",
         "Adicionada a função buildAddressUrl ao ExplorerService para melhorar o roteamento para exploradores de blockchain externos.",
-        "Estabilidade aprimorada do WalletConnect e suporte multichain melhorado para Neo N3 e Neo X.",
+        "Estabilidade aprimorada do WalletConnect e suporte multichain melhorado para Neo 3 e Neo X.",
         "Tela de envio reformulada",
         "Exibir GAS não reclamado em contas somente para visualização",
         "Melhorias de desempenho para uma experiência do usuário mais rápida e responsiva.",
@@ -57,7 +57,7 @@
       "changes": [
         "Suporte para mnemônico de 24 palavras",
         "Nova notificação: Token malicioso identificado",
-        "Remoção da exigência de 'crédito de gás' antes de ativar a migração Neo Legacy > Neo N3",
+        "Remoção da exigência de 'crédito de gás' antes de ativar a migração Neo Legacy > Neo 3",
         "Nova funcionalidade: Importar mnemônicos através de links diretos"
       ],
       "date": "2025-07-31",

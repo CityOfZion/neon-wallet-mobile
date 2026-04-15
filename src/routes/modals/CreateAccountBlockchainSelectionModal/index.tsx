@@ -84,6 +84,7 @@ export const CreateAccountBlockchainSelectionModal = ({
           <TwButton
             variant="contained-light"
             label={commonT('general.add')}
+            className="mb-2 mt-6"
             disabled={!actionData.blockchain}
             onPress={handleAct(handlePressAdd)}
           />
