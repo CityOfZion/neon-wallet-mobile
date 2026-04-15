@@ -98,7 +98,7 @@ export const Neo3VoteSupportUsModal = ({
 
       <Text className="font-sans-regular text-lg text-white">{t('cozTeamLabel')}</Text>
 
-      <View className="my-2 flex flex-grow flex-col justify-end gap-y-6">
+      <View className="mb-4 mt-2 flex flex-grow flex-col justify-end gap-y-6">
         <TwButton
           variant="contained-light"
           label={t('voteForCozButtonLabel')}
