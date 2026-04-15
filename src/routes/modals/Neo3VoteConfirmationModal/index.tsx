@@ -155,7 +155,7 @@ export const Neo3VoteConfirmationModal = ({
 
       navigation.popToTop()
 
-      await UtilsHelper.sleep(500)
+      await UtilsHelper.sleep(1000)
 
       navigation.navigate('SuccessModal', {
         title: t('title'),
@@ -250,7 +250,7 @@ export const Neo3VoteConfirmationModal = ({
         <TwButton
           label={t('castVoteButtonLabel')}
           variant="contained-light"
-          className="mt-6 w-full"
+          className="mb-2 mt-6 w-full"
           disabled={isDisabled}
           isLoading={isSubmitting}
           contentProps={{ className: 'px-4' }}
