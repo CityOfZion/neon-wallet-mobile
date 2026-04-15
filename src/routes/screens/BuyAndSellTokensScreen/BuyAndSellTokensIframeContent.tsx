@@ -31,7 +31,7 @@ type TProps = {
 }
 
 export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDepositActionsData }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokensScreen.iframeContent' })
+  const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokens.iframeContent' })
   const { currency } = useCurrencySelector()
   const navigation = useNavigation()
 

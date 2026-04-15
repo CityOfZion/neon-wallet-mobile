@@ -19,7 +19,7 @@ export const OnboardingCompletedScreen = ({
   navigation,
   route,
 }: TRootStackScreenProps<'OnboardingCompletedScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'onboardingCompletedScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'onboardingCompleted' })
 
   const { bottom } = useSafeAreaInsets()
   const { wallets } = useWalletsSelector()

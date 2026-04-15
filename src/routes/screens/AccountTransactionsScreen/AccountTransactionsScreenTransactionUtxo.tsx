@@ -16,7 +16,7 @@ type TProps = {
 }
 
 export const AccountTransactionsScreenTransactionUtxo = memo(({ transaction }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'accountTransactionsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'accountTransactions' })
   const navigation = useNavigation()
 
   const inputsLength = transaction.inputs.length

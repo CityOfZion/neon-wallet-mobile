@@ -11,7 +11,7 @@ import type { TMoreStackScreenProps } from '@/types/stacks'
 export const CreateWalletStep6Screen = ({ navigation, route }: TMoreStackScreenProps<'CreateWalletStep6Screen'>) => {
   const { wallet } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep6Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep6' })
 
   const handlePressContinue = () => {
     navigation.popToTop()

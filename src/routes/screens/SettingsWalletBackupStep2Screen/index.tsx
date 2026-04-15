@@ -21,7 +21,7 @@ export const SettingsWalletBackupStep2Screen = ({
 }: TMoreStackScreenProps<'SettingsWalletBackupStep2Screen'>) => {
   const { wallet, words } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep2Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep2' })
   const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
 
   const shuffledWords = useMemo(() => shuffle(words), [words])

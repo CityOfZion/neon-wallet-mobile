@@ -35,7 +35,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => (
 
 export const SettingsProtocolsScreen = ({ navigation }: TMoreStackScreenProps<'SettingsProtocolsScreen'>) => {
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'settingsProtocolsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'settingsProtocols' })
   const { t: commonT } = useTranslation('common')
 
   const data = useMemo<TItem[]>(() => {

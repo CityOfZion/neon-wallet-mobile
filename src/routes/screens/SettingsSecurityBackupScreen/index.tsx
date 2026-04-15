@@ -50,7 +50,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 
 export const SettingsSecurityBackupScreen = ({ navigation }: TMoreStackScreenProps<'SettingsSecurityBackupScreen'>) => {
   const { wallets } = useStandardWalletsSelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'settingsSecurityBackupScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'settingsSecurityBackup' })
   const { authenticate } = useAuthentication()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

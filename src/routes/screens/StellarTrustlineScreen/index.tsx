@@ -53,7 +53,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 export const StellarTrustlineScreen = ({ navigation, route }: TWalletsStackScreenProps<'StellarTrustlineScreen'>) => {
   const { stellarAccount } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'stellarTrustlineScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'stellarTrustline' })
   const trustlinesQuery = useStellarTrustlinesQuery(stellarAccount)
 
   const data = useMemo(() => {
