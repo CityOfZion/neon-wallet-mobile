@@ -74,7 +74,7 @@ export const AccountScreenWarningClaimModal = ({
 
             <Text className="font-sans-regular text-xl text-neon">{t('highClaimFee.title')}</Text>
 
-            <View className="my-3 flex-row gap-4">
+            <View className="my-3 flex-row gap-2">
               <Observation
                 title={t('claimAmount')}
                 value={BSBigNumberHelper.format(unclaimedNumber, { decimals: claimToken.decimals })}
@@ -90,7 +90,7 @@ export const AccountScreenWarningClaimModal = ({
 
             <Text className="font-sans-regular text-base text-white">{t('highClaimFee.subtitle')}</Text>
 
-            <Text className="font-sans-medium text-base text-white">{t('highClaimFee.question')}</Text>
+            <Text className="mt-2 font-sans-medium text-base text-white">{t('highClaimFee.question')}</Text>
           </View>
 
           <TwSeparator withoutContainer />
