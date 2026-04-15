@@ -78,7 +78,7 @@ export const Neo3NeoXBridgeScreen = ({
     params: { account },
   },
 }: TWalletsStackScreenProps<'Neo3NeoXBridgeScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'neo3NeoXBridgeScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'neo3NeoXBridge' })
   const { t: tCommonErrors } = useTranslation('common', { keyPrefix: 'errors' })
   const { accountsMapRef } = useAccountsMapSelector()
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()

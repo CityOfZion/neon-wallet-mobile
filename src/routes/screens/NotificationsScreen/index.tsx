@@ -102,7 +102,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
           <View className="flex-row gap-2.5">
             {item.relatedAccount && (
               <View className="flex-1 flex-row">
-                <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notificationsScreen.relatedAccountLabel')} `}</Text>
+                <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notifications.relatedAccountLabel')} `}</Text>
 
                 <Text className="flex-shrink font-sans-regular text-sm text-gray-300" numberOfLines={1}>
                   {item.relatedAccount.name}
@@ -111,7 +111,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
             )}
 
             <View className="flex-1 flex-row">
-              <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notificationsScreen.relatedAddressLabel')} `}</Text>
+              <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notifications.relatedAddressLabel')} `}</Text>
 
               <Text
                 className="w-12 flex-shrink font-sans-regular text-sm text-gray-300"
@@ -126,7 +126,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
       </View>
 
       <TwIconButton
-        aria-label={t('screens:notificationsScreen.actionsButtonLabel')}
+        aria-label={t('screens:notifications.actionsButtonLabel')}
         icon={<MdMoreVert className="text-gray-100" aria-hidden />}
         onPress={item.onMorePress.bind(null, item.notification)}
       />
@@ -135,7 +135,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 }
 
 export const NotificationsScreen = ({ navigation }: TMoreStackScreenProps<'NotificationsScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'notificationsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'notifications' })
   const { notifications } = useNotificationsSelector()
   const { accounts } = useAccountsSelector()
   const { language } = useLanguageSelector()

@@ -26,7 +26,7 @@ const renderItem: ListRenderItem<SessionTypes.Struct> = ({ item }) => {
 const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProps<'AccountConnectionsScreen'>) => {
   const account = route.params.account
 
-  const { t } = useTranslation('screens', { keyPrefix: 'accountConnectionsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'accountConnections' })
 
   const sessionsQuery = useWalletConnectSessions(account)
 

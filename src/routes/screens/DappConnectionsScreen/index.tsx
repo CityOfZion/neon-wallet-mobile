@@ -30,7 +30,7 @@ export const DappConnectionsScreen = ({
   navigation,
   route,
 }: TDappConnectionsStackScreenProps<'DappConnectionsScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'dappConnectionsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'dappConnections' })
   const { isNotConnected } = useIsConnectedSelector()
   const sessionsQuery = useWalletConnectSessions()
 

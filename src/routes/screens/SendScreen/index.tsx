@@ -57,7 +57,7 @@ type TActionsData = {
 }
 
 export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'SendScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'sendScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'send' })
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { authenticate } = useAuthentication()
   const { surveyInfoRef } = useSurveyInfoSelector()
@@ -319,7 +319,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
       const transactions = await service.transfer({ senderAccount: fields.serviceAccount, intents })
 
-      const notificationPrefix = 'screens:sendScreen'
+      const notificationPrefix = 'screens:send'
       const notificationSuccessPrefix = `${notificationPrefix}.successNotification`
       const notificationFailurePrefix = `${notificationPrefix}.failureNotification`
 

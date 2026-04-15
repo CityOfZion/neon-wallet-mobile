@@ -1,26 +1,5 @@
 {
-  "accountAssetsScreen": {
-    "balanceLabel": "余额",
-    "lastUpdatedLabel": "上次更新",
-    "tabs": {
-      "activeLabel": "活跃",
-      "hiddenLabel": "隐藏"
-    },
-    "title": "代币"
-  },
-  "accountConnectionsScreen": {
-    "connectDappLabel": "连接 dApp",
-    "emptyList": "暂无已连接 dApp",
-    "labels": {
-      "addConnection": "添加连接"
-    },
-    "title": "连接"
-  },
-  "accountNftsScreen": {
-    "emptyList": "暂无 NFT",
-    "title": "NFT"
-  },
-  "accountScreen": {
+  "account": {
     "blockHeightTitle": "{{ blockchain }} 区块高度",
     "buttons": {
       "buyAndSell": "买卖",
@@ -51,7 +30,28 @@
       }
     }
   },
-  "accountSettingsScreen": {
+  "accountAssets": {
+    "balanceLabel": "余额",
+    "lastUpdatedLabel": "上次更新",
+    "tabs": {
+      "activeLabel": "活跃",
+      "hiddenLabel": "隐藏"
+    },
+    "title": "代币"
+  },
+  "accountConnections": {
+    "connectDappLabel": "连接 dApp",
+    "emptyList": "暂无已连接 dApp",
+    "labels": {
+      "addConnection": "添加连接"
+    },
+    "title": "连接"
+  },
+  "accountNfts": {
+    "emptyList": "暂无 NFT",
+    "title": "NFT"
+  },
+  "accountSettings": {
     "customize": "自定义账户",
     "deleteAlert": "您确定要删除此账户吗？",
     "deleteButton": "删除账户",
@@ -64,7 +64,7 @@
     },
     "title": "账户设置"
   },
-  "accountTransactionsScreen": {
+  "accountTransactions": {
     "contextButtonLabel": "上下文",
     "detailsButtonLabel": "打开详情",
     "emptyList": "暂无交易",
@@ -76,7 +76,7 @@
     "title": "交易",
     "toLabel": "到"
   },
-  "buyAndSellTokensScreen": {
+  "buyAndSellTokens": {
     "buttons": {
       "accounts": "账户",
       "deposit": "充值",
@@ -109,14 +109,14 @@
     },
     "title": "买卖"
   },
-  "contactScreen": {
+  "contact": {
     "title": "联系人",
     "walletAddressLabel": "钱包地址"
   },
-  "contactsScreen": {
+  "contacts": {
     "title": "联系人"
   },
-  "createWalletStep1Screen": {
+  "createWalletStep1": {
     "body_1": "这组秘密单词可以帮助您轻松备份和恢复账户，让您的钱包更加安全。",
     "body_2": "正确记住您的短语非常重要，我们会帮助您完成。如果您着急，可以稍后再做。",
     "body_3": "为您的钱包取一个容易记住的名字，您就可以开始了！",
@@ -126,7 +126,7 @@
     "label_3": "为钱包命名",
     "title": "创建钱包"
   },
-  "createWalletStep2Screen": {
+  "createWalletStep2": {
     "body_1": "以下是您的秘密短语",
     "body_2": "请将此短语写在纸上或保存在安全的数字笔记中。您也可以在上方下载，但请务必妥善保管。",
     "body_3": "任何拥有此短语的人都可以窃取您的资产，且无法追回！",
@@ -137,7 +137,7 @@
     "oneOfThree": "1/3",
     "title": "创建钱包"
   },
-  "createWalletStep3Screen": {
+  "createWalletStep3": {
     "body_1": "请按正确顺序选择每个短语，以确保您记对了。",
     "dialog_1_body": "强烈建议您确认已正确备份安全短语",
     "dialog_1_title": "确定要跳过备份确认吗？",
@@ -147,7 +147,7 @@
     "title": "创建钱包",
     "twoOfThree": "2/3"
   },
-  "createWalletStep4Screen": {
+  "createWalletStep4": {
     "body_1": "为您的钱包取一个容易记住的名字，比如“交易”或“投资”等。",
     "errors": {
       "name": "至少1个字符且少于21个字符"
@@ -157,32 +157,32 @@
     "threeOfThree": "3/3",
     "title": "创建钱包"
   },
-  "createWalletStep5Screen": {
+  "createWalletStep5": {
     "continueButtonLabel": "立即创建",
     "subtitle": "为您的新账户选择所需的区块链",
     "title": "创建钱包"
   },
-  "createWalletStep6Screen": {
+  "createWalletStep6": {
     "body_1": "请务必妥善保管您的安全短语，建议多做几份备份。",
     "body_2": "如需查找钱包的安全短语，可在该钱包的设置页面中找到。",
     "label_1": "恭喜，您现在拥有一个全新的钱包！",
     "title": "创建钱包",
     "viewWallet": "查看钱包"
   },
-  "dappConnectionsScreen": {
+  "dappConnections": {
     "connectDappLabel": "连接 dApp",
     "connectNewDappLabel": "连接新 dApp",
     "noDappsConnected": "暂无已连接 dApp",
     "title": "连接"
   },
-  "importScreen": {
+  "import": {
     "enterAnAddress": "请输入地址、加密密钥、私钥或助记词",
     "mnemonicComplete": "助记词完整",
     "mnemonicIncorrect": "助记词不正确",
     "placeholder": "请输入信息",
     "title": "导入"
   },
-  "moreScreen": {
+  "more": {
     "chatWithUsButtonLabel": "联系我们",
     "contactsButtonLabel": "联系人",
     "createWalletButtonLabel": "创建钱包",
@@ -193,7 +193,7 @@
     "settingsButtonLabel": "设置",
     "title": "更多选项"
   },
-  "neo3NeoXBridgeScreen": {
+  "neo3NeoXBridge": {
     "aboutButtonLabel": "关于",
     "errorsByCode": {
       "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "选择的账户与选择的代币不兼容",
@@ -240,7 +240,7 @@
     "restartButtonLabel": "重新开始",
     "title": "桥接代币"
   },
-  "neo3VoteScreen": {
+  "neo3Vote": {
     "account": {
       "changeLabel": "更改",
       "noAccountSelectedLabel": "未选择账户",
@@ -278,7 +278,7 @@
       "thereIsNoNeoLabel": "您的 Neo 3 账户应拥有 NEO"
     }
   },
-  "notificationsScreen": {
+  "notifications": {
     "actions": {
       "error": {
         "accountNotFound": "我们无法找到此通知对应的账户",
@@ -292,15 +292,7 @@
     "relatedAddressLabel": "地址：",
     "title": "通知"
   },
-  "onboardingCompletedScreen": {
-    "backupMnemonicButtonLabel": "备份您的新钱包",
-    "subtitleImport": "您导入的钱包和账户已准备就绪！",
-    "subtitleNew": "您的新钱包和账户已准备就绪！",
-    "titleImport": "导入完成",
-    "titleNew": "设置完成",
-    "viewWalletButtonLabel": "查看钱包"
-  },
-  "onboardingScreen": {
+  "onboarding": {
     "cancelAllButtonLabel": "全部取消",
     "createWalletButtonLabel": "创建新钱包",
     "feature1": {
@@ -328,7 +320,15 @@
     "selectBlockchainsModalDescription": "选择您想要为其创建账户的区块链",
     "selectBlockchainsModalTitle": "选择区块链"
   },
-  "receiveScreen": {
+  "onboardingCompleted": {
+    "backupMnemonicButtonLabel": "备份您的新钱包",
+    "subtitleImport": "您导入的钱包和账户已准备就绪！",
+    "subtitleNew": "您的新钱包和账户已准备就绪！",
+    "titleImport": "导入完成",
+    "titleNew": "设置完成",
+    "viewWalletButtonLabel": "查看钱包"
+  },
+  "receive": {
     "accountSelectPlaceholder": "选择…",
     "accountSelectionModalTitle": "选择收款账户",
     "accountStepTitle": "收款账户",
@@ -339,7 +339,7 @@
     "successfulDownloadMessage": "二维码已保存到您的图库！",
     "title": "接收令牌"
   },
-  "searchScreen": {
+  "search": {
     "emptyResultDescription": "未找到任何内容！",
     "errors": {
       "execute": "执行操作时出错。如有疑问，请联系客服。",
@@ -351,7 +351,7 @@
     "resultDescription": "您可能对以下主题感兴趣：",
     "title": "搜索 Neon"
   },
-  "sendScreen": {
+  "send": {
     "failureNotification": {
       "previewBody": "我们无法验证你的转账是否完成",
       "title": "转账失败"
@@ -403,16 +403,7 @@
     },
     "title": "发送代币"
   },
-  "settingsProtocolEditScreen": {
-    "addCustomNetworkButtonLabel": "添加自定义网络",
-    "default": "（默认）",
-    "editCustomNetworkButtonLabel": "编辑自定义网络",
-    "selectNetworkUrlButtonLabel": "选择网络 URL"
-  },
-  "settingsProtocolsScreen": {
-    "title": "协议"
-  },
-  "settingsScreen": {
+  "settings": {
     "tabs": {
       "personalisation": {
         "currencyButtonLabel": "货币",
@@ -435,7 +426,16 @@
     },
     "title": "设置"
   },
-  "settingsSecurityBackupScreen": {
+  "settingsProtocolEdit": {
+    "addCustomNetworkButtonLabel": "添加自定义网络",
+    "default": "（默认）",
+    "editCustomNetworkButtonLabel": "编辑自定义网络",
+    "selectNetworkUrlButtonLabel": "选择网络 URL"
+  },
+  "settingsProtocols": {
+    "title": "协议"
+  },
+  "settingsSecurityBackup": {
     "title": "安全",
     "withAccountsToBackup": {
       "description_1": "通过密码或生物识别认证保护钱包前，需先备份您的钱包。",
@@ -448,12 +448,12 @@
       "description": "所有钱包都已备份，请继续设置安全"
     }
   },
-  "stellarTrustlineScreen": {
+  "stellarTrustline": {
     "addTrustlineButtonLabel": "添加信任线",
     "emptyList": "未找到信任线",
     "title": "Stellar 信任线"
   },
-  "supportTicketScreen": {
+  "supportTicket": {
     "descriptionLabel": "描述",
     "descriptionPlaceholder": "描述你的问题…",
     "emailLabel": "电子邮件",
@@ -471,7 +471,7 @@
     "successToast": "我们已收到你的支持票证，将在不久后与你联系。",
     "title": "打开支持票"
   },
-  "swapScreen": {
+  "swap": {
     "form": {
       "accountToUseModalTitle": "选择来源账户",
       "accountToUseTitle": "从这里发送",
@@ -513,7 +513,10 @@
       "experimentHigherAmounts": "兑换金额越大，汇率越优，欢迎尝试！"
     }
   },
-  "walletBackupStep1Screen": {
+  "wallet": {
+    "addNewAccount": "添加新账户"
+  },
+  "walletBackupStep1": {
     "body_1": "以下是您的秘密短语",
     "body_2": "请将此短语写在纸上或保存在安全的数字笔记中。您也可以在上方下载，但请务必妥善保管。",
     "body_3": "任何拥有此短语的人都可以窃取您的资产，且无法追回！",
@@ -524,7 +527,7 @@
     "oneOfThree": "1/3",
     "title": "备份钱包"
   },
-  "walletBackupStep2Screen": {
+  "walletBackupStep2": {
     "body_1": "为确认您已备份关键词，请按正确顺序选择下方的单词。",
     "errors": {
       "incorrectWordOrder": "词序错误。请重试以确认您的备份。"
@@ -533,14 +536,11 @@
     "title": "备份钱包",
     "twoOfThree": "2/3"
   },
-  "walletBackupStep3Screen": {
+  "walletBackupStep3": {
     "label_1": "恭喜，您已确认备份",
     "title": "备份钱包"
   },
-  "walletScreen": {
-    "addNewAccount": "添加新账户"
-  },
-  "walletSettingsScreen": {
+  "walletSettings": {
     "backup": "备份助记词",
     "customize": "自定义钱包",
     "deleteAlert": "您确定要删除此钱包吗？",
@@ -553,7 +553,7 @@
     },
     "title": "钱包设置"
   },
-  "walletsScreen": {
+  "wallets": {
     "createFirstWallet": "创建第一个钱包",
     "incompleteBalanceWarningButton": "好的，我明白了",
     "incompleteBalanceWarningText": "我们无法获取您所有代币的价格数据，因此总额可能不准确",

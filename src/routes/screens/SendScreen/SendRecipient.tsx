@@ -61,7 +61,7 @@ export const SendRecipient = ({
   isDisabledMaxAmount,
   onMaxAmount,
 }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'sendScreen.form.recipient' })
+  const { t } = useTranslation('screens', { keyPrefix: 'send.form.recipient' })
   const debounce = useDebounceFunction()
   const { currency } = useCurrencySelector()
   const navigation = useNavigation()

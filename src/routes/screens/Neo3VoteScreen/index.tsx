@@ -47,7 +47,7 @@ type TActionsData = {
 export const Neo3VoteScreen = ({ navigation, route }: TWalletsStackScreenProps<'Neo3VoteScreen'>) => {
   const { defaultNeo3Account } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'neo3VoteScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'neo3Vote' })
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { accountsByBlockchains } = useAccountsByBlockchainsSelector(['neo3'])
   const { canShowNeo3VoteSupportUsModalRef } = useCanShowNeo3VoteSupportUsModalSelector()

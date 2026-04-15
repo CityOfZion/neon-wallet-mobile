@@ -62,7 +62,7 @@ const renderItem: ListRenderItem<TItem> = ({
     onGoToConfirmation,
   },
 }) => {
-  const tPrefix = 'screens:neo3VoteScreen.listItem'
+  const tPrefix = 'screens:neo3Vote.listItem'
   const { position } = candidate
 
   const icon = match({ isCurrentVote, type: candidate.type })
@@ -186,7 +186,7 @@ const renderItem: ListRenderItem<TItem> = ({
 }
 
 export const Neo3VoteList = ({ neo3Account, search, voteErrorMessage, canVote, canScrollToCandidateRef }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'neo3VoteScreen.list' })
+  const { t } = useTranslation('screens', { keyPrefix: 'neo3Vote.list' })
   const { data, isLoading } = useNeo3VoteGetCandidatesToVote()
   const voteDetailsByAddressQuery = useNeo3VoteGetVoteDetailsByAddress(neo3Account?.address)
   const navigation = useNavigation()

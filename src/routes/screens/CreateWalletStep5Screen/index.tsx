@@ -20,7 +20,7 @@ type TActionData = {
 export const CreateWalletStep5Screen = ({ navigation, route }: TMoreStackScreenProps<'CreateWalletStep5Screen'>) => {
   const { mnemonic, name, hasBackup } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep5Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep5' })
   const { createWallet } = useCreateWallet()
   const { createAccount } = useCreateAccount()
 

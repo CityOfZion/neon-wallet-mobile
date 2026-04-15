@@ -21,7 +21,7 @@ type TActionsData = {
 export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenProps<'CreateWalletStep4Screen'>) => {
   const { mnemonic, hasBackup } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep4Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep4' })
   const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
   const { actionData, actionState, setData, setError, handleAct } = useActions<TActionsData>({ name: '' })
 

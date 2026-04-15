@@ -45,7 +45,7 @@ const Separator = () => <TwSeparator containerClassName="my-2" />
 export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'ContactScreen'>) => {
   const { contact } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'contactScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'contact' })
   const { t: commonT } = useTranslation('common')
 
   const { contactById } = useContactByIdSelector(contact.id)

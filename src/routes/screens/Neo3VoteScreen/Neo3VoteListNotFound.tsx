@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 import TbList from '@/assets/images/tb-list.svg'
 
 export const Neo3VoteListNotFound = () => {
-  const { t } = useTranslation('screens', { keyPrefix: 'neo3VoteScreen.listNotFound' })
+  const { t } = useTranslation('screens', { keyPrefix: 'neo3Vote.listNotFound' })
 
   return (
     <View className="mt-2 flex flex-col items-center gap-y-2 px-4">
