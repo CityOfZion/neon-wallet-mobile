@@ -22,7 +22,7 @@ type TActionsData = {
 }
 
 export const SupportTicketScreen = ({ navigation }: TMoreStackScreenProps<'SupportTicketScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'supportTicketScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'supportTicket' })
 
   const { actionData, handleAct, actionState, setError, setDataWrapper } = useActions<TActionsData>({
     email: '',

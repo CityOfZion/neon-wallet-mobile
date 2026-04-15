@@ -42,7 +42,7 @@ import { AccountScreenTitle } from './AccountScreenTitle'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
 
 export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'AccountScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'accountScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'account' })
   const { account } = useAccountByIdSelector(route.params.account.id)
   const { wallet } = useWalletByIdSelector(route.params.wallet.id)
   const { selectedNetwork } = useSelectedNetworkSelector(account.blockchain)

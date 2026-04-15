@@ -20,7 +20,7 @@ export const SettingsWalletBackupStep3Screen = ({
   const { wallet } = route.params
 
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep3Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep3' })
   const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
 
   const handlePress = () => {

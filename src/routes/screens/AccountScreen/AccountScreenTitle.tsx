@@ -12,7 +12,7 @@ type TProps = {
 }
 
 export const AccountScreenTitle = ({ account: { blockchain } }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'accountScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'account' })
   const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const { data, isLoading } = useBlockHeightQuery(blockchain)
 

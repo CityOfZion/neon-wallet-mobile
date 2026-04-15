@@ -26,7 +26,7 @@ import type { TWalletsStackScreenProps } from '@/types/stacks'
 export const WalletSettingsScreen = ({ navigation, route }: TWalletsStackScreenProps<'WalletSettingsScreen'>) => {
   const { wallet } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'walletSettingsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'walletSettings' })
   const { authenticate } = useAuthentication()
   const { deleteWallet } = useDeleteWallet()
 

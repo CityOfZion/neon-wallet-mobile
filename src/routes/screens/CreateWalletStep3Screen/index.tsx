@@ -18,7 +18,7 @@ import type { TMoreStackScreenProps } from '@/types/stacks'
 export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenProps<'CreateWalletStep3Screen'>) => {
   const words = route.params.words
 
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep3Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep3' })
   const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
 
   const shuffledWords = useMemo(() => shuffle(words), [words])

@@ -32,7 +32,7 @@ type TActionData = {
 const { theme } = resolveConfig(tailwindConfig)
 
 export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'ReceiveScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'receiveScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'receive' })
   const { writeFile } = useFileSystem()
 
   const { actionData, setDataWrapper } = useActions<TActionData>({

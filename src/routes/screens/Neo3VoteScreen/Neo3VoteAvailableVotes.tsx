@@ -12,7 +12,7 @@ type TProps = {
 }
 
 export const Neo3VoteAvailableVotes = ({ neoAmount, hasNeoAmount, isLoading }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'neo3VoteScreen.availableVotes' })
+  const { t } = useTranslation('screens', { keyPrefix: 'neo3Vote.availableVotes' })
 
   return (
     <View className="flex w-full flex-row items-center justify-between gap-x-2">
