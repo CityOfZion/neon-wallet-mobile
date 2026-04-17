@@ -34,7 +34,7 @@ const renderItem: ListRenderItem<TNote> = ({ item }) => {
       <View className="flex-1">
         <Text className="font-sans-bold text-lg text-white">{item.date}</Text>
 
-        <View className="mt-2 gap-1">
+        <View className="mt-2 items-start gap-1">
           {item.changes.map((change, index) => (
             <Text key={`${index}-${change}`} className="font-sans-regular text-gray-400">
               - {change}
