@@ -36,18 +36,18 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => (
 export const SettingsProtocolsScreen = ({ navigation }: TMoreStackScreenProps<'SettingsProtocolsScreen'>) => {
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { t } = useTranslation('screens', { keyPrefix: 'settingsProtocols' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const data = useMemo<TItem[]>(() => {
     return BlockchainServiceHelper.blockchainNames.map(blockchain => ({
       blockchain,
-      label: commonT(`blockchainServices.${blockchain}.label`),
+      label: tCommon(`blockchainServices.${blockchain}.label`),
       subtitle: selectedNetworkByBlockchain[blockchain].name,
       onPress: () => {
         navigation.navigate('SettingsProtocolEditScreen', { blockchain })
       },
     }))
-  }, [commonT, navigation, selectedNetworkByBlockchain])
+  }, [tCommon, navigation, selectedNetworkByBlockchain])
 
   return (
     <ScreenLayout.Root>

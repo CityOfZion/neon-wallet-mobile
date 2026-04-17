@@ -30,7 +30,7 @@ const EditAccountModal = ({ navigation, route }: TRootStackScreenProps<'EditAcco
   const { account } = route.params
   const dispatch = useAppDispatch()
   const { t } = useTranslation('modals', { keyPrefix: 'editAccount' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const { actionData, setData, setDataWrapper, setError, actionState, handleAct } = useActions<TActionData>({
     name: account.name,
@@ -67,14 +67,14 @@ const EditAccountModal = ({ navigation, route }: TRootStackScreenProps<'EditAcco
       <ModalLayout.Header>
         <ModalLayout.Button
           position="left"
-          label={commonT('general.cancel')}
+          label={tCommon('general.cancel')}
           onPress={navigation.goBack}
           colorSchema="white"
         />
         <ModalLayout.Title>{t('title')}</ModalLayout.Title>
         <ModalLayout.Button
           position="right"
-          label={commonT('general.save')}
+          label={tCommon('general.save')}
           disabled={!actionState.isValid}
           isLoading={actionState.isActing}
           onPress={handleAct(handlePressSave)}

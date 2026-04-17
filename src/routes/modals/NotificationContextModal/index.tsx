@@ -18,7 +18,7 @@ export const NotificationContextModal = ({ navigation, route }: TRootStackScreen
   const { notification } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'notificationContext' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const dispatch = useAppDispatch()
 
   const handleToggleRead = () => {
@@ -42,7 +42,7 @@ export const NotificationContextModal = ({ navigation, route }: TRootStackScreen
           onPress={handleToggleRead}
         />
 
-        <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
+        <TwButton variant="text" label={tCommon('general.cancel')} className="mt-7" onPress={navigation.goBack} />
       </ModalLayout.ViewContent>
     </ModalLayout.Root>
   )

@@ -30,7 +30,7 @@ export const DappConnectionRequestModal = ({
   const { account, proposal, fromDeeplink } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionRequest' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const [proposalDetails, setProposalDetails] = useState<TWalletKitHelperProposalDetails>()
 
@@ -117,14 +117,14 @@ export const DappConnectionRequestModal = ({
             <View className="mt-8 gap-4">
               <TwButton
                 variant="contained-light"
-                label={commonT('general.accept')}
+                label={tCommon('general.accept')}
                 onPress={() => startApprove()}
                 isLoading={isApproving}
               />
 
               <TwButton
                 variant="outline"
-                label={commonT('general.decline')}
+                label={tCommon('general.decline')}
                 onPress={() => startReject()}
                 isLoading={isRejecting}
               />

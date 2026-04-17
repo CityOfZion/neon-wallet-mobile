@@ -28,7 +28,7 @@ export const ImportKeySelectionModal = ({ route }: TRootStackScreenProps<'Import
 
   const { accountsRef } = useAccountsSelector()
   const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelection' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const { createWallet } = useCreateWallet()
   const { importAccounts } = useImportAccounts()
@@ -38,7 +38,7 @@ export const ImportKeySelectionModal = ({ route }: TRootStackScreenProps<'Import
 
   const [isImporting, startImport] = usePressOnce(async () => {
     const wallet = await createWallet({
-      name: commonT('wallet.importedName'),
+      name: tCommon('wallet.importedName'),
       backupStatus: 'successful',
       type: 'non-standard',
     })

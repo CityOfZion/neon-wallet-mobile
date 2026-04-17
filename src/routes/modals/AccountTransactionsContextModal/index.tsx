@@ -19,7 +19,7 @@ export const AccountTransactionsContextModal = ({
   route,
 }: TRootStackScreenProps<'AccountTransactionsContextModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'accountTransactionsContext' })
-  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
 
   const { account, dateFrom, dateTo, onDatesChange } = route.params
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
@@ -64,7 +64,7 @@ export const AccountTransactionsContextModal = ({
           onPress={handleExport}
         />
 
-        <TwButton variant="text" label={tCommon('cancel')} className="mt-6" onPress={navigation.goBack} />
+        <TwButton variant="text" label={tCommonGeneral('cancel')} className="mt-6" onPress={navigation.goBack} />
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>
   )

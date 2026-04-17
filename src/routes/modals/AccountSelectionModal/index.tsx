@@ -43,7 +43,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
   const { onSelect, blockchains, title } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'accountSelection' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { wallets } = useOwnWalletsSelector()
 
   const {
@@ -165,7 +165,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
           <TwButton
             variant="outline"
             colorSchema="pink"
-            label={commonT('general.clear')}
+            label={tCommon('general.clear')}
             leftElement={<TbX aria-hidden />}
             onPress={reset}
           />
@@ -173,7 +173,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
           <TwButton
             variant="contained-light"
             className="flex-1"
-            label={commonT('general.save')}
+            label={tCommon('general.save')}
             onPress={handleSave}
             disabled={isDisabled}
           />

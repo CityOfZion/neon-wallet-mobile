@@ -29,7 +29,7 @@ export const CreateAccountBlockchainSelectionModal = ({
 }: TRootStackScreenProps<'CreateAccountBlockchainSelectionModal'>) => {
   const { wallet } = route.params
 
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { t } = useTranslation('modals', { keyPrefix: 'createAccountBlockchainSelection' })
   const { createAccount } = useCreateAccount()
   const { accountsByWalletId } = useAccountsByWalletIdSelector(wallet.id)
@@ -84,7 +84,7 @@ export const CreateAccountBlockchainSelectionModal = ({
             <TwButton
               className="mb-2 mt-6"
               variant="contained-light"
-              label={commonT('general.add')}
+              label={tCommon('general.add')}
               disabled={!actionData.blockchain}
               onPress={handleAct(handlePressAdd)}
             />

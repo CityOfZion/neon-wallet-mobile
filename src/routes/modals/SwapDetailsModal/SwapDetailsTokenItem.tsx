@@ -16,7 +16,7 @@ type TProps = {
 }
 
 export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 }: TProps) => {
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   return (
     <View className="flex-row items-center justify-between gap-2">
@@ -27,7 +27,7 @@ export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 
           {symbol}
           {blockchain && (
             <Text className="font-sans-regular uppercase text-gray-100">
-              {` | ${commonT(`blockchainServices.${blockchain}.label`)}`}
+              {` | ${tCommon(`blockchainServices.${blockchain}.label`)}`}
             </Text>
           )}
         </Text>
