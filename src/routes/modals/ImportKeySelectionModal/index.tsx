@@ -120,7 +120,7 @@ export const ImportKeySelectionModal = ({ route }: TRootStackScreenProps<'Import
 
             <TwButton
               variant="contained-light"
-              className="my-4"
+              className="mb-4 mt-8"
               label={t('buttonLabel')}
               isLoading={isImporting}
               disabled={selectedAccounts.length === 0}

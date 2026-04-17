@@ -19,7 +19,8 @@ export const BlockchainIconWithLabel = ({ token, blockchain }: TProps) => {
       <TwBlockchainIcon blockchain={blockchain} className="mt-0.5 size-3.5 text-gray-300" />
 
       <Text className="font-sans-regular text-base text-white">
-        {token.name} <Text className="text-gray-100">| {tBlockchainServices(`${blockchain}.label`)}</Text>
+        {token.name}
+        <Text className="text-gray-100">{` | ${tBlockchainServices(`${blockchain}.label`)}`}</Text>
       </Text>
     </View>
   )
