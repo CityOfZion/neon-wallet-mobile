@@ -27,7 +27,7 @@ export let activatedNfcModal: TNfcModalThis | undefined
 
 const NfcModal = () => {
   const { t } = useTranslation('components', { keyPrefix: 'nfc' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const [visible, setVisible] = useState(false)
   const [status, setStatus] = useState<'success' | 'idle'>('idle')
@@ -95,7 +95,7 @@ const NfcModal = () => {
 
           <TwButton
             onPress={handleCancel}
-            label={commonT('general.cancel')}
+            label={tCommon('general.cancel')}
             variant="card"
             labelProps={{ className: 'dark:text-white text-asphalt' }}
             className="w-full bg-gray-300/30"

@@ -21,7 +21,7 @@ export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => 
   const { session, onAccept, onReject, isAccepting, isRejecting, request } = props
 
   const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const params = request.params.request.params as ContractInvocationMulti
 
@@ -72,7 +72,7 @@ export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => 
       <View className="mt-auto gap-4 pt-8">
         <TwButton
           variant="contained-light"
-          label={commonT('general.accept')}
+          label={tCommon('general.accept')}
           onPress={() => onAccept()}
           isLoading={isAccepting}
           disabled={isRejecting}
@@ -80,7 +80,7 @@ export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => 
 
         <TwButton
           variant="outline"
-          label={commonT('general.decline')}
+          label={tCommon('general.decline')}
           onPress={() => onReject()}
           isLoading={isRejecting}
           disabled={isAccepting}

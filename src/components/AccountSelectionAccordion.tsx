@@ -49,7 +49,7 @@ const AccountSelectionAccordionHeader = ({
   accountsCount,
   accountsSelectedCount,
 }: TAccountSelectionAccordionHeaderProps) => {
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { t } = useTranslation('components', { keyPrefix: 'accountSelectionAccordion' })
 
   return (
@@ -59,7 +59,7 @@ const AccountSelectionAccordionHeader = ({
 
         <View className="flex-shrink flex-grow">
           <Text className="font-sans-medium text-xs text-gray-300">
-            {commonT(`blockchainServices.${blockchain}.label`)}
+            {tCommon(`blockchainServices.${blockchain}.label`)}
           </Text>
 
           <Text
@@ -67,7 +67,7 @@ const AccountSelectionAccordionHeader = ({
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {commonT(`blockchainServices.${blockchain}.label`)}
+            {tCommon(`blockchainServices.${blockchain}.label`)}
           </Text>
         </View>
       </View>

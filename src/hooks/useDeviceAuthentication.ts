@@ -10,7 +10,7 @@ import { useAppDispatch } from './useRedux'
 import { settingsReducerActions } from '@/store/reducers/settings'
 
 export const useDeviceAuthentication = () => {
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const dispatch = useAppDispatch()
   const [isDeviceAuthenticationAvailable, setIsDeviceAuthenticationAvailable] = useState<boolean>()
 
@@ -44,12 +44,12 @@ export const useDeviceAuthentication = () => {
 
   const authenticateDevice = async () => {
     const isAvailable = checkDeviceAuthenticationAvailable()
-    if (!isAvailable) throw new AppError(commonT('errors.unauthorized'))
+    if (!isAvailable) throw new AppError(tCommon('errors.unauthorized'))
 
     const result = await LocalAuthentication.authenticateAsync()
 
     if (!result.success) {
-      throw new AppError(commonT('errors.unauthorized'))
+      throw new AppError(tCommon('errors.unauthorized'))
     }
   }
 

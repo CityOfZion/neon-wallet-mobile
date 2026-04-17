@@ -36,7 +36,7 @@ export const ConnectHardwareBluetoothModalList = ({
   navigation,
 }: TRootStackScreenProps<'ConnectHardwareBluetoothModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetooth.list' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { createHardwareWallet } = useCreateHardwareWallet()
 
   const [devices, setDevices] = useState<BleDevice[]>([])
@@ -64,7 +64,7 @@ export const ConnectHardwareBluetoothModalList = ({
     } catch (error) {
       LoggerHelper.error(error, { where: 'ConnectHardwareBluetoothModalList', operation: 'connect' })
       ToastHelper.error({
-        message: AppError.wrap(error, commonT('hardwareWallet.errors.hardwareWalletNotFound')).message,
+        message: AppError.wrap(error, tCommon('hardwareWallet.errors.hardwareWalletNotFound')).message,
       })
       setSelectedDevice(undefined)
     }
