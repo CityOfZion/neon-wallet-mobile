@@ -365,7 +365,7 @@
   },
   "importEncryptedKeySelection": {
     "accountAlreadyExists": "Konto existiert bereits",
-    "decryptError": "Fehler beim Entschlüsseln des Schlüssels",
+    "decryptError": "Falsches Passwort",
     "description": "Wähle die Blockchain des verschlüsselten Schlüssels aus, den du importieren möchtest",
     "importEncryptedConfirmPasswordLabel": "Um fortzufahren, gib bitte das Passwort ein, das zur Verschlüsselung des Schlüssels verwendet wurde:",
     "importEncryptedKeyInputPlaceholder": "Passwort eingeben",
@@ -502,7 +502,7 @@
     "latencyLabel": "{{latency}}ms",
     "listLabel": "Netzwerk-URL-Liste",
     "refreshButtonLabel": "Aktualisieren",
-    "selectAutomaticallyCheckboxLabel": "Automatisch auswählen",
+    "selectAutomaticallyCheckboxLabel": "Auto",
     "title": "Netzwerk-URL-Auswahl"
   },
   "notificationContext": {
@@ -732,6 +732,7 @@
       "invalidLimit": "Ungültiges Limit"
     },
     "limitLabel": "Limit (Optional)",
+    "limitPlaceholder": "Grenzbetrag eingeben",
     "title": "Trustline",
     "tokenLabel": "Token",
     "tokenPlaceholder": "Token auswählen"
@@ -739,6 +740,7 @@
   "stellarTrustilneTokenSelection": {
     "noTokensFound": "Keine Token gefunden",
     "placeholderMessage": "Zum Suchen tippen",
+    "searchInputPlaceholder": "Nach einem Token suchen",
     "title": "Trustline"
   },
   "survey": {

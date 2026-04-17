@@ -17,8 +17,7 @@ import { useModalErase } from '@/hooks/useModalErase'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { DappPermissionErrorContent } from './DappPermissionErrorContent'
 import { DappPermissionGenericContent } from './DappPermissionGenericContent'
@@ -129,21 +128,23 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
   const Content = CUSTOM_CONTENT_BY_REQUEST[blockchain]?.[request.params.request.method] || DappPermissionGenericContent
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      rightElement={<TwModalLayoutCloseIconButton onPress={() => startReject()} />}
-      onRequestClose={() => startReject()}
-    >
-      <Content
-        request={request}
-        session={session}
-        sessionDetails={sessionDetails}
-        sessionAccount={sessionAccount}
-        onAccept={startAccept}
-        onReject={startReject}
-        isAccepting={isAccepting}
-        isRejecting={isRejecting}
-      />
-    </TwModalLayout>
+    <ModalLayout.Root onRequestClose={() => startReject()}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={() => startReject()} />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Content
+          request={request}
+          session={session}
+          sessionDetails={sessionDetails}
+          sessionAccount={sessionAccount}
+          onAccept={startAccept}
+          onReject={startReject}
+          isAccepting={isAccepting}
+          isRejecting={isRejecting}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

@@ -13,6 +13,7 @@
     "claimAsset": "<1>领取</1> {{ amount }} {{ symbol }}",
     "connections": "连接",
     "gasUnavailable": "GAS 不可用",
+    "moreButtonLabel": "更多",
     "nfts": "NFT",
     "tokens": "代币",
     "transactions": "交易",
@@ -114,48 +115,49 @@
     "walletAddressLabel": "钱包地址"
   },
   "contacts": {
+    "addContactButtonLabel": "添加联系人",
     "title": "联系人"
   },
   "createWalletStep1": {
-    "body_1": "这组秘密单词可以帮助您轻松备份和恢复账户，让您的钱包更加安全。",
-    "body_2": "正确记住您的短语非常重要，我们会帮助您完成。如果您着急，可以稍后再做。",
-    "body_3": "为您的钱包取一个容易记住的名字，您就可以开始了！",
+    "body1": "这组秘密单词可以帮助您轻松备份和恢复账户，让您的钱包更加安全。",
+    "body2": "正确记住您的短语非常重要，我们会帮助您完成。如果您着急，可以稍后再做。",
+    "body3": "为您的钱包取一个容易记住的名字，您就可以开始了！",
     "createWallet": "创建钱包",
-    "label_1": "生成安全短语",
-    "label_2": "确认安全短语",
-    "label_3": "为钱包命名",
+    "label1": "生成安全短语",
+    "label2": "确认安全短语",
+    "label3": "为钱包命名",
     "title": "创建钱包"
   },
   "createWalletStep2": {
-    "body_1": "以下是您的秘密短语",
-    "body_2": "请将此短语写在纸上或保存在安全的数字笔记中。您也可以在上方下载，但请务必妥善保管。",
-    "body_3": "任何拥有此短语的人都可以窃取您的资产，且无法追回！",
-    "dialog_body": "为确保安全短语安全，请将其保存在加密笔记中。",
-    "dialog_dismiss": "好的，我明白了",
-    "dialog_title": "请确保妥善保管您的安全短语",
-    "label_1": "生成安全短语",
+    "body1": "以下是您的秘密短语",
+    "body2": "请将此短语写在纸上或保存在安全的数字笔记中。您也可以在上方下载，但请务必妥善保管。",
+    "body3": "任何拥有此短语的人都可以窃取您的资产，且无法追回！",
+    "dialogBody": "为确保安全短语安全，请将其保存在加密笔记中。",
+    "dialogDismiss": "好的，我明白了",
+    "dialogTitle": "请确保妥善保管您的安全短语",
+    "label": "生成安全短语",
     "oneOfThree": "1/3",
     "title": "创建钱包"
   },
   "createWalletStep3": {
-    "body_1": "请按正确顺序选择每个短语，以确保您记对了。",
-    "dialog_1_body": "强烈建议您确认已正确备份安全短语",
-    "dialog_1_title": "确定要跳过备份确认吗？",
-    "dialog_2_body": "请重试以确认您的备份",
-    "dialog_2_title": "单词顺序不正确",
-    "label_1": "确认安全短语",
+    "body1": "请按正确顺序选择每个短语，以确保您记对了。",
+    "dialog1Body": "强烈建议您确认已正确备份安全短语",
+    "dialog1Title": "确定要跳过备份确认吗？",
+    "dialog2Body": "请重试以确认您的备份",
+    "dialog2Title": "单词顺序不正确",
+    "label": "确认安全短语",
     "title": "创建钱包",
     "twoOfThree": "2/3"
   },
   "createWalletStep4": {
-    "body_1": "为您的钱包取一个容易记住的名字，比如“交易”或“投资”等。",
+    "body1": "为您的錢包取一个容易记住的名字，比如“交易”或“投资”等。",
     "errors": {
-      "name": "至少1个字符且少于21个字符"
+      "name": "至1个字符且少于21个字符"
     },
-    "label_1": "为钱包命名",
-    "label_walletName": "钱包名称",
+    "label": "为錢包命名",
+    "labelWalletName": "錢包名称",
     "threeOfThree": "3/3",
-    "title": "创建钱包"
+    "title": "创建錢包"
   },
   "createWalletStep5": {
     "continueButtonLabel": "立即创建",
@@ -163,9 +165,9 @@
     "title": "创建钱包"
   },
   "createWalletStep6": {
-    "body_1": "请务必妥善保管您的安全短语，建议多做几份备份。",
-    "body_2": "如需查找钱包的安全短语，可在该钱包的设置页面中找到。",
-    "label_1": "恭喜，您现在拥有一个全新的钱包！",
+    "body1": "请务必妥善保管您的安全短语，建议多做几份备份。",
+    "body2": "如需查找钱包的安全短语，可在该钱包的设置页面中找到。",
+    "description": "恭喜，您现在拥有一个全新的钱包！",
     "title": "创建钱包",
     "viewWallet": "查看钱包"
   },
@@ -438,10 +440,10 @@
   "settingsSecurityBackup": {
     "title": "安全",
     "withAccountsToBackup": {
-      "description_1": "通过密码或生物识别认证保护钱包前，需先备份您的钱包。",
-      "description_2": "这是为了防止您丢失密码或无法认证而导致资金丢失的预防措施。",
-      "description_3": "请备份以下钱包",
-      "description_4": "如果您有多个钱包，备份完一个后会返回此处继续备份下一个。"
+      "description1": "通过密码或生物识别认证保护钱包前，需先备份您的钱包。",
+      "description2": "这是为了防止您丢失密码或无法认证而导致资金丢失的预防措施。",
+      "description3": "请备份以下钱包",
+      "description4": "如果您有多个钱包，备份完一个后会返回此处继续备份下一个。"
     },
     "withoutAccountsToBackup": {
       "button_label": "继续安全设置",
@@ -511,33 +513,37 @@
     "title": "兑换代币",
     "tooltips": {
       "experimentHigherAmounts": "兑换金额越大，汇率越优，欢迎尝试！"
-    }
+    },
+    "viewExplanationButtonLabel": "查看说明"
   },
   "wallet": {
-    "addNewAccount": "添加新账户"
+    "addNewAccountButtonLabel": "添加新账户",
+    "moreButtonLabel": "更多"
   },
   "walletBackupStep1": {
-    "body_1": "以下是您的秘密短语",
-    "body_2": "请将此短语写在纸上或保存在安全的数字笔记中。您也可以在上方下载，但请务必妥善保管。",
-    "body_3": "任何拥有此短语的人都可以窃取您的资产，且无法追回！",
-    "dialog_body": "为确保安全短语安全，请将其保存在加密笔记中。",
-    "dialog_dismiss": "好的，我明白了",
-    "dialog_title": "请确保妥善保管您的安全短语",
-    "label_1": "安全短语",
+    "body1": "以下是您的秘密短语",
+    "body2": "请将此短语写在纸上或保存在安全的数字笔记中。您也可以在上方下载，但请务必妥善保管。",
+    "body3": "任何拥有此短语的人都可以窃取您的资产，且无法追回！",
+    "copyButtonLabel": "复制",
+    "description": "安全短语",
+    "dialogBody": "为确保安全短语安全，请将其保存在加密笔记中。",
+    "dialogDismiss": "好的，我明白了",
+    "dialogTitle": "请确保妥善保管您的安全短语",
     "oneOfThree": "1/3",
+    "printButtonLabel": "打印",
     "title": "备份钱包"
   },
   "walletBackupStep2": {
-    "body_1": "为确认您已备份关键词，请按正确顺序选择下方的单词。",
+    "body": "为确认您已备份关键词，请按正确顺序选择下方的单词。",
+    "description": "确认备份",
     "errors": {
       "incorrectWordOrder": "词序错误。请重试以确认您的备份。"
     },
-    "label_1": "确认备份",
     "title": "备份钱包",
     "twoOfThree": "2/3"
   },
   "walletBackupStep3": {
-    "label_1": "恭喜，您已确认备份",
+    "description": "恭喜，您已确认备份",
     "title": "备份钱包"
   },
   "walletSettings": {

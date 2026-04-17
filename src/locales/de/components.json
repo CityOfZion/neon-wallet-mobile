@@ -40,6 +40,11 @@
   "blockchainList": {
     "xExisting": "{{amount}} vorhanden"
   },
+  "modalLayout": {
+    "labels": {
+      "closeButton": "Modal schließen"
+    }
+  },
   "nfc": {
     "description": "Bitte NFC-Tags antippen",
     "title": "Bereit zum Scannen"
@@ -48,6 +53,9 @@
     "closeButtonLabel": "QR-Code-Scanner schließen",
     "permissionOffMessage": "Zum Scannen von QR-Codes ist die Kameraberechtigung erforderlich. Bitte erteilen Sie diese in den Geräteeinstellungen.",
     "permissionOffTitle": "Kamerazugriff erforderlich"
+  },
+  "screenLayout": {
+    "backButtonLabel": "Zurück"
   },
   "screenLayoutBars": {
     "customMode": "Custom Network Modus",
@@ -116,11 +124,6 @@
       "clearButton": "Eingabe löschen",
       "hideButton": "Eingabe verbergen",
       "showButton": "Eingabe anzeigen"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "Modal schließen"
     }
   }
 }

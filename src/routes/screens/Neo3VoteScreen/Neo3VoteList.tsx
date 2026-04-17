@@ -84,7 +84,7 @@ const renderItem: ListRenderItem<TItem> = ({
             style={{ width: candidateVotePercentage as DimensionValue }}
           >
             <View
-              className={StyleHelper.mergeStyles('h-full w-full bg-lemon opacity-5', {
+              className={StyleHelper.mergeStyles('size-full bg-lemon opacity-5', {
                 'bg-neon': position === 1,
                 'bg-green-100': position === 2,
                 'bg-green': position === 3,

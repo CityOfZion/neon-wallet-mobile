@@ -40,6 +40,11 @@
   "blockchainList": {
     "xExisting": "已有 {{amount}} 個"
   },
+  "modalLayout": {
+    "labels": {
+      "closeButton": "關閉視窗"
+    }
+  },
   "nfc": {
     "description": "請輕觸 NFC 標籤",
     "title": "準備掃描"
@@ -48,6 +53,9 @@
     "closeButtonLabel": "關閉二維碼掃描器",
     "permissionOffMessage": "掃描二維碼需要相機權限。請在設備設定中授予權限。",
     "permissionOffTitle": "需要攝影機存取權限"
+  },
+  "screenLayout": {
+    "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
     "customMode": "自訂網路模式",
@@ -116,11 +124,6 @@
       "clearButton": "清除輸入",
       "hideButton": "隱藏輸入",
       "showButton": "顯示輸入"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "關閉視窗"
     }
   }
 }

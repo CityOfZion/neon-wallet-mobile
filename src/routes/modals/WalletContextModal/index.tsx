@@ -13,7 +13,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbAlertTriangle from '@/assets/images/tb-alert-triangle.svg'
 import TbDeviceFloppy from '@/assets/images/tb-device-floppy.svg'
@@ -66,34 +66,38 @@ export const WalletContextModal = ({ navigation, route }: TRootStackScreenProps<
   }
 
   return (
-    <TwModalLayout full={false} withoutHeader>
-      {wallet?.type === 'standard' && (
-        <Fragment>
-          <TwMenuButton
-            label={t('backup')}
-            subtitle={
-              wallet.backupStatus !== 'successful' ? <TbAlertTriangle aria-hidden className="text-pink" /> : undefined
-            }
-            leftElement={<TbDeviceFloppy aria-hidden />}
-            onPress={handlePressBackup}
-          />
+    <ModalLayout.Root full={false}>
+      <ModalLayout.Header />
 
-          <TwSeparator />
-        </Fragment>
-      )}
+      <ModalLayout.ViewContent>
+        {wallet?.type === 'standard' && (
+          <Fragment>
+            <TwMenuButton
+              label={t('backup')}
+              subtitle={
+                wallet.backupStatus !== 'successful' ? <TbAlertTriangle aria-hidden className="text-pink" /> : undefined
+              }
+              leftElement={<TbDeviceFloppy aria-hidden />}
+              onPress={handlePressBackup}
+            />
 
-      <TwMenuButton label={t('create')} leftElement={<TbPlus aria-hidden />} onPress={handlePressCreate} />
+            <TwSeparator />
+          </Fragment>
+        )}
 
-      <TwSeparator />
+        <TwMenuButton label={t('create')} leftElement={<TbPlus aria-hidden />} onPress={handlePressCreate} />
 
-      <TwMenuButton
-        label={t('reorder')}
-        leftElement={<TbReorder aria-hidden />}
-        onPress={handlePressReorder}
-        disabled={wallets.length === 0}
-      />
+        <TwSeparator />
 
-      <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
-    </TwModalLayout>
+        <TwMenuButton
+          label={t('reorder')}
+          leftElement={<TbReorder aria-hidden />}
+          onPress={handlePressReorder}
+          disabled={wallets.length === 0}
+        />
+
+        <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

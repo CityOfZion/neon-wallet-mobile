@@ -43,10 +43,18 @@ export const WALLET_CARD_HEIGHT = 385
 export const WALLET_CARD_HEIGHT_RATIO = WALLET_CARD_HEIGHT / WALLET_CARD_WIDTH
 
 export const getWalletCardDimensions = (width?: number) => {
-  let newWidth = width ? width : WALLET_CARD_WIDTH
-  newWidth = Math.min(newWidth, Dimensions.get('window').width * 0.9)
+  const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
-  const newHeight = newWidth * WALLET_CARD_HEIGHT_RATIO
+  let newWidth = width ? width : WALLET_CARD_WIDTH
+  newWidth = Math.min(newWidth, windowWidth * 0.9)
+
+  let newHeight = newWidth * WALLET_CARD_HEIGHT_RATIO
+  const maxHeight = windowHeight * 0.45
+
+  if (newHeight > maxHeight) {
+    newHeight = maxHeight
+    newWidth = newHeight / WALLET_CARD_HEIGHT_RATIO
+  }
 
   return {
     width: newWidth,

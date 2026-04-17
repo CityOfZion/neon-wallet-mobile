@@ -13,6 +13,7 @@
     "claimAsset": "<1>Claim</1> {{ amount }} {{ symbol }}",
     "connections": "Verbindungen",
     "gasUnavailable": "GAS nicht verfügbar",
+    "moreButtonLabel": "Mehr",
     "nfts": "NFTs",
     "tokens": "Tokens",
     "transactions": "Transaktionen",
@@ -114,46 +115,47 @@
     "walletAddressLabel": "Wallet Adressen"
   },
   "contacts": {
+    "addContactButtonLabel": "Kontakt hinzufügen",
     "title": "Kontakte"
   },
   "createWalletStep1": {
-    "body_1": "Diese geheimen Wörter erleichtern das Sichern und Wiederherstellen Ihres Kontos. Dies macht Ihr Wallet wirklich sicher",
-    "body_2": "Es ist wirklich wichtig, dass Sie sich Ihre Phrase korrekt merken, also helfen wir Ihnen dabei. Wenn Sie es eilig haben, können Sie es später tun.",
-    "body_3": "Geben Sie Ihrem Wallet einen einprägsamen Namen und los geht's!",
+    "body1": "Diese geheimen Wörter erleichtern das Sichern und Wiederherstellen Ihres Kontos. Dies macht Ihr Wallet wirklich sicher",
+    "body2": "Es ist wirklich wichtig, dass Sie sich Ihre Phrase korrekt merken, also helfen wir Ihnen dabei. Wenn Sie es eilig haben, können Sie es später tun.",
+    "body3": "Geben Sie Ihrem Wallet einen einprägsamen Namen und los geht's!",
     "createWallet": "Wallet erstellen",
-    "label_1": "Sicherheitsphrase generieren",
-    "label_2": "Sicherheitsphrase bestätigen",
-    "label_3": "Geben Sie Ihrem Wallet einen Namen",
+    "label1": "Sicherheitsphrase generieren",
+    "label2": "Sicherheitsphrase bestätigen",
+    "label3": "Geben Sie Ihrem Wallet einen Namen",
     "title": "Wallet erstellen"
   },
   "createWalletStep2": {
-    "body_1": "Unten finden Sie Ihre geheime Phrase",
-    "body_2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
-    "body_3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
-    "dialog_body": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
-    "dialog_dismiss": "OK, verstanden",
-    "dialog_title": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
-    "label_1": "Sicherheitsphrase generieren",
+    "body1": "Unten finden Sie Ihre geheime Phrase",
+    "body2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
+    "body3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
+    "dialogBody": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
+    "dialogDismiss": "OK, verstanden",
+    "dialogTitle": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
+    "label": "Sicherheitsphrase generieren",
     "oneOfThree": "1 von 3",
     "title": "Wallet erstellen"
   },
   "createWalletStep3": {
-    "body_1": "Bitte wählen Sie jede Phrase in der richtigen Reihenfolge aus, um sicherzustellen, dass Sie sie richtig haben.",
-    "dialog_1_body": "Die Bestätigung, dass Sie Ihre Sicherheitsphrase korrekt gesichert haben, wird dringend empfohlen",
-    "dialog_1_title": "Möchten Sie die Backup-Bestätigung wirklich überspringen?",
-    "dialog_2_body": "Bitte versuchen Sie erneut, Ihr Backup zu bestätigen",
-    "dialog_2_title": "Falsche Wortreihenfolge",
-    "label_1": "Sicherheitsphrase bestätigen",
+    "body1": "Bitte wählen Sie jede Phrase in der richtigen Reihenfolge aus, um sicherzustellen, dass Sie sie richtig haben.",
+    "dialog1Body": "Die Bestätigung, dass Sie Ihre Sicherheitsphrase korrekt gesichert haben, wird dringend empfohlen",
+    "dialog1Title": "Möchten Sie die Backup-Bestätigung wirklich überspringen?",
+    "dialog2Body": "Bitte versuchen Sie erneut, Ihr Backup zu bestätigen",
+    "dialog2Title": "Falsche Wortreihenfolge",
+    "label": "Sicherheitsphrase bestätigen",
     "title": "Wallet erstellen",
     "twoOfThree": "2 von 3"
   },
   "createWalletStep4": {
-    "body_1": "Geben Sie Ihrem Wallet einen einprägsamen Namen, vielleicht könnte er damit zusammenhängen, wofür Sie das Wallet verwenden möchten, wie \"Trading\" oder \"Investitionen\".",
+    "body1": "Geben Sie Ihrem Wallet einen einprägsamen Namen, vielleicht könnte er damit zusammenhängen, wofür Sie das Wallet verwenden möchten, wie \"Trading\" oder \"Investitionen\".",
     "errors": {
       "name": "Muss mindestens 1 und maximal 21 Zeichen haben"
     },
-    "label_1": "Geben Sie Ihrem Wallet einen Namen",
-    "label_walletName": "Wallet Name",
+    "label": "Geben Sie Ihrem Wallet einen Namen",
+    "labelWalletName": "Wallet Name",
     "threeOfThree": "3 von 3",
     "title": "Wallet erstellen"
   },
@@ -163,9 +165,9 @@
     "title": "Wallet erstellen"
   },
   "createWalletStep6": {
-    "body_1": "Denken Sie daran, Ihre geheime Phrase sicher aufzubewahren. Mehrere Backups zu haben ist immer eine gute Idee.",
-    "body_2": "Wenn Sie die geheime Phrase eines Wallets finden müssen, können Sie sie auf der Einstellungsseite für dieses Wallet finden.",
-    "label_1": "Glückwunsch, Sie sind stolzer Besitzer eines brandneuen Wallets!",
+    "body1": "Denken Sie daran, Ihre geheime Phrase sicher aufzubewahren. Mehrere Backups zu haben ist immer eine gute Idee.",
+    "body2": "Wenn Sie die geheime Phrase eines Wallets finden müssen, können Sie sie auf der Einstellungsseite für dieses Wallet finden.",
+    "description": "Glückwunsch, Sie sind stolzer Besitzer eines brandneuen Wallets!",
     "title": "Wallet erstellen",
     "viewWallet": "Wallet ansehen"
   },
@@ -438,10 +440,10 @@
   "settingsSecurityBackup": {
     "title": "Sicherheit",
     "withAccountsToBackup": {
-      "description_1": "Eine Voraussetzung für die Sicherung Ihres Wallets durch Passwort- oder biometrische Authentifizierung ist, dass Sie zuerst Ihre Wallets sichern.",
-      "description_2": "Dies ist ein vorsorglicher Schritt, um zu verhindern, dass Sie Ihr Passwort verlieren oder sich anderweitig nicht authentifizieren können und den Zugriff auf Ihr gesamtes Guthaben verlieren.",
-      "description_3": "Bitte sichern Sie die folgenden Wallets",
-      "description_4": "Wenn Sie mehrere Wallets haben, werden Sie nach jedem Backup hierher zurückgebracht, um das nächste Wallet zu sichern."
+      "description1": "Eine Voraussetzung für die Sicherung Ihres Wallets durch Passwort- oder biometrische Authentifizierung ist, dass Sie zuerst Ihre Wallets sichern.",
+      "description2": "Dies ist ein vorsorglicher Schritt, um zu verhindern, dass Sie Ihr Passwort verlieren oder sich anderweitig nicht authentifizieren können und den Zugriff auf Ihr gesamtes Guthaben verlieren.",
+      "description3": "Bitte sichern Sie die folgenden Wallets",
+      "description4": "Wenn Sie mehrere Wallets haben, werden Sie nach jedem Backup hierher zurückgebracht, um das nächste Wallet zu sichern."
     },
     "withoutAccountsToBackup": {
       "button_label": "Weiter zur Sicherheit",
@@ -511,33 +513,37 @@
     "title": "Tokens tauschen",
     "tooltips": {
       "experimentHigherAmounts": "Wechselkurse sind bei höheren Swap-Beträgen besser, probieren Sie es aus!"
-    }
+    },
+    "viewExplanationButtonLabel": "Erklärung anzeigen"
   },
   "wallet": {
-    "addNewAccount": "Neues Konto hinzufügen"
+    "addNewAccountButtonLabel": "Neues Konto hinzufügen",
+    "moreButtonLabel": "Mehr"
   },
   "walletBackupStep1": {
-    "body_1": "Unten finden Sie Ihre geheime Phrase",
-    "body_2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
-    "body_3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
-    "dialog_body": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
-    "dialog_dismiss": "OK, verstanden",
-    "dialog_title": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
-    "label_1": "Sicherheitsphrase",
+    "body1": "Unten finden Sie Ihre geheime Phrase",
+    "body2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
+    "body3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
+    "copyButtonLabel": "Kopieren",
+    "description": "Sicherheitsphrase",
+    "dialogBody": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
+    "dialogDismiss": "OK, verstanden",
+    "dialogTitle": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
     "oneOfThree": "1 von 3",
+    "printButtonLabel": "Drucken",
     "title": "Wallet sichern"
   },
   "walletBackupStep2": {
-    "body_1": "Um zu bestätigen, dass Sie Ihre Schlüsselwörter gesichert haben, wählen Sie bitte Ihre Wörter in der richtigen Reihenfolge aus der Liste unten aus.",
+    "body": "Um zu bestätigen, dass Sie Ihre Schlüsselwörter gesichert haben, wählen Sie bitte Ihre Wörter in der richtigen Reihenfolge aus der Liste unten aus.",
+    "description": "Backup bestätigen",
     "errors": {
       "incorrectWordOrder": "Falsche Wortreihenfolge. Bitte versuchen Sie es erneut, um Ihre Sicherungskopie zu bestätigen."
     },
-    "label_1": "Backup bestätigen",
     "title": "Wallet sichern",
     "twoOfThree": "2 von 3"
   },
   "walletBackupStep3": {
-    "label_1": "Glückwunsch, Sie haben Ihr Backup bestätigt",
+    "description": "Glückwunsch, Sie haben Ihr Backup bestätigt",
     "title": "Wallet sichern"
   },
   "walletSettings": {

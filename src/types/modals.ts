@@ -344,22 +344,22 @@ export type TNeo3NeoXBridgeConfirmationModalParams = {
 
 export type TImportAddressSelectionModalParams = {
   address: string
-  onConfirm: () => void
+  onSuccess: () => void
 }
 
 export type TImportMnemonicSelectionModalParams = {
   mnemonic: string
-  onConfirm: () => void
+  onSuccess: () => void
 }
 
 export type TImportKeySelectionModalParams = {
   key: string
-  onConfirm: () => void
+  onSuccess: () => void
 }
 
 export type TImportEncryptedKeySelectionModalParams = {
   encryptedKey: string
-  onConfirm: () => void
+  onSuccess: () => void
 }
 
 export type TNeo3NeoXBridgeDetailsModalParams = {

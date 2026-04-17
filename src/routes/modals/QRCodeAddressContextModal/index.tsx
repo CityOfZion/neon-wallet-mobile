@@ -7,7 +7,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbEyeSearch from '@/assets/images/tb-eye-search.svg'
 import TbStepOut from '@/assets/images/tb-step-out.svg'
@@ -59,28 +59,32 @@ export const QRCodeAddressContextModal = ({
   }
 
   return (
-    <TwModalLayout full={false} withoutHeader>
-      <TwMenuButton
-        label={t('sendButtonLabel')}
-        leftElement={<TbStepOut aria-hidden className="text-neon" />}
-        onPress={handlePressSend}
-      />
+    <ModalLayout.Root full={false}>
+      <ModalLayout.Header />
 
-      <TwSeparator />
+      <ModalLayout.ViewContent>
+        <TwMenuButton
+          label={t('sendButtonLabel')}
+          leftElement={<TbStepOut aria-hidden className="text-neon" />}
+          onPress={handlePressSend}
+        />
 
-      <TwMenuButton
-        onPress={handlePressImport}
-        leftElement={<TbEyeSearch aria-hidden className="text-neon" />}
-        label={t('watchButtonLabel')}
-      />
+        <TwSeparator />
 
-      <TwSeparator />
+        <TwMenuButton
+          onPress={handlePressImport}
+          leftElement={<TbEyeSearch aria-hidden className="text-neon" />}
+          label={t('watchButtonLabel')}
+        />
 
-      <TwMenuButton
-        label={t('contactButtonLabel')}
-        leftElement={<TbUsers aria-hidden className="text-neon" />}
-        onPress={handlePressContact}
-      />
-    </TwModalLayout>
+        <TwSeparator />
+
+        <TwMenuButton
+          label={t('contactButtonLabel')}
+          leftElement={<TbUsers aria-hidden className="text-neon" />}
+          onPress={handlePressContact}
+        />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

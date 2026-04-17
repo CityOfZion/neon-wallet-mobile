@@ -21,13 +21,13 @@ export const TwCheckbox = ({ checked, onCheckedChange, label, className, labelCl
       <CheckboxPrimitive.Root
         checked={checked}
         onCheckedChange={onCheckedChange}
-        className={StyleHelper.mergeStyles('h-6 w-6 items-center justify-center rounded', {
+        className={StyleHelper.mergeStyles('size-6 items-center justify-center rounded', {
           'border-2 border-gray-300': !checked,
           'bg-neon': checked,
         })}
       >
         <CheckboxPrimitive.Indicator>
-          <TbCheck aria-hidden className="h-5 w-5 text-gray-850" strokeWidth={3} />
+          <TbCheck aria-hidden className="size-5 text-gray-850" strokeWidth={3} />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
     </View>

@@ -103,7 +103,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
             <WebView
               source={{ uri: url }}
               nestedScrollEnabled
-              containerClassName="h-full w-full"
+              containerClassName="size-full"
               originWhitelist={['*']}
               onLoad={handleLoad}
               onError={handleError}
@@ -119,7 +119,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
           className="h-11 w-[48%]"
           contentProps={{ className: 'gap-x-2 items-center' }}
           labelProps={{ className: 'w-fit' }}
-          leftElement={<TbArrowLeft aria-hidden className="h-5 min-h-5 w-5 min-w-5 fill-neon" />}
+          leftElement={<TbArrowLeft aria-hidden className="size-5 fill-neon min-size-5" />}
           onPress={handleBack}
         />
 
@@ -130,7 +130,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
           disabled={isIframeLoading}
           contentProps={{ className: 'gap-x-2 items-center' }}
           labelProps={{ className: 'w-fit' }}
-          leftElement={<MdRestartAlt aria-hidden className="h-5 min-h-5 w-5 min-w-5 fill-neon" />}
+          leftElement={<MdRestartAlt aria-hidden className="size-5 fill-neon min-size-5" />}
           onPress={handleRestart}
         />
       </View>

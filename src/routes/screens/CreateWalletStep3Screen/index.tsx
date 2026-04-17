@@ -10,8 +10,7 @@ import { TwButton } from '@/components/TwButton'
 import { AlertHelper } from '@/helpers/AlertHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
-import { TwScreenLayoutButton } from '@/layouts/TwScreenLayout/TwScreenLayoutButtons'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
@@ -34,8 +33,8 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
 
   const handleSkip = () => {
     AlertHelper.show({
-      title: t('dialog_1_title'),
-      subtitle: t('dialog_1_body'),
+      title: t('dialog1Title'),
+      subtitle: t('dialog1Body'),
       buttons: [
         {
           label: commonT('yes'),
@@ -52,8 +51,8 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
 
     if (mountedPressedWords !== mountedWords) {
       AlertHelper.show({
-        title: t('dialog_2_title'),
-        subtitle: t('dialog_2_body'),
+        title: t('dialog2Title'),
+        subtitle: t('dialog2Body'),
         buttons: [
           {
             label: commonT('retry'),
@@ -79,50 +78,54 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
   }
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      rightElement={<TwScreenLayoutButton onPress={handleSkip} label={commonT('skip')} />}
-    >
-      <View className="w-full flex-shrink flex-row items-center justify-between gap-2">
-        <Text className="flex-shrink font-sans-semibold text-base text-white">{t('label_1')}</Text>
-        <Text className="font-sans-bold text-base text-white">{t('twoOfThree')}</Text>
-      </View>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        <ScreenLayout.Button position="right" onPress={handleSkip} label={commonT('skip')} />
+      </ScreenLayout.Header>
+      <ScreenLayout.ScrollContent>
+        <View className="w-full flex-shrink flex-row items-center justify-between gap-2">
+          <Text className="flex-shrink font-sans-semibold text-base text-white">{t('label')}</Text>
+          <Text className="font-sans-bold text-base text-white">{t('twoOfThree')}</Text>
+        </View>
 
-      <Text className="mt-1 font-sans-regular text-base text-white">{t('body_1')}</Text>
+        <Text className="mt-1 font-sans-regular text-base text-white">{t('body1')}</Text>
 
-      <View className="mt-6 flex-row flex-wrap gap-2">
-        {shuffledWords.map((word, index) => {
-          const isWordPressed = pressedWordsIndex.some(pressedWord => pressedWord === index)
+        <View className="mt-6 flex-row flex-wrap gap-2">
+          {shuffledWords.map((word, index) => {
+            const isWordPressed = pressedWordsIndex.some(pressedWord => pressedWord === index)
 
-          return (
-            <PressableScale
-              onPress={handlePressWord.bind(null, index, isWordPressed)}
-              key={`mnemonic-${word}-${index}`}
-              className={StyleHelper.mergeStyles('flex-grow rounded-md bg-gray-300/15 px-2 py-2', {
-                'bg-neon': isWordPressed,
-              })}
-            >
-              <Text
+            return (
+              <PressableScale
+                onPress={handlePressWord.bind(null, index, isWordPressed)}
                 key={`mnemonic-${word}-${index}`}
-                className={StyleHelper.mergeStyles('text-center font-sans-regular text-lg text-neon', {
-                  'text-gray-850': isWordPressed,
+                className={StyleHelper.mergeStyles('flex-grow rounded-md bg-gray-300/15 p-2', {
+                  'bg-neon': isWordPressed,
                 })}
               >
-                {word}
-              </Text>
-            </PressableScale>
-          )
-        })}
-      </View>
+                <Text
+                  key={`mnemonic-${word}-${index}`}
+                  className={StyleHelper.mergeStyles('text-center font-sans-regular text-lg text-neon', {
+                    'text-gray-850': isWordPressed,
+                  })}
+                >
+                  {word}
+                </Text>
+              </PressableScale>
+            )
+          })}
+        </View>
 
-      <View className="mt-auto py-3">
-        <TwButton
-          variant="contained-light"
-          label={commonT('continue')}
-          disabled={pressedWordsIndex.length !== words.length}
-          onPress={handlePressContinue}
-        />
-      </View>
-    </TwScreenLayout>
+        <View className="mt-auto py-3">
+          <TwButton
+            variant="contained-light"
+            label={commonT('continue')}
+            disabled={pressedWordsIndex.length !== words.length}
+            onPress={handlePressContinue}
+          />
+        </View>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

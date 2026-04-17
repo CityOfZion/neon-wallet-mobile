@@ -19,8 +19,7 @@ import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 import { useMount } from '@/hooks/useMount'
 import { usePressOnce } from '@/hooks/usePressOnce'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -88,50 +87,51 @@ export const DappConnectionRequestModal = ({
   )
 
   return (
-    <TwModalLayout
-      rightElement={<TwModalLayoutCloseIconButton onPress={() => startReject()} />}
-      title={t('title')}
-      onRequestClose={() => startReject()}
-      contentContainerClassName="justify-between"
-    >
-      {isMounting || !proposalDetails ? (
-        <ScreenLoader />
-      ) : (
-        <Fragment>
-          <View className="gap-5">
-            <TwDappHeader
-              title={
-                <Trans t={t} i18nKey="subtitle" values={{ dAppName: proposal.proposer.metadata.name }}>
-                  <Text className="font-sans-bold">start</Text>
-                  end
-                </Trans>
-              }
-              uri={proposal.proposer.metadata.icons[0]}
-            />
+    <ModalLayout.Root onRequestClose={() => startReject()}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={() => startReject()} />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="justify-between">
+        {isMounting || !proposalDetails ? (
+          <ScreenLoader />
+        ) : (
+          <Fragment>
+            <View className="gap-5">
+              <TwDappHeader
+                title={
+                  <Trans t={t} i18nKey="subtitle" values={{ dAppName: proposal.proposer.metadata.name }}>
+                    <Text className="font-sans-bold">start</Text>
+                    end
+                  </Trans>
+                }
+                uri={proposal.proposer.metadata.icons[0]}
+              />
 
-            <DappDetailsCard
-              chain={proposalDetails.service.walletConnectService.chain}
-              methods={proposalDetails.methods}
-            />
-          </View>
+              <DappDetailsCard
+                chain={proposalDetails.service.walletConnectService.chain}
+                methods={proposalDetails.methods}
+              />
+            </View>
 
-          <View className="mt-8 gap-4">
-            <TwButton
-              variant="contained-light"
-              label={commonT('general.accept')}
-              onPress={() => startApprove()}
-              isLoading={isApproving}
-            />
+            <View className="mt-8 gap-4">
+              <TwButton
+                variant="contained-light"
+                label={commonT('general.accept')}
+                onPress={() => startApprove()}
+                isLoading={isApproving}
+              />
 
-            <TwButton
-              variant="outline"
-              label={commonT('general.decline')}
-              onPress={() => startReject()}
-              isLoading={isRejecting}
-            />
-          </View>
-        </Fragment>
-      )}
-    </TwModalLayout>
+              <TwButton
+                variant="outline"
+                label={commonT('general.decline')}
+                onPress={() => startReject()}
+                isLoading={isRejecting}
+              />
+            </View>
+          </Fragment>
+        )}
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

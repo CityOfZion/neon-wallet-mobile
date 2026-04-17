@@ -11,8 +11,7 @@ import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 
 import { useContactByIdSelector } from '@/hooks/useContactSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
-import { TwScreenLayoutButton } from '@/layouts/TwScreenLayout/TwScreenLayoutButtons'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
@@ -62,37 +61,40 @@ export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'Cont
   }))
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      rightElement={<TwScreenLayoutButton label={commonT('general.edit')} onPress={handlePressEdit} />}
-      withoutScroll
-    >
-      {contactById && (
-        <FlatList
-          style={{ width: '100%' }}
-          data={addresses}
-          ListHeaderComponentStyle={{ alignItems: 'center' }}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Fragment>
-              <View className="mt-12 size-32 items-center justify-center rounded-full bg-asphalt shadow-xl shadow-black">
-                <Text className="font-sans-semibold text-4xl uppercase text-gray-300">
-                  {contactById.name.charAt(0)}
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        <ScreenLayout.Button position="right" label={commonT('general.edit')} onPress={handlePressEdit} />
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        {contactById && (
+          <FlatList
+            style={{ width: '100%' }}
+            data={addresses}
+            ListHeaderComponentStyle={{ alignItems: 'center' }}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              <Fragment>
+                <View className="mt-12 size-32 items-center justify-center rounded-full bg-asphalt shadow-xl shadow-black">
+                  <Text className="font-sans-semibold text-4xl uppercase text-gray-300">
+                    {contactById.name.charAt(0)}
+                  </Text>
+                </View>
+
+                <Text className="mb-6 mt-12 font-sans-regular text-xl text-white">{contactById.name}</Text>
+
+                <Text className="mb-4 w-full text-center font-sans-regular text-sm uppercase text-gray-300">
+                  {t('walletAddressLabel')}
                 </Text>
-              </View>
-
-              <Text className="mb-6 mt-12 font-sans-regular text-xl text-white">{contactById.name}</Text>
-
-              <Text className="mb-4 w-full text-center font-sans-regular text-sm uppercase text-gray-300">
-                {t('walletAddressLabel')}
-              </Text>
-            </Fragment>
-          }
-          renderItem={renderItem}
-          ItemSeparatorComponent={Separator}
-          keyExtractor={item => `${item.address}-${item.blockchain}`}
-        />
-      )}
-    </TwScreenLayout>
+              </Fragment>
+            }
+            renderItem={renderItem}
+            ItemSeparatorComponent={Separator}
+            keyExtractor={item => `${item.address}-${item.blockchain}`}
+          />
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

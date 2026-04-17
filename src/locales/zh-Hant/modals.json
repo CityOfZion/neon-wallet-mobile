@@ -365,7 +365,7 @@
   },
   "importEncryptedKeySelection": {
     "accountAlreadyExists": "帳戶已存在",
-    "decryptError": "解密金鑰時發生錯誤",
+    "decryptError": "密碼錯誤",
     "description": "選擇您要匯入的加密金鑰所對應的區塊鏈",
     "importEncryptedConfirmPasswordLabel": "若要繼續，請輸入用於加密金鑰的密碼：",
     "importEncryptedKeyInputPlaceholder": "輸入密碼",
@@ -502,7 +502,7 @@
     "latencyLabel": "{{latency}}毫秒",
     "listLabel": "網路 URL 清單",
     "refreshButtonLabel": "重新整理",
-    "selectAutomaticallyCheckboxLabel": "自動選擇",
+    "selectAutomaticallyCheckboxLabel": "Auto",
     "title": "網路 URL 選擇"
   },
   "notificationContext": {
@@ -732,6 +732,7 @@
       "invalidLimit": "無效限額"
     },
     "limitLabel": "限額（可選）",
+    "limitPlaceholder": "輸入限額",
     "title": "信任線",
     "tokenLabel": "代幣",
     "tokenPlaceholder": "選擇代幣"
@@ -739,6 +740,7 @@
   "stellarTrustilneTokenSelection": {
     "noTokensFound": "未找到代幣",
     "placeholderMessage": "輸入以搜尋代幣",
+    "searchInputPlaceholder": "搜尋代幣",
     "title": "信任線"
   },
   "survey": {

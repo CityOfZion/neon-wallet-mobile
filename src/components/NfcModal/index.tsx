@@ -74,8 +74,8 @@ const NfcModal = () => {
   if (!visible) return null
 
   return (
-    <Animated.View className="absolute h-full w-full" entering={FadeIn} exiting={FadeOut}>
-      <BlurView className="absolute h-full w-full" intensity={90} tint="dark" />
+    <Animated.View className="absolute size-full" entering={FadeIn} exiting={FadeOut}>
+      <BlurView className="absolute size-full" intensity={90} tint="dark" />
 
       <View className="flex-1 items-center justify-end p-3">
         <Animated.View

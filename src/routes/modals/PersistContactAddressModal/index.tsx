@@ -12,8 +12,7 @@ import { StringHelper } from '@/helpers/StringHelper'
 import { useActions } from '@/hooks/useActions'
 import { useNameService } from '@/hooks/useNameService'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
@@ -72,43 +71,48 @@ export const PersistContactAddressModal = ({
   }
 
   return (
-    <TwModalLayout
-      title={address ? t('title.edit') : t('title.create')}
-      rightElement={<TwModalLayoutCloseIconButton />}
-      contentContainerClassName="gap-6"
-    >
-      <TwSelectButton
-        value={actionData.blockchain ? commonT(`blockchainServices.${actionData.blockchain}.label`) : undefined}
-        leftElement={actionData.blockchain ? <TwBlockchainIcon blockchain={actionData.blockchain} /> : undefined}
-        label={t('chainLabel')}
-        placeholder={t('chainPlaceholder')}
-        onPress={handleSelectBlockchain}
-      />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{address ? t('title.edit') : t('title.create')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
 
-      <TwInput
-        label={t('addressLabel')}
-        labelDescription={isNameService ? validatedAddress : undefined}
-        placeholder={t('addressPlaceholder')}
-        onChangeText={handleChangeAddress}
-        value={actionData.address}
-        error={isValidAddressOrDomainAddress === false ? t('invalidMessage') : undefined}
-        success={isValidAddressOrDomainAddress === true ? t('successMessage') : undefined}
-        disabled={!actionData.blockchain}
-        loading={isValidatingAddressOrDomainAddress}
-        scannable
-        pastable
-        autoCapitalize="none"
-        autoCorrect={false}
-        autoComplete="off"
-      />
+      <ModalLayout.KeyboardAvoidingContent>
+        <TwSelectButton
+          className="mb-6"
+          value={actionData.blockchain ? commonT(`blockchainServices.${actionData.blockchain}.label`) : undefined}
+          leftElement={actionData.blockchain ? <TwBlockchainIcon blockchain={actionData.blockchain} /> : undefined}
+          label={t('chainLabel')}
+          placeholder={t('chainPlaceholder')}
+          onPress={handleSelectBlockchain}
+        />
 
-      <TwButton
-        className="mt-auto"
-        variant="contained-light"
-        label={address ? commonT('general.save') : commonT('general.add')}
-        onPress={handleAdd}
-        disabled={!isValidAddressOrDomainAddress}
-      />
-    </TwModalLayout>
+        <TwInput
+          label={t('addressLabel')}
+          labelDescription={isNameService ? validatedAddress : undefined}
+          placeholder={t('addressPlaceholder')}
+          onChangeText={handleChangeAddress}
+          value={actionData.address}
+          error={isValidAddressOrDomainAddress === false ? t('invalidMessage') : undefined}
+          success={isValidAddressOrDomainAddress === true ? t('successMessage') : undefined}
+          disabled={!actionData.blockchain}
+          loading={isValidatingAddressOrDomainAddress}
+          scannable
+          pastable
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="off"
+        />
+
+        <ModalLayout.KeyboardAvoidingArea>
+          <TwButton
+            variant="contained-light"
+            label={address ? commonT('general.save') : commonT('general.add')}
+            onPress={handleAdd}
+            disabled={!isValidAddressOrDomainAddress}
+          />
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }

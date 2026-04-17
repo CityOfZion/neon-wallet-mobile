@@ -9,8 +9,7 @@ import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCheck from '@/assets/images/tb-check.svg'
 
@@ -46,8 +45,14 @@ export const CurrencySelectionModal = () => {
   }))
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <FlatList data={data} scrollEnabled={false} ItemSeparatorComponent={TwSeparator} renderItem={renderItem} />
-    </TwModalLayout>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <FlatList data={data} scrollEnabled={false} ItemSeparatorComponent={TwSeparator} renderItem={renderItem} />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

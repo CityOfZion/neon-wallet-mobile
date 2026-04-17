@@ -11,7 +11,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useActions } from '@/hooks/useActions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
@@ -73,58 +73,64 @@ export const SupportTicketScreen = ({ navigation }: TMoreStackScreenProps<'Suppo
   }
 
   return (
-    <TwScreenLayout title={t('title')}>
-      <TwInput
-        placeholder={t('namePlaceholder')}
-        label={t('nameLabel')}
-        value={actionData.name}
-        onChangeText={setDataWrapper('name')}
-        inputContainerProps={{
-          className: 'bg-gray-900',
-        }}
-        containerProps={{
-          className: 'mt-6',
-        }}
-        error={actionState.errors.name}
-      />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
 
-      <TwInput
-        placeholder={t('emailPlaceholder')}
-        label={t('emailLabel')}
-        value={actionData.email}
-        onChangeText={setDataWrapper('email')}
-        inputContainerProps={{
-          className: 'bg-gray-900',
-        }}
-        containerProps={{
-          className: 'mt-6',
-        }}
-        error={actionState.errors.email}
-      />
+      <ScreenLayout.KeyboardAvoidingContent>
+        <TwInput
+          placeholder={t('namePlaceholder')}
+          label={t('nameLabel')}
+          value={actionData.name}
+          onChangeText={setDataWrapper('name')}
+          inputContainerProps={{
+            className: 'bg-gray-900',
+          }}
+          containerProps={{
+            className: 'mt-6',
+          }}
+          error={actionState.errors.name}
+        />
+        <TwInput
+          placeholder={t('emailPlaceholder')}
+          label={t('emailLabel')}
+          value={actionData.email}
+          onChangeText={setDataWrapper('email')}
+          inputContainerProps={{
+            className: 'bg-gray-900',
+          }}
+          containerProps={{
+            className: 'mt-6',
+          }}
+          error={actionState.errors.email}
+        />
+        <TwInput
+          placeholder={t('descriptionPlaceholder')}
+          label={t('descriptionLabel')}
+          value={actionData.description}
+          onChangeText={setDataWrapper('description')}
+          multiline
+          containerProps={{
+            className: 'mt-6 mb-8',
+          }}
+          inputContainerProps={{
+            className: 'bg-gray-900 py-2',
+          }}
+          className="min-h-72 align-top"
+        />
 
-      <TwInput
-        placeholder={t('descriptionPlaceholder')}
-        label={t('descriptionLabel')}
-        value={actionData.description}
-        onChangeText={setDataWrapper('description')}
-        multiline
-        containerProps={{
-          className: 'mt-6 mb-8',
-        }}
-        inputContainerProps={{
-          className: 'bg-gray-900 py-2',
-        }}
-        className="min-h-72 align-top"
-      />
-
-      <TwButton
-        variant="contained-light"
-        label={t('submitTicketButtonLabel')}
-        onPress={handleAct(handleSubmit)}
-        isLoading={actionState.isActing}
-        disabled={isDisabled}
-        className="mb-3 mt-auto"
-      />
-    </TwScreenLayout>
+        <ScreenLayout.KeyboardAvoidingArea>
+          <TwButton
+            variant="contained-light"
+            label={t('submitTicketButtonLabel')}
+            onPress={handleAct(handleSubmit)}
+            isLoading={actionState.isActing}
+            disabled={isDisabled}
+          />
+        </ScreenLayout.KeyboardAvoidingArea>
+      </ScreenLayout.KeyboardAvoidingContent>
+    </ScreenLayout.Root>
   )
 }

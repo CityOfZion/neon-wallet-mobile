@@ -7,8 +7,7 @@ import { TwButton } from '@/components/TwButton'
 
 import { usePressOnce } from '@/hooks/usePressOnce'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCheck from '@/assets/images/tb-check.svg'
 
@@ -43,21 +42,27 @@ export const SendConfirmModal = ({ navigation, route }: TRootStackScreenProps<'S
       }))
 
   return (
-    <TwModalLayout title={t('title')} titleClassName="text-1xl" rightElement={<TwModalLayoutCloseIconButton />}>
-      <Text className="mb-6 mt-1 text-left font-sans-regular text-base leading-5 text-white">{t('description')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Text className="mb-6 mt-1 text-left font-sans-regular text-base leading-5 text-white">{t('description')}</Text>
 
-      <SendDetails data={data} blockchain={service.name} fee={fee} />
+        <SendDetails data={data} blockchain={service.name} fee={fee} />
 
-      <View className="mt-auto">
-        <TwButton
-          label={t('confirmButtonLabel')}
-          className="my-4"
-          variant="contained-light"
-          isLoading={isLoading}
-          leftElement={<TbCheck aria-hidden />}
-          onPress={handleSubmit}
-        />
-      </View>
-    </TwModalLayout>
+        <View className="mt-auto">
+          <TwButton
+            label={t('confirmButtonLabel')}
+            className="my-4"
+            variant="contained-light"
+            isLoading={isLoading}
+            leftElement={<TbCheck aria-hidden />}
+            onPress={handleSubmit}
+          />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

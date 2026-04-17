@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react'
 
 import { debounce } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
 
 import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
@@ -15,8 +14,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { useActions } from '@/hooks/useActions'
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbTrash from '@/assets/images/tb-trash.svg'
 
@@ -132,12 +130,15 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
   }, [network, setData, validateURL])
 
   return (
-    <TwModalLayout
-      title={network ? t('editTitle', { networkName: network.name }) : t('createTitle')}
-      rightElement={<TwModalLayoutCloseIconButton />}
-      contentContainerClassName="justify-between"
-    >
-      <View className="gap-4">
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>
+          {network ? t('editTitle', { networkName: network.name }) : t('createTitle')}
+        </ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+
+      <ModalLayout.KeyboardAvoidingContent>
         <TwInput
           label={t('inputLabels.name')}
           labelDescription={t('inputLabels.nameDescription')}
@@ -148,6 +149,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
         />
 
         <TwInput
+          containerProps={{ className: 'mt-7' }}
           label={t('inputLabels.url')}
           placeholder={t('inputPlaceholder.url')}
           onChangeText={handleChangeNetworkUrl}
@@ -155,25 +157,25 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
           error={canShowUrlInputMessage && !actionData.isUrlValid ? actionState.errors.url : undefined}
           success={canShowUrlInputMessage && actionData.isUrlValid ? t('connected') : undefined}
         />
-      </View>
 
-      <View className="gap-4">
-        {network && (
+        <ModalLayout.KeyboardAvoidingArea className="gap-4 pt-7">
+          {network && (
+            <TwButton
+              variant="outline"
+              leftElement={<TbTrash aria-hidden />}
+              label={t('delete')}
+              onPress={handleDelete}
+            />
+          )}
+
           <TwButton
-            variant="outline"
-            leftElement={<TbTrash aria-hidden />}
-            label={t('delete')}
-            onPress={handleDelete}
+            variant="contained-light"
+            label={commonT('general.save')}
+            onPress={handleSave}
+            disabled={!actionState.isValid || actionData.isValidating || !actionData.isUrlValid}
           />
-        )}
-
-        <TwButton
-          variant="contained-light"
-          label={commonT('general.save')}
-          onPress={handleSave}
-          disabled={!actionState.isValid || actionData.isValidating || !actionData.isUrlValid}
-        />
-      </View>
-    </TwModalLayout>
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }
