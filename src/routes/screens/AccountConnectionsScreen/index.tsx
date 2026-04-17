@@ -13,7 +13,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 
 import { useWalletConnectSessions } from '@/hooks/useWalletConnectSessions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdAdd from '@/assets/images/md-add.svg'
 
@@ -37,45 +37,50 @@ const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProp
   }
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      withoutScroll
-      rightElement={
-        <TwIconButton
-          aria-label={t('labels.addConnection')}
-          icon={<MdAdd aria-hidden className="size-10 text-white" />}
-          onPress={handlePressAdd}
-        />
-      }
-    >
-      <AccountSubTitle account={account} />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
 
-      <View className="my-11">
-        <FlatList
-          data={sessions}
-          renderItem={renderItem}
-          ItemSeparatorComponent={TwSeparator}
-          ListEmptyComponent={
-            <FlatListEmpty
-              label={t('emptyList')}
-              footer={
-                <TwButton
-                  className="mt-4 border border-dashed border-gray-300"
-                  variant="outline"
-                  labelProps={{
-                    className: 'text-white',
-                  }}
-                  label={t('connectDappLabel')}
-                  leftElement={<MdAdd aria-hidden className="size-9 text-white" />}
-                  onPress={handlePressAdd}
-                />
-              }
-            />
-          }
-          keyExtractor={(_, index) => index.toString()}
-        />
-      </View>
-    </TwScreenLayout>
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+
+        <ScreenLayout.ButtonContent position="right">
+          <TwIconButton
+            aria-label={t('labels.addConnection')}
+            icon={<MdAdd aria-hidden className="size-10 text-white" />}
+            onPress={handlePressAdd}
+          />
+        </ScreenLayout.ButtonContent>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <AccountSubTitle account={account} />
+
+        <View className="my-11">
+          <FlatList
+            data={sessions}
+            renderItem={renderItem}
+            ItemSeparatorComponent={TwSeparator}
+            ListEmptyComponent={
+              <FlatListEmpty
+                label={t('emptyList')}
+                footer={
+                  <TwButton
+                    className="mt-4 border border-dashed border-gray-300"
+                    variant="outline"
+                    labelProps={{
+                      className: 'text-white',
+                    }}
+                    label={t('connectDappLabel')}
+                    leftElement={<MdAdd aria-hidden className="size-9 text-white" />}
+                    onPress={handlePressAdd}
+                  />
+                }
+              />
+            }
+            keyExtractor={(_, index) => index.toString()}
+          />
+        </View>
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }
 

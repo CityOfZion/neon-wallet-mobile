@@ -7,7 +7,7 @@ import { TwMenuButton } from '@/components/TwMenuButton'
 
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCheckbox from '@/assets/images/tb-checkbox.svg'
 
@@ -32,14 +32,18 @@ export const NotificationContextModal = ({ navigation, route }: TRootStackScreen
   }
 
   return (
-    <TwModalLayout withoutHeader full={false}>
-      <TwMenuButton
-        label={!notification.read ? t('markAsReadButtonLabel') : t('markAsUnreadButtonLabel')}
-        leftElement={<TbCheckbox aria-hidden className="text-neon" />}
-        onPress={handleToggleRead}
-      />
+    <ModalLayout.Root full={false}>
+      <ModalLayout.Header />
 
-      <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
-    </TwModalLayout>
+      <ModalLayout.ViewContent>
+        <TwMenuButton
+          label={!notification.read ? t('markAsReadButtonLabel') : t('markAsUnreadButtonLabel')}
+          leftElement={<TbCheckbox aria-hidden className="text-neon" />}
+          onPress={handleToggleRead}
+        />
+
+        <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

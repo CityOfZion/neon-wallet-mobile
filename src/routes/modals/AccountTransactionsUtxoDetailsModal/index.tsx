@@ -12,8 +12,7 @@ import { DateHelper } from '@/helpers/DateHelper'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 import { usePendingTransactionsSelector } from '@/hooks/useUtilitySelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { AccountTransactionsUtxoDetailsList } from './AccountTransactionsUtxoDetailsList'
 
@@ -46,43 +45,49 @@ export const AccountTransactionsUtxoDetailsModal = ({
   }, [navigation, pendingTransactions, transaction.isPending, txId])
 
   return (
-    <TwModalLayout title={t('title')} titleClassName="text-xl" rightElement={<TwModalLayoutCloseIconButton />}>
-      <Text className="mb-4 font-sans-medium text-lg text-white">
-        {DateHelper.formatLocalized(transaction.date, { format: 'PPP', language })}
-      </Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title className="text-xl">{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Text className="mb-4 font-sans-medium text-lg text-white">
+          {DateHelper.formatLocalized(transaction.date, { format: 'PPP', language })}
+        </Text>
 
-      <AccountTransactionsTransactionCard transaction={transaction} className="mb-8">
-        {nfts.length > 0 && (
-          <View className="mt-2 flex gap-y-2">
-            {nfts.map((nft, index) => (
-              <AccountTransactionsTransactionItemNft key={`utxo-nft-${index}`} blockchain={blockchain} nft={nft} />
-            ))}
-          </View>
-        )}
-      </AccountTransactionsTransactionCard>
+        <AccountTransactionsTransactionCard transaction={transaction} className="mb-8">
+          {nfts.length > 0 && (
+            <View className="mt-2 flex gap-y-2">
+              {nfts.map((nft, index) => (
+                <AccountTransactionsTransactionItemNft key={`utxo-nft-${index}`} blockchain={blockchain} nft={nft} />
+              ))}
+            </View>
+          )}
+        </AccountTransactionsTransactionCard>
 
-      <TwTabs.Root className="mb-10" value={tab} onValueChange={newTab => setTab(newTab as TTab)}>
-        <TwTabs.List>
-          <TwTabs.Trigger value="from" label={t('fromLabel')} />
-          <TwTabs.Trigger value="to" label={t('toLabel')} />
-        </TwTabs.List>
+        <TwTabs.Root className="mb-10" value={tab} onValueChange={newTab => setTab(newTab as TTab)}>
+          <TwTabs.List>
+            <TwTabs.Trigger value="from" label={t('fromLabel')} />
+            <TwTabs.Trigger value="to" label={t('toLabel')} />
+          </TwTabs.List>
 
-        <TwTabs.Content value="from">
-          <AccountTransactionsUtxoDetailsList
-            title={t(inputsLength === 1 ? 'inputTitle' : 'inputsTitle', { value: inputsLength })}
-            blockchain={blockchain}
-            inputsOutputs={inputs}
-          />
-        </TwTabs.Content>
+          <TwTabs.Content value="from">
+            <AccountTransactionsUtxoDetailsList
+              title={t(inputsLength === 1 ? 'inputTitle' : 'inputsTitle', { value: inputsLength })}
+              blockchain={blockchain}
+              inputsOutputs={inputs}
+            />
+          </TwTabs.Content>
 
-        <TwTabs.Content value="to">
-          <AccountTransactionsUtxoDetailsList
-            title={t(outputsLength === 1 ? 'outputTitle' : 'outputsTitle', { value: outputsLength })}
-            blockchain={blockchain}
-            inputsOutputs={outputs}
-          />
-        </TwTabs.Content>
-      </TwTabs.Root>
-    </TwModalLayout>
+          <TwTabs.Content value="to">
+            <AccountTransactionsUtxoDetailsList
+              title={t(outputsLength === 1 ? 'outputTitle' : 'outputsTitle', { value: outputsLength })}
+              blockchain={blockchain}
+              inputsOutputs={outputs}
+            />
+          </TwTabs.Content>
+        </TwTabs.Root>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

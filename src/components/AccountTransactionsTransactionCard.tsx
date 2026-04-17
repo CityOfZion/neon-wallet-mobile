@@ -99,12 +99,12 @@ export const AccountTransactionsTransactionCard = ({ transaction, className, chi
     if (!accountToUse) return
 
     navigation.navigate('Neo3NeoXBridgeDetailsModal', {
-      tokenToUse: transaction.data.tokenToUse,
+      tokenToUse: bridgeData.neo3NeoxBridge.tokenToUse,
       tokenToReceive,
       accountToUse,
-      addressToReceive: transaction.data.receiverAddress,
-      amountToUse: transaction.data.amount,
-      amountToReceive: transaction.data.amount,
+      addressToReceive: bridgeData.neo3NeoxBridge.receiverAddress,
+      amountToUse: bridgeData.neo3NeoxBridge.amount,
+      amountToReceive: bridgeData.neo3NeoxBridge.amount,
       transactionHash: transaction.txId,
       confirmed: true,
     })

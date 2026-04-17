@@ -40,6 +40,11 @@
   "blockchainList": {
     "xExisting": "{{amount}} existente(s)"
   },
+  "modalLayout": {
+    "labels": {
+      "closeButton": "Fechar modal"
+    }
+  },
   "nfc": {
     "description": "Por favor, toque nas tags NFC",
     "title": "Pronto para Escanear"
@@ -48,6 +53,9 @@
     "closeButtonLabel": "Fechar leitor de código QR",
     "permissionOffMessage": "É necessário conceder permissão à câmera para ler códigos QR. Por favor, conceda essa permissão nas configurações do seu dispositivo.",
     "permissionOffTitle": "Acesso à câmera necessário"
+  },
+  "screenLayout": {
+    "backButtonLabel": "Voltar"
   },
   "screenLayoutBars": {
     "customMode": "Modo Rede Customizada",
@@ -116,11 +124,6 @@
       "clearButton": "Limpar entrada",
       "hideButton": "Ocultar entrada",
       "showButton": "Mostrar entrada"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "Fechar modal"
     }
   }
 }

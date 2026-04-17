@@ -29,7 +29,7 @@ import { useExchange } from '@/hooks/useExchanges'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useSelectedNetworkByBlockchainSelector, useSurveyInfoSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbPlus from '@/assets/images/tb-plus.svg'
 import TbStepOut from '@/assets/images/tb-step-out.svg'
@@ -552,104 +552,108 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
   }, [route.params?.account])
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      contentContainerClassName="pt-0"
-      headerClassName="h-12 mb-8"
-      rightElement={
+    <ScreenLayout.Root>
+      <ScreenLayout.Header className="mb-8 h-12">
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
         <TwButton
+          className="absolute right-0 mr-4"
           label={t('restartButtonLabel')}
-          className="mr-4"
           variant="text-slim"
           colorSchema={isRestartDisabled ? 'white' : 'neon'}
           disabled={isRestartDisabled}
           onPress={initializeOrRestartService}
         />
-      }
-    >
-      <ActionCard>
-        <ActionStep title={t('form.sourceAccountLabel')} leftElement={<TbStepOut aria-hidden className="text-blue" />}>
-          <ActionAddressButton
-            label={t('form.recipient.selectButtonLabel')}
-            address={actionData.selectedAccount?.address}
-            contentProps={{ className: 'px-3 gap-x-2' }}
-            blockchain={actionData.selectedAccount?.blockchain}
-            onPress={() =>
-              navigation.navigate('AccountSelectionModal', {
-                title: t('form.accountToUseModalTitle'),
-                onSelect: handleSelectAccount,
-              })
-            }
-          />
-        </ActionStep>
-      </ActionCard>
+      </ScreenLayout.Header>
 
-      <TwStepSeparator />
+      <ScreenLayout.KeyboardAvoidingContent className="pt-0">
+        <ActionCard>
+          <ActionStep
+            title={t('form.sourceAccountLabel')}
+            leftElement={<TbStepOut aria-hidden className="text-blue" />}
+          >
+            <ActionAddressButton
+              label={t('form.recipient.selectButtonLabel')}
+              address={actionData.selectedAccount?.address}
+              contentProps={{ className: 'px-3 gap-x-2' }}
+              blockchain={actionData.selectedAccount?.blockchain}
+              onPress={() =>
+                navigation.navigate('AccountSelectionModal', {
+                  title: t('form.accountToUseModalTitle'),
+                  onSelect: handleSelectAccount,
+                })
+              }
+            />
+          </ActionStep>
+        </ActionCard>
 
-      <View className="mb-2 flex flex-col gap-4">
-        {actionData.recipients.map((recipient, index) => (
-          <SendRecipient
-            key={recipient.id}
-            order={index + 1}
-            recipient={recipient}
-            onRemoveRecipient={() => handleRemoveRecipient(recipient.id)}
-            onUpdateRecipient={updatedRecipient => handleUpdateRecipient(recipient.id, updatedRecipient)}
-            selectedAccount={actionData.selectedAccount}
-            removable={isMultiTransfer}
-            balance={balanceQuery}
-            isLoadingMaxAmount={actionData.maxAmountRecipientId === recipient.id}
-            isDisabledMaxAmount={isCalculatingForm}
-            onMaxAmount={handleMaxAmount}
-          />
-        ))}
-      </View>
+        <TwStepSeparator />
 
-      {(actionState.errors.fee || actionState.errors.selectedAccount) && (
-        <TwAlertErrorBanner className="my-2" message={actionState.errors.fee || actionState.errors.selectedAccount} />
-      )}
+        <View className="mb-2 flex flex-col gap-4">
+          {actionData.recipients.map((recipient, index) => (
+            <SendRecipient
+              key={recipient.id}
+              order={index + 1}
+              recipient={recipient}
+              onRemoveRecipient={() => handleRemoveRecipient(recipient.id)}
+              onUpdateRecipient={updatedRecipient => handleUpdateRecipient(recipient.id, updatedRecipient)}
+              selectedAccount={actionData.selectedAccount}
+              removable={isMultiTransfer}
+              balance={balanceQuery}
+              isLoadingMaxAmount={actionData.maxAmountRecipientId === recipient.id}
+              isDisabledMaxAmount={isCalculatingForm}
+              onMaxAmount={handleMaxAmount}
+            />
+          ))}
+        </View>
 
-      <TwButton
-        leftElement={<TbPlus aria-hidden />}
-        label={t('form.addRecipientButtonLabel')}
-        variant="text"
-        iconsOnEdge={false}
-        disabled={isAccountDisabled}
-        colorSchema={isAccountDisabled ? 'white' : 'neon'}
-        className="mx-auto my-2 w-64"
-        onPress={handleAddRecipient}
-      />
+        {(actionState.errors.fee || actionState.errors.selectedAccount) && (
+          <TwAlertErrorBanner className="my-2" message={actionState.errors.fee || actionState.errors.selectedAccount} />
+        )}
 
-      <ActionFeeStep
-        title={t('form.totalFeeLabel')}
-        feePlaceholder={t('form.totalFeePlaceholder')}
-        fee={actionData.fee || undefined}
-        isCalculatingFee={actionData.isCalculatingFee}
-        service={service}
-        className="mb-4"
-      />
-
-      {!!tipConfig && actionData.tipAmountBn && actionData.tipFiatPriceBn && (
-        <SendTipCheckbox
-          amountBn={actionData.tipAmountBn}
-          tokenSymbol={tipConfig.token}
-          isChecked={actionData.isTipChecked}
-          onCheckChange={setDataWrapper('isTipChecked')}
-          isDisabled={actionData.isTipDisabled}
-          isLoading={exchangeQuery.isLoading}
-          fiatPriceBn={actionData.tipFiatPriceBn}
-          className="mb-8"
+        <TwButton
+          leftElement={<TbPlus aria-hidden />}
+          label={t('form.addRecipientButtonLabel')}
+          variant="text"
+          iconsOnEdge={false}
+          disabled={isAccountDisabled}
+          colorSchema={isAccountDisabled ? 'white' : 'neon'}
+          className="mx-auto my-2 w-64"
+          onPress={handleAddRecipient}
         />
-      )}
 
-      <TwButton
-        label={t('form.sendTokensButtonLabel')}
-        className="mb-4 mt-auto"
-        variant="card"
-        disabled={isButtonDisabled}
-        leftElement={<TbStepOut aria-hidden className="text-neon" />}
-        onPress={handleAct(handleGoToConfirmStep)}
-        isLoading={actionState.isActing}
-      />
-    </TwScreenLayout>
+        <ActionFeeStep
+          title={t('form.totalFeeLabel')}
+          feePlaceholder={t('form.totalFeePlaceholder')}
+          fee={actionData.fee || undefined}
+          isCalculatingFee={actionData.isCalculatingFee}
+          service={service}
+          className="mb-4"
+        />
+
+        {!!tipConfig && actionData.tipAmountBn && actionData.tipFiatPriceBn && (
+          <SendTipCheckbox
+            amountBn={actionData.tipAmountBn}
+            tokenSymbol={tipConfig.token}
+            isChecked={actionData.isTipChecked}
+            onCheckChange={setDataWrapper('isTipChecked')}
+            isDisabled={actionData.isTipDisabled}
+            isLoading={exchangeQuery.isLoading}
+            fiatPriceBn={actionData.tipFiatPriceBn}
+            className="mb-8"
+          />
+        )}
+
+        <TwButton
+          label={t('form.sendTokensButtonLabel')}
+          className="mb-4 mt-auto"
+          variant="card"
+          disabled={isButtonDisabled}
+          leftElement={<TbStepOut aria-hidden className="text-neon" />}
+          onPress={handleAct(handleGoToConfirmStep)}
+          isLoading={actionState.isActing}
+        />
+      </ScreenLayout.KeyboardAvoidingContent>
+    </ScreenLayout.Root>
   )
 }

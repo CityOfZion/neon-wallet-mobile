@@ -43,7 +43,7 @@ export const TwStepper = ({
             <View className="h-7 w-7 items-center justify-center rounded-full bg-gray-800">
               <Text
                 className={StyleHelper.mergeStyles(
-                  'flex h-6 w-6 items-center justify-center rounded-full text-center font-sans-bold text-sm leading-6 transition-colors',
+                  'flex size-6 items-center justify-center rounded-full text-center font-sans-bold text-sm leading-6 transition-colors',
                   {
                     'bg-blue text-asphalt': isPastStep && isDefaultTheme,
                     'bg-gray-900 text-gray-300': isFutureStep && isDefaultTheme,

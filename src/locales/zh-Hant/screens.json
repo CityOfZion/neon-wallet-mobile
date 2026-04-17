@@ -13,6 +13,7 @@
     "claimAsset": "<1>領取</1> {{ amount }} {{ symbol }}",
     "connections": "連線",
     "gasUnavailable": "GAS 無法取得",
+    "moreButtonLabel": "更多",
     "nfts": "NFT",
     "tokens": "代幣",
     "transactions": "交易",
@@ -114,46 +115,47 @@
     "walletAddressLabel": "錢包地址"
   },
   "contacts": {
+    "addContactButtonLabel": "新增聯絡人",
     "title": "聯絡人"
   },
   "createWalletStep1": {
-    "body_1": "這組秘密單詞讓您可以輕鬆備份和還原帳戶，讓您的錢包更加安全。",
-    "body_2": "正確記住您的助記詞非常重要，我們會協助您完成。如果您趕時間，也可以稍後再做。",
-    "body_3": "給您的錢包取個好記的名字，您就可以開始使用了！",
+    "body1": "這組秘密單詞讓您可以輕鬆備份和還原帳戶，讓您的錢包更加安全。",
+    "body2": "正確記住您的助記詞非常重要，我們會協助您完成。如果您趕時間，也可以稍後再做。",
+    "body3": "給您的錢包取個好記的名字，您就可以開始使用了！",
     "createWallet": "建立錢包",
-    "label_1": "產生安全助記詞",
-    "label_2": "確認安全助記詞",
-    "label_3": "為您的錢包命名",
+    "label1": "產生安全助記詞",
+    "label2": "確認安全助記詞",
+    "label3": "為您的錢包命名",
     "title": "建立錢包"
   },
   "createWalletStep2": {
-    "body_1": "以下是您的秘密助記詞",
-    "body_2": "請將這組助記詞寫在紙上或記錄在安全的數位筆記中。您也可以在上方下載，但請務必妥善保存。",
-    "body_3": "任何擁有這組助記詞的人都能竊取您的資產，且您將無法取回！",
-    "dialog_body": "為了安全，請將您的助記詞儲存在加密筆記中。",
-    "dialog_dismiss": "好的，我明白了",
-    "dialog_title": "請確保妥善保存您的安全助記詞",
-    "label_1": "產生安全助記詞",
+    "body1": "以下是您的秘密助記詞",
+    "body2": "請將這組助記詞寫在紙上或記錄在安全的數位筆記中。您也可以在上方下載，但請務必妥善保存。",
+    "body3": "任何擁有這組助記詞的人都能竊取您的資產，且您將無法取回！",
+    "dialogBody": "為了安全，請將您的助記詞儲存在加密筆記中。",
+    "dialogDismiss": "好的，我明白了",
+    "dialogTitle": "請確保妥善保存您的安全助記詞",
+    "label": "產生安全助記詞",
     "oneOfThree": "1 / 3",
     "title": "建立錢包"
   },
   "createWalletStep3": {
-    "body_1": "請依正確順序選擇每個單詞，以確保您記對了。",
-    "dialog_1_body": "強烈建議您確認已正確備份安全助記詞",
-    "dialog_1_title": "您確定要略過備份確認嗎？",
-    "dialog_2_body": "請再試一次以確認您的備份",
-    "dialog_2_title": "單詞順序錯誤",
-    "label_1": "確認安全助記詞",
+    "body1": "請依正確順序選擇每個單詞，以確保您記對了。",
+    "dialog1Body": "強烈建議您確認已正確備份安全助記詞",
+    "dialog1Title": "您確定要略過備份確認嗎？",
+    "dialog2Body": "請再試一次以確認您的備份",
+    "dialog2Title": "單詞順序錯誤",
+    "label": "確認安全助記詞",
     "title": "建立錢包",
     "twoOfThree": "2 / 3"
   },
   "createWalletStep4": {
-    "body_1": "給您的錢包取個好記的名字，也許可以和用途有關，例如「交易」或「投資」。",
+    "body1": "給您的錢包取個好記的名字，也許可以和用途有關，例如「交易」或「投資」。",
     "errors": {
       "name": "必須至少 1 個字且少於 21 個字"
     },
-    "label_1": "為您的錢包命名",
-    "label_walletName": "錢包名稱",
+    "label": "為您的錢包命名",
+    "labelWalletName": "錢包名稱",
     "threeOfThree": "3 / 3",
     "title": "建立錢包"
   },
@@ -163,9 +165,9 @@
     "title": "建立錢包"
   },
   "createWalletStep6": {
-    "body_1": "請務必妥善保存您的秘密助記詞，建議多做幾份備份。",
-    "body_2": "如果需要查找錢包的秘密助記詞，可以在該錢包的設定頁面找到。",
-    "label_1": "恭喜，您現在擁有一個全新的錢包！",
+    "body1": "請務必妥善保存您的秘密助記詞，建議多做幾份備份。",
+    "body2": "如果需要查找錢包的秘密助記詞，可以在該錢包的設定頁面找到。",
+    "description": "恭喜，您現在擁有一個全新的錢包！",
     "title": "建立錢包",
     "viewWallet": "查看錢包"
   },
@@ -438,10 +440,10 @@
   "settingsSecurityBackup": {
     "title": "安全性",
     "withAccountsToBackup": {
-      "description_1": "要透過密碼或生物辨識來保護您的錢包，必須先備份您的錢包。",
-      "description_2": "這是預防措施，以避免您遺失密碼或無法驗證身份時，導致無法存取所有資金。",
-      "description_3": "請備份以下錢包",
-      "description_4": "如果您有多個錢包，備份每個錢包後會返回此處繼續備份下一個。"
+      "description1": "要透過密碼或生物辨識來保護您的錢包，必須先備份您的錢包。",
+      "description2": "這是預防措施，以避免您遺失密碼或無法驗證身份時，導致無法存取所有資金。",
+      "description3": "請備份以下錢包",
+      "description4": "如果您有多個錢包，備份每個錢包後會返回此處繼續備份下一個。"
     },
     "withoutAccountsToBackup": {
       "button_label": "繼續前往安全性",
@@ -511,33 +513,37 @@
     "title": "兌換代幣",
     "tooltips": {
       "experimentHigherAmounts": "兌換較高金額時，匯率會更優惠，快來試試看！"
-    }
+    },
+    "viewExplanationButtonLabel": "查看說明"
   },
   "wallet": {
-    "addNewAccount": "新增帳戶"
+    "addNewAccountButtonLabel": "新增帳戶",
+    "moreButtonLabel": "更多"
   },
   "walletBackupStep1": {
-    "body_1": "以下是您的秘密助記詞",
-    "body_2": "請將這組助記詞寫在紙上或記錄在安全的數位筆記中。您也可以在上方下載，但請務必妥善保存。",
-    "body_3": "任何擁有這組助記詞的人都能竊取您的資產，且您將無法取回！",
-    "dialog_body": "為了安全，請將您的助記詞儲存在加密筆記中。",
-    "dialog_dismiss": "好的，我明白了",
-    "dialog_title": "請確保妥善保存您的安全助記詞",
-    "label_1": "安全助記詞",
+    "body1": "以下是您的秘密助記詞",
+    "body2": "請將這組助記詞寫在紙上或記錄在安全的數位筆記中。您也可以在上方下載，但請務必妥善保存。",
+    "body3": "任何擁有這組助記詞的人都能竊取您的資產，且您將無法取回！",
+    "copyButtonLabel": "複製",
+    "description": "安全助記詞",
+    "dialogBody": "為了安全，請將您的助記詞儲存在加密筆記中。",
+    "dialogDismiss": "好的，我明白了",
+    "dialogTitle": "請確保妥善保存您的安全助記詞",
     "oneOfThree": "1 / 3",
+    "printButtonLabel": "列印",
     "title": "備份錢包"
   },
   "walletBackupStep2": {
-    "body_1": "為確認您已備份助記詞，請從下方列表中依正確順序選擇單詞。",
+    "body": "為確認您已備份助記詞，請從下方列表中依正確順序選擇單詞。",
+    "description": "確認備份",
     "errors": {
       "incorrectWordOrder": "詞序錯誤。請重試以確認您的備份。"
     },
-    "label_1": "確認備份",
     "title": "備份錢包",
     "twoOfThree": "2 / 3"
   },
   "walletBackupStep3": {
-    "label_1": "恭喜，您已確認備份",
+    "description": "恭喜，您已確認備份",
     "title": "備份錢包"
   },
   "walletSettings": {

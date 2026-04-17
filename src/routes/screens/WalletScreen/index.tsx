@@ -21,7 +21,7 @@ import { useRefetch } from '@/hooks/useQuery'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useWalletByIdSelector } from '@/hooks/useWalletSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdAdd from '@/assets/images/md-add.svg'
 import MdMoreHoriz from '@/assets/images/md-more-horiz.svg'
@@ -95,42 +95,47 @@ export const WalletScreen = ({ navigation, route }: TWalletsStackScreenProps<'Wa
   }, [])
 
   return (
-    <TwScreenLayout
-      onLayout={handleLayout}
-      title={wallet.name}
-      withoutScroll
-      headerClassName="h-[46px]"
-      contentContainerClassName="pb-0"
-      rightElement={
-        <TwIconButton icon={<MdMoreHoriz aria-hidden className="text-white" />} size="md" onPress={handleMorePress} />
-      }
-    >
-      <Animated.View className="w-full flex-shrink flex-grow" style={[animatedStyles]}>
-        <AccountCardStackList
-          accounts={accountsByWalletId}
-          onPress={handlePress}
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-          contentContainerStyle={{ paddingBottom: ConstantsHelper.footerHeight }}
-          ListFooterComponent={
-            wallet.type === 'standard' || (wallet.type === 'hardware' && hasHardwareAccount) ? (
-              <PressableScale
-                onPress={createNewAccountAction.handleAct}
-                className="mb-4 mt-10 flex w-full flex-row items-center justify-center gap-1 rounded-2xl border border-dashed border-gray-100/50"
-                style={{ width: accountCardDimensions.width, height: accountCardDimensions.height }}
-              >
-                {createNewAccountAction.isActing ? (
-                  <Loader />
-                ) : (
-                  <Fragment>
-                    <MdAdd aria-hidden className="size-7 text-gray-100/50" />
-                    <Text className="font-sans-medium text-lg text-gray-100/50">{t('addNewAccount')}</Text>
-                  </Fragment>
-                )}
-              </PressableScale>
-            ) : undefined
-          }
-        />
-      </Animated.View>
-    </TwScreenLayout>
+    <ScreenLayout.Root onLayout={handleLayout}>
+      <ScreenLayout.Header className="h-[46px]">
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{wallet.name}</ScreenLayout.Title>
+        <ScreenLayout.ButtonContent position="right">
+          <TwIconButton
+            aria-label={t('moreButtonLabel')}
+            icon={<MdMoreHoriz aria-hidden className="text-white" />}
+            size="md"
+            onPress={handleMorePress}
+          />
+        </ScreenLayout.ButtonContent>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent className="pb-0">
+        <Animated.View className="w-full flex-shrink flex-grow" style={[animatedStyles]}>
+          <AccountCardStackList
+            accounts={accountsByWalletId}
+            onPress={handlePress}
+            refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+            contentContainerStyle={{ paddingBottom: ConstantsHelper.footerHeight }}
+            ListFooterComponent={
+              wallet.type === 'standard' || (wallet.type === 'hardware' && hasHardwareAccount) ? (
+                <PressableScale
+                  onPress={createNewAccountAction.handleAct}
+                  className="mb-4 mt-10 flex w-full flex-row items-center justify-center gap-1 rounded-2xl border border-dashed border-gray-100/50"
+                  style={{ width: accountCardDimensions.width, height: accountCardDimensions.height }}
+                >
+                  {createNewAccountAction.isActing ? (
+                    <Loader />
+                  ) : (
+                    <Fragment>
+                      <MdAdd aria-hidden className="size-7 text-gray-100/50" />
+                      <Text className="font-sans-medium text-lg text-gray-100/50">{t('addNewAccountButtonLabel')}</Text>
+                    </Fragment>
+                  )}
+                </PressableScale>
+              ) : undefined
+            }
+          />
+        </Animated.View>
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

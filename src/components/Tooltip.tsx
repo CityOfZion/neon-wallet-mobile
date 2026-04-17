@@ -143,7 +143,7 @@ const ContentPress = ({ children, className, ...props }: TContentProps) => {
   return (
     <Modal visible={visible} onRequestClose={() => setVisible(false)} transparent animationType="fade">
       {visible && (
-        <Pressable className="relative h-full w-full bg-black/80" onPress={() => setVisible(false)}>
+        <Pressable className="relative size-full bg-black/80" onPress={() => setVisible(false)}>
           <View
             onLayout={handleLayout}
             className="absolute"

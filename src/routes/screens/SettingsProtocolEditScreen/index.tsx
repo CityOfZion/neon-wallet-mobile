@@ -15,7 +15,7 @@ import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useCustomNetworksSelector, useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbCheck from '@/assets/images/tb-check.svg'
 import TbCube3dSphere from '@/assets/images/tb-cube-3d-sphere.svg'
@@ -123,34 +123,40 @@ export const SettingsProtocolEditScreen = ({
     .sort(item => (item.isDefault ? -1 : 1))
 
   return (
-    <TwScreenLayout title={t(`common:blockchainServices.${blockchain}.label`)} withoutScroll>
-      <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t(`common:blockchainServices.${blockchain}.label`)}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
 
-      <TwSeparator />
+        <TwSeparator />
 
-      <TwMenuButton
-        label={t('screens:settingsProtocolEdit.selectNetworkUrlButtonLabel')}
-        description={selectedNetwork.url}
-        disabled={service.networkUrls.length <= 1}
-        leftElement={<TbCube3dSphere aria-hidden />}
-        onPress={handleSelectNetworkUrl}
-      />
+        <TwMenuButton
+          label={t('screens:settingsProtocolEdit.selectNetworkUrlButtonLabel')}
+          description={selectedNetwork.url}
+          disabled={service.networkUrls.length <= 1}
+          leftElement={<TbCube3dSphere aria-hidden />}
+          onPress={handleSelectNetworkUrl}
+        />
 
-      {service.isCustomNetworkSupported && (
-        <Fragment>
-          <TwSeparator />
+        {service.isCustomNetworkSupported && (
+          <Fragment>
+            <TwSeparator />
 
-          <TwMenuButton
-            label={
-              isSelectedNetworkCustom
-                ? t('screens:settingsProtocolEdit.editCustomNetworkButtonLabel')
-                : t('screens:settingsProtocolEdit.addCustomNetworkButtonLabel')
-            }
-            leftElement={isSelectedNetworkCustom ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
-            onPress={isSelectedNetworkCustom ? handleEditCustomNetwork : handleAddCustomNetwork}
-          />
-        </Fragment>
-      )}
-    </TwScreenLayout>
+            <TwMenuButton
+              label={
+                isSelectedNetworkCustom
+                  ? t('screens:settingsProtocolEdit.editCustomNetworkButtonLabel')
+                  : t('screens:settingsProtocolEdit.addCustomNetworkButtonLabel')
+              }
+              leftElement={isSelectedNetworkCustom ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
+              onPress={isSelectedNetworkCustom ? handleEditCustomNetwork : handleAddCustomNetwork}
+            />
+          </Fragment>
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

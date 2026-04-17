@@ -13,6 +13,7 @@
     "claimAsset": "<1>Claim</1> {{ amount }} {{ symbol }}",
     "connections": "Connections",
     "gasUnavailable": "GAS unavailable",
+    "moreButtonLabel": "More",
     "nfts": "NFTs",
     "tokens": "Tokens",
     "transactions": "Transactions",
@@ -114,46 +115,47 @@
     "walletAddressLabel": "Wallet addresses"
   },
   "contacts": {
+    "addContactButtonLabel": "Add contact",
     "title": "Contacts"
   },
   "createWalletStep1": {
-    "body_1": "This set of secret words make it easy to back up and restore your account. This makes your wallet really secure ",
-    "body_2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
-    "body_3": "Give your wallet a memorable name and you're ready to go!",
+    "body1": "This set of secret words make it easy to back up and restore your account. This makes your wallet really secure ",
+    "body2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
+    "body3": "Give your wallet a memorable name and you're ready to go!",
     "createWallet": "Create Wallet",
-    "label_1": "Generate security phrase",
-    "label_2": "Confirm security phrase",
-    "label_3": "Give your wallet a name",
+    "label1": "Generate security phrase",
+    "label2": "Confirm security phrase",
+    "label3": "Give your wallet a name",
     "title": "Create Wallet"
   },
   "createWalletStep2": {
-    "body_1": "Below you will find your secret phrase",
-    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
-    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back! ",
-    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
-    "dialog_dismiss": "OK, I understand",
-    "dialog_title": "Make sure you keep your security phrase safe",
-    "label_1": "Generate security phrase",
+    "body1": "Below you will find your secret phrase",
+    "body2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
+    "body3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back! ",
+    "dialogBody": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialogDismiss": "OK, I understand",
+    "dialogTitle": "Make sure you keep your security phrase safe",
+    "label": "Generate security phrase",
     "oneOfThree": "1 of 3",
     "title": "Create Wallet"
   },
   "createWalletStep3": {
-    "body_1": "Please select each phrase in the correct order to make sure you’ve got it right. ",
-    "dialog_1_body": "Confirming that you have correctly backed up your security phrase is highly recommended",
-    "dialog_1_title": "Are you sure you want to skip back up confirmation?",
-    "dialog_2_body": "Please try again to confirm your back up",
-    "dialog_2_title": "Incorrect word order",
-    "label_1": "Confirm security phrase",
+    "body1": "Please select each phrase in the correct order to make sure you’ve got it right. ",
+    "dialog1Body": "Confirming that you have correctly backed up your security phrase is highly recommended",
+    "dialog1Title": "Are you sure you want to skip back up confirmation?",
+    "dialog2Body": "Please try again to confirm your back up",
+    "dialog2Title": "Incorrect word order",
+    "label": "Confirm security phrase",
     "title": "Create Wallet",
     "twoOfThree": "2 of 3"
   },
   "createWalletStep4": {
-    "body_1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
+    "body1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
     "errors": {
       "name": "Must be at least 1 character and less than 21 characters"
     },
-    "label_1": "Give your wallet a name",
-    "label_walletName": "Wallet Name",
+    "label": "Give your wallet a name",
+    "labelWalletName": "Wallet Name",
     "threeOfThree": "3 of 3",
     "title": "Create Wallet"
   },
@@ -163,9 +165,9 @@
     "title": "Create Wallet"
   },
   "createWalletStep6": {
-    "body_1": "Remember to keep your secret phrase safe, having several backups is always a good idea.",
-    "body_2": "If you need to find out a wallets secret phrase you can find it in the settings page for that wallet. ",
-    "label_1": "Congratulations, You’re the proud owner of a shiny new wallet!",
+    "body1": "Remember to keep your secret phrase safe, having several backups is always a good idea.",
+    "body2": "If you need to find out a wallets secret phrase you can find it in the settings page for that wallet. ",
+    "description": "Congratulations, You’re the proud owner of a shiny new wallet!",
     "title": "Create Wallet",
     "viewWallet": "View wallet"
   },
@@ -438,10 +440,10 @@
   "settingsSecurityBackup": {
     "title": "Security",
     "withAccountsToBackup": {
-      "description_1": "A requirement of securing your wallet through password or biometric authentication is to first back up your wallets.",
-      "description_2": "This is a precautionary step to prevent you from losing your password or otherwise not be able to authenticate and losing access to all your funds.",
-      "description_3": "Please back up the following wallets",
-      "description_4": "If you have multiple wallets you will be brought back here after each back up to back up the next wallet."
+      "description1": "A requirement of securing your wallet through password or biometric authentication is to first back up your wallets.",
+      "description2": "This is a precautionary step to prevent you from losing your password or otherwise not be able to authenticate and losing access to all your funds.",
+      "description3": "Please back up the following wallets",
+      "description4": "If you have multiple wallets you will be brought back here after each back up to back up the next wallet."
     },
     "withoutAccountsToBackup": {
       "button_label": "Continue to Security",
@@ -511,33 +513,37 @@
     "title": "Swap tokens",
     "tooltips": {
       "experimentHigherAmounts": "Exchange rates are better with higher swap amounts, experiment!"
-    }
+    },
+    "viewExplanationButtonLabel": "View explanation"
   },
   "wallet": {
-    "addNewAccount": "Add new account"
+    "addNewAccountButtonLabel": "Add new account",
+    "moreButtonLabel": "More"
   },
   "walletBackupStep1": {
-    "body_1": "Below you will find your secret phrase",
-    "body_2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
-    "body_3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
-    "dialog_body": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
-    "dialog_dismiss": "OK, I understand",
-    "dialog_title": "Make sure you keep your security phrase safe",
-    "label_1": "Security phrase",
+    "body1": "Below you will find your secret phrase",
+    "body2": "Write this phrase down on a piece of paper or record it in a secure digital note. You can also download it above but be sure to keep it safe.",
+    "body3": "Anyone with this phrase will be able to steal your hard earned assets and you won’t be able to get them back!",
+    "copyButtonLabel": "Copy",
+    "description": "Security phrase",
+    "dialogBody": "In order to keep your security phrase safe make sure it’s saved in an encrypted note.",
+    "dialogDismiss": "OK, I understand",
+    "dialogTitle": "Make sure you keep your security phrase safe",
     "oneOfThree": "1 of 3",
+    "printButtonLabel": "Print",
     "title": "Backup wallet"
   },
   "walletBackupStep2": {
-    "body_1": "To confirm you have backed up you key words please select your words in the correct order from the list below.",
+    "body": "To confirm you have backed up you key words please select your words in the correct order from the list below.",
+    "description": "Confirm back up",
     "errors": {
       "incorrectWordOrder": "Incorrect word order. Please try again to confirm your back up"
     },
-    "label_1": "Confirm back up",
     "title": "Backup wallet",
     "twoOfThree": "2 of 3"
   },
   "walletBackupStep3": {
-    "label_1": "Congratulations, You have confirmed your back up",
+    "description": "Congratulations, You have confirmed your back up",
     "title": "Backup wallet"
   },
   "walletSettings": {

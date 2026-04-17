@@ -365,7 +365,7 @@
   },
   "importEncryptedKeySelection": {
     "accountAlreadyExists": "Esta conta já existe",
-    "decryptError": "Erro ao decriptografar a chave",
+    "decryptError": "Senha incorreta",
     "description": "Selecione a blockchain da chave criptografada que deseja importar",
     "importEncryptedConfirmPasswordLabel": "Para continuar, você precisará inserir a senha usada para criptografar a chave:",
     "importEncryptedKeyInputPlaceholder": "Digite a senha",
@@ -502,7 +502,7 @@
     "latencyLabel": "{{latency}}ms",
     "listLabel": "Lista de URLs de rede",
     "refreshButtonLabel": "Atualizar",
-    "selectAutomaticallyCheckboxLabel": "Selecionar automaticamente",
+    "selectAutomaticallyCheckboxLabel": "Auto",
     "title": "Seleção de URL de rede"
   },
   "notificationContext": {
@@ -732,6 +732,7 @@
       "invalidLimit": "Limite inválido"
     },
     "limitLabel": "Limite (Opcional)",
+    "limitPlaceholder": "Insira um valor limite",
     "title": "Trustline",
     "tokenLabel": "Token",
     "tokenPlaceholder": "Selecione um token"
@@ -739,6 +740,7 @@
   "stellarTrustilneTokenSelection": {
     "noTokensFound": "Nenhum token encontrado",
     "placeholderMessage": "Digite para pesquisar tokens",
+    "searchInputPlaceholder": "Buscar um token",
     "title": "Trustline"
   },
   "survey": {

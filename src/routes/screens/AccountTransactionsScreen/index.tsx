@@ -19,7 +19,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 import { useActions } from '@/hooks/useActions'
 import { useTransactionsQuery } from '@/hooks/useTransactionsQuery'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdMoreHoriz from '@/assets/images/md-more-horiz.svg'
 
@@ -107,58 +107,60 @@ const AccountTransactionsScreen = ({ navigation, route }: TWalletsStackScreenPro
   }
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      withoutScroll
-      rightElement={
-        hasServiceFullTransactions ? (
-          <TwIconButton
-            aria-label={t('contextButtonLabel')}
-            icon={<MdMoreHoriz aria-hidden className="text-white" />}
-            onPress={handleContextPress}
-          />
-        ) : undefined
-      }
-      contentContainerClassName="pb-0"
-    >
-      <View className="mb-2 flex w-full flex-row items-center justify-between px-1">
-        <View className="flex flex-row items-center gap-x-2">
-          <TwBlockchainIcon blockchain={blockchain} className="size-4" />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        {hasServiceFullTransactions && (
+          <ScreenLayout.ButtonContent position="right">
+            <TwIconButton
+              aria-label={t('contextButtonLabel')}
+              icon={<MdMoreHoriz aria-hidden className="text-white" />}
+              onPress={handleContextPress}
+            />
+          </ScreenLayout.ButtonContent>
+        )}
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent className="pb-0">
+        <View className="mb-2 flex w-full flex-row items-center justify-between px-1">
+          <View className="flex flex-row items-center gap-x-2">
+            <TwBlockchainIcon blockchain={blockchain} className="size-4" />
 
-          <Text className="font-sans-regular text-base uppercase text-white">
-            {tBlockchainServices(`${blockchain}.label`)}
-          </Text>
+            <Text className="font-sans-regular text-base uppercase text-white">
+              {tBlockchainServices(`${blockchain}.label`)}
+            </Text>
+          </View>
+
+          <AccountSubTitle account={account} />
         </View>
 
-        <AccountSubTitle account={account} />
-      </View>
-
-      <SectionList
-        stickySectionHeadersEnabled={false}
-        className="w-full"
-        contentContainerClassName="pb-8 flex-grow"
-        sections={aggregatedData}
-        ListFooterComponent={
-          isLoading || isFetchingNextPage ? (
-            <Skeleton.Root className="mt-2">
-              <Skeleton.Group>
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <Skeleton.Item key={`transactions-skeleton-${index}`} className="h-44 w-full bg-gray-900" />
-                ))}
-              </Skeleton.Group>
-            </Skeleton.Root>
-          ) : undefined
-        }
-        ListEmptyComponent={!isLoading ? <FlatListEmpty label={t('emptyList')} className="py-8" /> : undefined}
-        onEndReached={handleEndReached}
-        onMomentumScrollBegin={handleMomentumScrollBegin}
-        renderSectionHeader={renderSectionHeader}
-        showsVerticalScrollIndicator={false}
-        onEndReachedThreshold={0.5}
-        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-        renderItem={renderItem}
-      />
-    </TwScreenLayout>
+        <SectionList
+          stickySectionHeadersEnabled={false}
+          className="w-full"
+          contentContainerClassName="pb-8 flex-grow"
+          sections={aggregatedData}
+          ListFooterComponent={
+            isLoading || isFetchingNextPage ? (
+              <Skeleton.Root className="mt-2">
+                <Skeleton.Group>
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <Skeleton.Item key={`transactions-skeleton-${index}`} className="h-44 w-full bg-gray-900" />
+                  ))}
+                </Skeleton.Group>
+              </Skeleton.Root>
+            ) : undefined
+          }
+          ListEmptyComponent={!isLoading ? <FlatListEmpty label={t('emptyList')} className="py-8" /> : undefined}
+          onEndReached={handleEndReached}
+          onMomentumScrollBegin={handleMomentumScrollBegin}
+          renderSectionHeader={renderSectionHeader}
+          showsVerticalScrollIndicator={false}
+          onEndReachedThreshold={0.5}
+          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+          renderItem={renderItem}
+        />
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }
 
