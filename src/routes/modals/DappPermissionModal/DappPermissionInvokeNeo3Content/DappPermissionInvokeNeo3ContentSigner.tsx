@@ -55,7 +55,6 @@ export const DappPermissionInvokeNeo3ContentSigner = ({ signer, session }: TProp
               <MdChevronRight className="size-6 text-gray-100" aria-hidden />
             </View>
           }
-          labelClassName="capitalize"
         >
           {t('signatureScopeDetailsHeaderLabel')}
         </Details.Header>

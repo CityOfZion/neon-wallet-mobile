@@ -53,23 +53,17 @@ const AccountSelectionAccordionHeader = ({
   const { t } = useTranslation('components', { keyPrefix: 'accountSelectionAccordion' })
 
   return (
-    <View className="flex-row justify-between gap-4 border-b border-gray-300/30 px-3 py-2.5">
-      <View className="flex-shrink flex-grow flex-row items-center gap-2.5">
+    <View className="flex-row justify-between gap-4 border-b border-gray-300/30 px-2 py-2.5">
+      <View className="h-10 flex-shrink flex-grow flex-row items-center gap-2.5">
         <TwBlockchainIcon blockchain={blockchain} className="size-6" />
 
-        <View className="flex-shrink flex-grow">
-          <Text className="font-sans-medium text-xs text-gray-300">
-            {tCommon(`blockchainServices.${blockchain}.label`)}
-          </Text>
-
-          <Text
-            className="flex-shrink flex-grow font-sans-bold text-lg text-white"
-            ellipsizeMode="tail"
-            numberOfLines={1}
-          >
-            {tCommon(`blockchainServices.${blockchain}.label`)}
-          </Text>
-        </View>
+        <Text
+          className="flex-shrink flex-grow font-sans-bold text-lg text-white"
+          ellipsizeMode="tail"
+          numberOfLines={1}
+        >
+          {tCommon(`blockchainServices.${blockchain}.label`)}
+        </Text>
       </View>
 
       <View className="flex-row items-center gap-2.5">
