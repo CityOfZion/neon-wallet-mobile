@@ -24,7 +24,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
   const { session, onAccept, onReject, isAccepting, isRejecting, request, sessionDetails } = props
 
   const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const parsedParams = useMemo(() => {
     const params = request.params.request.params
@@ -63,7 +63,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
             <Details.Header
               rightElement={
                 <TwIconButton
-                  aria-label={commonT('general.copy')}
+                  aria-label={tCommon('general.copy')}
                   icon={<TbCopy aria-hidden className="text-neon" />}
                   size="sm"
                   onPress={() => ClipboardHelper.write(content)}
@@ -89,7 +89,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
       <View className="mt-auto gap-4 pt-8">
         <TwButton
           variant="contained-light"
-          label={commonT('general.accept')}
+          label={tCommon('general.accept')}
           onPress={() => onAccept()}
           isLoading={isAccepting}
           disabled={isRejecting}
@@ -97,7 +97,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
 
         <TwButton
           variant="outline"
-          label={commonT('general.decline')}
+          label={tCommon('general.decline')}
           onPress={() => onReject()}
           isLoading={isRejecting}
           disabled={isAccepting}

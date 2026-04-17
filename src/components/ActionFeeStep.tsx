@@ -37,7 +37,7 @@ export const ActionFeeStep = ({
   className,
   iconClassName,
 }: TProps) => {
-  const { t: tCommon } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const { currency } = useCurrencySelector()
   const exchange = useExchange(service ? [{ blockchain: service.name, tokens: [service.feeToken] }] : [])
 
@@ -72,7 +72,7 @@ export const ActionFeeStep = ({
         {service && !isCalculatingFee && fee && (
           <View className="flex-row">
             <Text className="font-sans-regular text-lg text-white">{service.feeToken.symbol}</Text>
-            <Text className="font-sans-regular text-lg text-gray-100">{` | ${tCommon(`${service.name}.label`)}`}</Text>
+            <Text className="font-sans-regular text-lg text-gray-100">{` | ${tCommonBlockchainServices(`${service.name}.label`)}`}</Text>
           </View>
         )}
       </View>

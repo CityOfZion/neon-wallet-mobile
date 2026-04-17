@@ -33,7 +33,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
 
   const dispatch = useAppDispatch()
   const { t } = useTranslation('modals', { keyPrefix: 'persistNetwork' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const { actionData, actionState, setData, setError, clearErrors } = useActions<TActionData>({
     isUrlValid: false,
@@ -170,7 +170,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
 
           <TwButton
             variant="contained-light"
-            label={commonT('general.save')}
+            label={tCommon('general.save')}
             onPress={handleSave}
             disabled={!actionState.isValid || actionData.isValidating || !actionData.isUrlValid}
           />

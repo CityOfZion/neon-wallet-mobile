@@ -31,7 +31,7 @@ export const DappConnectionDetailsModal = ({
   const { session } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'dappConnectionDetails' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { accountsWithWalletMapRef } = useAccountsWithWalletMapSelector()
   const { language } = useLanguageSelector()
 
@@ -102,7 +102,7 @@ export const DappConnectionDetailsModal = ({
           className="mt-auto"
           variant="outline"
           colorSchema="pink"
-          label={commonT('general.disconnect')}
+          label={tCommon('general.disconnect')}
           isLoading={isDisconnecting}
           onPress={startDisconnect}
         />

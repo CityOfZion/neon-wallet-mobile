@@ -26,7 +26,7 @@ export const WalletContextModal = ({ navigation, route }: TRootStackScreenProps<
   const { wallet } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'walletContext' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const { wallets } = useWalletsSelector()
   const { authenticate } = useAuthentication()
@@ -96,7 +96,7 @@ export const WalletContextModal = ({ navigation, route }: TRootStackScreenProps<
           disabled={wallets.length === 0}
         />
 
-        <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
+        <TwButton variant="text" label={tCommon('general.cancel')} className="mt-7" onPress={navigation.goBack} />
       </ModalLayout.ViewContent>
     </ModalLayout.Root>
   )

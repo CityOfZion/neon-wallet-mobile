@@ -22,7 +22,7 @@ export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenP
   const { mnemonic, hasBackup } = route.params
 
   const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep4' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const { actionData, actionState, setData, setError, handleAct } = useActions<TActionsData>({ name: '' })
 
   const handleChangeName = (name: string) => {
@@ -71,7 +71,7 @@ export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenP
         <ScreenLayout.KeyboardAvoidingArea>
           <TwButton
             variant="contained-light"
-            label={commonT('continue')}
+            label={tCommonGeneral('continue')}
             disabled={actionState.isActing || !actionState.isValid}
             isLoading={actionState.isActing}
             onPress={handleAct(handleSubmit)}

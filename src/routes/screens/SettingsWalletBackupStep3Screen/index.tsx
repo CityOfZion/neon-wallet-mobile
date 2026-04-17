@@ -21,7 +21,7 @@ export const SettingsWalletBackupStep3Screen = ({
 
   const dispatch = useAppDispatch()
   const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep3' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
 
   const handlePress = () => {
     navigation.goBack()
@@ -45,7 +45,7 @@ export const SettingsWalletBackupStep3Screen = ({
         <Text className="text-center font-sans-bold text-xl text-white">{t('description')}</Text>
 
         <View className="mt-auto py-3">
-          <TwButton variant="contained-light" label={commonT('continue')} onPress={handlePress} />
+          <TwButton variant="contained-light" label={tCommonGeneral('continue')} onPress={handlePress} />
         </View>
       </ScreenLayout.ScrollContent>
     </ScreenLayout.Root>

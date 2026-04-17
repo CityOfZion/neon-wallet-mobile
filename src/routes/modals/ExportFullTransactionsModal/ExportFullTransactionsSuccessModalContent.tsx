@@ -22,7 +22,7 @@ type TProps = {
 
 export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDateFrom, formattedDateTo }: TProps) => {
   const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactions.success' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const handlePressDiscord = () => {
     LinkHelper.open(ConstantsHelper.cozDiscordUrl)
@@ -54,7 +54,7 @@ export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDa
             {account.address}
           </Text>
           <Text className="font-sans-regular text-lg text-gray-100">
-            {commonT(`blockchainServices.${account.blockchain}.label`)}
+            {tCommon(`blockchainServices.${account.blockchain}.label`)}
           </Text>
         </View>
 

@@ -24,7 +24,7 @@ const MIN_MESSAGE_READ_POINTER = 10
 
 export const useItemNfiAuthentication = () => {
   const { t } = useTranslation('hooks', { keyPrefix: 'useItemNfiAuthentication' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
@@ -228,7 +228,7 @@ export const useItemNfiAuthentication = () => {
       tag.item.tokenId !== security.tokenId ||
       tag.decoded.pubKey !== security.pubKey
     ) {
-      throw new AppError(commonT('errors.unauthorized'))
+      throw new AppError(tCommon('errors.unauthorized'))
     }
   }
 

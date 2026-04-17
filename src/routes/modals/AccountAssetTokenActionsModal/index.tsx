@@ -21,7 +21,7 @@ export const AccountAssetTokenActionsModal = ({
   navigation,
   route,
 }: TRootStackScreenProps<'AccountAssetTokenActionsModal'>) => {
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { t } = useTranslation('modals', { keyPrefix: 'accountAssetTokenActions' })
 
   const dispatch = useAppDispatch()
@@ -61,7 +61,7 @@ export const AccountAssetTokenActionsModal = ({
           disabled={isNativeToken}
         />
 
-        <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
+        <TwButton variant="text" label={tCommon('general.cancel')} className="mt-7" onPress={navigation.goBack} />
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>
   )

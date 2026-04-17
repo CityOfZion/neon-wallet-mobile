@@ -21,7 +21,7 @@ export const EditWalletModal = ({ navigation, route }: TRootStackScreenProps<'Ed
 
   const dispatch = useAppDispatch()
   const { t } = useTranslation('modals', { keyPrefix: 'editWallet' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const { actionData, actionState, handleAct, setData, setError } = useActions<TActionData>({
     name: wallet.name,
@@ -48,14 +48,14 @@ export const EditWalletModal = ({ navigation, route }: TRootStackScreenProps<'Ed
       <ModalLayout.Header>
         <ModalLayout.Button
           position="left"
-          label={commonT('general.cancel')}
+          label={tCommon('general.cancel')}
           onPress={navigation.goBack}
           colorSchema="white"
         />
         <ModalLayout.Title>{t('title')}</ModalLayout.Title>
         <ModalLayout.Button
           position="right"
-          label={commonT('general.save')}
+          label={tCommon('general.save')}
           disabled={!actionState.isValid}
           isLoading={actionState.isActing}
           onPress={handleAct(handlePressSave)}

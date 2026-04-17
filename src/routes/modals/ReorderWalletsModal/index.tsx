@@ -29,7 +29,7 @@ export const ReorderWalletsModal = ({ navigation }: TRootStackScreenProps<'Reord
   const { wallets } = useWalletsSelector()
   const dispatch = useAppDispatch()
   const { t } = useTranslation('modals', { keyPrefix: 'reorderWallets' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const [reorderedWallets, setReorderedWallets] = useState<TWallet[]>(wallets)
 
@@ -45,12 +45,12 @@ export const ReorderWalletsModal = ({ navigation }: TRootStackScreenProps<'Reord
       <ModalLayout.Header>
         <ModalLayout.Button
           position="left"
-          label={commonT('general.cancel')}
+          label={tCommon('general.cancel')}
           onPress={navigation.goBack}
           colorSchema="white"
         />
         <ModalLayout.Title>{t('title')}</ModalLayout.Title>
-        <ModalLayout.Button position="right" label={commonT('general.save')} onPress={handleSave} />
+        <ModalLayout.Button position="right" label={tCommon('general.save')} onPress={handleSave} />
       </ModalLayout.Header>
 
       <ModalLayout.ViewContent className="px-0">
