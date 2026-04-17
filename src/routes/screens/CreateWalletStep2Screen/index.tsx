@@ -23,7 +23,7 @@ import type { TMoreStackScreenProps } from '@/types/stacks'
 
 export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'CreateWalletStep2Screen'>) => {
   const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep2' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
 
   const [words, setWords] = useState<string[]>([])
 
@@ -101,7 +101,7 @@ export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'C
             <Text className="mt-5 font-sans-regular text-base text-white">{t('body3')}</Text>
 
             <View className="mt-auto py-3">
-              <TwButton label={commonT('continue')} variant="contained-light" onPress={handlePressContinue} />
+              <TwButton label={tCommonGeneral('continue')} variant="contained-light" onPress={handlePressContinue} />
             </View>
           </Fragment>
         )}

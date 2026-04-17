@@ -19,7 +19,7 @@ export const AccountQRCodeModal = ({ route }: TRootStackScreenProps<'AccountQRCo
   const { account } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'accountQRCode' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const handleCopy = () => {
     ClipboardHelper.write(account.address)
@@ -45,7 +45,7 @@ export const AccountQRCodeModal = ({ route }: TRootStackScreenProps<'AccountQRCo
           leftElement={<TbCopy aria-hidden />}
           className="mt-auto"
           variant="contained-light"
-          label={commonT('general.copyToClipboard')}
+          label={tCommon('general.copyToClipboard')}
           onPress={handleCopy}
         />
       </ModalLayout.ScrollContent>

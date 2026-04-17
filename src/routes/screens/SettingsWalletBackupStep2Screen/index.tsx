@@ -21,7 +21,7 @@ export const SettingsWalletBackupStep2Screen = ({
   const { wallet, words } = route.params
 
   const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep2' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
 
   const shuffledWords = useMemo(() => shuffle(words), [words])
 
@@ -57,7 +57,7 @@ export const SettingsWalletBackupStep2Screen = ({
       <ScreenLayout.Header>
         <ScreenLayout.BackButton />
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
-        <ScreenLayout.Button position="right" onPress={handlePressCancel} label={commonT('cancel')} />
+        <ScreenLayout.Button position="right" onPress={handlePressCancel} label={tCommonGeneral('cancel')} />
       </ScreenLayout.Header>
       <ScreenLayout.ScrollContent>
         <Text className="font-sans-semibold text-base text-white">{wallet.name}</Text>
@@ -97,7 +97,7 @@ export const SettingsWalletBackupStep2Screen = ({
         <View className="mt-auto py-3">
           <TwButton
             variant="contained-light"
-            label={commonT('continue')}
+            label={tCommonGeneral('continue')}
             disabled={pressedWordsIndex.length !== words.length}
             onPress={handlePressContinue}
           />

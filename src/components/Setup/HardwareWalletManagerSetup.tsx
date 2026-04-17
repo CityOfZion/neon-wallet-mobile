@@ -13,7 +13,7 @@ import { useMount } from '@/hooks/useMount'
 
 export const HardwareWalletManagerSetup = () => {
   const { t } = useTranslation('components', { keyPrefix: 'setup.hardwareWalletManager' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { editAccount } = useEditAccount()
   const { accountsRef } = useAccountsSelector()
   const navigation = useNavigation()
@@ -83,12 +83,12 @@ export const HardwareWalletManagerSetup = () => {
             title: t('detectedHardwareByUsb'),
             buttons: [
               {
-                label: commonT('general.yes'),
+                label: tCommon('general.yes'),
                 onPress: () => {
                   navigation.navigate('ConnectHardwareUsbModal')
                 },
               },
-              { label: commonT('general.no') },
+              { label: tCommon('general.no') },
             ],
           })
         })

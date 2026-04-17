@@ -28,7 +28,7 @@ export const SettingsWalletBackupStep1Screen = ({
   const { wallet } = route.params
 
   const { t } = useTranslation('screens', { keyPrefix: 'walletBackupStep1' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const [mnemonic, setMnemonic] = useState<string>('')
 
   const words = mnemonic.split(' ')
@@ -76,7 +76,7 @@ export const SettingsWalletBackupStep1Screen = ({
       <ScreenLayout.Header>
         <ScreenLayout.BackButton />
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
-        <ScreenLayout.Button position="right" onPress={navigation.goBack} label={commonT('cancel')} />
+        <ScreenLayout.Button position="right" onPress={navigation.goBack} label={tCommonGeneral('cancel')} />
       </ScreenLayout.Header>
       <ScreenLayout.ScrollContent>
         {isMounting ? (
@@ -121,7 +121,7 @@ export const SettingsWalletBackupStep1Screen = ({
             <Text className="mt-5 font-sans-regular text-base text-white">{t('body3')}</Text>
 
             <View className="mt-auto py-3">
-              <TwButton onPress={handlePressContinue} label={commonT('continue')} variant="contained-light" />
+              <TwButton onPress={handlePressContinue} label={tCommonGeneral('continue')} variant="contained-light" />
             </View>
           </Fragment>
         )}

@@ -21,7 +21,7 @@ export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'Impor
   const data = route.params?.data
 
   const { t } = useTranslation('screens', { keyPrefix: 'import' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const handleNavigateToWalletsScreen = () => {
     navigation.replace('TabStack', { screen: 'WalletsStack', params: { screen: 'WalletsScreen' } })
@@ -138,7 +138,7 @@ export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'Impor
         <ScreenLayout.KeyboardAvoidingArea>
           <TwButton
             variant="contained-light"
-            label={commonT('general.next')}
+            label={tCommon('general.next')}
             disabled={!actionState.isValid}
             onPress={handleAct(handleSubmit)}
           />

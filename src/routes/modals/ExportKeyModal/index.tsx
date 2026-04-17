@@ -26,7 +26,7 @@ export const ExportKeyModal = ({ navigation, route }: TRootStackScreenProps<'Exp
   const { account } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'exportKey' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const [key, setKey] = useState<string>()
 
@@ -78,7 +78,7 @@ export const ExportKeyModal = ({ navigation, route }: TRootStackScreenProps<'Exp
               leftElement={<TbCopy aria-hidden />}
               className="mt-auto"
               variant="contained-light"
-              label={commonT('general.copyToClipboard')}
+              label={tCommon('general.copyToClipboard')}
               onPress={handleCopy}
             />
           </Fragment>

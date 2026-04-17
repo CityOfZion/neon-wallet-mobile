@@ -27,7 +27,7 @@ type TActionsData = {
 
 export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<'DateSelectionModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'dateSelection' })
-  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const { language } = useLanguageSelector()
 
   const { actionDataRef, actionData, setData, setDataWrapper, reset } = useActions<TActionsData>({
@@ -123,14 +123,19 @@ export const DateSelectionModal = ({ route, navigation }: TRootStackScreenProps<
 
         <View className="mt-auto flex-row gap-3 pt-12">
           <TwButton
-            label={tCommon('reset')}
+            label={tCommonGeneral('reset')}
             variant="outline"
             colorSchema="pink"
             leftElement={<TbX aria-hidden />}
             onPress={reset}
           />
 
-          <TwButton label={tCommon('continue')} variant="contained-light" className="flex-1" onPress={handleSave} />
+          <TwButton
+            label={tCommonGeneral('continue')}
+            variant="contained-light"
+            className="flex-1"
+            onPress={handleSave}
+          />
         </View>
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>

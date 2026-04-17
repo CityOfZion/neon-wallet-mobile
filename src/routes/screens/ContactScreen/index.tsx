@@ -45,7 +45,7 @@ export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'Cont
   const { contact } = route.params
 
   const { t } = useTranslation('screens', { keyPrefix: 'contact' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const { contactById } = useContactByIdSelector(contact.id)
 
@@ -57,7 +57,7 @@ export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'Cont
 
   const addresses = contactById?.addresses.map<TItem>(item => ({
     ...item,
-    blockchainLabel: commonT(`blockchainServices.${item.blockchain}.label`),
+    blockchainLabel: tCommon(`blockchainServices.${item.blockchain}.label`),
   }))
 
   return (
@@ -65,7 +65,7 @@ export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'Cont
       <ScreenLayout.Header>
         <ScreenLayout.BackButton />
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
-        <ScreenLayout.Button position="right" label={commonT('general.edit')} onPress={handlePressEdit} />
+        <ScreenLayout.Button position="right" label={tCommon('general.edit')} onPress={handlePressEdit} />
       </ScreenLayout.Header>
       <ScreenLayout.ViewContent>
         {contactById && (

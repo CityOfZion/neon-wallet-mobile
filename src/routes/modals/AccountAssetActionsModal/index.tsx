@@ -17,7 +17,7 @@ export const AccountAssetActionsModal = ({ navigation, route }: TRootStackScreen
   const { account } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'accountAssetActions' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { isNotConnected } = useIsConnectedSelector()
   const balanceQuery = useBalance(account)
 
@@ -75,7 +75,7 @@ export const AccountAssetActionsModal = ({ navigation, route }: TRootStackScreen
           onPress={handlePressReceive}
         />
 
-        <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
+        <TwButton variant="text" label={tCommon('general.cancel')} className="mt-7" onPress={navigation.goBack} />
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>
   )
