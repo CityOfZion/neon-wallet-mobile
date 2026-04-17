@@ -8,8 +8,7 @@ import Sortable, { type SortableGridRenderItem } from 'react-native-sortables'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbGripVertical from '@/assets/images/tb-grip-vertical.svg'
 
@@ -42,35 +41,40 @@ export const ReorderWalletsModal = ({ navigation }: TRootStackScreenProps<'Reord
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      withoutScroll
-      leftElement={
-        <TwModalLayoutButton label={commonT('general.cancel')} onPress={navigation.goBack} colorSchema="white" />
-      }
-      rightElement={<TwModalLayoutButton label={commonT('general.save')} onPress={handleSave} />}
-      contentContainerClassName="px-0"
-    >
-      <Text className="text-center font-sans-medium text-lg text-white">{t('subtitle')}</Text>
-
-      <Animated.ScrollView
-        ref={scrollViewRef}
-        className="mt-8 flex-1"
-        contentContainerClassName="px-4 pb-8"
-        showsVerticalScrollIndicator={false}
-      >
-        <Sortable.Grid
-          columns={1}
-          rowGap={8}
-          onDragEnd={({ data }) => setReorderedWallets(data)}
-          data={reorderedWallets}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-          showDropIndicator
-          scrollableRef={scrollViewRef}
-          autoScrollEnabled
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Button
+          position="left"
+          label={commonT('general.cancel')}
+          onPress={navigation.goBack}
+          colorSchema="white"
         />
-      </Animated.ScrollView>
-    </TwModalLayout>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.Button position="right" label={commonT('general.save')} onPress={handleSave} />
+      </ModalLayout.Header>
+
+      <ModalLayout.ViewContent className="px-0">
+        <Text className="px-4 text-center font-sans-medium text-lg text-white">{t('subtitle')}</Text>
+
+        <Animated.ScrollView
+          ref={scrollViewRef}
+          className="mt-8 flex-1"
+          contentContainerClassName="px-4 pb-8"
+          showsVerticalScrollIndicator={false}
+        >
+          <Sortable.Grid
+            columns={1}
+            rowGap={8}
+            onDragEnd={({ data }) => setReorderedWallets(data)}
+            data={reorderedWallets}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+            showDropIndicator
+            scrollableRef={scrollViewRef}
+            autoScrollEnabled
+          />
+        </Animated.ScrollView>
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

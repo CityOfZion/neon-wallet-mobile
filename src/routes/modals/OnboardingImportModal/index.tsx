@@ -18,8 +18,7 @@ import { useImportAction } from '@/hooks/useImportAction'
 import { useNeonImportBackup } from '@/hooks/useNeonBackup'
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbArrowRight from '@/assets/images/tb-arrow-right.svg'
 import TbCheck from '@/assets/images/tb-check.svg'
@@ -54,27 +53,27 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
   }
 
   const handleSubmitAddress = async (address: string) => {
-    navigation.navigate('ImportAddressSelectionModal', { address, onConfirm: handleImportComplete })
+    navigation.navigate('ImportAddressSelectionModal', { address, onSuccess: handleImportComplete })
   }
 
   const handleSubmitMnemonic = async (mnemonic: string) => {
     navigation.navigate('ImportMnemonicSelectionModal', {
       mnemonic,
-      onConfirm: handleImportComplete,
+      onSuccess: handleImportComplete,
     })
   }
 
   const handleSubmitKey = async (key: string) => {
     navigation.navigate('ImportKeySelectionModal', {
       key,
-      onConfirm: handleImportComplete,
+      onSuccess: handleImportComplete,
     })
   }
 
   const handleSubmitEncryptedKey = async (encryptedKey: string) => {
     navigation.navigate('ImportEncryptedKeySelectionModal', {
       encryptedKey,
-      onConfirm: handleImportComplete,
+      onSuccess: handleImportComplete,
     })
   }
 
@@ -141,91 +140,98 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
   }, [backupFile])
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <View className="mb-8">
-        <Text className="my-6 text-center font-sans-regular text-lg text-white">{t('importDescription')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
 
-        <TwInput
-          placeholder={t('importDetailsPlaceholder')}
-          aria-label={t('importDetailsLabel')}
-          value={actionData.text}
-          onChangeText={handleChange}
-          autoFocus={isMnemonic}
-          className={StyleHelper.mergeStyles({
-            'h-fit max-h-36 align-top': isMnemonic,
-          })}
-          actionsContainerProps={{
-            className: StyleHelper.mergeStyles({
-              'mt-2 items-start': isMnemonic,
-            }),
-          }}
-          inputContainerProps={{
-            className: StyleHelper.mergeStyles('bg-gray-900 items-start', {
-              'border-magenta': !!actionState.errors.text,
-            }),
-          }}
-          multiline={isMnemonic}
-          pastable
-          clearable
-          autoCapitalize="none"
-          submitBehavior="blurAndSubmit"
-          autoComplete="off"
-          autoCorrect={false}
-        />
+      <ModalLayout.KeyboardAvoidingContent>
+        <View className="mb-8">
+          <Text className="my-6 text-center font-sans-regular text-lg text-white">{t('importDescription')}</Text>
 
-        {isMnemonic && (
-          <View className="mb-3 mt-4 flex-row items-center justify-center gap-2.5">
-            {actionState.errors.text ? (
-              <TbX aria-hidden className="size-5 text-magenta" />
-            ) : (
-              <TbCheck aria-hidden className="size-5 text-neon" />
-            )}
+          <TwInput
+            placeholder={t('importDetailsPlaceholder')}
+            aria-label={t('importDetailsLabel')}
+            value={actionData.text}
+            onChangeText={handleChange}
+            autoFocus={isMnemonic}
+            className={StyleHelper.mergeStyles({
+              'h-fit max-h-36 align-top': isMnemonic,
+            })}
+            actionsContainerProps={{
+              className: StyleHelper.mergeStyles({
+                'mt-2 items-start': isMnemonic,
+              }),
+            }}
+            inputContainerProps={{
+              className: StyleHelper.mergeStyles('bg-gray-900 items-start', {
+                'border-magenta': !!actionState.errors.text,
+              }),
+            }}
+            multiline={isMnemonic}
+            pastable
+            clearable
+            autoCapitalize="none"
+            submitBehavior="blurAndSubmit"
+            autoComplete="off"
+            autoCorrect={false}
+          />
 
-            <Text
-              className={StyleHelper.mergeStyles('font-sans-regular text-base text-neon', {
-                'text-magenta': actionState.errors.text,
-              })}
-            >
-              {t(!actionState.errors.text ? 'messages.mnemonicComplete' : 'messages.mnemonicIncorrect')}
-            </Text>
-          </View>
-        )}
+          {isMnemonic && (
+            <View className="mb-3 mt-4 flex-row items-center justify-center gap-2.5">
+              {actionState.errors.text ? (
+                <TbX aria-hidden className="size-5 text-magenta" />
+              ) : (
+                <TbCheck aria-hidden className="size-5 text-neon" />
+              )}
 
-        <TwButton
-          label={t('scanButtonLabel')}
-          variant="card"
-          leftElement={<TbQrcode aria-hidden />}
-          onPress={handleScanQrCode}
-          className="mt-4"
-        />
-      </View>
+              <Text
+                className={StyleHelper.mergeStyles('font-sans-regular text-base text-neon', {
+                  'text-magenta': actionState.errors.text,
+                })}
+              >
+                {t(!actionState.errors.text ? 'messages.mnemonicComplete' : 'messages.mnemonicIncorrect')}
+              </Text>
+            </View>
+          )}
 
-      <TwSeparator />
+          <TwButton
+            label={t('scanButtonLabel')}
+            variant="card"
+            leftElement={<TbQrcode aria-hidden />}
+            onPress={handleScanQrCode}
+            className="mt-4"
+          />
+        </View>
 
-      <View className="mt-8 gap-y-3">
-        <Text className="text-center font-sans-regular text-lg text-gray-100">{t('backupImportDescription')}</Text>
-        <TwButton
-          label={t('locateButtonLabel')}
-          variant="card"
-          className="mt-3"
-          leftElement={<TbEyeSearch aria-hidden />}
-          onPress={handleBrowseClick}
-        />
+        <TwSeparator />
 
-        {backupFile && <TwBanner type="success">{t('messages.successFile')}</TwBanner>}
-      </View>
+        <View className="mt-8 gap-y-3">
+          <Text className="text-center font-sans-regular text-lg text-gray-100">{t('backupImportDescription')}</Text>
+          <TwButton
+            label={t('locateButtonLabel')}
+            variant="card"
+            className="mt-3"
+            leftElement={<TbEyeSearch aria-hidden />}
+            onPress={handleBrowseClick}
+          />
 
-      <View className="mb-3 mt-auto">
-        <TwButton
-          className="mt-8"
-          variant="contained-light"
-          label={tCommon('general.next')}
-          disabled={isSubmitDisabled}
-          onPress={handleSubmitPress}
-          isLoading={actionState.isActing}
-          rightElement={<TbArrowRight aria-hidden />}
-        />
-      </View>
-    </TwModalLayout>
+          {backupFile && <TwBanner type="success">{t('messages.successFile')}</TwBanner>}
+        </View>
+
+        <ModalLayout.KeyboardAvoidingArea>
+          <TwButton
+            className="mt-8"
+            variant="contained-light"
+            label={tCommon('general.next')}
+            disabled={isSubmitDisabled}
+            onPress={handleSubmitPress}
+            isLoading={actionState.isActing}
+            rightElement={<TbArrowRight aria-hidden />}
+          />
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }

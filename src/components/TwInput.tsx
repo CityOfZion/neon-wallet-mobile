@@ -96,11 +96,12 @@ export const TwInput = ({
       <View
         {...inputContainerProps}
         className={StyleHelper.mergeStyles(
-          'flex-row items-center gap-2 rounded-lg border border-transparent bg-asphalt pl-5 pr-3',
+          'w-full flex-row items-center gap-2 rounded-lg border border-transparent bg-asphalt pl-5 pr-3',
           {
             'opacity-50': disabled,
             'border-pink': !!error,
             'border-neon': !!success,
+            'py-2': props.multiline,
           },
           inputContainerProps?.className
         )}
@@ -109,9 +110,10 @@ export const TwInput = ({
 
         <TextInput
           className={StyleHelper.mergeStyles(
-            'h-[52px] max-h-[52px] flex-1 font-sans-regular text-[1.125rem] text-white placeholder:text-gray-300',
+            'h-[52px] flex-1 font-sans-regular text-[1.125rem] text-white placeholder:text-gray-300',
             {
               'pt-3.5': Platform.OS === 'ios' && props.multiline,
+              'max-h-[52px]': !props.multiline,
             },
             className
           )}

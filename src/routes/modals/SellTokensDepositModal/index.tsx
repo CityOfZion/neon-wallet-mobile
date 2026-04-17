@@ -32,8 +32,7 @@ import { useDebounceFunction } from '@/hooks/useDebounceFunction'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TDepositActionsData } from '@/routes/screens/BuyAndSellTokensScreen'
 
@@ -333,140 +332,144 @@ export const SellTokensDepositModal = ({
   }, [actionData])
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      titleClassName="text-white text-xl"
-      rightElement={<TwModalLayoutCloseIconButton />}
-    >
-      <Text className="mx-3 font-sans-bold text-sm text-white">{t('description')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title className="text-xl">{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
 
-      <Text className="mx-3 mt-4 font-sans-regular text-sm text-white">{t('observation')}</Text>
+      <ModalLayout.KeyboardAvoidingContent>
+        <Text className="mx-3 font-sans-bold text-sm text-white">{t('description')}</Text>
 
-      <TwSeparator containerClassName="px-3 mt-4" />
+        <Text className="mx-3 mt-4 font-sans-regular text-sm text-white">{t('observation')}</Text>
 
-      <Text className="mx-3 mt-4 font-sans-semibold text-xs uppercase text-gray-200">{t('form.title')}</Text>
+        <TwSeparator containerClassName="px-3 mt-4" />
 
-      <View className="mt-3 rounded bg-gray-300/15 px-1 pb-0 pt-2">
-        <ActionStep
-          title={t('form.account.label')}
-          className="pb-6"
-          leftElement={<TbStepOut aria-hidden className="size-5 text-blue" />}
-        >
-          <ActionAddressButton
-            label={t('form.select.placeholder')}
-            className="h-11 w-30 rounded-md"
-            contentProps={{ className: 'px-2 gap-2' }}
-            address={actionData.account?.address}
-            blockchain={blockchain}
-            error={!!accountError}
-            isLoading={false}
-            onPress={handleOpenAccountSelectionModal}
-          />
-        </ActionStep>
-      </View>
+        <Text className="mx-3 mt-4 font-sans-semibold text-xs uppercase text-gray-200">{t('form.title')}</Text>
 
-      <TwStepSeparator contentClassName="bg-gray-700" iconContainerClassName="bg-gray-300/15" />
-
-      <View className="rounded bg-gray-300/15 px-1 py-3">
-        <ActionStep
-          title={t('form.recipient.label')}
-          className="pb-6 pt-4"
-          leftElement={<TbStepInto aria-hidden className="size-5 text-blue" />}
-        />
-
-        <TwSeparator containerClassName="px-1" />
-
-        <ActionStep
-          title={t('form.token.label')}
-          error={!!tokenError}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-        >
-          <ActionTokenButton
-            label={t('form.select.placeholder')}
-            className="h-11 w-30 rounded-md"
-            contentProps={{ className: 'px-2 gap-2' }}
-            token={actionData.token}
-            disabled={isRecipientDisabled}
-            isLoading={isBalanceLoading}
-            onPress={handleOpenTokenSelectionModal}
-          />
-        </ActionStep>
-
-        <TwSeparator containerClassName="px-1" />
-
-        <ActionStep
-          title={t('form.address.label')}
-          error={!!addressError}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-        >
-          <TwInput
-            aria-label={t('form.address.label')}
-            placeholder={t('form.address.placeholder')}
-            value={actionData.address}
-            pastable
-            disabled={isRecipientDisabled}
-            className="whitespace-nowrap"
-            containerProps={{ className: 'w-[62%]' }}
-            inputContainerProps={{ className: 'h-11 px-1 rounded-md gap-1' }}
-            onChangeText={handleChangeAddress}
-          />
-        </ActionStep>
-
-        <TwSeparator containerClassName="px-1" />
-
-        <ActionStep
-          title={t('form.amount.label')}
-          error={!!amountError}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-        >
-          <ActionInput
-            ref={amountTextInputRef}
-            placeholder={t('form.amount.placeholder')}
-            className="ml-auto mr-0 w-30 whitespace-nowrap rounded-md bg-gray-800"
-            value={actionData.amount}
-            disabled={isAmountDisabled}
-            editable={!isAmountDisabled}
-            error={!!amountError}
-            onChangeText={handleChangeAmount}
-          />
-        </ActionStep>
-
-        <View className="flex-row justify-between pb-3 pl-9 pr-3">
-          <Text className="font-sans-italic text-sm text-gray-200">
-            {t('form.fiat.label', { currencyLabel: currency.label })}
-          </Text>
-          <Text className="font-sans-italic text-sm text-gray-200">
-            {CurrencyHelper.format(
-              NumberHelper.number(actionData.amount) * NumberHelper.number(tokenBalance?.exchangeConvertedPrice),
-              { currency }
-            )}
-          </Text>
+        <View className="mt-3 rounded bg-gray-300/15 px-1 pb-0 pt-2">
+          <ActionStep
+            title={t('form.account.label')}
+            className="pb-6"
+            leftElement={<TbStepOut aria-hidden className="size-5 text-blue" />}
+          >
+            <ActionAddressButton
+              label={t('form.select.placeholder')}
+              className="h-11 w-30 rounded-md"
+              contentProps={{ className: 'px-2 gap-2' }}
+              address={actionData.account?.address}
+              blockchain={blockchain}
+              error={!!accountError}
+              isLoading={false}
+              onPress={handleOpenAccountSelectionModal}
+            />
+          </ActionStep>
         </View>
-      </View>
 
-      {isServiceCalculableFee && (
-        <ActionFeeStep
-          title={t('form.totalFee.label')}
-          feePlaceholder={t('form.totalFee.placeholder')}
-          className="mt-3 bg-gray-300/15"
-          iconClassName="size-5"
-          isCalculatingFee={actionData.isFeeLoading}
-          fee={actionData.fee}
-          service={service}
-        />
-      )}
+        <TwStepSeparator contentClassName="bg-gray-700" iconContainerClassName="bg-gray-300/15" />
 
-      {errorMessage && <TwAlertErrorBanner className="mt-3 gap-3 px-3" message={errorMessage} />}
+        <View className="rounded bg-gray-300/15 px-1 py-3">
+          <ActionStep
+            title={t('form.recipient.label')}
+            className="pb-6 pt-4"
+            leftElement={<TbStepInto aria-hidden className="size-5 text-blue" />}
+          />
 
-      <TwButton
-        className="mx-4 my-10"
-        variant="contained-light"
-        label={t('form.submit')}
-        isLoading={actionState.isActing}
-        disabled={isDisabled}
-        leftElement={<TbStepOut aria-hidden className="text-neon" />}
-        onPress={handleAct(handleSubmit)}
-      />
-    </TwModalLayout>
+          <TwSeparator containerClassName="px-1" />
+
+          <ActionStep
+            title={t('form.token.label')}
+            error={!!tokenError}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+          >
+            <ActionTokenButton
+              label={t('form.select.placeholder')}
+              className="h-11 w-30 rounded-md"
+              contentProps={{ className: 'px-2 gap-2' }}
+              token={actionData.token}
+              disabled={isRecipientDisabled}
+              isLoading={isBalanceLoading}
+              onPress={handleOpenTokenSelectionModal}
+            />
+          </ActionStep>
+
+          <TwSeparator containerClassName="px-1" />
+
+          <ActionStep
+            title={t('form.address.label')}
+            error={!!addressError}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+          >
+            <TwInput
+              aria-label={t('form.address.label')}
+              placeholder={t('form.address.placeholder')}
+              value={actionData.address}
+              pastable
+              disabled={isRecipientDisabled}
+              className="whitespace-nowrap"
+              containerProps={{ className: 'w-[62%]' }}
+              inputContainerProps={{ className: 'h-11 px-1 rounded-md gap-1' }}
+              onChangeText={handleChangeAddress}
+            />
+          </ActionStep>
+
+          <TwSeparator containerClassName="px-1" />
+
+          <ActionStep
+            title={t('form.amount.label')}
+            error={!!amountError}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+          >
+            <ActionInput
+              ref={amountTextInputRef}
+              placeholder={t('form.amount.placeholder')}
+              className="ml-auto mr-0 w-30 whitespace-nowrap rounded-md bg-gray-800"
+              value={actionData.amount}
+              disabled={isAmountDisabled}
+              editable={!isAmountDisabled}
+              error={!!amountError}
+              onChangeText={handleChangeAmount}
+            />
+          </ActionStep>
+
+          <View className="flex-row justify-between pb-3 pl-9 pr-3">
+            <Text className="font-sans-italic text-sm text-gray-200">
+              {t('form.fiat.label', { currencyLabel: currency.label })}
+            </Text>
+            <Text className="font-sans-italic text-sm text-gray-200">
+              {CurrencyHelper.format(
+                NumberHelper.number(actionData.amount) * NumberHelper.number(tokenBalance?.exchangeConvertedPrice),
+                { currency }
+              )}
+            </Text>
+          </View>
+        </View>
+
+        {isServiceCalculableFee && (
+          <ActionFeeStep
+            title={t('form.totalFee.label')}
+            feePlaceholder={t('form.totalFee.placeholder')}
+            className="mt-3 bg-gray-300/15"
+            iconClassName="size-5"
+            isCalculatingFee={actionData.isFeeLoading}
+            fee={actionData.fee}
+            service={service}
+          />
+        )}
+
+        {errorMessage && <TwAlertErrorBanner className="mt-3 gap-3 px-3" message={errorMessage} />}
+
+        <ModalLayout.KeyboardAvoidingArea>
+          <TwButton
+            variant="contained-light"
+            label={t('form.submit')}
+            isLoading={actionState.isActing}
+            disabled={isDisabled}
+            leftElement={<TbStepOut aria-hidden className="text-neon" />}
+            onPress={handleAct(handleSubmit)}
+          />
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }

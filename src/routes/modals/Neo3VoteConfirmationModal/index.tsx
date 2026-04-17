@@ -31,8 +31,7 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 import { useWalletByIdSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCheckbox from '@/assets/images/tb-checkbox.svg'
 
@@ -180,84 +179,88 @@ export const Neo3VoteConfirmationModal = ({
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      titleClassName="text-lg"
-      contentContainerClassName="pt-2 pb-16"
-      rightElement={<TwModalLayoutCloseIconButton />}
-    >
-      <View className="flex w-full flex-col gap-y-3">
-        <Text className="font-sans-bold text-lg text-white">{t('holderDescription')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title className="text-lg">{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="pt-2 pb-16">
+        <View className="flex w-full flex-col gap-y-3">
+          <Text className="font-sans-bold text-lg text-white">{t('holderDescription')}</Text>
 
-        <Text className="font-sans-regular text-lg text-white">{t('systemDescription')}</Text>
+          <Text className="font-sans-regular text-lg text-white">{t('systemDescription')}</Text>
 
-        <TwDashedSeparator className="my-4" />
+          <TwDashedSeparator className="my-4" />
 
-        <Neo3VoteConfirmationSummary
-          title={t('voteDetailsTitle')}
-          neo3Account={neo3Account}
-          candidate={candidate}
-          neoAmount={neoAmount}
-          isLoading={isDataLoading}
-        />
+          <Neo3VoteConfirmationSummary
+            title={t('voteDetailsTitle')}
+            neo3Account={neo3Account}
+            candidate={candidate}
+            neoAmount={neoAmount}
+            isLoading={isDataLoading}
+          />
 
-        <Details.Root className="bg-asphalt/50">
-          <Details.Body>
-            <Details.Item
-              label={<Neo3VoteConfirmationDetailsLabel>{t('detailsFeeLabel')}</Neo3VoteConfirmationDetailsLabel>}
-              description={
+          <Details.Root className="bg-asphalt/50">
+            <Details.Body>
+              <Details.Item
+                label={<Neo3VoteConfirmationDetailsLabel>{t('detailsFeeLabel')}</Neo3VoteConfirmationDetailsLabel>}
+                description={
+                  <Skeleton.Root loading={isCalculateVoteFeeLoading}>
+                    <Skeleton.Group>
+                      <Skeleton.Item className="h-5 w-24" />
+                    </Skeleton.Group>
+                    <Skeleton.Content>
+                      <Text className="font-sans-medium text-sm uppercase text-gray-100" accessibilityRole="text">
+                        {CurrencyHelper.format(
+                          exchangeQuery.convertAmount(fee || 0, service.feeToken.hash, service.name),
+                          { currency, maximumFractionDigits: 3, showZero: false }
+                        )}
+                      </Text>
+                    </Skeleton.Content>
+                  </Skeleton.Root>
+                }
+              >
+                <View className="flex-row items-center">
+                  <TwBlockchainIcon
+                    blockchain={neo3Account.blockchain}
+                    className="mr-2 mt-0.5 size-3.5 text-gray-300"
+                  />
+                  <Text className="font-sans-regular text-base text-white">{service.feeToken.name}</Text>
+                </View>
+
                 <Skeleton.Root loading={isCalculateVoteFeeLoading}>
                   <Skeleton.Group>
-                    <Skeleton.Item className="h-5 w-24" />
+                    <Skeleton.Item className="h-5 w-30" />
                   </Skeleton.Group>
                   <Skeleton.Content>
-                    <Text className="font-sans-medium text-sm uppercase text-gray-100" accessibilityRole="text">
-                      {CurrencyHelper.format(
-                        exchangeQuery.convertAmount(fee || 0, service.feeToken.hash, service.name),
-                        { currency, maximumFractionDigits: 3, showZero: false }
-                      )}
-                    </Text>
+                    <Text className="font-sans-medium text-base text-white">{fee}</Text>
                   </Skeleton.Content>
                 </Skeleton.Root>
-              }
-            >
-              <View className="flex-row items-center">
-                <TwBlockchainIcon blockchain={neo3Account.blockchain} className="mr-2 mt-0.5 size-3.5 text-gray-300" />
-                <Text className="font-sans-regular text-base text-white">{service.feeToken.name}</Text>
-              </View>
+              </Details.Item>
+            </Details.Body>
+          </Details.Root>
 
-              <Skeleton.Root loading={isCalculateVoteFeeLoading}>
-                <Skeleton.Group>
-                  <Skeleton.Item className="h-5 w-30" />
-                </Skeleton.Group>
-                <Skeleton.Content>
-                  <Text className="font-sans-medium text-base text-white">{fee}</Text>
-                </Skeleton.Content>
-              </Skeleton.Root>
-            </Details.Item>
-          </Details.Body>
-        </Details.Root>
+          {!!voteErrorMessage && (
+            <TwAlertErrorBanner
+              className="w-full gap-x-3 px-4"
+              iconClassName="text-pink"
+              messageClassName="text-lg font-sans-regular"
+              message={voteErrorMessage}
+            />
+          )}
 
-        {!!voteErrorMessage && (
-          <TwAlertErrorBanner
-            className="w-full gap-x-3 px-4"
-            iconClassName="text-pink"
-            messageClassName="text-lg font-sans-regular"
-            message={voteErrorMessage}
+          <TwButton
+            label={t('castVoteButtonLabel')}
+            variant="contained-light"
+            className="mt-6 w-full"
+            disabled={isDisabled}
+            isLoading={isSubmitting}
+            contentProps={{ className: 'px-4' }}
+            leftElement={<TbCheckbox aria-hidden />}
+            onPress={handleSubmit}
           />
-        )}
-
-        <TwButton
-          label={t('castVoteButtonLabel')}
-          variant="contained-light"
-          className="mb-2 mt-6 w-full"
-          disabled={isDisabled}
-          isLoading={isSubmitting}
-          contentProps={{ className: 'px-4' }}
-          leftElement={<TbCheckbox aria-hidden />}
-          onPress={handleSubmit}
-        />
-      </View>
-    </TwModalLayout>
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

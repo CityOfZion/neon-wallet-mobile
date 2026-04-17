@@ -12,7 +12,7 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TMoreStackScreenProps } from '@/types/stacks'
@@ -50,8 +50,14 @@ export const SettingsProtocolsScreen = ({ navigation }: TMoreStackScreenProps<'S
   }, [commonT, navigation, selectedNetworkByBlockchain])
 
   return (
-    <TwScreenLayout title={t('title')} withoutScroll>
-      <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
-    </TwScreenLayout>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

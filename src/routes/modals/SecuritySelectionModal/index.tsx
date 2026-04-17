@@ -18,8 +18,7 @@ import { usePasswordAuthentication } from '@/hooks/usePasswordAuthentication'
 import { useSecuritySelector } from '@/hooks/useSettingsSelector'
 import { useStandardWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { SecuritySelectionModalButton } from './SecuritySelectionModalButton'
 
@@ -105,61 +104,67 @@ export const SecuritySelectionModal = ({ navigation }: TRootStackScreenProps<'Se
   )
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} contentContainerClassName="px-0">
-      {isMounting || isNfiAuthenticationAvailable === undefined || isDeviceAuthenticationAvailable === undefined ? (
-        <ScreenLoader />
-      ) : (
-        <Fragment>
-          <Text className="mb-6 px-5 font-sans-regular text-lg text-white">{t('description')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="px-0">
+        {isMounting || isNfiAuthenticationAvailable === undefined || isDeviceAuthenticationAvailable === undefined ? (
+          <ScreenLoader />
+        ) : (
+          <Fragment>
+            <Text className="mb-6 px-5 font-sans-regular text-lg text-white">{t('description')}</Text>
 
-          <View className="px-5">
-            <SecuritySelectionModalButton
-              currentSecurity={security}
-              securityType="password"
-              disabled={loading}
-              onPress={handleLinkSecurity('password')}
-              onRemove={handleRemoveSecurity}
-              label={t('passwordTypeButtonLabel')}
-            />
+            <View className="px-5">
+              <SecuritySelectionModalButton
+                currentSecurity={security}
+                securityType="password"
+                disabled={loading}
+                onPress={handleLinkSecurity('password')}
+                onRemove={handleRemoveSecurity}
+                label={t('passwordTypeButtonLabel')}
+              />
 
-            {isDeviceAuthenticationAvailable && (
-              <Fragment>
-                <TwSeparator />
+              {isDeviceAuthenticationAvailable && (
+                <Fragment>
+                  <TwSeparator />
 
-                <SecuritySelectionModalButton
-                  currentSecurity={security}
-                  securityType="device"
-                  disabled={loading}
-                  onPress={handleLinkSecurity('device')}
-                  onRemove={handleRemoveSecurity}
-                  label={t('deviceTypeButtonLabel')}
-                />
-              </Fragment>
-            )}
+                  <SecuritySelectionModalButton
+                    currentSecurity={security}
+                    securityType="device"
+                    disabled={loading}
+                    onPress={handleLinkSecurity('device')}
+                    onRemove={handleRemoveSecurity}
+                    label={t('deviceTypeButtonLabel')}
+                  />
+                </Fragment>
+              )}
 
-            {isNfiAuthenticationAvailable && (
-              <Fragment>
-                <TwSeparator />
+              {isNfiAuthenticationAvailable && (
+                <Fragment>
+                  <TwSeparator />
 
-                <SecuritySelectionModalButton
-                  currentSecurity={security}
-                  securityType="nfi"
-                  disabled={loading}
-                  onPress={handleLinkSecurity('nfi')}
-                  onRemove={handleRemoveSecurity}
-                  label={t('nfiTypeButtonLabel')}
-                />
-              </Fragment>
-            )}
-          </View>
-
-          {security.type === 'disabled' && (
-            <View className="mt-auto px-5">
-              <TwBanner type="error">{t('alert')}</TwBanner>
+                  <SecuritySelectionModalButton
+                    currentSecurity={security}
+                    securityType="nfi"
+                    disabled={loading}
+                    onPress={handleLinkSecurity('nfi')}
+                    onRemove={handleRemoveSecurity}
+                    label={t('nfiTypeButtonLabel')}
+                  />
+                </Fragment>
+              )}
             </View>
-          )}
-        </Fragment>
-      )}
-    </TwModalLayout>
+
+            {security.type === 'disabled' && (
+              <View className="mt-auto px-5">
+                <TwBanner type="error">{t('alert')}</TwBanner>
+              </View>
+            )}
+          </Fragment>
+        )}
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

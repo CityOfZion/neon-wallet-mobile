@@ -4,7 +4,6 @@ import { type BarcodeScanningResult, CameraView, useCameraPermissions } from 'ex
 import { useTranslation } from 'react-i18next'
 import { Modal, Text, useWindowDimensions, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
@@ -24,7 +23,6 @@ const QrCodeScanModal = () => {
   const { t } = useTranslation('components', { keyPrefix: 'qrCodeScan' })
   const { width, height } = useWindowDimensions()
   const [permission, requestPermission] = useCameraPermissions()
-  const { top, left } = useSafeAreaInsets()
 
   const [visible, setVisible] = useState(false)
 
@@ -125,11 +123,10 @@ const QrCodeScanModal = () => {
           </View>
         ) : (
           <Fragment>
-            <CameraView className="absolute left-0 top-0 h-full w-full" onBarcodeScanned={handleBarCodeScanned} mute />
+            <CameraView className="absolute left-0 top-0 size-full" onBarcodeScanned={handleBarCodeScanned} mute />
 
             <TwIconButton
-              className="absolute"
-              style={{ top, left: left + 10 }}
+              className="top-safe absolute left-[calc(env(safe-area-inset-left)+10px)]"
               icon={<MdClose className="text-white" aria-hidden />}
               onPress={hide}
               aria-label={t('closeButtonLabel')}

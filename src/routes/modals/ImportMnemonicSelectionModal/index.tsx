@@ -19,14 +19,13 @@ import { usePressOnce } from '@/hooks/usePressOnce'
 import { useLastIndexesByWallet } from '@/hooks/useUtilitySelector'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TUseImportAccountsParams } from '@/types/hooks'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'ImportMnemonicSelectionModal'>) => {
-  const { mnemonic, onConfirm } = route.params
+  const { mnemonic, onSuccess } = route.params
 
   const { accountsRef } = useAccountsSelector()
   const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelection' })
@@ -57,7 +56,7 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
 
     AnalyticsHelper.logEvent('wallet_imported')
 
-    onConfirm()
+    onSuccess()
   })
 
   const handleSelectAccount = (account: TAccountSelectionAccordionAccount) => {
@@ -94,37 +93,39 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
   )
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      rightElement={<TwModalLayoutCloseIconButton />}
-      contentContainerClassName="justify-between"
-    >
-      {isMounting ? (
-        <ScreenLoader />
-      ) : (
-        <Fragment>
-          <View>
-            <Text className="my-8 px-6 text-center font-sans-regular text-lg text-white">
-              {t('foundAccountsMnemonicLabel')}
-            </Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="justify-between">
+        {isMounting ? (
+          <ScreenLoader />
+        ) : (
+          <Fragment>
+            <View>
+              <Text className="my-8 px-6 text-center font-sans-regular text-lg text-white">
+                {t('foundAccountsMnemonicLabel')}
+              </Text>
 
-            <AccountSelectionAccordion
-              selectedAccounts={selectedAccounts}
-              accounts={generatedAccounts}
-              onPressAccount={handleSelectAccount}
+              <AccountSelectionAccordion
+                selectedAccounts={selectedAccounts}
+                accounts={generatedAccounts}
+                onPressAccount={handleSelectAccount}
+              />
+            </View>
+
+            <TwButton
+              variant="contained-light"
+              className="my-4"
+              label={t('buttonLabel')}
+              isLoading={isImporting}
+              disabled={selectedAccounts.length === 0}
+              onPress={startImport}
             />
-          </View>
-
-          <TwButton
-            variant="contained-light"
-            className="my-4"
-            label={t('buttonLabel')}
-            isLoading={isImporting}
-            disabled={selectedAccounts.length === 0}
-            onPress={startImport}
-          />
-        </Fragment>
-      )}
-    </TwModalLayout>
+          </Fragment>
+        )}
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

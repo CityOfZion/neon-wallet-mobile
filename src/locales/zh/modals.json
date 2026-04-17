@@ -365,7 +365,7 @@
   },
   "importEncryptedKeySelection": {
     "accountAlreadyExists": "账户已存在",
-    "decryptError": "解密密钥时出错",
+    "decryptError": "密码错误",
     "description": "选择您要导入的加密密钥所对应的区块链",
     "importEncryptedConfirmPasswordLabel": "要继续，请输入用于加密密钥的密码：",
     "importEncryptedKeyInputPlaceholder": "输入密码",
@@ -502,7 +502,7 @@
     "latencyLabel": "{{latency}}毫秒",
     "listLabel": "网络 URL 列表",
     "refreshButtonLabel": "刷新",
-    "selectAutomaticallyCheckboxLabel": "自动选择",
+    "selectAutomaticallyCheckboxLabel": "Auto",
     "title": "网络 URL 选择"
   },
   "notificationContext": {
@@ -732,6 +732,7 @@
       "invalidLimit": "无效限额"
     },
     "limitLabel": "限额（可选）",
+    "limitPlaceholder": "输入限额",
     "title": "信任线",
     "tokenLabel": "代币",
     "tokenPlaceholder": "选择代币"
@@ -739,6 +740,7 @@
   "stellarTrustilneTokenSelection": {
     "noTokensFound": "未找到代币",
     "placeholderMessage": "输入以搜索代币",
+    "searchInputPlaceholder": "搜索代币",
     "title": "信任线"
   },
   "survey": {

@@ -20,8 +20,7 @@ import { useAccountsWithWalletMapSelector } from '@/hooks/useAccountSelector'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -55,57 +54,59 @@ export const DappConnectionDetailsModal = ({
   const wallet = account?.wallet
 
   return (
-    <TwModalLayout
-      rightElement={<TwModalLayoutCloseIconButton />}
-      title={t('title')}
-      contentContainerClassName="space-between"
-    >
-      <TwDappHeader
-        title={<Text className="font-sans-bold text-lg text-white">{session.peer.metadata.name}</Text>}
-        uri={session.peer.metadata.icons[0]}
-      />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="space-between">
+        <TwDappHeader
+          title={<Text className="font-sans-bold text-lg text-white">{session.peer.metadata.name}</Text>}
+          uri={session.peer.metadata.icons[0]}
+        />
 
-      <DappDetailsCard
-        chain={sessionDetails.service.walletConnectService.chain}
-        methods={sessionDetails.methods}
-        className="my-6"
-      >
-        <Details.Panel label={t('expiresAtPanelTitle')}>
-          <Details.Item>
-            {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PPPp', language })}
-          </Details.Item>
-        </Details.Panel>
-
-        {wallet && (
-          <Details.Panel label={t('walletPanelTitle')}>
-            <Details.Item>{wallet.name}</Details.Item>
-          </Details.Panel>
-        )}
-
-        {account && (
-          <Details.Panel label={t('accountPanelTitle')}>
-            <Details.Item contentClassName="justify-start">
-              <View
-                className={StyleHelper.mergeStyles('size-3 rounded-full bg-neon', account.skin.id)}
-                style={{
-                  backgroundColor: account.skin.type === 'color' ? account.skin.id : undefined,
-                }}
-              />
-
-              <Text className="font-sans-medium text-sm text-white">{account.name}</Text>
+        <DappDetailsCard
+          chain={sessionDetails.service.walletConnectService.chain}
+          methods={sessionDetails.methods}
+          className="my-6"
+        >
+          <Details.Panel label={t('expiresAtPanelTitle')}>
+            <Details.Item>
+              {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PPPp', language })}
             </Details.Item>
           </Details.Panel>
-        )}
-      </DappDetailsCard>
 
-      <TwButton
-        className="mt-auto"
-        variant="outline"
-        colorSchema="pink"
-        label={commonT('general.disconnect')}
-        isLoading={isDisconnecting}
-        onPress={startDisconnect}
-      />
-    </TwModalLayout>
+          {wallet && (
+            <Details.Panel label={t('walletPanelTitle')}>
+              <Details.Item>{wallet.name}</Details.Item>
+            </Details.Panel>
+          )}
+
+          {account && (
+            <Details.Panel label={t('accountPanelTitle')}>
+              <Details.Item contentClassName="justify-start">
+                <View
+                  className={StyleHelper.mergeStyles('size-3 rounded-full bg-neon', account.skin.id)}
+                  style={{
+                    backgroundColor: account.skin.type === 'color' ? account.skin.id : undefined,
+                  }}
+                />
+
+                <Text className="font-sans-medium text-sm text-white">{account.name}</Text>
+              </Details.Item>
+            </Details.Panel>
+          )}
+        </DappDetailsCard>
+
+        <TwButton
+          className="mt-auto"
+          variant="outline"
+          colorSchema="pink"
+          label={commonT('general.disconnect')}
+          isLoading={isDisconnecting}
+          onPress={startDisconnect}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

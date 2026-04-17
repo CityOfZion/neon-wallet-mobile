@@ -64,7 +64,7 @@ const Alert = () => {
       onRequestClose={hide}
     >
       <BlurView
-        className="h-full w-full items-center justify-center"
+        className="size-full items-center justify-center"
         intensity={Platform.OS === 'ios' ? 15 : 90}
         tint="dark"
         onTouchStart={hide}

@@ -14,8 +14,7 @@ import { useActions } from '@/hooks/useActions'
 import { createAppSelector, useAppSelector } from '@/hooks/useRedux'
 import { useOwnWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbX from '@/assets/images/tb-x.svg'
 
@@ -88,92 +87,98 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
   }
 
   return (
-    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <SelectAccordion.Root
-        className="mt-4"
-        value={selectedWallet?.name}
-        open={walletAccordionIsOpen}
-        onOpenChange={handleToggleWalletAccordion}
-      >
-        <SelectAccordion.Trigger label={t('walletsAccordionLabel')} />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{title || t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <SelectAccordion.Root
+          className="mt-4"
+          value={selectedWallet?.name}
+          open={walletAccordionIsOpen}
+          onOpenChange={handleToggleWalletAccordion}
+        >
+          <SelectAccordion.Trigger label={t('walletsAccordionLabel')} />
 
-        <SelectAccordion.Content>
-          <Radio.Root value={selectedWallet} onValueChange={handleWalletChange} className="bg-transparent">
-            {wallets.map((wallet, index) => (
-              <Fragment key={wallet.id}>
-                <Radio.Item value={wallet} id={wallet.id} label={wallet.name} />
+          <SelectAccordion.Content>
+            <Radio.Root value={selectedWallet} onValueChange={handleWalletChange} className="bg-transparent">
+              {wallets.map((wallet, index) => (
+                <Fragment key={wallet.id}>
+                  <Radio.Item value={wallet} id={wallet.id} label={wallet.name} />
 
-                {index !== wallets.length - 1 && <TwSeparator />}
-              </Fragment>
-            ))}
-          </Radio.Root>
-        </SelectAccordion.Content>
-      </SelectAccordion.Root>
+                  {index !== wallets.length - 1 && <TwSeparator />}
+                </Fragment>
+              ))}
+            </Radio.Root>
+          </SelectAccordion.Content>
+        </SelectAccordion.Root>
 
-      <SelectAccordion.Root
-        className="mt-4"
-        value={selectedAccount?.address}
-        disabled={!selectedWallet}
-        open={accountAccordionIsOpen}
-        onOpenChange={setDataWrapper('accountAccordionIsOpen')}
-      >
-        <SelectAccordion.Trigger label={t('accountsAccordionLabel')} />
+        <SelectAccordion.Root
+          className="mt-4"
+          value={selectedAccount?.address}
+          disabled={!selectedWallet}
+          open={accountAccordionIsOpen}
+          onOpenChange={setDataWrapper('accountAccordionIsOpen')}
+        >
+          <SelectAccordion.Trigger label={t('accountsAccordionLabel')} />
 
-        <SelectAccordion.Content>
-          <Radio.Root
-            value={selectedAccount}
-            onValueChange={handleAccountChange}
-            className="rounded-none bg-transparent"
-          >
-            {accounts.map((account, index) => (
-              <Fragment key={account.id}>
-                <Radio.Item
-                  value={account}
-                  id={account.id}
-                  className="gap-4"
-                  label={
-                    <View className="flex-1">
-                      <Text className="font-sans-regular text-lg text-white">{account.name}</Text>
-                      <Text
-                        className="w-24 font-sans-regular text-sm text-gray-100"
-                        numberOfLines={1}
-                        ellipsizeMode="middle"
-                      >
-                        {account.address}
-                      </Text>
-                    </View>
-                  }
-                  leftElement={
-                    <View className="h-full pt-1.5">
-                      <TwBlockchainIcon blockchain={account.blockchain} className="size-4 text-gray-300" />
-                    </View>
-                  }
-                />
+          <SelectAccordion.Content>
+            <Radio.Root
+              value={selectedAccount}
+              onValueChange={handleAccountChange}
+              className="rounded-none bg-transparent"
+            >
+              {accounts.map((account, index) => (
+                <Fragment key={account.id}>
+                  <Radio.Item
+                    value={account}
+                    id={account.id}
+                    className="gap-4"
+                    label={
+                      <View className="flex-1">
+                        <Text className="font-sans-regular text-lg text-white">{account.name}</Text>
+                        <Text
+                          className="w-24 font-sans-regular text-sm text-gray-100"
+                          numberOfLines={1}
+                          ellipsizeMode="middle"
+                        >
+                          {account.address}
+                        </Text>
+                      </View>
+                    }
+                    leftElement={
+                      <View className="h-full pt-1.5">
+                        <TwBlockchainIcon blockchain={account.blockchain} className="size-4 text-gray-300" />
+                      </View>
+                    }
+                  />
 
-                {index !== accounts.length - 1 && <TwSeparator />}
-              </Fragment>
-            ))}
-          </Radio.Root>
-        </SelectAccordion.Content>
-      </SelectAccordion.Root>
+                  {index !== accounts.length - 1 && <TwSeparator />}
+                </Fragment>
+              ))}
+            </Radio.Root>
+          </SelectAccordion.Content>
+        </SelectAccordion.Root>
 
-      <View className="mt-auto flex-row gap-3 pt-8">
-        <TwButton
-          variant="outline"
-          colorSchema="pink"
-          label={commonT('general.clear')}
-          leftElement={<TbX aria-hidden />}
-          onPress={reset}
-        />
+        <View className="mt-auto flex-row gap-3 pt-8">
+          <TwButton
+            variant="outline"
+            colorSchema="pink"
+            label={commonT('general.clear')}
+            leftElement={<TbX aria-hidden />}
+            onPress={reset}
+          />
 
-        <TwButton
-          variant="contained-light"
-          className="flex-1"
-          label={commonT('general.save')}
-          onPress={handleSave}
-          disabled={isDisabled}
-        />
-      </View>
-    </TwModalLayout>
+          <TwButton
+            variant="contained-light"
+            className="flex-1"
+            label={commonT('general.save')}
+            onPress={handleSave}
+            disabled={isDisabled}
+          />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

@@ -16,8 +16,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { useCreateHardwareWallet } from '@/hooks/useHardwareWallet'
 import { useMount } from '@/hooks/useMount'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbDeviceUsb from '@/assets/images/tb-device-usb.svg'
 import TbX from '@/assets/images/tb-x.svg'
@@ -81,42 +80,49 @@ export const ConnectHardwareUsbModal = ({ navigation }: TRootStackScreenProps<'C
   })
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      contentContainerClassName="items-center"
-      rightElement={<TwModalLayoutCloseIconButton />}
-    >
-      <Text className="font-sans-medium text-2xl text-white">{t('description1')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="items-center">
+        <Text className="font-sans-medium text-2xl text-white">{t('description1')}</Text>
 
-      <TbDeviceUsb aria-hidden rotation={45} className="my-9 h-28 w-28 stroke-1 text-blue" />
+        <TbDeviceUsb aria-hidden rotation={45} className="my-9 size-28 stroke-1 text-blue" />
 
-      {match(status)
-        .with('not-connected', () => (
-          <Fragment>
-            <View className="w-full flex-row items-center gap-4">
-              <TbDeviceUsb aria-hidden className="text-neon" rotation={45} />
+        {match(status)
+          .with('not-connected', () => (
+            <Fragment>
+              <View className="w-full flex-row items-center gap-4">
+                <TbDeviceUsb aria-hidden className="text-neon" rotation={45} />
 
-              <Text className="flex-grow font-sans-regular text-lg text-white">{t('noDevicesFound')}</Text>
+                <Text className="flex-grow font-sans-regular text-lg text-white">{t('noDevicesFound')}</Text>
 
-              <TbX aria-hidden className="text-pink" />
-            </View>
+                <TbX aria-hidden className="text-pink" />
+              </View>
 
-            <TwButton label={t('searchAgainButtonLabel')} onPress={handleConnect} variant="text" className="mt-auto" />
+              <TwButton
+                label={t('searchAgainButtonLabel')}
+                onPress={handleConnect}
+                variant="text"
+                className="mt-auto"
+              />
 
-            <Text className="mt-7 text-center font-sans-regular text-lg text-gray-100">
-              {t('noDevicesFoundDescription')}
-            </Text>
-          </Fragment>
-        ))
-        .otherwise(() => (
-          <Fragment>
-            <Text className="text-center font-sans-bold text-lg text-white">{t('description2')}</Text>
+              <Text className="mt-7 text-center font-sans-regular text-lg text-gray-100">
+                {t('noDevicesFoundDescription')}
+              </Text>
+            </Fragment>
+          ))
+          .otherwise(() => (
+            <Fragment>
+              <Text className="text-center font-sans-bold text-lg text-white">{t('description2')}</Text>
 
-            <Text className="mt-2.5 text-center font-sans-regular text-lg text-gray-100">{t('description3')}</Text>
+              <Text className="mt-2.5 text-center font-sans-regular text-lg text-gray-100">{t('description3')}</Text>
 
-            <Loader containerClassName="mt-8" className="h-10 w-10" />
-          </Fragment>
-        ))}
-    </TwModalLayout>
+              <Loader containerClassName="mt-8" className="size-10" />
+            </Fragment>
+          ))}
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

@@ -40,6 +40,11 @@
   "blockchainList": {
     "xExisting": "{{amount}} existing"
   },
+  "modalLayout": {
+    "labels": {
+      "closeButton": "Close modal"
+    }
+  },
   "nfc": {
     "description": "Please tap NFC tags",
     "title": "Ready to Scan"
@@ -48,6 +53,9 @@
     "closeButtonLabel": "Close qrcode scanner",
     "permissionOffMessage": "Camera permission is required to scan QR codes. Please grant permission in your device settings.",
     "permissionOffTitle": "Camera Access Required"
+  },
+  "screenLayout": {
+    "backButtonLabel": "Go back"
   },
   "screenLayoutBars": {
     "customMode": "Custom Network Mode",
@@ -116,11 +124,6 @@
       "clearButton": "Clear input",
       "hideButton": "Hide input",
       "showButton": "Show input"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "Close modal"
     }
   }
 }

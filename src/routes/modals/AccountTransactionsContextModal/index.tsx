@@ -7,7 +7,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbAdjustments from '@/assets/images/tb-adjustments.svg'
 import TbFileExport from '@/assets/images/tb-file-export.svg'
@@ -44,24 +44,28 @@ export const AccountTransactionsContextModal = ({
   }
 
   return (
-    <TwModalLayout full={false} withoutHeader>
-      <TwMenuButton
-        label={t('filtersButtonLabel')}
-        disabled={!hasServiceFullTransactions}
-        leftElement={<TbAdjustments aria-hidden className="text-neon" />}
-        onPress={handleFilters}
-      />
+    <ModalLayout.Root full={false}>
+      <ModalLayout.Header />
 
-      <TwSeparator />
+      <ModalLayout.ScrollContent>
+        <TwMenuButton
+          label={t('filtersButtonLabel')}
+          disabled={!hasServiceFullTransactions}
+          leftElement={<TbAdjustments aria-hidden className="text-neon" />}
+          onPress={handleFilters}
+        />
 
-      <TwMenuButton
-        label={t('exportButtonLabel')}
-        disabled={!hasServiceFullTransactions}
-        leftElement={<TbFileExport aria-hidden className="text-neon" />}
-        onPress={handleExport}
-      />
+        <TwSeparator />
 
-      <TwButton variant="text" label={tCommon('cancel')} className="mt-6" onPress={navigation.goBack} />
-    </TwModalLayout>
+        <TwMenuButton
+          label={t('exportButtonLabel')}
+          disabled={!hasServiceFullTransactions}
+          leftElement={<TbFileExport aria-hidden className="text-neon" />}
+          onPress={handleExport}
+        />
+
+        <TwButton variant="text" label={tCommon('cancel')} className="mt-6" onPress={navigation.goBack} />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

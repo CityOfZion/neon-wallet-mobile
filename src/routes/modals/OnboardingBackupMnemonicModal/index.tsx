@@ -13,7 +13,7 @@ import { useExportMnemonic } from '@/hooks/useExportMnemonic'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import NeonWalletIcon from '@/assets/images/neon-wallet-icon.svg'
 
@@ -48,32 +48,37 @@ export const OnboardingBackupMnemonicModal = ({
   })
 
   return (
-    <TwModalLayout title={t('title')} contentContainerClassName="flex-col flex-1 gap-y-6">
-      <View className="mt-8 flex-col items-center gap-y-6">
-        <NeonWalletIcon aria-hidden className="size-20 text-neon" />
-        <Text className="font-sans-regular text-2xl text-neon">{t('subtitle')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="flex-col flex-1 gap-y-6">
+        <View className="mt-8 flex-col items-center gap-y-6">
+          <NeonWalletIcon aria-hidden className="size-20 text-neon" />
+          <Text className="font-sans-regular text-2xl text-neon">{t('subtitle')}</Text>
 
-        <Text className="text-center font-sans-medium text-base text-white">
-          <Trans t={t} i18nKey="description">
-            start
-            <Text className="italic">middle</Text>
-            end
-          </Trans>
-        </Text>
-      </View>
+          <Text className="text-center font-sans-medium text-base text-white">
+            <Trans t={t} i18nKey="description">
+              start
+              <Text className="italic">middle</Text>
+              end
+            </Trans>
+          </Text>
+        </View>
 
-      <View className="mb-4 mt-auto flex-col gap-7">
-        <TwBanner type="warning" textClassName="text-base">
-          {t('warningLabel')}
-        </TwBanner>
+        <View className="mb-4 mt-auto flex-col gap-7">
+          <TwBanner type="warning" textClassName="text-base">
+            {t('warningLabel')}
+          </TwBanner>
 
-        <TwButton
-          variant="contained-light"
-          label={t('backupAndContinueButtonLabel')}
-          onPress={startSubmitting}
-          isLoading={isSubmitting}
-        />
-      </View>
-    </TwModalLayout>
+          <TwButton
+            variant="contained-light"
+            label={t('backupAndContinueButtonLabel')}
+            onPress={startSubmitting}
+            isLoading={isSubmitting}
+          />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

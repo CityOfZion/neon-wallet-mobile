@@ -17,8 +17,7 @@ import { useActions } from '@/hooks/useActions'
 import { useFileSystem } from '@/hooks/useFileSystem'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import MdLooksOne from '@/assets/images/md-looks-one.svg'
 import MdLooksTwo from '@/assets/images/md-looks-two.svg'
@@ -124,43 +123,49 @@ export const ExportFullTransactionsModal = ({
   }
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <Text className="text-center font-sans-regular text-lg text-white">{t('description')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Text className="text-center font-sans-regular text-lg text-white">{t('description')}</Text>
 
-      <TwSeparator className="mt-6" />
+        <TwSeparator className="mt-6" />
 
-      <Text className="mt-9 font-sans-regular text-sm uppercase text-gray-100">{t('formLabel')}</Text>
+        <Text className="mt-9 font-sans-regular text-sm uppercase text-gray-100">{t('formLabel')}</Text>
 
-      <StepMenuButton
-        active={!selectedAccount}
-        value={selectedAccount?.address}
-        leftElement={<MdLooksOne aria-hidden />}
-        label={t('accountLabel')}
-        onPress={handleAccountSelectionPress}
-      />
+        <StepMenuButton
+          active={!selectedAccount}
+          value={selectedAccount?.address}
+          leftElement={<MdLooksOne aria-hidden />}
+          label={t('accountLabel')}
+          onPress={handleAccountSelectionPress}
+        />
 
-      <TwSeparator />
+        <TwSeparator />
 
-      <StepMenuButton
-        value={
-          formattedDateFrom && formattedDateTo
-            ? t('timePeriodValue', { from: formattedDateFrom, to: formattedDateTo })
-            : undefined
-        }
-        active={!!selectedAccount}
-        leftElement={<MdLooksTwo aria-hidden />}
-        label={t('timePeriodLabel')}
-        onPress={handleTimePeriodSelectionPress}
-      />
+        <StepMenuButton
+          value={
+            formattedDateFrom && formattedDateTo
+              ? t('timePeriodValue', { from: formattedDateFrom, to: formattedDateTo })
+              : undefined
+          }
+          active={!!selectedAccount}
+          leftElement={<MdLooksTwo aria-hidden />}
+          label={t('timePeriodLabel')}
+          onPress={handleTimePeriodSelectionPress}
+        />
 
-      <TwButton
-        label={t('exportButtonLabel')}
-        variant="contained-light"
-        className="mt-auto"
-        disabled={isDisabled}
-        isLoading={actionState.isActing}
-        onPress={handleAct(handleExport)}
-      />
-    </TwModalLayout>
+        <TwButton
+          label={t('exportButtonLabel')}
+          variant="contained-light"
+          className="mt-auto"
+          disabled={isDisabled}
+          isLoading={actionState.isActing}
+          onPress={handleAct(handleExport)}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }
