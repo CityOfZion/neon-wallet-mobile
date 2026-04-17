@@ -11,7 +11,7 @@ module.exports = {
 
     const localeJsonFiles = micromatch(files, ['**/src/locales/**/*.json'])
     if (localeJsonFiles.length > 0) {
-      commands.push('npm run translate -- --no-fail')
+      commands.push('npm run translate')
       commands.push('npm run lint -- src/locales/**/*.json')
       commands.push('git add src/locales/**/*.json')
     }
