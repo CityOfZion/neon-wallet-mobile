@@ -102,10 +102,8 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
                 ellipsizeMode="middle"
                 numberOfLines={1}
               >
-                {token?.symbol}{' '}
-                <Text className="font-sans-regular text-sm uppercase text-gray-100">
-                  | {tCommonBlockchainServices(`${transaction.blockchain}.label`)}
-                </Text>
+                {token?.symbol}
+                <Text className="font-sans-regular text-sm uppercase text-gray-100">{` | ${tCommonBlockchainServices(`${transaction.blockchain}.label`)}`}</Text>
               </Text>
 
               <Text className="max-w-[50%] font-sans-regular text-sm text-white" numberOfLines={1}>

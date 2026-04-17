@@ -33,6 +33,8 @@ export const AccountTransactionsUtxoDetailsModal = ({
   const { blockchain, inputs, outputs, nfts, txId } = transaction
   const inputsLength = inputs.length
   const outputsLength = outputs.length
+  const hasInputs = inputsLength > 0
+  const hasOutputs = outputsLength > 0
 
   useEffect(() => {
     if (!transaction.isPending) return
@@ -43,6 +45,12 @@ export const AccountTransactionsUtxoDetailsModal = ({
       setTransaction(previousTransaction => ({ ...previousTransaction, isPending: false }))
     }
   }, [navigation, pendingTransactions, transaction.isPending, txId])
+
+  useEffect(() => {
+    if (!hasInputs) {
+      setTab('to')
+    }
+  }, [hasInputs])
 
   return (
     <ModalLayout.Root>
@@ -65,28 +73,30 @@ export const AccountTransactionsUtxoDetailsModal = ({
           )}
         </AccountTransactionsTransactionCard>
 
-        <TwTabs.Root className="mb-10" value={tab} onValueChange={newTab => setTab(newTab as TTab)}>
-          <TwTabs.List>
-            <TwTabs.Trigger value="from" label={t('fromLabel')} />
-            <TwTabs.Trigger value="to" label={t('toLabel')} />
-          </TwTabs.List>
+        {(hasInputs || hasOutputs) && (
+          <TwTabs.Root className="mb-10" value={tab} onValueChange={newTab => setTab(newTab as TTab)}>
+            <TwTabs.List>
+              <TwTabs.Trigger value="from" label={t('fromLabel')} disabled={!hasInputs} />
+              <TwTabs.Trigger value="to" label={t('toLabel')} disabled={!hasOutputs} />
+            </TwTabs.List>
 
-          <TwTabs.Content value="from">
-            <AccountTransactionsUtxoDetailsList
-              title={t(inputsLength === 1 ? 'inputTitle' : 'inputsTitle', { value: inputsLength })}
-              blockchain={blockchain}
-              inputsOutputs={inputs}
-            />
-          </TwTabs.Content>
+            <TwTabs.Content value="from">
+              <AccountTransactionsUtxoDetailsList
+                title={t(inputsLength === 1 ? 'inputTitle' : 'inputsTitle', { value: inputsLength })}
+                blockchain={blockchain}
+                inputsOutputs={inputs}
+              />
+            </TwTabs.Content>
 
-          <TwTabs.Content value="to">
-            <AccountTransactionsUtxoDetailsList
-              title={t(outputsLength === 1 ? 'outputTitle' : 'outputsTitle', { value: outputsLength })}
-              blockchain={blockchain}
-              inputsOutputs={outputs}
-            />
-          </TwTabs.Content>
-        </TwTabs.Root>
+            <TwTabs.Content value="to">
+              <AccountTransactionsUtxoDetailsList
+                title={t(outputsLength === 1 ? 'outputTitle' : 'outputsTitle', { value: outputsLength })}
+                blockchain={blockchain}
+                inputsOutputs={outputs}
+              />
+            </TwTabs.Content>
+          </TwTabs.Root>
+        )}
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>
   )
