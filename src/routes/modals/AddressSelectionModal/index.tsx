@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TwTabs } from '@/components/TwTabs'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { AddressSelectionModalAccountsContent } from './AddressSelectionModalAccountsContent'
 import { AddressSelectionModalAddressContent } from './AddressSelectionModalAddressContent'
@@ -26,14 +25,14 @@ export const AddressSelectionModal = ({ navigation, route }: TRootStackScreenPro
   }
 
   return (
-    <TwModalLayout
-      title={title || t('title')}
-      titleClassName="text-xl"
-      rightElement={<TwModalLayoutCloseIconButton />}
-      withoutScroll
-    >
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title className="text-xl">{title || t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+
       <TwTabs.Root value={value} onValueChange={setValue} className="mt-5 flex-grow">
-        <TwTabs.List>
+        <TwTabs.List className="px-5">
           <TwTabs.Trigger value="address" label={t('addressTabLabel')} />
           <TwTabs.Trigger value="accounts" label={t('accountsTabLabel')} disabled={!blockchain} />
           <TwTabs.Trigger value="contacts" label={t('contactsTabLabel')} disabled={!blockchain} />
@@ -51,6 +50,6 @@ export const AddressSelectionModal = ({ navigation, route }: TRootStackScreenPro
           <AddressSelectionModalContactsContent onSelect={handleSelect} blockchain={blockchain} />
         </TwTabs.Content>
       </TwTabs.Root>
-    </TwModalLayout>
+    </ModalLayout.Root>
   )
 }

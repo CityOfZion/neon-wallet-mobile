@@ -20,7 +20,7 @@
     "typecheck": "tsc --noEmit",
     "check-env": "tsx scripts/check-env.ts",
     "icon": "svg-icons",
-    "dev": "expo start --dev-client",
+    "dev": "expo start --dev-client --clear",
     "prebuild": "expo prebuild",
     "check": "npm run lint && npm run typecheck && npm run check-env",
     "android": "expo run:android --no-build-cache",
@@ -167,7 +167,7 @@
   },
   "overrides": {
     "readable-stream": "4.5.2",
-    "axios": "1.13.5",
+    "axios": "1.15.0",
     "@react-native-async-storage/async-storage": "~2.2.0",
     "react": "19.1.4",
     "react-dom": "19.1.4",

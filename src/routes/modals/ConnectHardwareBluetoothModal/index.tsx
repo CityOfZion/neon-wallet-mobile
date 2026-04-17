@@ -5,8 +5,7 @@ import { ScreenLoader } from '@/components/ScreenLoader'
 
 import { useBluetooth } from '@/hooks/useBluetooth'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { ConnectHardwareBluetoothModalBluetoothOff } from './ConnectHardwareBluetoothModalBluetoothOff'
 import { ConnectHardwareBluetoothModalList } from './ConnectHardwareBluetoothModalList'
@@ -19,28 +18,29 @@ export const ConnectHardwareBluetoothModal = (props: TRootStackScreenProps<'Conn
   const { bluetoothState, bluetoothPermissionIsGranted, locationPermissionIsGranted, isLoading } = useBluetooth()
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      rightElement={<TwModalLayoutCloseIconButton />}
-      contentContainerClassName="items-center"
-      withoutScroll
-    >
-      {match({ bluetoothState, bluetoothPermissionIsGranted, locationPermissionIsGranted, isLoading })
-        .with({ isLoading: true }, () => <ScreenLoader />)
-        .with({ bluetoothState: P.not('PoweredOn') }, () => <ConnectHardwareBluetoothModalBluetoothOff />)
-        .with(
-          { bluetoothPermissionIsGranted: false },
-          { locationPermissionIsGranted: false },
-          ({ bluetoothPermissionIsGranted, locationPermissionIsGranted }) => (
-            <ConnectHardwareBluetoothModalPermission
-              bluetoothPermissionIsGranted={bluetoothPermissionIsGranted}
-              locationPermissionIsGranted={locationPermissionIsGranted}
-            />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ViewContent className="items-center">
+        {match({ bluetoothState, bluetoothPermissionIsGranted, locationPermissionIsGranted, isLoading })
+          .with({ isLoading: true }, () => <ScreenLoader />)
+          .with({ bluetoothState: P.not('PoweredOn') }, () => <ConnectHardwareBluetoothModalBluetoothOff />)
+          .with(
+            { bluetoothPermissionIsGranted: false },
+            { locationPermissionIsGranted: false },
+            ({ bluetoothPermissionIsGranted, locationPermissionIsGranted }) => (
+              <ConnectHardwareBluetoothModalPermission
+                bluetoothPermissionIsGranted={bluetoothPermissionIsGranted}
+                locationPermissionIsGranted={locationPermissionIsGranted}
+              />
+            )
           )
-        )
-        .otherwise(() => (
-          <ConnectHardwareBluetoothModalList {...props} />
-        ))}
-    </TwModalLayout>
+          .otherwise(() => (
+            <ConnectHardwareBluetoothModalList {...props} />
+          ))}
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

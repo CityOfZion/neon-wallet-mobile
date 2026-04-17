@@ -72,7 +72,7 @@ export const AccountCardNoContent = ({
         }}
       >
         <View
-          className="relative h-full w-full overflow-hidden rounded-2xl"
+          className="relative size-full overflow-hidden rounded-2xl"
           style={{
             backgroundColor: account.skin.type === 'color' ? account.skin.id : DEFAULT_COLOR,
             boxShadow: withShadow
@@ -81,7 +81,7 @@ export const AccountCardNoContent = ({
           }}
         >
           <Image
-            className="absolute h-full w-full"
+            className="absolute size-full"
             source={require('@/assets/images/account-placeholder.png')}
             contentFit="cover"
             priority="high"

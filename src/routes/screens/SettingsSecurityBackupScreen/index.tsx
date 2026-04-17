@@ -16,7 +16,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useStandardWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbCheck from '@/assets/images/tb-check.svg'
 import TbChevronRight from '@/assets/images/tb-chevron-right.svg'
@@ -81,67 +81,68 @@ export const SettingsSecurityBackupScreen = ({ navigation }: TMoreStackScreenPro
   }
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      withoutScroll
-      contentContainerClassName="px-0"
-      onBack={() => {
-        navigation.navigate('TabStack', {
-          screen: 'MoreStack',
-          params: {
-            screen: 'MoreScreen',
-          },
-        })
-      }}
-    >
-      <FlatList
-        data={items}
-        className="flex-1"
-        contentContainerClassName="flex-1 gap-2 px-5"
-        ListHeaderComponent={
-          <View className="items-center">
-            {success ? (
-              <Fragment>
-                <Image className="size-40" source={require('@/assets/images/backup-info-feature.png')} />
-                <Text className="px-8 text-center font-sans-bold text-lg text-neon">
-                  {t('withoutAccountsToBackup.description')}
-                </Text>
-                <TwSeparator className="mt-16" />
-              </Fragment>
-            ) : (
-              <Fragment>
-                <TbAlertTriangleFilled className="size-12 text-neon" aria-hidden />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton
+          onPress={() => {
+            navigation.navigate('TabStack', {
+              screen: 'MoreStack',
+              params: { screen: 'MoreScreen' },
+            })
+          }}
+        />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent className="px-0">
+        <FlatList
+          data={items}
+          className="flex-1"
+          contentContainerClassName="flex-1 gap-2 px-5"
+          ListHeaderComponent={
+            <View className="items-center">
+              {success ? (
+                <Fragment>
+                  <Image className="size-40" source={require('@/assets/images/backup-info-feature.png')} />
+                  <Text className="px-8 text-center font-sans-bold text-lg text-neon">
+                    {t('withoutAccountsToBackup.description')}
+                  </Text>
+                  <TwSeparator className="mt-16" />
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <TbAlertTriangleFilled className="size-12 text-neon" aria-hidden />
 
-                <Text className="mt-6 text-center font-sans-bold text-lg text-white">
-                  {t('withAccountsToBackup.description_1')}
-                </Text>
+                  <Text className="mt-6 text-center font-sans-bold text-lg text-white">
+                    {t('withAccountsToBackup.description1')}
+                  </Text>
 
-                <Text className="mt-6 text-center font-sans-regular text-lg text-white">
-                  {t('withAccountsToBackup.description_2')}
-                </Text>
+                  <Text className="mt-6 text-center font-sans-regular text-lg text-white">
+                    {t('withAccountsToBackup.description2')}
+                  </Text>
 
-                <Text className="mt-14 text-center font-sans-bold text-lg text-neon">
-                  {t('withAccountsToBackup.description_3')}
-                </Text>
+                  <Text className="mt-14 text-center font-sans-bold text-lg text-neon">
+                    {t('withAccountsToBackup.description3')}
+                  </Text>
 
-                <Text className="mb-4 mt-2 text-center font-sans-regular text-base text-gray-300">
-                  {t('withAccountsToBackup.description_4')}
-                </Text>
-              </Fragment>
-            )}
-          </View>
-        }
-        ListFooterComponent={
-          success ? (
-            <TwButton
-              onPress={handleSuccessContinue}
-              className="mt-8"
-              label={t('withoutAccountsToBackup.button_label')}
-            />
-          ) : undefined
-        }
-        renderItem={renderItem}
-      />
-    </TwScreenLayout>
+                  <Text className="mb-4 mt-2 text-center font-sans-regular text-base text-gray-300">
+                    {t('withAccountsToBackup.description4')}
+                  </Text>
+                </Fragment>
+              )}
+            </View>
+          }
+          ListFooterComponent={
+            success ? (
+              <TwButton
+                onPress={handleSuccessContinue}
+                className="mt-8"
+                label={t('withoutAccountsToBackup.button_label')}
+              />
+            ) : undefined
+          }
+          renderItem={renderItem}
+        />
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

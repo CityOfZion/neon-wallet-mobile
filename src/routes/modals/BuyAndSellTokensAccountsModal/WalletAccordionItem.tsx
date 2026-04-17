@@ -37,9 +37,9 @@ export const WalletAccordionItem = ({ wallet, accounts, defaultOpened }: TProps)
               {wallet.name}
             </Text>
 
-            <Skeleton.Root loading={isLoading} className="h-6 w-16 justify-center">
+            <Skeleton.Root loading={isLoading} className="justify-center">
               <Skeleton.Group>
-                <Skeleton.Item />
+                <Skeleton.Item className="h-6 w-16" />
               </Skeleton.Group>
 
               <Skeleton.Content>

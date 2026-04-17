@@ -40,7 +40,7 @@ import { useLazyBalance } from '@/hooks/useBalances'
 import { useMount } from '@/hooks/useMount'
 import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbArrowsSort from '@/assets/images/tb-arrows-sort.svg'
 import TbCoin from '@/assets/images/tb-coin.svg'
@@ -360,12 +360,11 @@ export const Neo3NeoXBridgeScreen = ({
   }, [navigation, t, isFocused, selectedNetworkByBlockchain.neo3, selectedNetworkByBlockchain.neox])
 
   return (
-    <TwScreenLayout
-      headerClassName="mt-2"
-      title={
+    <ScreenLayout.Root>
+      <ScreenLayout.Header className="mt-2">
+        <ScreenLayout.BackButton />
         <View className="-mt-1 flex max-w-[50%] flex-1 flex-row items-center justify-center">
           <Text className="line-clamp-1 font-sans-medium text-xl text-white">{t('title')}</Text>
-
           <TwIconButton
             aria-label={t('aboutButtonLabel')}
             size="sm"
@@ -374,228 +373,228 @@ export const Neo3NeoXBridgeScreen = ({
             onPress={handleGoToNeo3NeoXBridgeAboutModal}
           />
         </View>
-      }
-      rightElement={
         <TwButton
+          className="absolute right-0 mr-4"
           label={t('restartButtonLabel')}
-          className="mr-4"
           variant="text-slim"
           colorSchema={isRestartDisabled ? 'white' : 'neon'}
           disabled={isRestartDisabled}
           onPress={initializeOrRestartService}
         />
-      }
-    >
-      <ActionCard>
-        <ActionStep
-          title={t('form.assetsStepLabel')}
-          titleClassName="font-sans-bold"
-          className="mb-2"
-          leftElement={<TbDiamond aria-hidden className="text-blue" />}
-        />
+      </ScreenLayout.Header>
 
-        <TwSeparator />
-
-        <ActionStep
-          title={t('form.tokenToUseLabel')}
-          error={!!actionData.tokenToUse.error}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-        >
-          <ActionTokenButton
-            label={t('form.selectPlaceholder')}
-            className="bg-asphalt"
-            tokenClassName="text-base text-neon"
-            blockchainClassName="text-base text-neon"
-            token={actionData.tokenToUse.value}
-            isLoading={actionData.availableTokensToUse.loading || actionData.tokenToUse.loading}
-            contentProps={{ className: 'px-1 gap-2' }}
-            onPress={handleSelectTokenToUse}
+      <ScreenLayout.KeyboardAvoidingContent>
+        <ActionCard>
+          <ActionStep
+            title={t('form.assetsStepLabel')}
+            titleClassName="font-sans-bold"
+            className="mb-2"
+            leftElement={<TbDiamond aria-hidden className="text-blue" />}
           />
-        </ActionStep>
 
-        <View className="relative w-full">
-          <TwSeparator containerClassName="py-1" />
+          <TwSeparator />
 
-          <View className="absolute left-1/2 top-1/2 mx-auto flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gray-800 p-2">
-            <TwIconButton
-              aria-label={t('form.switchTokensButtonLabel')}
-              size="md"
-              className="size-8 rounded-full bg-neon"
-              icon={<TbArrowsSort aria-hidden className="h-5 max-h-5 min-h-5 w-5 min-w-5 max-w-5 text-black" />}
-              onPress={handleSwitchTokens}
+          <ActionStep
+            title={t('form.tokenToUseLabel')}
+            error={!!actionData.tokenToUse.error}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+          >
+            <ActionTokenButton
+              label={t('form.selectPlaceholder')}
+              className="bg-asphalt"
+              tokenClassName="text-base text-neon"
+              blockchainClassName="text-base text-neon"
+              token={actionData.tokenToUse.value}
+              isLoading={actionData.availableTokensToUse.loading || actionData.tokenToUse.loading}
+              contentProps={{ className: 'px-1 gap-2' }}
+              onPress={handleSelectTokenToUse}
             />
+          </ActionStep>
+
+          <View className="relative w-full">
+            <TwSeparator containerClassName="py-1" />
+
+            <View className="absolute left-1/2 top-1/2 mx-auto flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gray-800 p-2">
+              <TwIconButton
+                aria-label={t('form.switchTokensButtonLabel')}
+                size="md"
+                className="size-8 rounded-full bg-neon"
+                icon={<TbArrowsSort aria-hidden className="h-5 max-h-5 min-w-5 max-w-5 text-black min-size-5" />}
+                onPress={handleSwitchTokens}
+              />
+            </View>
           </View>
-        </View>
 
-        <ActionStep
-          title={t('form.tokenToReceiveLabel')}
-          error={!!actionData.tokenToReceive.error}
-          leftElement={<TbLock aria-hidden className="size-5" />}
-        >
-          <ActionTokenButton
-            label={t('form.selectPlaceholder')}
-            tokenClassName="text-base"
-            blockchainClassName="text-base"
-            variant="card"
-            token={actionData.tokenToReceive.value}
-            isLoading={actionData.tokenToReceive.loading}
-            disabled
-            contentProps={{ className: 'px-1 gap-2' }}
+          <ActionStep
+            title={t('form.tokenToReceiveLabel')}
+            error={!!actionData.tokenToReceive.error}
+            leftElement={<TbLock aria-hidden className="size-5" />}
+          >
+            <ActionTokenButton
+              label={t('form.selectPlaceholder')}
+              tokenClassName="text-base"
+              blockchainClassName="text-base"
+              variant="card"
+              token={actionData.tokenToReceive.value}
+              isLoading={actionData.tokenToReceive.loading}
+              disabled
+              contentProps={{ className: 'px-1 gap-2' }}
+            />
+          </ActionStep>
+        </ActionCard>
+
+        <TwStepSeparator iconContainerClassName="bg-gray-700" />
+
+        <ActionCard>
+          <ActionStep
+            title={t('form.accountDetailsStepLabel')}
+            titleClassName="font-sans-bold"
+            className="mb-2"
+            leftElement={<TbWallet aria-hidden className="text-blue" />}
           />
-        </ActionStep>
-      </ActionCard>
 
-      <TwStepSeparator iconContainerClassName="bg-gray-700" />
+          <TwSeparator />
 
-      <ActionCard>
-        <ActionStep
-          title={t('form.accountDetailsStepLabel')}
-          titleClassName="font-sans-bold"
-          className="mb-2"
-          leftElement={<TbWallet aria-hidden className="text-blue" />}
-        />
-
-        <TwSeparator />
-
-        <ActionStep
-          title={t('form.accountToUseLabel')}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-          error={hasAccountToUseError}
-        >
-          <ActionAddressButton
-            label={t('form.selectPlaceholder')}
-            address={actionData.accountToUse.value?.address}
-            className="bg-asphalt"
-            isLoading={actionData.accountToUse.loading}
-            disabled={isAddressesDisabled}
+          <ActionStep
+            title={t('form.accountToUseLabel')}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
             error={hasAccountToUseError}
-            contentProps={{ className: 'px-3 gap-2' }}
-            labelProps={
-              !!actionData.accountToUse.value?.address
-                ? {
-                    className: StyleHelper.mergeStyles('text-base', { 'text-pink': hasAccountToUseError }),
-                    ellipsizeMode: 'middle',
-                  }
-                : undefined
-            }
-            onPress={handleSelectAccountToUse}
-          />
-        </ActionStep>
+          >
+            <ActionAddressButton
+              label={t('form.selectPlaceholder')}
+              address={actionData.accountToUse.value?.address}
+              className="bg-asphalt"
+              isLoading={actionData.accountToUse.loading}
+              disabled={isAddressesDisabled}
+              error={hasAccountToUseError}
+              contentProps={{ className: 'px-3 gap-2' }}
+              labelProps={
+                !!actionData.accountToUse.value?.address
+                  ? {
+                      className: StyleHelper.mergeStyles('text-base', { 'text-pink': hasAccountToUseError }),
+                      ellipsizeMode: 'middle',
+                    }
+                  : undefined
+              }
+              onPress={handleSelectAccountToUse}
+            />
+          </ActionStep>
 
-        <TwSeparator />
+          <TwSeparator />
 
-        <ActionStep
-          title={t('form.addressToReceiveLabel')}
-          error={hasAddressToReceiveError}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-        >
-          <ActionAddressButton
-            label={t('form.selectPlaceholder')}
-            address={actionData.addressToReceive.value}
-            className="bg-asphalt"
-            isLoading={actionData.addressToReceive.loading}
-            disabled={isAddressesDisabled}
+          <ActionStep
+            title={t('form.addressToReceiveLabel')}
             error={hasAddressToReceiveError}
-            contentProps={{ className: 'px-3 gap-2' }}
-            labelProps={
-              !!actionData.addressToReceive.value
-                ? {
-                    className: StyleHelper.mergeStyles('text-base', { 'text-pink': hasAddressToReceiveError }),
-                    ellipsizeMode: 'middle',
-                  }
-                : undefined
-            }
-            onPress={handleSelectAddressToReceive}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+          >
+            <ActionAddressButton
+              label={t('form.selectPlaceholder')}
+              address={actionData.addressToReceive.value}
+              className="bg-asphalt"
+              isLoading={actionData.addressToReceive.loading}
+              disabled={isAddressesDisabled}
+              error={hasAddressToReceiveError}
+              contentProps={{ className: 'px-3 gap-2' }}
+              labelProps={
+                !!actionData.addressToReceive.value
+                  ? {
+                      className: StyleHelper.mergeStyles('text-base', { 'text-pink': hasAddressToReceiveError }),
+                      ellipsizeMode: 'middle',
+                    }
+                  : undefined
+              }
+              onPress={handleSelectAddressToReceive}
+            />
+          </ActionStep>
+        </ActionCard>
+
+        <TwStepSeparator iconContainerClassName="bg-gray-700" />
+
+        <ActionCard>
+          <ActionStep
+            title={t('form.amountsStepLabel')}
+            titleClassName="font-sans-bold"
+            className="mb-2"
+            leftElement={<TbCoin aria-hidden className="text-blue" />}
           />
-        </ActionStep>
-      </ActionCard>
 
-      <TwStepSeparator iconContainerClassName="bg-gray-700" />
+          <TwSeparator />
 
-      <ActionCard>
-        <ActionStep
-          title={t('form.amountsStepLabel')}
-          titleClassName="font-sans-bold"
-          className="mb-2"
-          leftElement={<TbCoin aria-hidden className="text-blue" />}
-        />
-
-        <TwSeparator />
-
-        <ActionStep
-          title={t('form.amountToUseLabel')}
-          description={t('form.amountToUseMinLabel', {
-            amount: actionData.amountToUseMin.value || t('form.amountToUseMinPlaceholder'),
-          })}
-          descriptionClassName="text-xs mt-1 text-gray-100"
-          className="-mt-5"
-          error={hasAmountToUseError}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-        >
-          <ActionInput
-            aria-label={t('form.amountToUseLabel')}
-            placeholder={t('form.amountPlaceholder')}
-            keyboardType="decimal-pad"
-            className="w-24 text-base"
-            containerClassName="mt-6"
-            value={actionData.amountToUse.value || ''}
-            disabled={isAmountsDisabled}
-            editable={!isAmountsDisabled}
+          <ActionStep
+            title={t('form.amountToUseLabel')}
+            description={t('form.amountToUseMinLabel', {
+              amount: actionData.amountToUseMin.value || t('form.amountToUseMinPlaceholder'),
+            })}
+            descriptionClassName="text-xs mt-1 text-gray-100"
+            className="-mt-5"
             error={hasAmountToUseError}
-            maxButtonProps={{
-              isLoading: actionData.amountToUseMax.loading,
-              disabled: !actionData.amountToUseMax.value || isAmountsDisabled,
-              labelProps: { className: 'text-base' },
-              onPress: handleApplyMaxAmountToUse,
-            }}
-            onChangeText={handleChangeAmountToUse}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+          >
+            <ActionInput
+              aria-label={t('form.amountToUseLabel')}
+              placeholder={t('form.amountPlaceholder')}
+              keyboardType="decimal-pad"
+              className="w-24 text-base"
+              containerClassName="mt-6"
+              value={actionData.amountToUse.value || ''}
+              disabled={isAmountsDisabled}
+              editable={!isAmountsDisabled}
+              error={hasAmountToUseError}
+              maxButtonProps={{
+                isLoading: actionData.amountToUseMax.loading,
+                disabled: !actionData.amountToUseMax.value || isAmountsDisabled,
+                labelProps: { className: 'text-base' },
+                onPress: handleApplyMaxAmountToUse,
+              }}
+              onChangeText={handleChangeAmountToUse}
+            />
+          </ActionStep>
+
+          <View className="mb-4 flex flex-row justify-between gap-x-2 pl-9 pr-4">
+            <Text className="font-sans-italic text-xs text-gray-100">{t('form.balanceLabel')}</Text>
+            <Text className="font-sans-italic text-xs text-gray-100">
+              {actionData.tokenToUseBalance.value?.amount || t('form.balancePlaceholder')}
+            </Text>
+          </View>
+
+          <TwSeparator />
+
+          <ActionStep
+            title={t('form.amountToReceiveLabel')}
+            description={t('form.amountToReceiveAfterFeesLabel')}
+            descriptionClassName="text-xs mt-1 text-gray-100"
+            className="mb-4"
+            error={!!actionData.amountToReceive.error}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+          >
+            <Text className="font-sans-medium text-lg text-white">
+              {actionData.amountToReceive.value || t('form.amountToReceivePlaceholder')}
+            </Text>
+          </ActionStep>
+        </ActionCard>
+
+        {bridgeOrchestratorRef.current.fromService && (
+          <ActionFeeStep
+            title={t('form.bridgeFeeLabel')}
+            feePlaceholder={t('form.bridgeFeePlaceholder')}
+            fee={actionData.bridgeFee.value || undefined}
+            isCalculatingFee={actionData.bridgeFee.loading}
+            service={bridgeOrchestratorRef.current.fromService}
           />
-        </ActionStep>
+        )}
 
-        <View className="mb-4 flex flex-row justify-between gap-x-2 pl-9 pr-4">
-          <Text className="font-sans-italic text-xs text-gray-100">{t('form.balanceLabel')}</Text>
-          <Text className="font-sans-italic text-xs text-gray-100">
-            {actionData.tokenToUseBalance.value?.amount || t('form.balancePlaceholder')}
-          </Text>
-        </View>
+        {errorMessage && <TwAlertErrorBanner message={errorMessage} className="mt-3" />}
 
-        <TwSeparator />
-
-        <ActionStep
-          title={t('form.amountToReceiveLabel')}
-          description={t('form.amountToReceiveAfterFeesLabel')}
-          descriptionClassName="text-xs mt-1 text-gray-100"
-          className="mb-4"
-          error={!!actionData.amountToReceive.error}
-          leftElement={<VscCircleFilled aria-hidden className="size-2" />}
-        >
-          <Text className="font-sans-medium text-lg text-white">
-            {actionData.amountToReceive.value || t('form.amountToReceivePlaceholder')}
-          </Text>
-        </ActionStep>
-      </ActionCard>
-
-      {bridgeOrchestratorRef.current.fromService && (
-        <ActionFeeStep
-          title={t('form.bridgeFeeLabel')}
-          feePlaceholder={t('form.bridgeFeePlaceholder')}
-          fee={actionData.bridgeFee.value || undefined}
-          isCalculatingFee={actionData.bridgeFee.loading}
-          service={bridgeOrchestratorRef.current.fromService}
+        <TwButton
+          label={t('form.submitButtonLabel')}
+          variant="contained-light"
+          className="mx-4 mb-10 mt-6"
+          isLoading={actionState.isActing}
+          disabled={isDisabled}
+          leftElement={<TbReplace2 aria-hidden className="text-neon" />}
+          onPress={handleAct(handleSubmit)}
         />
-      )}
-
-      {errorMessage && <TwAlertErrorBanner message={errorMessage} className="mt-3" />}
-
-      <TwButton
-        label={t('form.submitButtonLabel')}
-        variant="contained-light"
-        className="mx-4 mb-10 mt-6"
-        isLoading={actionState.isActing}
-        disabled={isDisabled}
-        leftElement={<TbReplace2 aria-hidden className="text-neon" />}
-        onPress={handleAct(handleSubmit)}
-      />
-    </TwScreenLayout>
+      </ScreenLayout.KeyboardAvoidingContent>
+    </ScreenLayout.Root>
   )
 }

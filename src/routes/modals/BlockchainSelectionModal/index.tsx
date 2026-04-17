@@ -8,8 +8,7 @@ import { TwButton } from '@/components/TwButton'
 
 import { useActions } from '@/hooks/useActions'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
@@ -36,20 +35,26 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
   }
 
   return (
-    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      {description && <Text className="mb-6 text-center font-sans-medium text-lg text-white">{description}</Text>}
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{title || t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        {description && <Text className="mb-6 text-center font-sans-medium text-lg text-white">{description}</Text>}
 
-      <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
+        <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
 
-      <View className="mt-auto py-4">
-        <TwButton
-          variant="contained-light"
-          label={commonT('general.continue')}
-          disabled={!actionData.blockchains.length}
-          onPress={handleAct(handleSubmit)}
-          {...buttonProps}
-        />
-      </View>
-    </TwModalLayout>
+        <View className="mt-auto py-4">
+          <TwButton
+            variant="contained-light"
+            label={commonT('general.continue')}
+            disabled={!actionData.blockchains.length}
+            onPress={handleAct(handleSubmit)}
+            {...buttonProps}
+          />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

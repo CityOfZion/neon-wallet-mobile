@@ -22,7 +22,7 @@ import { useNotificationsSelector } from '@/hooks/useNotificationSelector'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdCircleMedium from '@/assets/images/md-circle-medium.svg'
 import MdMoreVert from '@/assets/images/md-more-vert.svg'
@@ -200,24 +200,30 @@ export const NotificationsScreen = ({ navigation }: TMoreStackScreenProps<'Notif
   }
 
   return (
-    <TwScreenLayout title={t('title')} contentContainerClassName="items-center" withoutScroll onBack={handleBack}>
-      {!items.length ? (
-        <Fragment>
-          <TbBell className="mt-20 size-28 stroke-1 text-gray-300" aria-hidden />
-          <Text className="mt-7 font-sans-medium text-2xl text-white">{t('emptyListTitle')}</Text>
-          <Text className="mt-3.5 font-sans-regular text-lg text-gray-100">{t('emptyListBody')}</Text>
-        </Fragment>
-      ) : (
-        <Animated.FlatList
-          showsVerticalScrollIndicator={false}
-          itemLayoutAnimation={LinearTransition}
-          className="w-full"
-          data={items}
-          ItemSeparatorComponent={TwSeparator}
-          keyExtractor={item => item.notification.id}
-          renderItem={renderItem}
-        />
-      )}
-    </TwScreenLayout>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton onPress={handleBack} />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent className="items-center">
+        {!items.length ? (
+          <Fragment>
+            <TbBell className="mt-20 size-28 stroke-1 text-gray-300" aria-hidden />
+            <Text className="mt-7 font-sans-medium text-2xl text-white">{t('emptyListTitle')}</Text>
+            <Text className="mt-3.5 font-sans-regular text-lg text-gray-100">{t('emptyListBody')}</Text>
+          </Fragment>
+        ) : (
+          <Animated.FlatList
+            showsVerticalScrollIndicator={false}
+            itemLayoutAnimation={LinearTransition}
+            className="w-full"
+            data={items}
+            ItemSeparatorComponent={TwSeparator}
+            keyExtractor={item => item.notification.id}
+            renderItem={renderItem}
+          />
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

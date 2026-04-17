@@ -1,29 +1,25 @@
-import { BSBigNumber, type TBSToken } from '@cityofzion/blockchain-service'
+import { BSBigNumber, BSBigNumberHelper, type TBSToken } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
 
-import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
-import { TwInputLabel } from '@/components/TwInputLabel'
+import { TwSelectButton } from '@/components/TwSelectButton'
 import { TwTokenIcon } from '@/components/TwTokenIcon'
 
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
+import { useDebounceFunction } from '@/hooks/useDebounceFunction'
 import { usePersistTrustlineMutation } from '@/hooks/useStellarTruslines'
 import { useWalletByIdSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
-
-import MdChevronRight from '@/assets/images/md-chevron-right.svg'
-import TbPlus from '@/assets/images/tb-plus.svg'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 type TActionsData = {
   token?: TBSToken
   limit: string
+  isLimitFormatting: boolean
 }
 
 export const StellarPersistTrustlineModal = ({
@@ -36,16 +32,29 @@ export const StellarPersistTrustlineModal = ({
   const { t: tCommon } = useTranslation('common')
   const trustlineMutation = usePersistTrustlineMutation()
   const { wallet } = useWalletByIdSelector(stellarAccount.idWallet)
+  const debounce = useDebounceFunction()
 
-  const { actionData, actionState, setDataWrapper, setError, handleAct } = useActions<TActionsData>({
+  const { actionData, actionState, setData, setDataWrapper, setError, handleAct } = useActions<TActionsData>({
     token,
     limit: limit || '',
+    isLimitFormatting: false,
   })
 
   const isEditing = !!token
 
   const handleSelectToken = () => {
     navigation.navigate('StellarTrustilneTokenSelectionModal', { onSelect: setDataWrapper('token') })
+  }
+
+  const handleLimitChange = (limit: string) => {
+    setData({ limit, isLimitFormatting: true })
+
+    debounce(() => {
+      setData({
+        limit: BSBigNumberHelper.format(limit, { decimals: actionData.token?.decimals }),
+        isLimitFormatting: false,
+      })
+    })
   }
 
   const handleSubmit = async () => {
@@ -95,53 +104,50 @@ export const StellarPersistTrustlineModal = ({
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      leftElement={
-        <TwModalLayoutButton label={tCommon('general.cancel')} onPress={navigation.goBack} colorSchema="white" />
-      }
-      rightElement={
-        <TwModalLayoutButton
+    <ModalLayout.Root disableSwipeToClose={actionState.isActing}>
+      <ModalLayout.Header>
+        <ModalLayout.Button
+          position="left"
+          label={tCommon('general.cancel')}
+          onPress={navigation.goBack}
+          colorSchema="white"
+          disabled={actionState.isActing}
+        />
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.Button
+          position="right"
           label={tCommon('general.save')}
-          disabled={!actionData.token}
+          disabled={!actionData.token || actionData.isLimitFormatting}
           isLoading={actionState.isActing}
           onPress={handleAct(handleSubmit)}
         />
-      }
-      contentContainerClassName="items-center gap-6"
-    >
-      <View className="w-full">
-        <TwInputLabel label={t('tokenLabel')} />
+      </ModalLayout.Header>
 
-        <TwButton
-          label={actionData.token ? actionData.token.symbol : t('tokenPlaceholder')}
-          variant="card"
+      <ModalLayout.ScrollContent contentContainerClassName="items-center gap-6">
+        <TwSelectButton
+          label={t('tokenLabel')}
+          value={actionData.token ? actionData.token.symbol : t('tokenPlaceholder')}
           className="bg-asphalt"
           disabled={isEditing || actionState.isActing}
-          colorSchema={actionData.token ? 'white' : 'neon'}
-          labelProps={actionData.token ? { className: 'text-left' } : undefined}
-          iconsOnEdge={!!actionData.token}
-          rightElement={actionData.token ? <MdChevronRight aria-hidden className="text-white" /> : undefined}
           leftElement={
             actionData.token ? (
               <TwTokenIcon {...actionData.token} blockchain="stellar" width={20} height={20} />
-            ) : (
-              <TbPlus className="text-neon" aria-hidden />
-            )
+            ) : undefined
           }
           onPress={handleSelectToken}
         />
-      </View>
 
-      <TwInput
-        containerProps={{ className: 'w-full' }}
-        label={t('limitLabel')}
-        value={actionData.limit}
-        onChangeText={setDataWrapper('limit')}
-        error={actionState.errors.limit}
-        disabled={actionState.isActing}
-        keyboardType="decimal-pad"
-      />
-    </TwModalLayout>
+        <TwInput
+          label={t('limitLabel')}
+          placeholder={t('limitPlaceholder')}
+          value={actionData.limit}
+          onChangeText={handleLimitChange}
+          error={actionState.errors.limit}
+          disabled={actionState.isActing || !actionData.token}
+          keyboardType="decimal-pad"
+          loading={actionData.isLimitFormatting}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

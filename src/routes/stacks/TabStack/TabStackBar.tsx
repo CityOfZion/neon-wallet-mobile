@@ -34,7 +34,7 @@ const TabButton = ({ icon, active, className, label, ...props }: TTabButtonProps
       {cloneElement(icon, {
         ...icon.props,
         className: StyleHelper.mergeStyles(
-          'text-gray-100 w-7 h-7',
+          'text-gray-100 size-7',
           {
             'text-white': active,
           },
@@ -112,7 +112,7 @@ export const TabStackBar = (props: BottomTabBarProps) => {
         <View className="relative flex-1 items-center">
           <View className="absolute -top-3.5 h-16 w-16 rounded-full bg-gray-900 p-1">
             <TouchableOpacity
-              className="h-full w-full items-center justify-center rounded-full bg-neon"
+              className="size-full items-center justify-center rounded-full bg-neon"
               onPress={handlePressQuickTools}
               aria-label={t('quickToolsButtonLabel')}
             >

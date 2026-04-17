@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -107,5 +108,19 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities, theme }) => {
+      const spacing = theme('spacing') as Record<string, string>
+      const utilities: Record<string, any> = {}
+
+      Object.entries(spacing).forEach(([key, value]) => {
+        if (typeof value === 'string' && /^[a-zA-Z0-9-\/]+$/.test(key)) {
+          utilities[`.min-size-${key}`] = { minWidth: value, minHeight: value }
+          utilities[`.max-size-${key}`] = { maxWidth: value, maxHeight: value }
+        }
+      })
+
+      addUtilities(utilities)
+    }),
+  ],
 } satisfies Config

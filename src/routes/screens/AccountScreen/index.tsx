@@ -18,7 +18,7 @@ import { useUnclaimed } from '@/hooks/useUnclaimedQuery'
 import { useIsConnectedSelector } from '@/hooks/useUtilitySelector'
 import { useWalletByIdSelector } from '@/hooks/useWalletSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import { AccountScreenActionButton } from '@/routes/screens/AccountScreen/AccountScreenActionButton'
 import { AccountScreenMenuItem } from '@/routes/screens/AccountScreen/AccountScreenMenuItem'
@@ -147,133 +147,143 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
   }
 
   return (
-    <TwScreenLayout
-      className="-mt-1"
-      contentContainerClassName="px-4"
-      headerClassName="h-16"
-      title={<AccountScreenTitle account={account} />}
-      refreshControl={
-        <RefreshControl
-          refreshing={balanceQuery.isRefetching || unclaimedQuery.isRefetching}
-          onRefresh={handleRefetch}
-        />
-      }
-      rightElement={
-        <TwIconButton icon={<MdMoreHoriz aria-hidden className="text-white" />} size="md" onPress={handleMorePress} />
-      }
-    >
-      <AccountCard hideBalance={false} account={account} width={Dimensions.get('window').width - 32} />
+    <ScreenLayout.Root className="-mt-1">
+      <ScreenLayout.Header className="h-16">
+        <ScreenLayout.BackButton />
 
-      <View
-        className={StyleHelper.mergeStyles('mt-5 flex flex-shrink flex-row gap-x-3', {
-          hidden: !isServiceClaimable && isIos,
-        })}
+        <AccountScreenTitle account={account} />
+
+        <ScreenLayout.ButtonContent position="right">
+          <TwIconButton
+            aria-label={t('moreButtonLabel')}
+            icon={<MdMoreHoriz aria-hidden className="text-white" />}
+            size="md"
+            onPress={handleMorePress}
+          />
+        </ScreenLayout.ButtonContent>
+      </ScreenLayout.Header>
+      <ScreenLayout.ScrollContent
+        contentContainerClassName="px-4"
+        refreshControl={
+          <RefreshControl
+            refreshing={balanceQuery.isRefetching || unclaimedQuery.isRefetching}
+            onRefresh={handleRefetch}
+          />
+        }
       >
-        {isServiceClaimable && <AccountScreenClaimButton account={account} />}
+        <AccountCard hideBalance={false} account={account} width={Dimensions.get('window').width - 32} />
 
-        <AccountScreenActionButton
-          label={t('buttons.buyAndSell')}
-          className={StyleHelper.mergeStyles('w-[35%] flex-shrink-0 flex-grow-0', {
-            hidden: isIos,
-            'w-full': !isServiceClaimable,
+        <View
+          className={StyleHelper.mergeStyles('mt-5 flex flex-shrink flex-row gap-x-3', {
+            hidden: !isServiceClaimable && isIos,
           })}
-          disabled={isWatchAccount}
-          icon={<TbShoppingBag aria-hidden className="size-5 text-neon" />}
-          onPress={handlePressBuyAndSellButton}
-        />
-      </View>
+        >
+          {isServiceClaimable && <AccountScreenClaimButton account={account} />}
 
-      <View className="mt-3 flex flex-shrink flex-row gap-x-3">
-        <AccountScreenActionButton
-          label={t('buttons.receive')}
-          className="w-full"
-          icon={<TbStepInto aria-hidden className="size-5 text-neon" />}
-          onPress={handlePressReceiveButton}
-        />
+          <AccountScreenActionButton
+            label={t('buttons.buyAndSell')}
+            className={StyleHelper.mergeStyles('w-[35%] flex-shrink-0 flex-grow-0', {
+              hidden: isIos,
+              'w-full': !isServiceClaimable,
+            })}
+            disabled={isWatchAccount}
+            icon={<TbShoppingBag aria-hidden className="size-5 text-neon" />}
+            onPress={handlePressBuyAndSellButton}
+          />
+        </View>
 
-        <AccountScreenActionButton
-          label={t('buttons.send')}
-          className="w-full"
-          disabled={isSendDisabled}
-          icon={<TbStepOut aria-hidden className="size-5 text-neon" />}
-          onPress={handlePressSendButton}
-        />
-      </View>
-
-      {(isAndroid || isAbleToNeo3NeoXBridge) && (
         <View className="mt-3 flex flex-shrink flex-row gap-x-3">
-          {isAndroid && (
+          <AccountScreenActionButton
+            label={t('buttons.receive')}
+            className="w-full"
+            icon={<TbStepInto aria-hidden className="size-5 text-neon" />}
+            onPress={handlePressReceiveButton}
+          />
+
+          <AccountScreenActionButton
+            label={t('buttons.send')}
+            className="w-full"
+            disabled={isSendDisabled}
+            icon={<TbStepOut aria-hidden className="size-5 text-neon" />}
+            onPress={handlePressSendButton}
+          />
+        </View>
+
+        {(isAndroid || isAbleToNeo3NeoXBridge) && (
+          <View className="mt-3 flex flex-shrink flex-row gap-x-3">
+            {isAndroid && (
+              <AccountScreenActionButton
+                label={t('buttons.swap')}
+                className="w-full"
+                disabled={isWatchAccount}
+                icon={<TbTransform aria-hidden className="size-5 text-neon" />}
+                onPress={handlePressSwapButton}
+              />
+            )}
+
+            {isAbleToNeo3NeoXBridge && (
+              <AccountScreenActionButton
+                label={t('buttons.neo3NeoXBridge')}
+                className="w-full"
+                icon={<TbReplace2 aria-hidden className="size-5 text-neon" />}
+                onPress={handlePressNeo3NeoXBridgeButton}
+              />
+            )}
+          </View>
+        )}
+
+        {isAbleToNeo3Vote && (
+          <View className="mt-3 flex flex-shrink flex-row gap-x-3">
             <AccountScreenActionButton
-              label={t('buttons.swap')}
+              label={t('buttons.neo3Vote')}
+              className="w-full"
+              icon={<TbChartBarPopular aria-hidden className="size-5 text-neon" />}
+              onPress={handlePressNeo3VoteButton}
+            />
+          </View>
+        )}
+
+        {isAbleToStellarTrustline && (
+          <View className="mt-3 flex flex-shrink flex-row gap-x-3">
+            <AccountScreenActionButton
+              label={t('buttons.stellarTrustline')}
               className="w-full"
               disabled={isWatchAccount}
-              icon={<TbTransform aria-hidden className="size-5 text-neon" />}
-              onPress={handlePressSwapButton}
+              icon={<TbShieldCheck aria-hidden className="size-5 text-neon" />}
+              onPress={handlePressStellarTrustlineButton}
             />
-          )}
+          </View>
+        )}
 
-          {isAbleToNeo3NeoXBridge && (
-            <AccountScreenActionButton
-              label={t('buttons.neo3NeoXBridge')}
-              className="w-full"
-              icon={<TbReplace2 aria-hidden className="size-5 text-neon" />}
-              onPress={handlePressNeo3NeoXBridgeButton}
-            />
-          )}
-        </View>
-      )}
+        <View className="mt-5 flex w-full flex-col gap-y-3">
+          <AccountScreenMenuItem
+            label={t('tokens')}
+            icon={<TbBriefcase aria-hidden className="text-neon" />}
+            onPress={handlePressAssetsButton}
+          />
 
-      {isAbleToNeo3Vote && (
-        <View className="mt-3 flex flex-shrink flex-row gap-x-3">
-          <AccountScreenActionButton
-            label={t('buttons.neo3Vote')}
-            className="w-full"
-            icon={<TbChartBarPopular aria-hidden className="size-5 text-neon" />}
-            onPress={handlePressNeo3VoteButton}
+          <AccountScreenMenuItem
+            label={t('transactions')}
+            disabled={isCustomNetwork}
+            icon={<TbArrowsExchange aria-hidden className="text-neon" />}
+            onPress={handlePressTransactionsButton}
+          />
+
+          <AccountScreenMenuItem
+            label={t('nfts')}
+            disabled={isCustomNetwork}
+            icon={<TbDiamond aria-hidden className="text-neon" />}
+            onPress={handlePressNFTsButton}
+          />
+
+          <AccountScreenMenuItem
+            label={t('connections')}
+            disabled={isWatchAccount || !hasWalletConnect(service)}
+            icon={<TbPlug aria-hidden className="text-neon" />}
+            onPress={handlePressConnectionsButton}
           />
         </View>
-      )}
-
-      {isAbleToStellarTrustline && (
-        <View className="mt-3 flex flex-shrink flex-row gap-x-3">
-          <AccountScreenActionButton
-            label={t('buttons.stellarTrustline')}
-            className="w-full"
-            disabled={isWatchAccount}
-            icon={<TbShieldCheck aria-hidden className="size-5 text-neon" />}
-            onPress={handlePressStellarTrustlineButton}
-          />
-        </View>
-      )}
-
-      <View className="mt-5 flex w-full flex-col gap-y-3">
-        <AccountScreenMenuItem
-          label={t('tokens')}
-          icon={<TbBriefcase aria-hidden className="text-neon" />}
-          onPress={handlePressAssetsButton}
-        />
-
-        <AccountScreenMenuItem
-          label={t('transactions')}
-          disabled={isCustomNetwork}
-          icon={<TbArrowsExchange aria-hidden className="text-neon" />}
-          onPress={handlePressTransactionsButton}
-        />
-
-        <AccountScreenMenuItem
-          label={t('nfts')}
-          disabled={isCustomNetwork}
-          icon={<TbDiamond aria-hidden className="text-neon" />}
-          onPress={handlePressNFTsButton}
-        />
-
-        <AccountScreenMenuItem
-          label={t('connections')}
-          disabled={isWatchAccount || !hasWalletConnect(service)}
-          icon={<TbPlug aria-hidden className="text-neon" />}
-          onPress={handlePressConnectionsButton}
-        />
-      </View>
-    </TwScreenLayout>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

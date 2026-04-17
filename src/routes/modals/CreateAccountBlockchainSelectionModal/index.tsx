@@ -14,8 +14,7 @@ import { useCreateAccount } from '@/hooks/useAccountActions'
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
@@ -59,37 +58,39 @@ export const CreateAccountBlockchainSelectionModal = ({
   }
 
   return (
-    <TwModalLayout
-      rightElement={<TwModalLayoutCloseIconButton />}
-      title={t('title')}
-      contentContainerClassName="justify-between gap-3"
-    >
-      {actionState.isActing ? (
-        <ScreenLoader />
-      ) : (
-        <Fragment>
-          <View>
-            <Text className="text-center font-sans-medium text-lg text-white">{t('description')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="justify-between gap-3">
+        {actionState.isActing ? (
+          <ScreenLoader />
+        ) : (
+          <Fragment>
+            <View>
+              <Text className="text-center font-sans-medium text-lg text-white">{t('description')}</Text>
 
-            <BlockchainList
-              className="mt-6"
-              onSelect={handleSelect}
-              selectedBlockchains={[actionData.blockchain]}
-              isMulti={false}
-              walletAccounts={accountsByWalletId}
-              blockchains={wallet.type === 'hardware' ? [accountsByWalletId[0].blockchain] : undefined}
+              <BlockchainList
+                className="mt-6"
+                onSelect={handleSelect}
+                selectedBlockchains={[actionData.blockchain]}
+                isMulti={false}
+                walletAccounts={accountsByWalletId}
+                blockchains={wallet.type === 'hardware' ? [accountsByWalletId[0].blockchain] : undefined}
+              />
+            </View>
+
+            <TwButton
+              className="mb-2 mt-6"
+              variant="contained-light"
+              label={commonT('general.add')}
+              disabled={!actionData.blockchain}
+              onPress={handleAct(handlePressAdd)}
             />
-          </View>
-
-          <TwButton
-            variant="contained-light"
-            label={commonT('general.add')}
-            className="mb-2 mt-6"
-            disabled={!actionData.blockchain}
-            onPress={handleAct(handlePressAdd)}
-          />
-        </Fragment>
-      )}
-    </TwModalLayout>
+          </Fragment>
+        )}
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

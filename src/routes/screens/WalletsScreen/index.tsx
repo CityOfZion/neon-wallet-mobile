@@ -14,7 +14,7 @@ import { useRefetch } from '@/hooks/useQuery'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import { WalletsScreenEmptyList } from './WalletsScreenEmptyList'
 import { WalletsScreenHeader } from './WalletsScreenHeader'
@@ -67,39 +67,36 @@ export const WalletsScreen = ({ navigation }: TWalletsStackScreenProps<'WalletsS
       end={{ x: 0, y: 0 }}
       start={{ x: 0.8, y: 0.4 }}
     >
-      <TwScreenLayout
-        withoutHeader
-        withoutScroll
-        containerProps={{ className: 'bg-transparent' }}
-        contentContainerClassName="p-0"
-      >
-        <BalanceList
-          key={`wallets-length-${wallets.length}`}
-          contentContainerClassName="px-5"
-          accounts={accountsByWalletId}
-          ListHeaderComponent={
-            <Fragment>
-              <WalletsScreenHeader selectedWallet={selectedWallet} />
+      <ScreenLayout.Root className="bg-transparent">
+        <ScreenLayout.ViewContent className="p-0">
+          <BalanceList
+            key={`wallets-length-${wallets.length}`}
+            contentContainerClassName="px-5"
+            accounts={accountsByWalletId}
+            ListHeaderComponent={
+              <Fragment>
+                <WalletsScreenHeader selectedWallet={selectedWallet} />
 
-              {wallets.length > 0 ? (
-                <Fragment>
-                  <WalletCarousel
-                    wallets={wallets}
-                    selectedWallet={selectedWallet}
-                    onPress={handlePress}
-                    onSelect={setSelectedWallet}
-                  />
+                {wallets.length > 0 ? (
+                  <Fragment>
+                    <WalletCarousel
+                      wallets={wallets}
+                      selectedWallet={selectedWallet}
+                      onPress={handlePress}
+                      onSelect={setSelectedWallet}
+                    />
 
-                  <WalletsScreenWalletInfo selectedWalletAccounts={accountsByWalletId} />
-                </Fragment>
-              ) : (
-                <WalletsScreenEmptyList />
-              )}
-            </Fragment>
-          }
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={handleRefresh} />}
-        />
-      </TwScreenLayout>
+                    <WalletsScreenWalletInfo selectedWalletAccounts={accountsByWalletId} />
+                  </Fragment>
+                ) : (
+                  <WalletsScreenEmptyList />
+                )}
+              </Fragment>
+            }
+            refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={handleRefresh} />}
+          />
+        </ScreenLayout.ViewContent>
+      </ScreenLayout.Root>
     </LinearGradient>
   )
 }

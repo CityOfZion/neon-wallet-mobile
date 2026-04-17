@@ -68,7 +68,7 @@ const AccountCardComponent = ({
           P.when(value => value.type === 'nft' && !!value.imgUrl),
           () => (
             <Image
-              className="absolute h-full w-full"
+              className="absolute size-full"
               source={{
                 uri: (account.skin as TNftSkin).imgUrl,
                 height: ACCOUNT_CARD_WIDTH,
@@ -82,7 +82,7 @@ const AccountCardComponent = ({
           P.when(value => value.type === 'local' && !!SkinHelper.localSkins.get(value.id)),
           () => (
             <Image
-              className="absolute h-full w-full"
+              className="absolute size-full"
               source={{ uri: SkinHelper.localSkins.get(account.skin.id)!.imageUrl }}
               contentFit="cover"
               cachePolicy="memory-disk"
@@ -92,13 +92,13 @@ const AccountCardComponent = ({
         )
         .otherwise(() => (
           <LinearGradient
-            className="absolute h-full w-full"
+            className="absolute size-full"
             start={{ x: 0, y: 0 }}
             colors={['rgba(0, 0, 0, 0.5)', 'transparent']}
           />
         ))}
 
-      <View className="h-full w-full px-3.5 py-6">
+      <View className="size-full px-3.5 py-6">
         <View className="flex-row items-center gap-5">
           <TwBlockchainIcon className="size-6 text-white" blockchain={account.blockchain} />
 

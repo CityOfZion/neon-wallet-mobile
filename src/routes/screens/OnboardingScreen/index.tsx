@@ -7,7 +7,6 @@ import { Text, useWindowDimensions, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import type { CarouselRenderItem } from 'react-native-reanimated-carousel'
 import Carousel from 'react-native-reanimated-carousel'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { TwButton } from '@/components/TwButton'
 
@@ -21,7 +20,7 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdOutlineAutoAwesome from '@/assets/images/md-outline-auto-awesome.svg'
 
@@ -66,8 +65,8 @@ const PROGRESS_BY_STEP: Record<TStep, number> = {
 }
 
 const renderItem: CarouselRenderItem<(typeof DATA)[0]> = ({ item }) => (
-  <View className="h-full w-full">
-    <Image contentFit="contain" contentPosition="top" source={item.image} className="h-full w-full" />
+  <View className="size-full">
+    <Image contentFit="contain" contentPosition="top" source={item.image} className="size-full" />
 
     <View className="absolute bottom-10 w-full flex-col items-center gap-3 px-4">
       <Text className="text-center font-sans-medium text-2xl text-white">{item.header}</Text>
@@ -82,7 +81,6 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
   const { createWallet } = useCreateWallet()
   const { createAccount } = useCreateAccount()
   const { width } = useWindowDimensions()
-  const { top, bottom } = useSafeAreaInsets()
   const dispatch = useAppDispatch()
 
   const activeCarouselPage = useSharedValue<number>(0)
@@ -144,55 +142,50 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
   }
 
   return (
-    <TwScreenLayout
-      withoutBackButton
-      withoutHeader
-      withoutBars
-      className="bg-asphalt"
-      contentContainerClassName="px-0 pb-0"
-      style={{ paddingTop: top + 30 }}
-    >
-      <Carousel
-        data={DATA}
-        width={width}
-        autoPlay
-        autoPlayInterval={3000}
-        containerStyle={{ flex: 1 }}
-        mode="parallax"
-        onProgressChange={activeCarouselPage}
-        modeConfig={{
-          parallaxScrollingScale: 1,
-          parallaxScrollingOffset: 0,
-        }}
-        renderItem={renderItem}
-      />
+    <ScreenLayout.Root>
+      <ScreenLayout.ScrollContent contentContainerClassName="px-0 pb-0">
+        <Carousel
+          data={DATA}
+          width={width}
+          autoPlay
+          autoPlayInterval={3000}
+          containerStyle={{ flex: 1 }}
+          mode="parallax"
+          onProgressChange={activeCarouselPage}
+          modeConfig={{
+            parallaxScrollingScale: 1,
+            parallaxScrollingOffset: 0,
+          }}
+          renderItem={renderItem}
+        />
 
-      <OnboardingScreenPagination activePage={activeCarouselPage} totalPages={DATA.length} />
+        <OnboardingScreenPagination activePage={activeCarouselPage} totalPages={DATA.length} />
 
-      <View className="min-h-40 items-center gap-2 px-6 py-4" style={{ paddingBottom: Math.max(32, bottom) }}>
-        {!step ? (
-          <View className="w-full flex-col gap-y-4">
-            <TwButton
-              variant="card"
-              label={t('screens:onboarding.importWalletButtonLabel')}
-              onPress={handleImportWallet}
-            />
-            <TwButton
-              variant="contained-light"
-              label={t('screens:onboarding.createWalletButtonLabel')}
-              onPress={handleSelectBlockchains}
-              rightElement={<MdOutlineAutoAwesome aria-hidden />}
-            />
-          </View>
-        ) : (
-          <View className="w-full flex-col items-center justify-evenly">
-            <OnboardingScreenProgress progress={PROGRESS_BY_STEP['finalizing']} />
-            <Text className="mt-10 text-center font-sans-medium text-base text-gray-100">
-              {t('screens:onboarding.messagesByActions.finalizing')}
-            </Text>
-          </View>
-        )}
-      </View>
-    </TwScreenLayout>
+        <View className="pb-safe-or-8 min-h-40 items-center gap-2 px-6 py-4">
+          {!step ? (
+            <View className="w-full flex-col gap-y-4">
+              <TwButton
+                variant="card"
+                label={t('screens:onboarding.importWalletButtonLabel')}
+                onPress={handleImportWallet}
+              />
+              <TwButton
+                variant="contained-light"
+                label={t('screens:onboarding.createWalletButtonLabel')}
+                onPress={handleSelectBlockchains}
+                rightElement={<MdOutlineAutoAwesome aria-hidden />}
+              />
+            </View>
+          ) : (
+            <View className="w-full flex-col items-center justify-evenly">
+              <OnboardingScreenProgress progress={PROGRESS_BY_STEP['finalizing']} />
+              <Text className="mt-10 text-center font-sans-medium text-base text-gray-100">
+                {t('screens:onboarding.messagesByActions.finalizing')}
+              </Text>
+            </View>
+          )}
+        </View>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

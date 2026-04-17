@@ -12,7 +12,7 @@ import { AlertHelper } from '@/helpers/AlertHelper'
 import { EnvHelper } from '@/helpers/EnvHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdHelpOutline from '@/assets/images/md-help-outline.svg'
 
@@ -106,8 +106,17 @@ export const BuyAndSellTokensScreen = ({ navigation, route }: TWalletsStackScree
   }, [screenType])
 
   return (
-    <TwScreenLayout
-      title={
+    <ScreenLayout.Root>
+      <ScreenLayout.Header className="h-[56px]">
+        {EBuyAndSellTokensScreenTabValue.SELL_TOKENS === tabValue && (
+          <TwButton
+            className="absolute left-0 ml-2"
+            label={t('buttons.deposit')}
+            variant="text-slim"
+            labelProps={{ className: 'font-sans-medium' }}
+            onPress={handleDeposit}
+          />
+        )}
         <View className="-mt-1 flex max-w-[50%] flex-1 flex-row items-center justify-center">
           <Text className="line-clamp-1 font-sans-medium text-xl text-white">{t('title')}</Text>
           <TwIconButton
@@ -118,62 +127,48 @@ export const BuyAndSellTokensScreen = ({ navigation, route }: TWalletsStackScree
             onPress={handleInfo}
           />
         </View>
-      }
-      headerClassName="h-[56px]"
-      withoutBackButton
-      leftElement={
-        EBuyAndSellTokensScreenTabValue.SELL_TOKENS === tabValue ? (
-          <TwButton
-            label={t('buttons.deposit')}
-            variant="text-slim"
-            className="ml-2"
-            labelProps={{ className: 'font-sans-medium' }}
-            onPress={handleDeposit}
-          />
-        ) : undefined
-      }
-      rightElement={
         <TwButton
+          className="absolute right-0 mr-2"
           label={t('buttons.accounts')}
           variant="text-slim"
-          className="mr-2"
           labelProps={{ className: 'font-sans-medium' }}
           onPress={handleAccounts}
         />
-      }
-    >
-      <Fragment>
-        <View className="w-full">
-          <TwTabs.Root
-            value={tabValue}
-            onValueChange={handleChangeTabValue}
-            className="-mt-2 mb-4 flex-shrink-0 flex-grow-0"
-          >
-            <TwTabs.List>
-              <TwTabs.Trigger value={EBuyAndSellTokensScreenTabValue.BUY_TOKENS} label={t('tabs.buyTokens')} />
-              <TwTabs.Trigger value={EBuyAndSellTokensScreenTabValue.SELL_TOKENS} label={t('tabs.sellTokens')} />
-            </TwTabs.List>
-          </TwTabs.Root>
-        </View>
+      </ScreenLayout.Header>
+      <ScreenLayout.ScrollContent>
+        <Fragment>
+          <View className="w-full">
+            <TwTabs.Root
+              value={tabValue}
+              onValueChange={handleChangeTabValue}
+              className="-mt-2 mb-4 flex-shrink-0 flex-grow-0"
+            >
+              <TwTabs.List>
+                <TwTabs.Trigger value={EBuyAndSellTokensScreenTabValue.BUY_TOKENS} label={t('tabs.buyTokens')} />
+                <TwTabs.Trigger value={EBuyAndSellTokensScreenTabValue.SELL_TOKENS} label={t('tabs.sellTokens')} />
+              </TwTabs.List>
+            </TwTabs.Root>
+          </View>
 
-        {/* We aren't using the <TwTabs.Content /> because we need to load the two <WebView /> in the same screen */}
-        {EnvHelper.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL && (
-          <BuyAndSellTokensIframeContent
-            baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL}
-            hidden={EBuyAndSellTokensScreenTabValue.BUY_TOKENS !== tabValue}
-            account={account}
-          />
-        )}
+          {/* We aren't using the <TwTabs.Content /> because we need to load the two <WebView /> in the same screen */}
+          {EnvHelper.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL && (
+            <BuyAndSellTokensIframeContent
+              baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL}
+              hidden={EBuyAndSellTokensScreenTabValue.BUY_TOKENS !== tabValue}
+              account={account}
+            />
+          )}
 
-        {EnvHelper.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL && (
-          <BuyAndSellTokensIframeContent
-            baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL}
-            hidden={EBuyAndSellTokensScreenTabValue.SELL_TOKENS !== tabValue}
-            account={account}
-            setDepositActionsData={setDepositActionsData}
-          />
-        )}
-      </Fragment>
-    </TwScreenLayout>
+          {EnvHelper.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL && (
+            <BuyAndSellTokensIframeContent
+              baseUrl={EnvHelper.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL}
+              hidden={EBuyAndSellTokensScreenTabValue.SELL_TOKENS !== tabValue}
+              account={account}
+              setDepositActionsData={setDepositActionsData}
+            />
+          )}
+        </Fragment>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }
