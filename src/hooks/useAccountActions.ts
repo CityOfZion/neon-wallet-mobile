@@ -75,7 +75,7 @@ export const useCreateAccount = () => {
 export const useImportAccount = () => {
   const dispatch = useAppDispatch()
   const { accountsRef } = useAccountsSelector()
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const importAccount = useCallback(
     async ({ address, blockchain, type, wallet, key, name, skin, order }: TUseImportAccountParams) => {
@@ -84,7 +84,7 @@ export const useImportAccount = () => {
       const newAccount: TAccount = {
         id: UtilsHelper.uuid(),
         idWallet: wallet.id,
-        name: name || `${commonT(`blockchainServices.${blockchain}.accountName`)} ${currentOrder + 1}`,
+        name: name || `${tCommon(`blockchainServices.${blockchain}.accountName`)} ${currentOrder + 1}`,
         blockchain,
         skin: skin || { type: 'color', id: SkinHelper.getSkinColor() },
         address,
@@ -93,7 +93,7 @@ export const useImportAccount = () => {
       }
 
       if (type !== 'watch') {
-        if (!key) throw new AppError(commonT('errors.mustHaveKey'))
+        if (!key) throw new AppError(tCommon('errors.mustHaveKey'))
 
         await SecureStoreHelper.saveKey(newAccount, key)
       }
@@ -102,7 +102,7 @@ export const useImportAccount = () => {
 
       return newAccount
     },
-    [accountsRef, commonT, dispatch]
+    [accountsRef, tCommon, dispatch]
   )
 
   return { importAccount }

@@ -29,7 +29,7 @@ export const HideFraudulentTokenModal = ({
   },
 }: TRootStackScreenProps<'HideFraudulentTokenModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'hideFraudulentToken' })
-  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const balanceQuery = useBalance(account, { showType: 'active' })
   const dispatch = useAppDispatch()
   const [isHiding, startHide] = usePressOnce(() => {
@@ -85,7 +85,7 @@ export const HideFraudulentTokenModal = ({
                 <View className="w-full border-b border-gray-600 pb-2.5">
                   <Text className="font-sans-regular text-base text-white">
                     <Text className="font-sans-semibold">{t('blockchainLabel')}</Text>{' '}
-                    {tCommonBlockchain(`${account.blockchain}.label`)}
+                    {tCommonBlockchainServices(`${account.blockchain}.label`)}
                   </Text>
                 </View>
                 <View className="w-full">

@@ -18,7 +18,7 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
   const words = route.params.words
 
   const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep3' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
 
   const shuffledWords = useMemo(() => shuffle(words), [words])
 
@@ -37,10 +37,10 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
       subtitle: t('dialog1Body'),
       buttons: [
         {
-          label: commonT('yes'),
+          label: tCommonGeneral('yes'),
           onPress: handleConfirmSkip,
         },
-        { label: commonT('no') },
+        { label: tCommonGeneral('no') },
       ],
     })
   }
@@ -55,7 +55,7 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
         subtitle: t('dialog2Body'),
         buttons: [
           {
-            label: commonT('retry'),
+            label: tCommonGeneral('retry'),
             onPress: () => {
               setPressedWordsIndex([])
             },
@@ -82,7 +82,7 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
       <ScreenLayout.Header>
         <ScreenLayout.BackButton />
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
-        <ScreenLayout.Button position="right" onPress={handleSkip} label={commonT('skip')} />
+        <ScreenLayout.Button position="right" onPress={handleSkip} label={tCommonGeneral('skip')} />
       </ScreenLayout.Header>
       <ScreenLayout.ScrollContent>
         <View className="w-full flex-shrink flex-row items-center justify-between gap-2">
@@ -120,7 +120,7 @@ export const CreateWalletStep3Screen = ({ navigation, route }: TMoreStackScreenP
         <View className="mt-auto py-3">
           <TwButton
             variant="contained-light"
-            label={commonT('continue')}
+            label={tCommonGeneral('continue')}
             disabled={pressedWordsIndex.length !== words.length}
             onPress={handlePressContinue}
           />

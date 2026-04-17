@@ -21,7 +21,7 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
   const { onSelect, isMulti = false, description, title, buttonProps } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelection' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { actionData, setData, handleAct } = useActions<TActionData>({
     blockchains: ['neo3'],
   })
@@ -48,7 +48,7 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
         <View className="mt-auto py-4">
           <TwButton
             variant="contained-light"
-            label={commonT('general.continue')}
+            label={tCommon('general.continue')}
             disabled={!actionData.blockchains.length}
             onPress={handleAct(handleSubmit)}
             {...buttonProps}

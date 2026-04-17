@@ -17,7 +17,7 @@ import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount, TWallet } from '@/types/store'
 
 export const useCreateHardwareWallet = () => {
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { createWallet } = useCreateWallet()
   const { editAccount } = useEditAccount()
   const { importAccount } = useImportAccount()
@@ -60,7 +60,7 @@ export const useCreateHardwareWallet = () => {
 
         if (!existentWallet) {
           wallet = await createWallet({
-            name: commonT('wallet.ledgerName', { blockchain: commonT(`blockchainServices.${blockchain}.label`) }),
+            name: tCommon('wallet.ledgerName', { blockchain: tCommon(`blockchainServices.${blockchain}.label`) }),
             type: 'hardware',
             backupStatus: 'successful',
           })
@@ -68,7 +68,7 @@ export const useCreateHardwareWallet = () => {
           wallet = await editWallet({
             wallet: existentWallet,
             data: {
-              name: commonT('wallet.ledgerName', { blockchain: commonT(`blockchainServices.${blockchain}.label`) }),
+              name: tCommon('wallet.ledgerName', { blockchain: tCommon(`blockchainServices.${blockchain}.label`) }),
               type: 'hardware',
             },
           })
@@ -104,7 +104,7 @@ export const useCreateHardwareWallet = () => {
 
       return { newAccounts, newWallets }
     },
-    [accountsWithWalletMapRef, createWallet, commonT, editWallet, editAccount, importAccount]
+    [accountsWithWalletMapRef, createWallet, tCommon, editWallet, editAccount, importAccount]
   )
 
   return { createHardwareWallet }
@@ -112,19 +112,19 @@ export const useCreateHardwareWallet = () => {
 
 export const useHardwareWalletAddAccount = () => {
   const { accountsWithWalletRef } = useAccountsWithWalletSelector()
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { importAccount } = useImportAccount()
   const dispatch = useAppDispatch()
 
   const addHardwareAccount = useCallback(
     async (wallet: TWallet, accountName?: string) => {
       if (wallet.type !== 'hardware') {
-        throw new AppError(commonT('hardwareWallet.errors.accountIsNotHardware'))
+        throw new AppError(tCommon('hardwareWallet.errors.accountIsNotHardware'))
       }
 
       const firstWalletAccount = accountsWithWalletRef.current.find(account => account.idWallet === wallet.id)
       if (!firstWalletAccount) {
-        throw new AppError(commonT('hardwareWallet.errors.blockchainNotFound'))
+        throw new AppError(tCommon('hardwareWallet.errors.blockchainNotFound'))
       }
 
       // When a wallet is hardware, all accounts are from the same blockchain
@@ -151,7 +151,7 @@ export const useHardwareWalletAddAccount = () => {
       )
       return account
     },
-    [accountsWithWalletRef, commonT, dispatch, importAccount]
+    [accountsWithWalletRef, tCommon, dispatch, importAccount]
   )
 
   return {

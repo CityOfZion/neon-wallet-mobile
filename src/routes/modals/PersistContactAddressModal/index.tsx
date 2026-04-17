@@ -30,7 +30,7 @@ export const PersistContactAddressModal = ({
   const address = route.params?.address
 
   const { t } = useTranslation('modals', { keyPrefix: 'persistContactAddress' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const {
     validateAddressOrNS,
@@ -80,7 +80,7 @@ export const PersistContactAddressModal = ({
       <ModalLayout.KeyboardAvoidingContent>
         <TwSelectButton
           className="mb-6"
-          value={actionData.blockchain ? commonT(`blockchainServices.${actionData.blockchain}.label`) : undefined}
+          value={actionData.blockchain ? tCommon(`blockchainServices.${actionData.blockchain}.label`) : undefined}
           leftElement={actionData.blockchain ? <TwBlockchainIcon blockchain={actionData.blockchain} /> : undefined}
           label={t('chainLabel')}
           placeholder={t('chainPlaceholder')}
@@ -107,7 +107,7 @@ export const PersistContactAddressModal = ({
         <ModalLayout.KeyboardAvoidingArea>
           <TwButton
             variant="contained-light"
-            label={address ? commonT('general.save') : commonT('general.add')}
+            label={address ? tCommon('general.save') : tCommon('general.add')}
             onPress={handleAdd}
             disabled={!isValidAddressOrDomainAddress}
           />

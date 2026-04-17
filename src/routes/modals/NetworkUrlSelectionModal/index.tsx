@@ -25,7 +25,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const NetworkUrlSelectionModal = ({ route }: TRootStackScreenProps<'NetworkUrlSelectionModal'>) => {
   const { blockchain } = route.params
   const { t } = useTranslation('modals', { keyPrefix: 'networkUrlSelection' })
-  const { t: tCommon } = useTranslation('common', { keyPrefix: 'general' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
   const pingNetworksQuery = usePingNetworks(blockchain, { refetchInterval: 5000 })
   const dispatch = useAppDispatch()
@@ -113,7 +113,7 @@ export const NetworkUrlSelectionModal = ({ route }: TRootStackScreenProps<'Netwo
                           <Text className="font-sans-regular text-sm text-gray-300">
                             {typeof network.latency === 'number'
                               ? t('latencyLabel', { latency: network.latency })
-                              : tCommon('emptyData')}
+                              : tCommonGeneral('emptyData')}
                           </Text>
                         </View>
                       }
@@ -135,7 +135,7 @@ export const NetworkUrlSelectionModal = ({ route }: TRootStackScreenProps<'Netwo
                             </Text>
 
                             <Text className="font-sans-regular text-sm text-gray-300" numberOfLines={1}>
-                              {typeof network.height === 'number' ? network.height : tCommon('emptyData')}
+                              {typeof network.height === 'number' ? network.height : tCommonGeneral('emptyData')}
                             </Text>
                           </View>
                         </View>

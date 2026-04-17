@@ -27,7 +27,7 @@ type TStatus = 'searching' | 'connected' | 'not-connected'
 
 export const ConnectHardwareUsbModal = ({ navigation }: TRootStackScreenProps<'ConnectHardwareUsbModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareUsb' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
   const { createHardwareWallet } = useCreateHardwareWallet()
 
   const [status, setStatus] = useState<TStatus>('searching')
@@ -65,7 +65,7 @@ export const ConnectHardwareUsbModal = ({ navigation }: TRootStackScreenProps<'C
 
       LoggerHelper.error(error, { where: 'ConnectHardwareUsbModal', operation: 'connect' })
       ToastHelper.error({
-        message: AppError.wrap(error, commonT('hardwareWallet.errors.hardwareWalletNotFound')).message,
+        message: AppError.wrap(error, tCommon('hardwareWallet.errors.hardwareWalletNotFound')).message,
       })
       setStatus('not-connected')
     }

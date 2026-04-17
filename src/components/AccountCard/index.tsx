@@ -47,7 +47,7 @@ const AccountCardComponent = ({
 }: TProps) => {
   const navigation = useNavigation()
   const { t } = useTranslation('components', { keyPrefix: 'accountCard' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const balance = useBalance(account)
   const { currency } = useCurrencySelector()
 
@@ -142,7 +142,7 @@ const AccountCardComponent = ({
 
         <View className="flex-row justify-between pl-11">
           <Text className="font-sans-bold text-sm uppercase text-white/60">
-            {commonT(`${account.blockchain}.label`)}
+            {tCommonBlockchainServices(`${account.blockchain}.label`)}
           </Text>
 
           {(isCompacted || isStack) && !hideBalance && (

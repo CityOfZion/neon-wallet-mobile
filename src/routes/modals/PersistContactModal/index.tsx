@@ -38,7 +38,7 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
 
   const dispatch = useAppDispatch()
   const { t } = useTranslation('modals', { keyPrefix: 'persistContact' })
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const { actionData, actionState, setData, setError, handleAct } = useActions<TActionData>({
     addresses: contact?.addresses || addresses || [],
@@ -107,9 +107,9 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
     AlertHelper.show({
       subtitle: t('deleteContactAlert'),
       buttons: [
-        { label: commonT('general.cancel') },
+        { label: tCommon('general.cancel') },
         {
-          label: commonT('general.delete'),
+          label: tCommon('general.delete'),
           onPress: handleConfirmDelete,
         },
       ],
@@ -121,14 +121,14 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
       <ModalLayout.Header>
         <ModalLayout.Button
           position="left"
-          label={commonT('general.cancel')}
+          label={tCommon('general.cancel')}
           onPress={navigation.goBack}
           colorSchema="white"
         />
         <ModalLayout.Title>{contact ? t('title.edit') : t('title.create')}</ModalLayout.Title>
         <ModalLayout.Button
           position="right"
-          label={commonT('general.save')}
+          label={tCommon('general.save')}
           onPress={handleAct(handleSave)}
           disabled={!actionState.isValid || actionData.addresses.length === 0}
         />
