@@ -14,15 +14,17 @@ type TProps = {
 
 export const AccountTransactionsScreenTransactionDefault = memo(({ transaction }: TProps) => (
   <AccountTransactionsTransactionCard transaction={transaction}>
-    <View className="mt-4 gap-y-4">
-      {transaction.events.map((event, index) => (
-        <AccountTransactionsTransactionDefaultEvent
-          key={`${transaction.txId}-event-${index}`}
-          event={event}
-          blockchain={transaction.blockchain}
-          relatedAddress={transaction.relatedAddress}
-        />
-      ))}
-    </View>
+    {transaction.events.length > 0 && (
+      <View className="mt-4 gap-y-4">
+        {transaction.events.map((event, index) => (
+          <AccountTransactionsTransactionDefaultEvent
+            key={`${transaction.txId}-event-${index}`}
+            event={event}
+            blockchain={transaction.blockchain}
+            relatedAddress={transaction.relatedAddress}
+          />
+        ))}
+      </View>
+    )}
   </AccountTransactionsTransactionCard>
 ))
