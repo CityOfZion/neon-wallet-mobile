@@ -9,8 +9,7 @@ import { TwButton } from '@/components/TwButton'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
@@ -27,23 +26,29 @@ export const AccountQRCodeModal = ({ route }: TRootStackScreenProps<'AccountQRCo
   }
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <AccountSubTitle account={account} />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <AccountSubTitle account={account} />
 
-      <View className="my-11 w-full px-9">
-        <NeonQRCode value={account.address} />
-      </View>
+        <View className="my-11 w-full px-9">
+          <NeonQRCode value={account.address} />
+        </View>
 
-      <Text className="font-sans-semibold text-sm uppercase text-gray-300">{t('address')}</Text>
-      <Text className="mt-2 font-sans-regular text-base text-white">{account.address}</Text>
+        <Text className="font-sans-semibold text-sm uppercase text-gray-300">{t('address')}</Text>
+        <Text className="mt-2 font-sans-regular text-base text-white">{account.address}</Text>
 
-      <TwButton
-        leftElement={<TbCopy aria-hidden />}
-        className="mt-auto"
-        variant="contained-light"
-        label={commonT('general.copyToClipboard')}
-        onPress={handleCopy}
-      />
-    </TwModalLayout>
+        <TwButton
+          leftElement={<TbCopy aria-hidden />}
+          className="mt-auto"
+          variant="contained-light"
+          label={commonT('general.copyToClipboard')}
+          onPress={handleCopy}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

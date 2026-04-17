@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
 
 import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
@@ -9,6 +8,8 @@ import { TwInput } from '@/components/TwInput'
 import { StringHelper } from '@/helpers/StringHelper'
 
 import { useNameService } from '@/hooks/useNameService'
+
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 
@@ -49,7 +50,7 @@ export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TP
   const isButtonDisabled = addressInput.length === 0 || isValidatingAddressOrDomainAddress || hasInvalidAddress
 
   return (
-    <View className="flex-shrink flex-grow justify-between">
+    <ModalLayout.KeyboardAvoidingContent keyboardVerticalOffset={240}>
       <TwInput
         placeholder={t('inputPlaceholder')}
         value={addressInput}
@@ -64,7 +65,14 @@ export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TP
         loading={isValidatingAddressOrDomainAddress}
       />
 
-      <TwButton variant="contained-light" label={t('buttonLabel')} disabled={isButtonDisabled} onPress={handleSelect} />
-    </View>
+      <ModalLayout.KeyboardAvoidingArea>
+        <TwButton
+          variant="contained-light"
+          label={t('buttonLabel')}
+          disabled={isButtonDisabled}
+          onPress={handleSelect}
+        />
+      </ModalLayout.KeyboardAvoidingArea>
+    </ModalLayout.KeyboardAvoidingContent>
   )
 }

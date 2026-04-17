@@ -14,7 +14,7 @@ import { TwTokenIcon } from '@/components/TwTokenIcon'
 
 import { useStellarTrustlinesQuery } from '@/hooks/useStellarTruslines'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
 
@@ -72,42 +72,48 @@ export const StellarTrustlineScreen = ({ navigation, route }: TWalletsStackScree
   }, [navigation, stellarAccount, trustlinesQuery.data, trustlinesQuery.isLoading])
 
   return (
-    <TwScreenLayout title={t('title')} withoutScroll>
-      <AccountSubTitle account={stellarAccount} className="mb-5" />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <AccountSubTitle account={stellarAccount} className="mb-5" />
 
-      <Skeleton.Root loading={trustlinesQuery.isLoading} className="w-full flex-1">
-        <Skeleton.Group>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton.Item key={`trustline-skeleton-${index}`} className="h-12 w-full rounded-md" />
-          ))}
-        </Skeleton.Group>
+        <Skeleton.Root loading={trustlinesQuery.isLoading} className="w-full flex-1">
+          <Skeleton.Group>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton.Item key={`trustline-skeleton-${index}`} className="h-12 w-full rounded-md" />
+            ))}
+          </Skeleton.Group>
 
-        <Skeleton.Content className="size-full">
-          <FlatList
-            className="w-full"
-            refreshControl={
-              <RefreshControl refreshing={trustlinesQuery.isRefetching} onRefresh={trustlinesQuery.refetch} />
-            }
-            ListEmptyComponent={
-              !trustlinesQuery.isLoading ? (
-                <Text className="my-8 text-center font-sans-regular text-lg text-white">{t('emptyList')}</Text>
-              ) : undefined
-            }
-            ItemSeparatorComponent={() => <TwSeparator withoutContainer />}
-            data={data}
-            renderItem={renderItem}
-          />
+          <Skeleton.Content className="size-full">
+            <FlatList
+              className="w-full"
+              refreshControl={
+                <RefreshControl refreshing={trustlinesQuery.isRefetching} onRefresh={trustlinesQuery.refetch} />
+              }
+              ListEmptyComponent={
+                !trustlinesQuery.isLoading ? (
+                  <Text className="my-8 text-center font-sans-regular text-lg text-white">{t('emptyList')}</Text>
+                ) : undefined
+              }
+              ItemSeparatorComponent={() => <TwSeparator withoutContainer />}
+              data={data}
+              renderItem={renderItem}
+            />
 
-          <TwButton
-            className="mb-4 mt-8"
-            label={t('addTrustlineButtonLabel')}
-            variant="contained-light"
-            onPress={() => {
-              navigation.navigate('StellarPersistTrustlineModal', { stellarAccount })
-            }}
-          />
-        </Skeleton.Content>
-      </Skeleton.Root>
-    </TwScreenLayout>
+            <TwButton
+              className="mb-4 mt-8"
+              label={t('addTrustlineButtonLabel')}
+              variant="contained-light"
+              onPress={() => {
+                navigation.navigate('StellarPersistTrustlineModal', { stellarAccount })
+              }}
+            />
+          </Skeleton.Content>
+        </Skeleton.Root>
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

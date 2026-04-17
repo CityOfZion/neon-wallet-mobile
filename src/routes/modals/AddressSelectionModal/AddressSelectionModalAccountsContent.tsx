@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
 
 import { TwAccountList } from '@/components/TwAccountList'
 import { TwButton } from '@/components/TwButton'
+
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount } from '@/types/store'
@@ -25,7 +26,7 @@ export const AddressSelectionModalAccountsContent = ({ onSelect, blockchain }: T
   }
 
   return (
-    <View className="flex-shrink flex-grow justify-between">
+    <ModalLayout.ViewContent className="justify-between">
       <TwAccountList
         onPress={setSelectedAccount}
         selectedAccount={selectedAccount}
@@ -39,6 +40,6 @@ export const AddressSelectionModalAccountsContent = ({ onSelect, blockchain }: T
         disabled={!selectedAccount}
         onPress={handleSelect}
       />
-    </View>
+    </ModalLayout.ViewContent>
   )
 }

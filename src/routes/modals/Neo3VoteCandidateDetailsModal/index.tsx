@@ -21,8 +21,7 @@ import {
   useNeo3VoteValidations,
 } from '@/hooks/useNeo3Vote'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCheckbox from '@/assets/images/tb-checkbox.svg'
 
@@ -74,70 +73,74 @@ export const Neo3VoteCandidateDetailsModal = ({
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      contentContainerClassName="pt-2 pb-12"
-      rightElement={<TwModalLayoutCloseIconButton />}
-    >
-      <View className="flex flex-col gap-y-6">
-        {(logoUrl || isCozCandidate) && (
-          <View className="mx-auto flex h-12 w-44 min-w-44 max-w-44 items-center justify-center rounded-full bg-gray-600/50">
-            <Image
-              className="h-full max-h-8 w-full max-w-36"
-              contentFit="contain"
-              source={!logoUrl && isCozCandidate ? require('@/assets/images/logo-coz.png') : logoUrl}
-              alt={name}
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="pt-2 pb-12">
+        <View className="flex flex-col gap-y-6">
+          {(logoUrl || isCozCandidate) && (
+            <View className="mx-auto flex h-12 w-44 min-w-44 max-w-44 items-center justify-center rounded-full bg-gray-600/50">
+              <Image
+                className="h-full max-h-8 w-full max-w-36"
+                contentFit="contain"
+                source={!logoUrl && isCozCandidate ? require('@/assets/images/logo-coz.png') : logoUrl}
+                alt={name}
+              />
+            </View>
+          )}
+
+          <Details.Root>
+            <Details.Body>
+              <Details.Item label={t('positionLabel')}>{position}</Details.Item>
+              <Details.ItemSeparator />
+              <Details.Item label={t('nameLabel')}>{name}</Details.Item>
+              <Details.ItemSeparator />
+              <Details.Item label={t('pubKeyLabel')}>{pubKey}</Details.Item>
+              <Details.ItemSeparator />
+              <Details.Item label={t('votesLabel')}>
+                {`${NumberHelper.localeNumber(votes)} (${candidateVotePercentage})`}
+              </Details.Item>
+            </Details.Body>
+          </Details.Root>
+
+          <View className="mx-auto flex w-[92%] flex-col gap-y-4">
+            <TwButton
+              variant="contained-light"
+              className="w-full"
+              contentProps={{ className: 'px-4' }}
+              label={isCurrentVote ? t('voteAlreadyCastButtonLabel') : t('castVoteButtonLabel')}
+              isLoading={isLoading}
+              disabled={isDisabled}
+              leftElement={isCurrentVote ? undefined : <TbCheckbox aria-hidden />}
+              onPress={handleGoToNeo3VoteConfirmationModal}
             />
+
+            {!isLoading && !isCurrentVote && !!errorMessage && (
+              <TwAlertErrorBanner
+                className="w-full gap-x-3 px-4"
+                iconClassName="text-pink"
+                messageClassName="text-sm font-sans-regular"
+                message={errorMessage}
+              />
+            )}
           </View>
-        )}
 
-        <Details.Root>
-          <Details.Body>
-            <Details.Item label={t('positionLabel')}>{position}</Details.Item>
-            <Details.ItemSeparator />
-            <Details.Item label={t('nameLabel')}>{name}</Details.Item>
-            <Details.ItemSeparator />
-            <Details.Item label={t('pubKeyLabel')}>{pubKey}</Details.Item>
-            <Details.ItemSeparator />
-            <Details.Item label={t('votesLabel')}>
-              {`${NumberHelper.localeNumber(votes)} (${candidateVotePercentage})`}
-            </Details.Item>
-          </Details.Body>
-        </Details.Root>
+          {!!description && (
+            <Fragment>
+              <TwSeparator />
 
-        <View className="mx-auto flex w-[92%] flex-col gap-y-4">
-          <TwButton
-            variant="contained-light"
-            className="w-full"
-            contentProps={{ className: 'px-4' }}
-            label={isCurrentVote ? t('voteAlreadyCastButtonLabel') : t('castVoteButtonLabel')}
-            isLoading={isLoading}
-            disabled={isDisabled}
-            leftElement={isCurrentVote ? undefined : <TbCheckbox aria-hidden />}
-            onPress={handleGoToNeo3VoteConfirmationModal}
-          />
-
-          {!isLoading && !isCurrentVote && !!errorMessage && (
-            <TwAlertErrorBanner
-              className="w-full gap-x-3 px-4"
-              iconClassName="text-pink"
-              messageClassName="text-sm font-sans-regular"
-              message={errorMessage}
-            />
+              <View className="flex flex-col gap-y-2">
+                <Text className="w-full font-sans-semibold text-sm uppercase text-gray-100">
+                  {t('descriptionLabel')}
+                </Text>
+                <Text className="w-full break-all font-sans-regular text-sm text-white">{description}</Text>
+              </View>
+            </Fragment>
           )}
         </View>
-
-        {!!description && (
-          <Fragment>
-            <TwSeparator />
-
-            <View className="flex flex-col gap-y-2">
-              <Text className="w-full font-sans-semibold text-sm uppercase text-gray-100">{t('descriptionLabel')}</Text>
-              <Text className="w-full break-all font-sans-regular text-sm text-white">{description}</Text>
-            </View>
-          </Fragment>
-        )}
-      </View>
-    </TwModalLayout>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

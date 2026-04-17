@@ -27,7 +27,7 @@ import {
   useSelectedNetworkByBlockchainSelector,
 } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdInfoOutline from '@/assets/images/md-info-outline.svg'
 import TbSearch from '@/assets/images/tb-search.svg'
@@ -139,14 +139,11 @@ export const Neo3VoteScreen = ({ navigation, route }: TWalletsStackScreenProps<'
   }, [voteDetailsByAddressQuery.isLoading, voteDetailsByAddressQuery.data, cozCandidate, defaultNeo3Account])
 
   return (
-    <TwScreenLayout
-      headerClassName="h-[36px] mt-2"
-      contentContainerClassName="gap-y-6 w-full"
-      withoutScroll
-      title={
+    <ScreenLayout.Root>
+      <ScreenLayout.Header className="mt-2 h-[36px]">
+        <ScreenLayout.BackButton />
         <View className="-mt-2 flex max-w-[50%] flex-1 flex-row items-center justify-center">
           <Text className="line-clamp-1 font-sans-medium text-xl text-white">{t('title')}</Text>
-
           <TwIconButton
             aria-label={t('howItWorksButtonLabel')}
             size="md"
@@ -155,51 +152,52 @@ export const Neo3VoteScreen = ({ navigation, route }: TWalletsStackScreenProps<'
             onPress={handleGoToNeo3VoteHowItWorksModal}
           />
         </View>
-      }
-    >
-      {!isLoading && !!voteErrorMessage && (
-        <TwAlertErrorBanner
-          className="w-full gap-x-2 px-3"
-          iconClassName="size-5"
-          messageClassName="text-base"
-          message={voteErrorMessage}
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent className="w-full gap-y-6">
+        {!isLoading && !!voteErrorMessage && (
+          <TwAlertErrorBanner
+            className="w-full gap-x-2 px-3"
+            iconClassName="size-5"
+            messageClassName="text-base"
+            message={voteErrorMessage}
+          />
+        )}
+
+        <Neo3VoteAccount
+          neo3Account={neo3Account}
+          isDisabled={isLoading || !hasNeo3Accounts || !isMainnet}
+          onSelect={handleSelectNeo3Account}
         />
-      )}
 
-      <Neo3VoteAccount
-        neo3Account={neo3Account}
-        isDisabled={isLoading || !hasNeo3Accounts || !isMainnet}
-        onSelect={handleSelectNeo3Account}
-      />
+        <TwSeparator />
 
-      <TwSeparator />
+        <TwInput
+          className="h-11 w-full text-sm placeholder:text-neon"
+          aria-label={t('searchLabel')}
+          placeholder={t('searchPlaceholder')}
+          value={search}
+          maxLength={100}
+          inputContainerProps={{ className: 'bg-gray-300/15 w-full px-3 rounded' }}
+          clearable
+          disabled={isSearchDisabled}
+          onChangeText={setDataWrapper('search')}
+          leftElement={<TbSearch aria-hidden className="h-4 max-h-4 min-h-4 w-4 min-w-4 max-w-4 text-neon" />}
+        />
 
-      <TwInput
-        className="h-11 w-full text-sm placeholder:text-neon"
-        aria-label={t('searchLabel')}
-        placeholder={t('searchPlaceholder')}
-        value={search}
-        maxLength={100}
-        inputContainerProps={{ className: 'bg-gray-300/15 w-full px-3 rounded' }}
-        clearable
-        disabled={isSearchDisabled}
-        onChangeText={setDataWrapper('search')}
-        leftElement={<TbSearch aria-hidden className="h-4 max-h-4 min-h-4 w-4 min-w-4 max-w-4 text-neon" />}
-      />
+        <Neo3VoteAvailableVotes
+          neoAmount={neoAmount}
+          hasNeoAmount={hasNeoAmount}
+          isLoading={voteDetailsByAddressQuery.isLoading}
+        />
 
-      <Neo3VoteAvailableVotes
-        neoAmount={neoAmount}
-        hasNeoAmount={hasNeoAmount}
-        isLoading={voteDetailsByAddressQuery.isLoading}
-      />
-
-      <Neo3VoteList
-        neo3Account={neo3Account}
-        search={search}
-        voteErrorMessage={voteErrorMessage}
-        canVote={canVote}
-        canScrollToCandidateRef={canScrollToCandidateRef}
-      />
-    </TwScreenLayout>
+        <Neo3VoteList
+          neo3Account={neo3Account}
+          search={search}
+          voteErrorMessage={voteErrorMessage}
+          canVote={canVote}
+          canScrollToCandidateRef={canScrollToCandidateRef}
+        />
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

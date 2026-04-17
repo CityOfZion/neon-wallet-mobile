@@ -16,8 +16,7 @@ import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { useActions } from '@/hooks/useActions'
 import { useLazyStellarGetTrustlineTokens } from '@/hooks/useStellarTruslines'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -108,39 +107,44 @@ export const StellarTrustilneTokenSelectionModal = ({
   }
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      <TwInput
-        className="placeholder:text-neon"
-        placeholder="Search for a token"
-        containerProps={{
-          className: 'mt-6 mx-4.5',
-        }}
-        value={actionData.filter}
-        onChangeText={handleValueChange}
-        clearable
-        autoCapitalize="none"
-      />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
 
-      <Skeleton.Root loading={actionData.loading} className="mt-4 w-full">
-        <Skeleton.Group>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton.Item key={`trustline-skeleton-${index}`} className="h-12 w-full rounded-md" />
-          ))}
-        </Skeleton.Group>
-        <Skeleton.Content className="size-full">
-          <FlatList
-            className="w-full"
-            ListEmptyComponent={
-              <Text className="my-8 text-center font-sans-regular text-lg text-gray-300">
-                {actionState.changed.filter ? t('noTokensFound') : t('placeholderMessage')}
-              </Text>
-            }
-            ItemSeparatorComponent={() => <TwSeparator withoutContainer />}
-            data={data}
-            renderItem={renderItem}
-          />
-        </Skeleton.Content>
-      </Skeleton.Root>
-    </TwModalLayout>
+      <ModalLayout.ViewContent>
+        <TwInput
+          className="placeholder:text-neon"
+          placeholder={t('searchInputPlaceholder')}
+          value={actionData.filter}
+          onChangeText={handleValueChange}
+          clearable
+          autoCapitalize="none"
+        />
+
+        <Skeleton.Root loading={actionData.loading} className="mt-4 w-full flex-1">
+          <Skeleton.Group>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton.Item key={`trustline-skeleton-${index}`} className="h-12 w-full rounded-md" />
+            ))}
+          </Skeleton.Group>
+
+          <Skeleton.Content className="w-full">
+            <FlatList
+              className="w-full"
+              ListEmptyComponent={
+                <Text className="my-8 text-center font-sans-regular text-lg text-gray-300">
+                  {actionState.changed.filter ? t('noTokensFound') : t('placeholderMessage')}
+                </Text>
+              }
+              ItemSeparatorComponent={() => <TwSeparator withoutContainer />}
+              data={data}
+              renderItem={renderItem}
+            />
+          </Skeleton.Content>
+        </Skeleton.Root>
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

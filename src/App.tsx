@@ -6,6 +6,7 @@ import * as ExpoSplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { LogBox, Platform } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
 
@@ -70,25 +71,27 @@ export const App = () => {
       <QueryClientProvider client={ReactQueryHelper.client}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-            <NavigationContainer
-              linking={ReactNavigationHelper.getLinking()}
-              fallback={<ScreenLoader className="bg-asphalt" />}
-            >
-              <Setup />
+            <KeyboardProvider>
+              <NavigationContainer
+                linking={ReactNavigationHelper.getLinking()}
+                fallback={<ScreenLoader className="bg-asphalt" />}
+              >
+                <Setup />
 
-              <RootStack />
-            </NavigationContainer>
+                <RootStack />
+              </NavigationContainer>
 
-            <Suspense fallback={null}>
-              <Alert />
-              <Toaster />
-              <QrCodeScanModal />
+              <Suspense fallback={null}>
+                <Alert />
+                <Toaster />
+                <QrCodeScanModal />
 
-              {/* IOS already has a native NFC modal */}
-              {Platform.OS === 'android' && <NfcModal />}
+                {/* IOS already has a native NFC modal */}
+                {Platform.OS === 'android' && <NfcModal />}
 
-              <StatusBar style="light" translucent backgroundColor="transparent" />
-            </Suspense>
+                <StatusBar style="light" translucent backgroundColor="transparent" />
+              </Suspense>
+            </KeyboardProvider>
           </SafeAreaProvider>
         </GestureHandlerRootView>
       </QueryClientProvider>

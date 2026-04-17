@@ -8,7 +8,7 @@ import { TwButton } from '@/components/TwButton'
 
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import { walletReducerActions } from '@/store/reducers/wallet'
 import type { TMoreStackScreenProps } from '@/types/stacks'
@@ -34,14 +34,20 @@ export const SettingsWalletBackupStep3Screen = ({
   }, [dispatch, wallet])
 
   return (
-    <TwScreenLayout title={t('title')}>
-      <Image source={require('@/assets/images/logo-3d.png')} className="h-64" contentFit="contain" />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ScrollContent>
+        <Image source={require('@/assets/images/logo-3d.png')} className="h-64" contentFit="contain" />
 
-      <Text className="text-center font-sans-bold text-xl text-white">{t('label_1')}</Text>
+        <Text className="text-center font-sans-bold text-xl text-white">{t('description')}</Text>
 
-      <View className="mt-auto py-3">
-        <TwButton variant="contained-light" label={commonT('continue')} onPress={handlePress} />
-      </View>
-    </TwScreenLayout>
+        <View className="mt-auto py-3">
+          <TwButton variant="contained-light" label={commonT('continue')} onPress={handlePress} />
+        </View>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

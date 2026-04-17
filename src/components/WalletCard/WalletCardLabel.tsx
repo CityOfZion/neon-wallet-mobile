@@ -29,7 +29,7 @@ export const WalletCardLabel = ({ wallet, isInactive }: TProps) => {
       }}
     >
       {wallet.type && (
-        <View className="h-full w-full flex-row items-center gap-4 px-4">
+        <View className="size-full flex-row items-center gap-4 px-4">
           {WALLET_ICON_BY_TYPE[wallet.type]}
 
           <Text

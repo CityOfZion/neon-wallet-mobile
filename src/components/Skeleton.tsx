@@ -101,10 +101,7 @@ const Item = ({ className, ...props }: ViewProps) => {
   })
 
   return (
-    <View
-      className={StyleHelper.mergeStyles('h-full w-full overflow-hidden rounded-md bg-black/5', className)}
-      {...props}
-    >
+    <View className={StyleHelper.mergeStyles('size-full overflow-hidden rounded-md bg-black/5', className)} {...props}>
       <AnimatedLinearGradient
         colors={[
           'transparent',

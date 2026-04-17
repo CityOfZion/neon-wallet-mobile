@@ -9,14 +9,13 @@ import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
-import { ToastHelper } from '@/helpers/ToastHelper'
+import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useDoesAccountExist, useImportAccount } from '@/hooks/useAccountActions'
 import { useActions } from '@/hooks/useActions'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbArrowRight from '@/assets/images/tb-arrow-right.svg'
 
@@ -32,7 +31,7 @@ export const ImportEncryptedKeySelectionModal = ({
   navigation,
   route,
 }: TRootStackScreenProps<'ImportEncryptedKeySelectionModal'>) => {
-  const { encryptedKey, onConfirm } = route.params
+  const { encryptedKey, onSuccess } = route.params
 
   const { t } = useTranslation('modals', { keyPrefix: 'importEncryptedKeySelection' })
   const { t: tCommon } = useTranslation('common')
@@ -61,7 +60,10 @@ export const ImportEncryptedKeySelectionModal = ({
       inputProps: { placeholder: t('importEncryptedKeyInputPlaceholder') },
       description: t('importEncryptedConfirmPasswordLabel'),
       onConfirm: async (password: string) => {
-        const { address, key } = await service.decrypt(encryptedKey, password)
+        const { address, key } = await service.decrypt(encryptedKey, password).catch(error => {
+          LoggerHelper.error(error, { where: 'ImportEncryptedKeySelectionModal', operation: 'handlePressNext' })
+          throw new AppError(t('decryptError'), error)
+        })
 
         if (doesAccountExist({ address, blockchain })) {
           throw new AppError(t('accountAlreadyExists'))
@@ -75,32 +77,41 @@ export const ImportEncryptedKeySelectionModal = ({
 
         await importAccount({ address, blockchain, wallet, key, type: 'standard' })
       },
-      onSuccess: () => {
+      onSuccess: async () => {
         AnalyticsHelper.logEvent('wallet_imported')
 
-        onConfirm()
+        navigation.goBack()
+
+        await UtilsHelper.sleep(500)
+
+        onSuccess()
       },
       onError: error => {
         LoggerHelper.error(error, { where: 'PasswordModal', operation: 'handlePressNext' })
-        ToastHelper.error({ message: AppError.wrap(error, t('decryptError')).message })
       },
     })
   }
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      <Text className="mb-6 text-center font-sans-medium text-lg text-white">{t('description')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ViewContent>
+        <Text className="mb-6 text-center font-sans-medium text-lg text-white">{t('description')}</Text>
 
-      <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchain} isMulti={false} />
+        <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchain} isMulti={false} />
 
-      <TwButton
-        className="mb-4 mt-auto"
-        variant="contained-light"
-        label={tCommon('general.next')}
-        disabled={!actionData.blockchain.length}
-        onPress={handleAct(handleSubmit)}
-        rightElement={<TbArrowRight aria-hidden />}
-      />
-    </TwModalLayout>
+        <TwButton
+          className="mb-4 mt-auto"
+          variant="contained-light"
+          label={tCommon('general.next')}
+          disabled={!actionData.blockchain.length}
+          onPress={handleAct(handleSubmit)}
+          rightElement={<TbArrowRight aria-hidden />}
+        />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

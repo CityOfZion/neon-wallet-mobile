@@ -14,8 +14,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { useActions } from '@/hooks/useActions'
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCheckbox from '@/assets/images/tb-checkbox.svg'
 
@@ -64,63 +63,64 @@ export const Neo3VoteSupportUsModal = ({
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      contentContainerClassName="gap-y-4 pt-2"
-      rightElement={<TwModalLayoutCloseIconButton onPress={handleClose} />}
-      onRequestClose={handleClose}
-    >
-      <Image
-        className="mx-auto mb-2 h-12 w-full"
-        contentFit="contain"
-        source={require('@/assets/images/logo-coz.png')}
-        alt={t('cozLogoAlt')}
-      />
-
-      <Text className="font-sans-regular text-lg text-white">{t('hiLabel')}</Text>
-
-      <Text className="font-sans-bold text-lg text-white">{t('aboutNeonWalletDescription')}</Text>
-
-      <Text className="font-sans-regular text-lg text-white">{t('importantThingsLabel')}</Text>
-
-      <Text className="font-sans-regular text-lg text-white">{t('youCanSupportUsLabel')}</Text>
-
-      <Text className="font-sans-regular text-lg text-white">
-        <Trans t={t} i18nKey="scanOurWebsite">
-          start
-          <Text className="font-sans-regular text-lg text-neon" onPress={handleOpenCozLink}>
-            end
-          </Text>
-        </Trans>
-      </Text>
-
-      <Text className="font-sans-regular text-lg text-white">{t('thankYouLabel')}</Text>
-
-      <Text className="font-sans-regular text-lg text-white">{t('cozTeamLabel')}</Text>
-
-      <View className="mb-4 mt-2 flex flex-grow flex-col justify-end gap-y-6">
-        <TwButton
-          variant="contained-light"
-          label={t('voteForCozButtonLabel')}
-          leftElement={<TbCheckbox aria-hidden />}
-          onPress={handleGoToNeo3VoteConfirmationModalForCoz}
+    <ModalLayout.Root onRequestClose={handleClose}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={handleClose} />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="gap-y-4 pt-2">
+        <Image
+          className="mx-auto mb-2 h-12 w-full"
+          contentFit="contain"
+          source={require('@/assets/images/logo-coz.png')}
+          alt={t('cozLogoAlt')}
         />
 
-        <TwButton
-          label={t('skipButtonLabel')}
-          variant="card"
-          labelProps={{ className: 'text-gray-200' }}
-          onPress={handleClose}
-        />
+        <Text className="font-sans-regular text-lg text-white">{t('hiLabel')}</Text>
 
-        <TwCheckbox
-          label={t('dontShowAgainLabel')}
-          checked={dontShowAgain}
-          className="mt-2 flex-row-reverse justify-center"
-          labelClassName="text-lg"
-          onCheckedChange={handleToggleDontShowAgain}
-        />
-      </View>
-    </TwModalLayout>
+        <Text className="font-sans-bold text-lg text-white">{t('aboutNeonWalletDescription')}</Text>
+
+        <Text className="font-sans-regular text-lg text-white">{t('importantThingsLabel')}</Text>
+
+        <Text className="font-sans-regular text-lg text-white">{t('youCanSupportUsLabel')}</Text>
+
+        <Text className="font-sans-regular text-lg text-white">
+          <Trans t={t} i18nKey="scanOurWebsite">
+            start
+            <Text className="font-sans-regular text-lg text-neon" onPress={handleOpenCozLink}>
+              end
+            </Text>
+          </Trans>
+        </Text>
+
+        <Text className="font-sans-regular text-lg text-white">{t('thankYouLabel')}</Text>
+
+        <Text className="font-sans-regular text-lg text-white">{t('cozTeamLabel')}</Text>
+
+        <View className="my-2 flex flex-grow flex-col justify-end gap-y-6">
+          <TwButton
+            variant="contained-light"
+            label={t('voteForCozButtonLabel')}
+            leftElement={<TbCheckbox aria-hidden />}
+            onPress={handleGoToNeo3VoteConfirmationModalForCoz}
+          />
+
+          <TwButton
+            label={t('skipButtonLabel')}
+            variant="card"
+            labelProps={{ className: 'text-gray-200' }}
+            onPress={handleClose}
+          />
+
+          <TwCheckbox
+            label={t('dontShowAgainLabel')}
+            checked={dontShowAgain}
+            className="mt-2 flex-row-reverse justify-center"
+            labelClassName="text-lg"
+            onCheckedChange={handleToggleDontShowAgain}
+          />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

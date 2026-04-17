@@ -8,8 +8,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useItemNfiAuthentication } from '@/hooks/useItemNfiAuthentication'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -49,41 +48,43 @@ export const RemoveNfiModal = ({ route, navigation }: TRootStackScreenProps<'Rem
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      rightElement={<TwModalLayoutCloseIconButton onPress={handleClose} />}
-      onRequestClose={handleClose}
-    >
-      <Text className="font-sans-regular text-lg text-white">{t('description')}</Text>
+    <ModalLayout.Root onRequestClose={handleClose}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={handleClose} />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Text className="font-sans-regular text-lg text-white">{t('description')}</Text>
 
-      <TwMenuButton
-        className="mt-7"
-        onPress={handleNfIPress}
-        label={
-          <Text numberOfLines={1} className="flex-shrink font-sans-regular text-lg text-neon">
-            <Trans t={t} i18nKey="haveNfiLabelButton">
-              start
-              <Text className="uppercase">middle</Text>
-              end
-            </Trans>
-          </Text>
-        }
-      />
+        <TwMenuButton
+          className="mt-7"
+          onPress={handleNfIPress}
+          label={
+            <Text numberOfLines={1} className="flex-shrink font-sans-regular text-lg text-neon">
+              <Trans t={t} i18nKey="haveNfiLabelButton">
+                start
+                <Text className="uppercase">middle</Text>
+                end
+              </Trans>
+            </Text>
+          }
+        />
 
-      <TwSeparator />
+        <TwSeparator />
 
-      <TwMenuButton
-        onPress={handleNoNfiPress}
-        label={
-          <Text numberOfLines={1} className="flex-shrink font-sans-regular text-lg text-neon">
-            <Trans t={t} i18nKey="noNfiLabelButton">
-              start
-              <Text className="uppercase">middle</Text>
-              end
-            </Trans>
-          </Text>
-        }
-      />
-    </TwModalLayout>
+        <TwMenuButton
+          onPress={handleNoNfiPress}
+          label={
+            <Text numberOfLines={1} className="flex-shrink font-sans-regular text-lg text-neon">
+              <Trans t={t} i18nKey="noNfiLabelButton">
+                start
+                <Text className="uppercase">middle</Text>
+                end
+              </Trans>
+            </Text>
+          }
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

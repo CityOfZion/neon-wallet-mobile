@@ -63,7 +63,7 @@ export const AccountScreenWarningClaimModal = ({
       className="items-center justify-center"
     >
       <BlurView
-        className="h-full w-full items-center justify-center"
+        className="size-full items-center justify-center"
         intensity={Platform.OS === 'ios' ? 15 : 90}
         tint="dark"
         onTouchStart={onReject}

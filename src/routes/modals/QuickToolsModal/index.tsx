@@ -15,7 +15,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useHasHardwareAccountSelector } from '@/hooks/useAccountSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbChartBarPopular from '@/assets/images/tb-chart-bar-popular.svg'
 import TbDeviceUsb from '@/assets/images/tb-device-usb.svg'
@@ -152,74 +152,78 @@ export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickTool
   }
 
   return (
-    <TwModalLayout withoutHeader full={false}>
-      <TwMenuButton
-        label={t('qrCode.title')}
-        leftElement={<TbQrcode aria-hidden className="text-neon" />}
-        onPress={handlePressQrCode}
-      />
+    <ModalLayout.Root full={false}>
+      <ModalLayout.Header />
 
-      <TwSeparator />
+      <ModalLayout.ScrollContent>
+        <TwMenuButton
+          label={t('qrCode.title')}
+          leftElement={<TbQrcode aria-hidden className="text-neon" />}
+          onPress={handlePressQrCode}
+        />
 
-      {!isIos && (
-        <Fragment>
-          <TwMenuButton
-            label={t('buyAndSellTokens.title')}
-            leftElement={<TbShoppingBag aria-hidden />}
-            onPress={handlePressBuyAndSellTokens}
-          />
+        <TwSeparator />
 
-          <TwSeparator />
-        </Fragment>
-      )}
+        {!isIos && (
+          <Fragment>
+            <TwMenuButton
+              label={t('buyAndSellTokens.title')}
+              leftElement={<TbShoppingBag aria-hidden />}
+              onPress={handlePressBuyAndSellTokens}
+            />
 
-      <TwMenuButton
-        label={t('send.title')}
-        leftElement={<TbStepOut aria-hidden className="text-neon" />}
-        onPress={handlePressSend}
-      />
+            <TwSeparator />
+          </Fragment>
+        )}
 
-      <TwSeparator />
+        <TwMenuButton
+          label={t('send.title')}
+          leftElement={<TbStepOut aria-hidden className="text-neon" />}
+          onPress={handlePressSend}
+        />
 
-      <TwMenuButton
-        label={t('receive.title')}
-        leftElement={<TbStepInto aria-hidden className="text-neon" />}
-        onPress={handlePressReceive}
-      />
+        <TwSeparator />
 
-      {!isIos && (
-        <Fragment>
-          <TwSeparator />
+        <TwMenuButton
+          label={t('receive.title')}
+          leftElement={<TbStepInto aria-hidden className="text-neon" />}
+          onPress={handlePressReceive}
+        />
 
-          <TwMenuButton label={t('swap.title')} leftElement={<TbTransform aria-hidden />} onPress={handlePressSwap} />
-        </Fragment>
-      )}
+        {!isIos && (
+          <Fragment>
+            <TwSeparator />
 
-      <TwSeparator />
+            <TwMenuButton label={t('swap.title')} leftElement={<TbTransform aria-hidden />} onPress={handlePressSwap} />
+          </Fragment>
+        )}
 
-      <TwMenuButton
-        label={t('neo3NeoXBridge.title')}
-        leftElement={<TbReplace2 aria-hidden />}
-        onPress={handlePressNeo3NeoXBridge}
-      />
+        <TwSeparator />
 
-      <TwSeparator />
+        <TwMenuButton
+          label={t('neo3NeoXBridge.title')}
+          leftElement={<TbReplace2 aria-hidden />}
+          onPress={handlePressNeo3NeoXBridge}
+        />
 
-      <TwMenuButton
-        label={t('neo3Vote.title')}
-        leftElement={<TbChartBarPopular aria-hidden />}
-        onPress={handlePressNeo3Vote}
-      />
+        <TwSeparator />
 
-      <TwSeparator />
+        <TwMenuButton
+          label={t('neo3Vote.title')}
+          leftElement={<TbChartBarPopular aria-hidden />}
+          onPress={handlePressNeo3Vote}
+        />
 
-      <TwMenuButton
-        label={hasHardwareAccount ? t('hardware.disconnectTitle') : t('hardware.connectTitle')}
-        leftElement={
-          hasHardwareAccount ? <TbX aria-hidden className="text-pink" /> : <TbDeviceUsb aria-hidden rotation={45} />
-        }
-        onPress={hasHardwareAccount ? handlePressDisconnectHardware : handlePressConnectHardware}
-      />
-    </TwModalLayout>
+        <TwSeparator />
+
+        <TwMenuButton
+          label={hasHardwareAccount ? t('hardware.disconnectTitle') : t('hardware.connectTitle')}
+          leftElement={
+            hasHardwareAccount ? <TbX aria-hidden className="text-pink" /> : <TbDeviceUsb aria-hidden rotation={45} />
+          }
+          onPress={hasHardwareAccount ? handlePressDisconnectHardware : handlePressConnectHardware}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import type { ProposalTypes, SignClientTypes } from '@walletconnect/types'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 
 import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
@@ -18,8 +18,7 @@ import { useActions } from '@/hooks/useActions'
 import { useIsConnectedSelector } from '@/hooks/useUtilitySelector'
 import { useOwnWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TAccount, TWallet } from '@/types/store'
@@ -158,12 +157,13 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
   }, [route.params?.uri])
 
   return (
-    <TwModalLayout
-      rightElement={<TwModalLayoutCloseIconButton />}
-      title={t('title')}
-      contentContainerClassName="justify-between"
-    >
-      <View className="mt-5">
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+
+      <ModalLayout.KeyboardAvoidingContent>
         <Text className="text-center font-sans-regular text-lg text-white">{t('subtitle')}</Text>
 
         <TwInput
@@ -179,15 +179,17 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
           error={actionState.errors.uri}
           onScan={handleScan}
         />
-      </View>
 
-      <TwButton
-        variant="contained-light"
-        label={t('connectLabel')}
-        disabled={!actionState.isValid || isNotConnected}
-        onPress={handleAct(handleSubmit)}
-        isLoading={actionState.isActing}
-      />
-    </TwModalLayout>
+        <ModalLayout.KeyboardAvoidingArea>
+          <TwButton
+            variant="contained-light"
+            label={t('connectLabel')}
+            disabled={!actionState.isValid || isNotConnected}
+            onPress={handleAct(handleSubmit)}
+            isLoading={actionState.isActing}
+          />
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }

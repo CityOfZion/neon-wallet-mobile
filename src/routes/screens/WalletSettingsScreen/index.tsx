@@ -15,7 +15,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useDeleteWallet } from '@/hooks/useWalletActions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbFileExport from '@/assets/images/tb-file-export.svg'
 import TbPencil from '@/assets/images/tb-pencil.svg'
@@ -76,29 +76,39 @@ export const WalletSettingsScreen = ({ navigation, route }: TWalletsStackScreenP
   }
 
   return (
-    <TwScreenLayout title={t('title')}>
-      <TwMenuButton label={t('customize')} leftElement={<TbPencil aria-hidden />} onPress={handlePressEdit} />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ScrollContent>
+        <TwMenuButton label={t('customize')} leftElement={<TbPencil aria-hidden />} onPress={handlePressEdit} />
 
-      {wallet.type === 'standard' && (
-        <Fragment>
-          <TwSeparator />
+        {wallet.type === 'standard' && (
+          <Fragment>
+            <TwSeparator />
 
-          <TwMenuButton label={t('backup')} leftElement={<TbFileExport aria-hidden />} onPress={handlePressOnBackup} />
-        </Fragment>
-      )}
+            <TwMenuButton
+              label={t('backup')}
+              leftElement={<TbFileExport aria-hidden />}
+              onPress={handlePressOnBackup}
+            />
+          </Fragment>
+        )}
 
-      <View className="mt-auto items-center">
-        <Text className="font-sans-bold text-sm uppercase text-gray-300">{t('deleteTitle')}</Text>
+        <View className="mt-auto items-center">
+          <Text className="font-sans-bold text-sm uppercase text-gray-300">{t('deleteTitle')}</Text>
 
-        <Text className="mb-4 text-center font-sans-regular text-white">{t('deleteSubtitle')}</Text>
+          <Text className="mb-4 text-center font-sans-regular text-white">{t('deleteSubtitle')}</Text>
 
-        <TwButton
-          variant="outline"
-          label={t('deleteButton')}
-          leftElement={<TbTrash aria-hidden />}
-          onPress={handlePressDelete}
-        />
-      </View>
-    </TwScreenLayout>
+          <TwButton
+            variant="outline"
+            label={t('deleteButton')}
+            leftElement={<TbTrash aria-hidden />}
+            onPress={handlePressDelete}
+          />
+        </View>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

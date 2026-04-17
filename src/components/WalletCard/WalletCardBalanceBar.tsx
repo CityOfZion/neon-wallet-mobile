@@ -61,7 +61,7 @@ export const WalletCardBalanceBar = React.memo(({ accounts }: TProps) => {
       </Skeleton.Group>
 
       <Skeleton.Content
-        className={StyleHelper.mergeStyles('h-full w-full flex-row', {
+        className={StyleHelper.mergeStyles('size-full flex-row', {
           'gap-1 bg-gray-700 px-1': !isBarsLoading,
         })}
       >

@@ -22,8 +22,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useActions } from '@/hooks/useActions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
-import { TwScreenLayoutButton } from '@/layouts/TwScreenLayout/TwScreenLayoutButtons'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
 import TbHelp from '@/assets/images/tb-help.svg'
@@ -198,49 +197,50 @@ export const SearchScreen = ({ navigation }: TSearchStackScreenProps<'SearchScre
   }
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      rightElement={<TwScreenLayoutButton label={t('resetButtonLabel')} onPress={reset} />}
-      withoutBackButton
-      withoutScroll
-    >
-      <TwInput
-        containerProps={{ className: 'w-full' }}
-        placeholder={t('inputPlaceholder')}
-        inputContainerProps={{ className: 'bg-gray-300/15' }}
-        className="placeholder:text-neon"
-        onChangeText={handleChange}
-        value={actionData.search}
-        maxLength={200}
-      />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        <ScreenLayout.Button position="right" label={t('resetButtonLabel')} onPress={reset} />
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <TwInput
+          containerProps={{ className: 'w-full' }}
+          placeholder={t('inputPlaceholder')}
+          inputContainerProps={{ className: 'bg-gray-300/15' }}
+          className="placeholder:text-neon"
+          onChangeText={handleChange}
+          value={actionData.search}
+          maxLength={200}
+        />
 
-      {match(actionData)
-        .with({ isSearching: true }, () => <ScreenLoader />)
-        .with({ foundActions: undefined }, () => (
-          <View className="flex-grow flex-row items-center justify-center gap-5">
-            <TbSearch aria-hidden className="h-11 w-11 text-gray-300" />
-            <Text className="font-sans-medium text-2xl text-gray-300">{t('idleResultDescription')}</Text>
-          </View>
-        ))
-        .with({ foundActions: [] }, () => (
-          <View className="flex-grow flex-row items-center justify-center gap-5">
-            <Text className="font-sans-medium text-2xl text-gray-300">{t('emptyResultDescription')}</Text>
-          </View>
-        ))
-        .otherwise(({ foundActions }) => (
-          <FlatList
-            data={foundActions}
-            className="w-full"
-            ListHeaderComponent={
-              <Fragment>
-                <Text className="mb-4 mt-8 font-sans-regular text-lg text-white">{t('resultDescription')}</Text>
-                <TwSeparator containerClassName="mb-5" />
-              </Fragment>
-            }
-            keyExtractor={(_, index) => `search-action-${index}`}
-            renderItem={renderItem}
-          />
-        ))}
-    </TwScreenLayout>
+        {match(actionData)
+          .with({ isSearching: true }, () => <ScreenLoader />)
+          .with({ foundActions: undefined }, () => (
+            <View className="flex-grow flex-row items-center justify-center gap-5">
+              <TbSearch aria-hidden className="size-11 text-gray-300" />
+              <Text className="font-sans-medium text-2xl text-gray-300">{t('idleResultDescription')}</Text>
+            </View>
+          ))
+          .with({ foundActions: [] }, () => (
+            <View className="flex-grow flex-row items-center justify-center gap-5">
+              <Text className="font-sans-medium text-2xl text-gray-300">{t('emptyResultDescription')}</Text>
+            </View>
+          ))
+          .otherwise(({ foundActions }) => (
+            <FlatList
+              data={foundActions}
+              className="w-full"
+              ListHeaderComponent={
+                <Fragment>
+                  <Text className="mb-4 mt-8 font-sans-regular text-lg text-white">{t('resultDescription')}</Text>
+                  <TwSeparator containerClassName="mb-5" />
+                </Fragment>
+              }
+              keyExtractor={(_, index) => `search-action-${index}`}
+              renderItem={renderItem}
+            />
+          ))}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

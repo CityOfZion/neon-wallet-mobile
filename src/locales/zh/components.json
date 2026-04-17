@@ -40,6 +40,11 @@
   "blockchainList": {
     "xExisting": "已有{{amount}}个"
   },
+  "modalLayout": {
+    "labels": {
+      "closeButton": "关闭弹窗"
+    }
+  },
   "nfc": {
     "description": "请轻触NFC标签",
     "title": "准备扫描"
@@ -48,6 +53,9 @@
     "closeButtonLabel": "关闭二维码扫描器",
     "permissionOffMessage": "扫描二维码需要相机权限。请在设备设置中授予权限。",
     "permissionOffTitle": "需要摄像头访问权限"
+  },
+  "screenLayout": {
+    "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
     "customMode": "自定义网络模式",
@@ -116,11 +124,6 @@
       "clearButton": "清除输入",
       "hideButton": "隐藏输入",
       "showButton": "显示输入"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "关闭弹窗"
     }
   }
 }

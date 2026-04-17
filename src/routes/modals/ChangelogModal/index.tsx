@@ -10,8 +10,7 @@ import { DateHelper } from '@/helpers/DateHelper'
 
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 type TNote = {
   version: string
@@ -59,20 +58,26 @@ export const ChangelogModal = () => {
   }))
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      <FlatList
-        data={items}
-        showsVerticalScrollIndicator={false}
-        contentContainerClassName="gap-2.5"
-        ListHeaderComponent={
-          <View className="mb-3">
-            <Text className="font-sans-regular text-sm text-white">{t('thankYouText')}</Text>
-            <Text className="text-right font-sans-bold text-sm text-white">{t('cozTeam')}</Text>
-          </View>
-        }
-        renderItem={renderItem}
-        keyExtractor={item => item.version}
-      />
-    </TwModalLayout>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ViewContent>
+        <FlatList
+          data={items}
+          showsVerticalScrollIndicator={false}
+          contentContainerClassName="gap-2.5"
+          ListHeaderComponent={
+            <View className="mb-3">
+              <Text className="font-sans-regular text-sm text-white">{t('thankYouText')}</Text>
+              <Text className="text-right font-sans-bold text-sm text-white">{t('cozTeam')}</Text>
+            </View>
+          }
+          renderItem={renderItem}
+          keyExtractor={item => item.version}
+        />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }
