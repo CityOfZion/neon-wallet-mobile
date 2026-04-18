@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
 
-import { type TWalletKitHelperProposalDetails, WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
+import { type TWalletKitHelperProposalDetails } from '@cityofzion/bs-multichain'
 import type { ErrorResponse } from '@walletconnect/jsonrpc-utils'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -52,7 +52,7 @@ export const DappConnectionRequestModal = ({
 
   const [isRejecting, startReject] = usePressOnce(async (reason?: ErrorResponse) => {
     await WalletKitHelper.kit
-      .rejectSession({ id: proposal.id, reason: reason || BSWalletKitHelper.getError('USER_REJECTED') })
+      .rejectSession({ id: proposal.id, reason: reason || WalletKitHelper.getError('USER_REJECTED') })
       .catch(error => LoggerHelper.error(error, { where: 'DappConnectionRequestModal', operation: 'rejectSession' }))
 
     await WalletKitHelper.redirect({
@@ -66,7 +66,7 @@ export const DappConnectionRequestModal = ({
     () => {
       try {
         setProposalDetails(
-          BSWalletKitHelper.getProposalDetails({
+          WalletKitHelper.getProposalDetails({
             proposal,
             address: account.address,
             service: BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain],
@@ -79,7 +79,7 @@ export const DappConnectionRequestModal = ({
           id: 'dapp-connection-details-proposal-error',
         })
 
-        startReject(BSWalletKitHelper.getError('UNSUPPORTED_NAMESPACE_KEY'))
+        startReject(WalletKitHelper.getError('UNSUPPORTED_NAMESPACE_KEY'))
       }
     },
     [],

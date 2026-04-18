@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import type { ProposalTypes, SignClientTypes } from '@walletconnect/types'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
@@ -65,7 +64,7 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
     const handleClose = async () => {
       reset()
       WalletKitHelper.kit
-        .rejectSession({ id: proposal.id, reason: BSWalletKitHelper.getError('USER_REJECTED') })
+        .rejectSession({ id: proposal.id, reason: WalletKitHelper.getError('USER_REJECTED') })
         .catch(error =>
           LoggerHelper.error(error, { where: 'DappConnectionModal', operation: 'rejectSession/handleClose' })
         )
@@ -77,7 +76,7 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
       })
     }
 
-    const services = BSWalletKitHelper.getProposalServices({
+    const services = WalletKitHelper.getProposalServices({
       proposal,
       services: BlockchainServiceHelper.bsAggregator.blockchainServices,
     })
@@ -138,7 +137,7 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
   const handleChangeText = (text: string) => {
     setData({ uri: text })
 
-    if (!BSWalletKitHelper.isValidURI(text)) {
+    if (!WalletKitHelper.isValidURI(text)) {
       setError('uri', t('errors.invalidUrl'))
     }
   }

@@ -1,7 +1,7 @@
 import { Fragment, useMemo, useState } from 'react'
 
 import type { TBSToken } from '@cityofzion/blockchain-service'
-import { BSBigNumberHelper, isClaimable } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, isClaimable } from '@cityofzion/blockchain-service'
 import type { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
@@ -71,7 +71,7 @@ export const AccountScreenClaimButton = ({ account }: TProps) => {
         t={t}
         i18nKey="claimAsset"
         values={{
-          amount: BSBigNumberHelper.format(unclaimedQuery.data.unclaimedNumber, { decimals: claimToken.decimals }),
+          amount: new BSBigHumanAmount(unclaimedQuery.data.unclaimedNumber, claimToken.decimals).toFormatted(),
           symbol: claimToken.symbol,
         }}
       >

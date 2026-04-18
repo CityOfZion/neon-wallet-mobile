@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react'
 
-import { BSBigNumberHelper, hasNeo3NeoXBridge } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, hasNeo3NeoXBridge } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import type { GestureResponderEvent, ViewProps } from 'react-native'
@@ -68,7 +68,7 @@ export const AccountTransactionsTransactionCard = ({ transaction, className, chi
     : undefined
 
   const isUtxo = transaction.view === 'utxo'
-  const feeBn = BSBigNumberHelper.fromNumber(transaction.networkFeeAmount || 0).plus(transaction.systemFeeAmount || 0)
+  const feeBn = new BSBigHumanAmount(transaction.networkFeeAmount || 0).plus(transaction.systemFeeAmount || 0)
 
   const handleSwapPress = (event: GestureResponderEvent) => {
     event.stopPropagation()

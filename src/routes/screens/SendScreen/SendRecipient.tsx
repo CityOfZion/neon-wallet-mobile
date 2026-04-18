@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
-import type { TBSToken } from '@cityofzion/blockchain-service'
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, type TBSToken } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -79,7 +78,7 @@ export const SendRecipient = ({
 
     debounce(() => {
       onUpdateRecipient({
-        amount: BSBigNumberHelper.format(value, { decimals: recipient.token?.token?.decimals }),
+        amount: new BSBigHumanAmount(value, recipient.token?.token?.decimals).toFormatted(),
         isAmountLoading: false,
       })
     })
@@ -219,9 +218,9 @@ export const SendRecipient = ({
           <Text className="font-sans-regular text-sm text-gray-100">
             {CurrencyHelper.format(
               recipient.amount && recipient.token
-                ? BSBigNumberHelper.fromNumber(recipient.amount)
+                ? new BSBigHumanAmount(recipient.amount, recipient.token.token.decimals)
                     .multipliedBy(recipient.token.exchangeConvertedPrice)
-                    .toFixed()
+                    .toNumber()
                 : 0,
               { currency, maximumFractionDigits: 6 }
             )}

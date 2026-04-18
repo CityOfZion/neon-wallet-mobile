@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 import { hasWalletConnect } from '@cityofzion/blockchain-service'
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
@@ -136,7 +135,7 @@ export const useDeleteAccount = () => {
       if (!hasWalletConnect(service)) return
 
       const sessions = WalletKitHelper.kit.getActiveSessions()
-      const accountSessions = BSWalletKitHelper.filterSessions(Object.values(sessions), {
+      const accountSessions = WalletKitHelper.filterSessions(Object.values(sessions), {
         addresses: [account.address],
         chains: [service.walletConnectService.chain],
       })
@@ -144,7 +143,7 @@ export const useDeleteAccount = () => {
         accountSessions.map(session =>
           WalletKitHelper.kit.disconnectSession({
             topic: session.topic,
-            reason: BSWalletKitHelper.getError('USER_DISCONNECTED'),
+            reason: WalletKitHelper.getError('USER_DISCONNECTED'),
           })
         )
       )
