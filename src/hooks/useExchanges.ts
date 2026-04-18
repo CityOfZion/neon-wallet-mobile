@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { BSBigNumberHelper, type TBSToken, type TTokenPricesResponse } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, type TBSToken, type TTokenPricesResponse } from '@cityofzion/blockchain-service'
 import type { Query, QueryClient } from '@tanstack/react-query'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import lodash from 'lodash'
@@ -163,7 +163,7 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
         convertAmount: (amount: string | number, hash: string, blockchain: TBlockchainServiceKey) => {
           const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(hash, blockchain, data)
           if (convertedPrice === 0) return 0
-          return BSBigNumberHelper.fromNumber(amount).multipliedBy(convertedPrice).toNumber()
+          return new BSBigHumanAmount(amount).multipliedBy(convertedPrice).toNumber()
         },
       }
     },

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 
-import { BSBigNumberHelper, isCalculableFee } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, isCalculableFee } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import type { TextInput } from 'react-native'
 import { Text, View } from 'react-native'
@@ -128,7 +128,7 @@ export const SellTokensDepositModal = ({
 
     debounceAmount(() => {
       setData({
-        amount: BSBigNumberHelper.format(amount, { decimals: tokenBalance?.token?.decimals }),
+        amount: new BSBigHumanAmount(amount, tokenBalance?.token?.decimals).toFormatted(),
         isAmountLoading: false,
       })
     })
@@ -256,14 +256,14 @@ export const SellTokensDepositModal = ({
           senderAccount: serviceAccount,
           intents: [
             {
-              amount: BSBigNumberHelper.format(actionData.amount, { decimals: token.decimals }),
+              amount: new BSBigHumanAmount(actionData.amount, token.decimals).toFormatted(),
               receiverAddress: actionData.address,
               token,
             },
           ],
         })
 
-        let feeWithAmountBn = BSBigNumberHelper.fromNumber(fee)
+        let feeWithAmountBn = new BSBigHumanAmount(fee)
 
         setData({ fee })
 
@@ -275,7 +275,7 @@ export const SellTokensDepositModal = ({
           service.tokenService.predicateByHash(service.feeToken, token)
         )
 
-        const amountBn = BSBigNumberHelper.fromNumber(amount)
+        const amountBn = new BSBigHumanAmount(amount)
 
         if (amountBn.isZero() || amountBn.isNegative()) {
           setError('amount', t('messages.invalidAmount'))

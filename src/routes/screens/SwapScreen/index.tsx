@@ -6,7 +6,7 @@ import type {
   TSwapToken,
   TSwapValidateValue,
 } from '@cityofzion/blockchain-service'
-import { BSBigNumberHelper, isCalculableFee } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, isCalculableFee } from '@cityofzion/blockchain-service'
 import { SimpleSwapOrchestrator } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import type { TextInput } from 'react-native'
@@ -647,7 +647,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
           <ActionStep
             title={t('form.amountToUseTitle')}
             description={t('form.minimumAmountTitle', {
-              amount: BSBigNumberHelper.format(actionData.selectAmountToUseMinMax.value?.min || 0, { decimals: 6 }),
+              amount: new BSBigHumanAmount(actionData.selectAmountToUseMinMax.value?.min || 0, 6).toFormatted(),
             })}
             leftElement={<VscCircleFilled aria-hidden className="size-2" />}
             className="items-start"
@@ -702,7 +702,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
                   'opacity-50': !actionData.selectedTokenToUse.value,
                 })}
               >
-                {BSBigNumberHelper.format(actionData.selectedAmountToReceive.value || 0, { decimals: 10 })}
+                {new BSBigHumanAmount(actionData.selectedAmountToReceive.value || 0, 10).toFormatted()}
               </Text>
             )}
           </ActionStep>

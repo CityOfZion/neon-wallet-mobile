@@ -1,5 +1,4 @@
-import type { TBSToken } from '@cityofzion/blockchain-service'
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, type TBSToken } from '@cityofzion/blockchain-service'
 import { BlurView } from 'expo-blur'
 import { useTranslation } from 'react-i18next'
 import { type GestureResponderEvent, Modal, Platform, Text, View } from 'react-native'
@@ -77,13 +76,13 @@ export const AccountScreenWarningClaimModal = ({
             <View className="my-3 flex-row gap-2">
               <Observation
                 title={t('claimAmount')}
-                value={BSBigNumberHelper.format(unclaimedNumber, { decimals: claimToken.decimals })}
+                value={new BSBigHumanAmount(unclaimedNumber, claimToken.decimals).toFormatted()}
                 symbol={claimToken.symbol}
               />
 
               <Observation
                 title={t('claimFee')}
-                value={BSBigNumberHelper.format(feeNumber, { decimals: feeTokenBalance.token.decimals })}
+                value={new BSBigHumanAmount(feeNumber, feeTokenBalance.token.decimals).toFormatted()}
                 symbol={feeTokenBalance.token.symbol}
               />
             </View>

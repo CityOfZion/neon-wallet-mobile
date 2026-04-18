@@ -1,5 +1,5 @@
 import { BSKeychainHelper } from '@cityofzion/blockchain-service'
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
+import { WalletKitHelper } from '@cityofzion/bs-multichain'
 import { getStateFromPath, type LinkingOptions } from '@react-navigation/native'
 import * as Linking from 'expo-linking'
 
@@ -88,7 +88,7 @@ export class ReactNavigationHelper {
             wcUri = decodeURIComponent(realWCUri)
           }
 
-          if (BSWalletKitHelper.isValidURI(wcUri)) {
+          if (WalletKitHelper.isValidURI(wcUri)) {
             return getStateFromPath<TRootStackParamList>(`uri/-/-`, {
               screens: {
                 TabStack: {

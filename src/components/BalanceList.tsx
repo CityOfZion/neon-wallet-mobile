@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import type { FlatListProps, ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
@@ -127,7 +127,7 @@ export const BalanceList = ({ onItemPress, onItemLongPress, accounts, className,
         blockchain: tokenBalance.blockchain,
         token: tokenBalance.token,
         amountNumber,
-        amount: BSBigNumberHelper.format(amountNumber, { decimals: tokenBalance.token.decimals }),
+        amount: new BSBigHumanAmount(amountNumber, tokenBalance.token.decimals).toFormatted(),
         exchangeAmount: exchangeAmountNumber,
         onPress: onItemPress,
         onLongPress: onItemLongPress,
