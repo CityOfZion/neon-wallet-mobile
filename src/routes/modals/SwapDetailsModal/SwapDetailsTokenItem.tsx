@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -18,6 +18,8 @@ type TProps = {
 export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 }: TProps) => {
   const { t: tCommon } = useTranslation('common')
 
+  const formattedAmount = new BSBigHumanAmount(amount, decimals).toFormatted()
+
   return (
     <View className="flex-row items-center justify-between gap-2">
       <View className="flex-row items-center gap-2">
@@ -33,7 +35,7 @@ export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 
         </Text>
       </View>
 
-      <Text className="font-sans-regular text-lg text-white">{BSBigNumberHelper.format(amount, { decimals })}</Text>
+      <Text className="font-sans-regular text-lg text-white">{formattedAmount}</Text>
     </View>
   )
 }

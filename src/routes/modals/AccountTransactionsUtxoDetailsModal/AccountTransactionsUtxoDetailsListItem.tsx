@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BSBigNumberHelper, type TTransactionUtxoInputOutput } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, type TTransactionUtxoInputOutput } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -33,7 +33,7 @@ export const AccountTransactionsUtxoDetailsListItem = ({ blockchain, inputOutput
   const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(inputOutput.token.hash, blockchain, data)
 
   const fiatAmount = CurrencyHelper.format(
-    BSBigNumberHelper.fromNumber(convertedPrice).multipliedBy(inputOutput.amount).toNumber(),
+    new BSBigHumanAmount(convertedPrice).multipliedBy(inputOutput.amount).toNumber(),
     { currency }
   )
 

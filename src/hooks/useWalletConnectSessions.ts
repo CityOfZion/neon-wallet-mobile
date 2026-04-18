@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
 import { hasWalletConnect } from '@cityofzion/blockchain-service'
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import { useIsFocused } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 
@@ -34,7 +33,7 @@ const fetchSessions = async (account?: TAccount) => {
     const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
     if (!hasWalletConnect(service)) return []
 
-    return BSWalletKitHelper.filterSessions(sessions, {
+    return WalletKitHelper.filterSessions(sessions, {
       addresses: [account.address],
       chains: [service.walletConnectService.chain],
     })
