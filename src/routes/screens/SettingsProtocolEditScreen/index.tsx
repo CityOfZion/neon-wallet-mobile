@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 
 import { hasWalletConnect } from '@cityofzion/blockchain-service'
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import type { ListRenderItem } from 'react-native'
 import { FlatList } from 'react-native'
 
@@ -76,7 +75,7 @@ export const SettingsProtocolEditScreen = ({
     if (!hasWalletConnect(service)) return
 
     const sessions = WalletKitHelper.kit.getActiveSessions()
-    const accountSessions = BSWalletKitHelper.filterSessions(Object.values(sessions), {
+    const accountSessions = WalletKitHelper.filterSessions(Object.values(sessions), {
       chains: [service.walletConnectService.chain],
     })
 
@@ -84,7 +83,7 @@ export const SettingsProtocolEditScreen = ({
       accountSessions.map(session =>
         WalletKitHelper.kit.disconnectSession({
           topic: session.topic,
-          reason: BSWalletKitHelper.getError('USER_DISCONNECTED'),
+          reason: WalletKitHelper.getError('USER_DISCONNECTED'),
         })
       )
     )

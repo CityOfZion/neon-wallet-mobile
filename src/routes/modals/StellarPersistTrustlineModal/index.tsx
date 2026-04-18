@@ -1,4 +1,4 @@
-import { BSBigNumber, BSBigNumberHelper, type TBSToken } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, type TBSToken } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 
 import { TwInput } from '@/components/TwInput'
@@ -51,7 +51,7 @@ export const StellarPersistTrustlineModal = ({
 
     debounce(() => {
       setData({
-        limit: BSBigNumberHelper.format(limit, { decimals: actionData.token?.decimals }),
+        limit: new BSBigHumanAmount(limit, actionData.token?.decimals).toFormatted(),
         isLimitFormatting: false,
       })
     })
@@ -61,7 +61,7 @@ export const StellarPersistTrustlineModal = ({
     if (!actionData.token) return
 
     if (actionData.limit) {
-      const limitBn = BSBigNumber(actionData.limit)
+      const limitBn = new BSBigHumanAmount(actionData.limit)
       if (limitBn.isNaN() || limitBn.isNegative() || (limit && limitBn.isLessThanOrEqualTo(limit))) {
         setError('limit', t('errors.invalidLimit'))
         return

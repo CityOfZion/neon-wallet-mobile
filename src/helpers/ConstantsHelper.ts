@@ -1,4 +1,4 @@
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import { BSNeo3Constants } from '@cityofzion/bs-neo3'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
@@ -20,14 +20,14 @@ export class ConstantsHelper {
     ['neo3', new Set(['0x42e6b0379e39a428362e08cf9d7e40903cdb0fe7'])],
   ])
 
-  static readonly tipPercentageBn = BSBigNumberHelper.fromNumber('0.01') // 1%
+  static readonly tipPercentageBn = new BSBigHumanAmount('0.01') // 1%
   static readonly tipConfigByBlockchain = new Map([
     [
       'neo3',
       {
         address: 'Na6zQi9giUtftPGbLeFn9nfuWjEMP98Trq',
         token: BSNeo3Constants.GAS_TOKEN,
-        minBn: BSBigNumberHelper.fromNumber('0.00000001'), // GAS has 8 decimals
+        minBn: new BSBigHumanAmount('0.00000001', BSNeo3Constants.GAS_TOKEN.decimals), // GAS has 8 decimals
       },
     ],
   ])

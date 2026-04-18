@@ -1,3 +1,4 @@
+import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import * as ExpoMinimizer from '@raulduartep/expo-minimizer'
 import { type IWalletKit, WalletKit } from '@reown/walletkit'
 import { Core } from '@walletconnect/core'
@@ -11,7 +12,7 @@ import { UtilsHelper } from './UtilsHelper'
 
 import type { TWalletConnectRedirectParams } from '@/types/helpers'
 
-export abstract class WalletKitHelper {
+export abstract class WalletKitHelper extends BSWalletKitHelper {
   static kit: IWalletKit
 
   static async setup() {
