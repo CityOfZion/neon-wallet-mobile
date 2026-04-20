@@ -1,4 +1,3 @@
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import { useNavigation } from '@react-navigation/native'
 import type { ErrorResponse } from '@walletconnect/jsonrpc-utils'
 import type { PendingRequestTypes } from '@walletconnect/types'
@@ -28,31 +27,28 @@ export const WalletConnectManagerSetup = () => {
       const session = sessions[request.topic]
       if (!session) return
 
-      const sessionDetails = BSWalletKitHelper.getSessionDetails({
+      const sessionDetails = WalletKitHelper.getSessionDetails({
         session,
         services: BlockchainServiceHelper.bsAggregator.blockchainServices,
       })
       const sessionAccount = accountsMapRef.current.get(AccountHelper.buildAccountKey(sessionDetails))
 
+      const serviceAccount = sessionAccount ? await BlockchainServiceHelper.getServiceAccount(sessionAccount) : null
+
       async function handleReject(reason?: ErrorResponse) {
         await WalletKitHelper.kit
           .respondSessionRequest({
             topic: request.topic,
-            response: BSWalletKitHelper.formatRequestError(
-              request,
-              reason || BSWalletKitHelper.getError('USER_REJECTED')
-            ),
+            response: WalletKitHelper.formatRequestError(request, reason || WalletKitHelper.getError('USER_REJECTED')),
           })
           .catch(error => LoggerHelper.error(error, { where: 'WalletConnectManagerSetup', operation: 'handleReject' }))
       }
 
       async function handleAccept() {
         try {
-          if (!sessionAccount) return
+          if (!serviceAccount) return
 
-          const serviceAccount = await BlockchainServiceHelper.getServiceAccount(sessionAccount)
-
-          const response = await BSWalletKitHelper.processRequest({
+          const response = await WalletKitHelper.processRequest({
             account: serviceAccount,
             request,
             sessionDetails,
@@ -60,7 +56,7 @@ export const WalletConnectManagerSetup = () => {
 
           await WalletKitHelper.kit.respondSessionRequest({
             topic: request.topic,
-            response: BSWalletKitHelper.formatRequestResult(request, response),
+            response: WalletKitHelper.formatRequestResult(request, response),
           })
 
           return response
@@ -69,7 +65,7 @@ export const WalletConnectManagerSetup = () => {
 
           await WalletKitHelper.kit.respondSessionRequest({
             topic: request.topic,
-            response: BSWalletKitHelper.formatRequestError(request, {
+            response: WalletKitHelper.formatRequestError(request, {
               message: AppError.wrap(error, null).message,
               code: -32000,
             }),
@@ -79,12 +75,19 @@ export const WalletConnectManagerSetup = () => {
         }
       }
 
-      if (!sessionAccount || sessionAccount.type === 'watch') {
-        handleReject(BSWalletKitHelper.getError('UNSUPPORTED_NAMESPACE_KEY'))
+      if (!sessionAccount || sessionAccount.type === 'watch' || !serviceAccount) {
+        handleReject(WalletKitHelper.getError('UNSUPPORTED_NAMESPACE_KEY'))
         return
       }
 
       const method = request.params.request.method
+
+      try {
+        await WalletKitHelper.validateRequest({ account: serviceAccount, request, sessionDetails })
+      } catch (error: any) {
+        handleReject({ code: -32000, message: error.message })
+        return
+      }
 
       if (sessionDetails.service.walletConnectService.autoApproveMethods.includes(method)) {
         ToastHelper.loading({
@@ -94,12 +97,13 @@ export const WalletConnectManagerSetup = () => {
 
         handleAccept()
           .then(() => {
-            ToastHelper.dismiss('auto-approve-walletconnect-request')
-            ToastHelper.success({ message: t('autoAcceptSuccessMessage') })
+            ToastHelper.success({ message: t('autoAcceptSuccessMessage'), id: 'auto-approve-walletconnect-request' })
           })
           .catch(error => {
-            ToastHelper.dismiss('auto-approve-walletconnect-request')
-            ToastHelper.error({ message: AppError.wrap(error, t('autoAcceptErrorMessage')).message })
+            ToastHelper.error({
+              message: AppError.wrap(error, t('autoAcceptErrorMessage')).message,
+              id: 'auto-approve-walletconnect-request',
+            })
           })
         return
       }

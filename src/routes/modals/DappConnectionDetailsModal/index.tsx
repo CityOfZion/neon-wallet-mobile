@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -37,7 +36,7 @@ export const DappConnectionDetailsModal = ({
 
   const [isDisconnecting, startDisconnect] = usePressOnce(async () => {
     await WalletKitHelper.kit
-      .disconnectSession({ topic: session.topic, reason: BSWalletKitHelper.getError('USER_DISCONNECTED') })
+      .disconnectSession({ topic: session.topic, reason: WalletKitHelper.getError('USER_DISCONNECTED') })
       .catch(error =>
         LoggerHelper.error(error, { where: 'DappConnectionDetailsModal', operation: 'disconnectSession' })
       )
@@ -45,7 +44,7 @@ export const DappConnectionDetailsModal = ({
     navigation.goBack()
   })
 
-  const sessionDetails = BSWalletKitHelper.getSessionDetails({
+  const sessionDetails = WalletKitHelper.getSessionDetails({
     session,
     services: BlockchainServiceHelper.bsAggregator.blockchainServices,
   })

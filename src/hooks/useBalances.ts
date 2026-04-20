@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import type { QueryClient } from '@tanstack/react-query'
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { cloneDeep } from 'lodash'
@@ -8,7 +8,6 @@ import { match } from 'ts-pattern'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ExchangeHelper } from '@/helpers/ExchangeHelper'
-import { NumberHelper } from '@/helpers/NumberHelper'
 import { TokenHelper } from '@/helpers/TokenHelper'
 
 import { useCurrencyRatio } from './useCurrencyRatio'
@@ -71,8 +70,9 @@ const fetchBalance = async (
           exchange
         )
 
-        const amount = BSBigNumberHelper.format(balance.amount, { decimals: balance.token.decimals })
-        const amountNumber = NumberHelper.number(amount)
+        const amountBn = new BSBigHumanAmount(balance.amount, balance.token.decimals)
+        const amount = amountBn.toFormatted()
+        const amountNumber = amountBn.toNumber()
         const exchangeAmount = amountNumber * exchangeConvertedPrice
 
         tokensBalancesMap.set(service.tokenService.normalizeHash(balance.token.hash), {

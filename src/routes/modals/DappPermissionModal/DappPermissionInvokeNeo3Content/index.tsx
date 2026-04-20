@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 
-import type { ContractInvocationMulti } from '@cityofzion/bs-neo3'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -8,6 +7,7 @@ import { Details } from '@/components/Details'
 import { TwButton } from '@/components/TwButton'
 import { TwDappHeader } from '@/components/TwDappHeader'
 
+import type { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 
 import TbArrowsSort from '@/assets/images/tb-arrows-sort.svg'
@@ -23,8 +23,11 @@ export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => 
   const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
   const { t: tCommon } = useTranslation('common')
 
-  const params = request.params.request.params as ContractInvocationMulti
-
+  const params = request.params.request.params as Awaited<
+    ReturnType<
+      typeof BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3.walletConnectService.handlers.invokeFunction.validate
+    >
+  >
   useEffect(() => {
     if (params.extraNetworkFee || params.extraSystemFee || params.systemFeeOverride || params.networkFeeOverride) {
       ToastHelper.info({ message: t('feeOverridesMessage'), id: 'dapp-permission-fee-overrides' })
