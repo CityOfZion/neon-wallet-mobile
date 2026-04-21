@@ -41,9 +41,9 @@ const getUnclaimedInfos = async (
   let fee = '0'
 
   if (unclaimedNumber > 0) {
-    const serviceAccount = await BlockchainServiceHelper.getServiceAccount(account)
-
     try {
+      const serviceAccount = await BlockchainServiceHelper.getServiceAccount(account)
+
       fee = await blockchainService.claimService.calculateFee(serviceAccount)
     } catch {
       /* empty */

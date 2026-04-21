@@ -126,7 +126,7 @@ export const useNeonCreateBackup = () => {
     }
 
     await writeFile(
-      `Neon-Backup-${DateHelper.getNowUnix()}.${NeonBackupHelper.fileExtension}`,
+      `NEON-backup-${DateHelper.getNowUnix()}.${NeonBackupHelper.fileExtension}`,
       JSON.stringify(backupFile),
       'application/json'
     )
