@@ -45,7 +45,8 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
     if (!qrRef.current || !actionData.selectedAccount?.address) return
 
     qrRef.current.toDataURL(async (dataURL: string) => {
-      await writeFile(`qr_code_${actionData.selectedAccount?.address}`, dataURL, 'image/png')
+      await writeFile(`NEON-address-${actionData.selectedAccount?.address}.png`, dataURL, 'image/png')
+
       ToastHelper.success({ message: t('successfulDownloadMessage') })
     })
   }
