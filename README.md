@@ -39,38 +39,22 @@ EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID=123456789
 - **Kotlin** (for Android native code)
 - **Swift** (for iOS native code)
 
-# Translation Script Guide (Optional)
-This project includes an automated translation script to keep all locale files up-to-date across supported languages using the Google Cloud Translation API v3.
+## Translation (Optional)
+This project uses a [Claude Code](https://claude.ai/code) skill to keep all locale files up-to-date.
 
-## Prerequisites
-- **Google Cloud Project** with the Cloud Translation API enabled.
-- **Service Account Key** (JSON) with permissions for the Translation API.
+**Prerequisites**
+- Claude Code CLI installed and authenticated
 
-### Google Cloud Setup
-- Go to the [Google Cloud Console](https://console.cloud.google.com).
-- Create a new project or select an existing one.
-- Enable the Cloud Translation API for your project.
-- Create a Service Account with the "Cloud Translation API User" role.
-- Download the service account key as a JSON file.
-- Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of this file.
+**Running translations**
 
-## Setting a Budget to Prevent Unexpected Charges
-To ensure you never exceed the free tier of the Google Cloud Translation API and avoid unexpected charges, you can set a budget and configure alerts in your Google Cloud project.
+After modifying English locale files in `src/shared/locales/en/`, run:
 
-### How to Set Up a Budget and Alerts
-- Go to [Google Cloud Billing Budgets & Alerts](https://console.cloud.google.com/billing/budgets).
-- Make sure you are in the correct billing account for your project.
-- Click **"CREATE BUDGET"**.
-- Name your budget (e.g., "Translation API Free Tier Limit").
-- Set the **Scope** to your project or all projects as needed.
-- Enter the amount that matches the free tier for the Translation API (e.g., $0.01 if you want to be alerted before any charges, or the USD equivalent of the free tier quota).
-- Set alert thresholds (e.g., 50%, 90%, 100% of your budget).
-- Add your email to receive notifications when your usage approaches or exceeds your budget.
-- Review your settings and click **"Finish"**.
+```bash
+npm run translate
+```
 
-### Important Notes
-- Only modify translation files in the `en` (English) locale directory.
-- The script will fail if there are uncommitted changes in other locale directories to prevent accidental overwrites.
-- New translation keys are automatically added to all languages.
-- Removed keys are automatically deleted from all languages.
-- Updated translations are re-translated to maintain consistency.
+The skill detects changed keys via `git diff`, then translates additions, updates, and deletions into all supported languages (`de`, `pt-br`, `zh`, `zh-Hant`).
+
+**Important**
+- Only modify files in the `en/` locale directory — other language files are managed automatically
+- Commit your English changes before running the script (it will refuse to run if non-English locales have uncommitted changes)
