@@ -20,7 +20,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundleIdentifier: 'io.cityofzion.neon',
     infoPlist: {
       ITSAppUsesNonExemptEncryption: false,
+      NSFaceIDUsageDescription:
+        'Allowing $(PRODUCT_NAME) to access your face ID will let you quickly and securely authenticate to the app',
     },
+    associatedDomains: ['webcredentials:teressa-overjoyful-contently.ngrok-free.dev'],
     appStoreUrl: 'https://apps.apple.com/app/id1530111452',
   },
   android: {
@@ -37,6 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'android.permission.BLUETOOTH_ADMIN',
       'android.permission.BLUETOOTH_CONNECT',
       'android.permission.NFC',
+      'android.permission.USE_BIOMETRIC',
     ],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=io.cityofzion.neon',
   },

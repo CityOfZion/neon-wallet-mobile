@@ -18,9 +18,6 @@ export const useDeviceAuthentication = () => {
     const canUseHardware = await LocalAuthentication.hasHardwareAsync()
     if (!canUseHardware) return false
 
-    const enrolled = await LocalAuthentication.isEnrolledAsync()
-    if (!enrolled) return false
-
     return true
   }
 
@@ -43,7 +40,7 @@ export const useDeviceAuthentication = () => {
   }
 
   const authenticateDevice = async () => {
-    const isAvailable = checkDeviceAuthenticationAvailable()
+    const isAvailable = await checkDeviceAuthenticationAvailable()
     if (!isAvailable) throw new AppError(tCommon('errors.unauthorized'))
 
     const result = await LocalAuthentication.authenticateAsync()
