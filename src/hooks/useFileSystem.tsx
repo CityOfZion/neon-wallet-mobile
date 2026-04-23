@@ -26,20 +26,21 @@ export const useFileSystem = () => {
   const { t } = useTranslation('hooks', { keyPrefix: 'useFileSystem' })
 
   const writeFile = async (fileName: string, data: string, mimeType: TFileSystemMimeType) => {
-    let fileUri = ''
+    const fileExtension = EXTENSIONS_BY_MIME_TYPE[mimeType]
+    let fileUri = `${fileName}.${fileExtension}`
 
     if (Platform.OS === 'ios') {
-      const fileExtension = EXTENSIONS_BY_MIME_TYPE[mimeType]
-      fileUri = `${FileSystem.cacheDirectory}${fileName}.${fileExtension}`
+      fileUri = `${FileSystem.cacheDirectory}${fileUri}`
     } else {
       const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync()
 
       if (!permissions.granted) throw new AppError(t('errors.directory'))
 
-      fileUri = await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, fileName, mimeType)
+      fileUri = await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, fileUri, mimeType)
     }
 
     const encoding = ENCODING_BY_MIME_TYPE[mimeType]
+
     await FileSystem.writeAsStringAsync(fileUri, data, { encoding })
 
     if (Platform.OS === 'ios') {
@@ -47,6 +48,7 @@ export const useFileSystem = () => {
         mimeType: mimeType,
         UTI: 'public.text',
       })
+
       await FileSystem.deleteAsync(fileUri)
     }
   }

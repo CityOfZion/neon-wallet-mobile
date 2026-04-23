@@ -102,7 +102,7 @@ export const ExportFullTransactionsModal = ({
       const format = 'yyyyMMdd'
       const localizedFileDateFrom = DateHelper.formatLocalized(dateFrom, { language, format })
       const localizedFileDateTo = DateHelper.formatLocalized(dateTo, { language, format })
-      const filename = `NEON-transactions-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}.csv`
+      const filename = `NEON-transactions-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
 
       await writeFile(filename, result, 'text/csv')
 
