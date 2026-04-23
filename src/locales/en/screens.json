@@ -530,7 +530,6 @@
     "dialogDismiss": "OK, I understand",
     "dialogTitle": "Make sure you keep your security phrase safe",
     "oneOfThree": "1 of 3",
-    "printButtonLabel": "Print",
     "title": "Backup wallet"
   },
   "walletBackupStep2": {

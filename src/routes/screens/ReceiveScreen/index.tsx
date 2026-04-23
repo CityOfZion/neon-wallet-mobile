@@ -11,6 +11,7 @@ import { ActionStep } from '@/components/ActionStep'
 import { TwButton } from '@/components/TwButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
+import { DateHelper } from '@/helpers/DateHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useActions } from '@/hooks/useActions'
@@ -45,7 +46,11 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
     if (!qrRef.current || !actionData.selectedAccount?.address) return
 
     qrRef.current.toDataURL(async (dataURL: string) => {
-      await writeFile(`NEON-address-${actionData.selectedAccount?.address}.png`, dataURL, 'image/png')
+      await writeFile(
+        `NEON-address-${actionData.selectedAccount?.address}-${DateHelper.getNowUnix()}`,
+        dataURL,
+        'image/png'
+      )
 
       ToastHelper.success({ message: t('successfulDownloadMessage') })
     })

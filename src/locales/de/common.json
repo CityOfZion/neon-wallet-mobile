@@ -70,6 +70,7 @@
     "delete": "Löschen",
     "disconnect": "Trennen",
     "done": "Fertig",
+    "download": "Herunterladen",
     "edit": "Bearbeiten",
     "emptyData": "--",
     "errorOpenLink": "Beim Öffnen dieses Links ist ein Problem aufgetreten",
@@ -79,6 +80,7 @@
     "retry": "Erneut versuchen",
     "save": "Speichern",
     "saveAndContinue": "Speichern & weiter",
+    "savedSuccessfully": "Erfolgreich gespeichert",
     "skip": "Überspringen",
     "yes": "Ja"
   },

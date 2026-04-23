@@ -70,6 +70,7 @@
     "delete": "刪除",
     "disconnect": "中斷連線",
     "done": "完成",
+    "download": "下載",
     "edit": "編輯",
     "emptyData": "--",
     "errorOpenLink": "開啟此連結時發生問題",
@@ -79,6 +80,7 @@
     "retry": "重試",
     "save": "儲存",
     "saveAndContinue": "儲存並繼續",
+    "savedSuccessfully": "儲存成功",
     "skip": "跳過",
     "yes": "是"
   },
