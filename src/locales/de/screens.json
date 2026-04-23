@@ -530,7 +530,6 @@
     "dialogDismiss": "OK, verstanden",
     "dialogTitle": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
     "oneOfThree": "1 von 3",
-    "printButtonLabel": "Drucken",
     "title": "Wallet sichern"
   },
   "walletBackupStep2": {
