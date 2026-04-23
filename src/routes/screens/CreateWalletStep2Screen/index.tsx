@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react'
 
 import { BSKeychainHelper } from '@cityofzion/blockchain-service'
-import * as Print from 'expo-print'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -11,19 +10,23 @@ import { TwIconButton } from '@/components/TwIconButton'
 
 import { AlertHelper } from '@/helpers/AlertHelper'
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
+import { DateHelper } from '@/helpers/DateHelper'
+import { ToastHelper } from '@/helpers/ToastHelper'
 
+import { useFileSystem } from '@/hooks/useFileSystem'
 import { useMount } from '@/hooks/useMount'
 
 import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
-import TbPrinter from '@/assets/images/tb-printer.svg'
+import TbDownload from '@/assets/images/tb-download.svg'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
 export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'CreateWalletStep2Screen'>) => {
   const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep2' })
   const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
+  const { writeFile } = useFileSystem()
 
   const [words, setWords] = useState<string[]>([])
 
@@ -52,10 +55,10 @@ export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'C
     ClipboardHelper.write(mnemonic)
   }
 
-  const handlePressPrint = () => {
-    Print.printAsync({
-      html: `<html lang="en-US"><body><br><br>&emsp;&emsp;${mnemonic}</body></html>`,
-    })
+  const handlePressDownload = async () => {
+    await writeFile(`NEON-mnemonic-${DateHelper.getNowUnix()}`, mnemonic, 'text/txt')
+
+    ToastHelper.success({ message: tCommonGeneral('savedSuccessfully') })
   }
 
   const { isMounting } = useMount(() => {
@@ -91,9 +94,18 @@ export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'C
               ))}
             </View>
 
-            <View className="flex-row justify-end">
-              <TwIconButton icon={<TbCopy className="text-neon" aria-hidden />} onPress={handlePressCopy} />
-              <TwIconButton icon={<TbPrinter className="text-neon" aria-hidden />} onPress={handlePressPrint} />
+            <View className="flex-row items-center justify-end">
+              <TwIconButton
+                aria-label={tCommonGeneral('copy')}
+                icon={<TbCopy className="text-neon" aria-hidden />}
+                onPress={handlePressCopy}
+              />
+
+              <TwIconButton
+                aria-label={tCommonGeneral('download')}
+                icon={<TbDownload className="text-neon" aria-hidden />}
+                onPress={handlePressDownload}
+              />
             </View>
 
             <Text className="mt-2.5 font-sans-regular text-base text-white">{t('body2')}</Text>
