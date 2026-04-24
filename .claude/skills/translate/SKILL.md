@@ -9,7 +9,7 @@ Translate changed English locale keys into all other languages.
 Here are the current changes to the English locale files:
 
 ```diff
-!`git diff HEAD -- src/shared/locales/en/ 2>/dev/null || echo "No changes detected in English locale files."`
+!`git diff HEAD -- src/locales/en/ 2>/dev/null || echo "No changes detected in English locale files."`
 ```
 
 ## Steps
