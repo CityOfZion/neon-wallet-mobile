@@ -53,9 +53,7 @@ export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDa
           <Text className="w-28 font-sans-regular text-lg text-blue" numberOfLines={1} ellipsizeMode="middle">
             {account.address}
           </Text>
-          <Text className="font-sans-regular text-lg text-gray-100">
-            {tCommon(`blockchainServices.${account.blockchain}.label`)}
-          </Text>
+          <Text className="font-sans-regular text-lg text-gray-100">{tCommon(`blockchain.${account.blockchain}`)}</Text>
         </View>
 
         <TwSeparator />

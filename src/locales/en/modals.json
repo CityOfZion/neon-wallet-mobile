@@ -577,7 +577,7 @@
     },
     "inputPlaceholder": {
       "name": "Enter Network Name",
-      "url": "Example: https://mainnet1.neo.coz.io:443"
+      "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "Name must be at least 1 character and less than 20 characters",
     "invalidUrl": "Invalid URL",

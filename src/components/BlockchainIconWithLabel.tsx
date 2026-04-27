@@ -12,7 +12,7 @@ type TProps = {
 }
 
 export const BlockchainIconWithLabel = ({ token, blockchain }: TProps) => {
-  const { t: tBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
 
   return (
     <View className="flex flex-row items-center gap-x-2">
@@ -20,7 +20,7 @@ export const BlockchainIconWithLabel = ({ token, blockchain }: TProps) => {
 
       <Text className="font-sans-regular text-base text-white">
         {token.name}
-        <Text className="text-gray-100">{` | ${tBlockchainServices(`${blockchain}.label`)}`}</Text>
+        <Text className="text-gray-100">{` | ${tCommonBlockchain(blockchain)}`}</Text>
       </Text>
     </View>
   )

@@ -9,6 +9,7 @@ import { TokenSelectionTokenIcon } from '@/components/TokenSelectionTokenIcon'
 import { TwInput } from '@/components/TwInput'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
+import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { NumberHelper } from '@/helpers/NumberHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
@@ -25,8 +26,11 @@ type TItem = TTokenSelectionModalToken & {
   onPress(): void
 }
 
+const { t } = I18nextHelper.get()
+
 const renderItem: ListRenderItem<TItem> = ({ item, index }) => {
-  const network = item.network || item.blockchain
+  const { network, blockchain } = item
+  const blockchainName = blockchain ? t(`common:blockchain.${blockchain}`) : network
   const odd = index % 2 === 0
 
   return (
@@ -45,7 +49,9 @@ const renderItem: ListRenderItem<TItem> = ({ item, index }) => {
 
         <Text className="ml-2.5 font-sans-medium text-lg uppercase text-white">{item.symbol}</Text>
 
-        {network && <Text className="font-sans-regular text-lg uppercase text-gray-100"> | {network}</Text>}
+        {blockchainName && (
+          <Text className="font-sans-regular text-lg uppercase text-gray-100">{` | ${blockchainName}`}</Text>
+        )}
       </View>
 
       {!item.hideBalance && (
@@ -89,6 +95,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
       }
 
       const hash = token.hash
+
       if (!hideBalance && balance.data && hash) {
         const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[token.blockchain!]
 

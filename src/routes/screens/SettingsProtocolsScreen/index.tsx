@@ -41,7 +41,7 @@ export const SettingsProtocolsScreen = ({ navigation }: TMoreStackScreenProps<'S
   const data = useMemo<TItem[]>(() => {
     return BlockchainServiceHelper.blockchainNames.map(blockchain => ({
       blockchain,
-      label: tCommon(`blockchainServices.${blockchain}.label`),
+      label: tCommon(`blockchain.${blockchain}`),
       subtitle: selectedNetworkByBlockchain[blockchain].name,
       onPress: () => {
         navigation.navigate('SettingsProtocolEditScreen', { blockchain })

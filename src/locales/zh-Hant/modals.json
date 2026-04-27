@@ -577,7 +577,7 @@
     },
     "inputPlaceholder": {
       "name": "輸入網路名稱",
-      "url": "範例：https://mainnet1.neo.coz.io:443"
+      "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "名稱必須至少 1 個字且少於 20 個字",
     "invalidUrl": "無效的 URL",

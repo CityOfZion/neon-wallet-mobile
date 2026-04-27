@@ -41,6 +41,10 @@ module.exports = (() => {
       return context.resolveRequest(context, 'events', platform)
     }
 
+    if (moduleName === 'assert') {
+      return context.resolveRequest(context, 'assert', platform)
+    }
+
     if (moduleName === 'util') {
       return context.resolveRequest(context, 'util', platform)
     }
@@ -56,5 +60,5 @@ module.exports = (() => {
     return context.resolveRequest(context, moduleName, platform)
   }
 
-  return withNativeWind(config, { input: './src/styles/global.css', inlineRem: 16 })
+  return withNativeWind(config, { input: './src/assets/css/styles.css', inlineRem: 16 })
 })()

@@ -1,4 +1,5 @@
-import { BSBigHumanAmount, type TBSToken } from '@cityofzion/blockchain-service'
+import type { BSBigNumber, TBSToken } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import * as CheckboxPrimitive from '@rn-primitives/checkbox'
 import { useTranslation } from 'react-i18next'
@@ -12,8 +13,8 @@ import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 import TbCheck from '@/assets/images/tb-check.svg'
 
 type TProps = {
-  amountBn: BigNumber
-  fiatPriceBn: BigNumber
+  amountBn: BSBigNumber
+  fiatPriceBn: BSBigNumber
   isChecked: boolean
   isDisabled: boolean
   isLoading: boolean

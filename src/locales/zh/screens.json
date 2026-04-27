@@ -290,6 +290,9 @@
     "actionsButtonLabel": "操作",
     "emptyListBody": "您已全部查看！",
     "emptyListTitle": "暂无内容",
+    "providerLabels": {
+      "system": "系统"
+    },
     "relatedAccountLabel": "账户：",
     "relatedAddressLabel": "地址：",
     "title": "通知"

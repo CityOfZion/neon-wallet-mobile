@@ -1,8 +1,9 @@
 import type { ArgumentArray } from 'classnames'
 import classNames from 'classnames'
-import tailwindConfig from 'tailwind.config'
 import { twMerge } from 'tailwind-merge'
 import resolveConfig from 'tailwindcss/resolveConfig'
+
+import tailwindConfig from '../../tailwind.config'
 
 const resolvedTailwindConfig = resolveConfig(tailwindConfig)
 

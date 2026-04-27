@@ -124,13 +124,13 @@ export const useItemNfiAuthentication = () => {
           async onCreate(password) {
             await UtilsHelper.sleep(500)
             const firstTag = await getItemTag(t('linkMessage'))
-            const firstTagPointer = parseInt(firstTag.decoded.msg, 16)
+            const firstTagPointer = parseInt(firstTag.decoded.message, 16)
             if (!firstTag.decoded.validSignature || firstTagPointer < MIN_MESSAGE_READ_POINTER) {
               throw new AppError(t('invalidSignatureError'))
             }
 
             const secondTag = await getItemTag(t('confirmLinkMessage'))
-            const secondTagPointer = parseInt(secondTag.decoded.msg, 16)
+            const secondTagPointer = parseInt(secondTag.decoded.message, 16)
             if (!secondTag.decoded.validSignature || secondTagPointer <= firstTagPointer) {
               throw new AppError(t('invalidSignatureError'))
             }
@@ -220,7 +220,7 @@ export const useItemNfiAuthentication = () => {
     if (security.type !== 'nfi') return
 
     const tag = await getItemTag(t('authenticateMessage'))
-    const tagPointer = parseInt(tag.decoded.msg, 16)
+    const tagPointer = parseInt(tag.decoded.message, 16)
 
     if (
       !tag.decoded.validSignature ||

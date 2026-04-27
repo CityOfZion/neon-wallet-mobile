@@ -29,7 +29,7 @@ export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 
           {symbol}
           {blockchain && (
             <Text className="font-sans-regular uppercase text-gray-100">
-              {` | ${tCommon(`blockchainServices.${blockchain}.label`)}`}
+              {` | ${tCommon(`blockchain.${blockchain}`)}`}
             </Text>
           )}
         </Text>

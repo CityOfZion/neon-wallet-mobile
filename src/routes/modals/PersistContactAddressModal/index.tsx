@@ -80,7 +80,7 @@ export const PersistContactAddressModal = ({
       <ModalLayout.KeyboardAvoidingContent>
         <TwSelectButton
           className="mb-6"
-          value={actionData.blockchain ? tCommon(`blockchainServices.${actionData.blockchain}.label`) : undefined}
+          value={actionData.blockchain ? tCommon(`blockchain.${actionData.blockchain}`) : undefined}
           leftElement={actionData.blockchain ? <TwBlockchainIcon blockchain={actionData.blockchain} /> : undefined}
           label={t('chainLabel')}
           placeholder={t('chainPlaceholder')}
