@@ -105,7 +105,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           'Giving $(PRODUCT_NAME) access to bluetooth will allow you to connect to hardware wallets',
       },
     ],
-    './plugins/withUsb',
+    './plugins/with-usb',
     [
       'expo-notifications',
       {
