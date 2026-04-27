@@ -290,6 +290,9 @@
     "actionsButtonLabel": "Actions",
     "emptyListBody": "You’re caught up!",
     "emptyListTitle": "Nothing to see here",
+    "providerLabels": {
+      "system": "System"
+    },
     "relatedAccountLabel": "Account:",
     "relatedAddressLabel": "Address:",
     "title": "Notifications"
@@ -410,7 +413,7 @@
       "personalisation": {
         "currencyButtonLabel": "Currency",
         "languageButtonLabel": "Language",
-        "networkConfigurationButtonLabel": "Network Configuration",
+        "networkConfigurationButtonLabel": "Network configuration",
         "title": "Personalisation"
       },
       "security": {

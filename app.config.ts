@@ -12,7 +12,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   userInterfaceStyle: 'light',
   icon: './assets/icon.png',
   primaryColor: '#4CFFB3',
-  newArchEnabled: true,
   platforms: ['ios', 'android'],
   scheme: ['neon', 'neon3', 'wc'],
   ios: {
@@ -40,9 +39,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     playStoreUrl: 'https://play.google.com/store/apps/details?id=io.cityofzion.neon',
   },
-  splash: {
-    backgroundColor: '#1A2026',
-  },
   extra: {
     eas: {
       projectId: '8fd4811a-e4b2-4657-a66f-ab6f91af9880',
@@ -54,6 +50,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   updates: {
     url: 'https://u.expo.dev/8fd4811a-e4b2-4657-a66f-ab6f91af9880',
     checkAutomatically: 'NEVER',
+    enableBsdiffPatchSupport: true,
   },
   plugins: [
     [
@@ -74,8 +71,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       '@sentry/react-native/expo',
       {
         url: 'https://sentry.io',
+        organization: 'coz-inc',
+        project: 'neon-wallet-mobile',
       },
     ],
+    '@sentry/react-native',
     [
       'expo-camera',
       {
@@ -122,5 +122,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     'expo-localization',
+    'expo-image',
+    'expo-sharing',
+    'expo-web-browser',
+    [
+      'expo-build-properties',
+      {
+        buildReactNativeFromSource: true,
+        useHermesV1: true,
+      },
+    ],
   ],
 })

@@ -39,9 +39,9 @@ export const AccountTransactionsTransactionDefaultEventToken = ({ blockchain, ev
         <TwTokenIcon width={20} height={20} {...event.token} blockchain={blockchain} className="rounded" />
       )}
 
-      {(event.token?.symbol || event.token?.hash) && (
+      {(event.token?.symbol || event.token?.name || event.token?.hash) && (
         <Text className="w-full max-w-14 font-sans-regular text-base text-white" numberOfLines={1}>
-          {event.token.symbol || event.token.hash}
+          {event.token.symbol || event.token.name || event.token.hash}
         </Text>
       )}
 

@@ -577,7 +577,7 @@
     },
     "inputPlaceholder": {
       "name": "输入网络名称",
-      "url": "例如：https://mainnet1.neo.coz.io:443"
+      "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "名称至少为1个字符且少于20个字符",
     "invalidUrl": "无效的URL",

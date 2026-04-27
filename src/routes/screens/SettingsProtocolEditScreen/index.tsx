@@ -125,7 +125,7 @@ export const SettingsProtocolEditScreen = ({
     <ScreenLayout.Root>
       <ScreenLayout.Header>
         <ScreenLayout.BackButton />
-        <ScreenLayout.Title>{t(`common:blockchainServices.${blockchain}.label`)}</ScreenLayout.Title>
+        <ScreenLayout.Title>{t(`common:blockchain.${blockchain}`)}</ScreenLayout.Title>
       </ScreenLayout.Header>
       <ScreenLayout.ViewContent>
         <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />

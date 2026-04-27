@@ -1,7 +1,7 @@
 # Neon Wallet Mobile
 
 ## Description
-Everything a self-custodial wallet should be with everything you need to explore and make transactions in the Neo 3, Neo Legacy, Neo X, Bitcoin, Solana, Ethereum, EVMs and other blockchains.
+Your self-custodial and open-source blockchain wallet as mobile app.
 
 ## Installation
 - [Play Store (Android)](https://play.google.com/store/apps/details?id=io.cityofzion.neon)

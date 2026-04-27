@@ -7,10 +7,8 @@ const jsoncParser = require('jsonc-eslint-parser')
 
 module.exports = defineConfig([
   { ignores: ['dist/*', 'node_modules/*', 'out/*'] },
-
   expoConfig,
   prettierRecommended,
-
   {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
@@ -30,7 +28,6 @@ module.exports = defineConfig([
       '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
-
   {
     plugins: {
       'simple-import-sort': simpleImportSortPlugin,
@@ -58,7 +55,6 @@ module.exports = defineConfig([
       ],
     },
   },
-
   {
     rules: {
       'import/no-named-as-default': 'off',
@@ -68,7 +64,6 @@ module.exports = defineConfig([
       'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
     },
   },
-
   {
     files: ['src/locales/**/*.json'],
     languageOptions: {

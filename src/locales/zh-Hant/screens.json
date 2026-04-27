@@ -290,6 +290,9 @@
     "actionsButtonLabel": "操作",
     "emptyListBody": "您已全部掌握！",
     "emptyListTitle": "這裡沒有內容",
+    "providerLabels": {
+      "system": "系統"
+    },
     "relatedAccountLabel": "帳戶：",
     "relatedAddressLabel": "地址：",
     "title": "通知"

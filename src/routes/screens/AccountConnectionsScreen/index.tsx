@@ -44,11 +44,7 @@ const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProp
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
 
         <ScreenLayout.ButtonContent position="right">
-          <TwIconButton
-            aria-label={t('labels.addConnection')}
-            icon={<MdAdd aria-hidden className="text-white" />}
-            onPress={handlePressAdd}
-          />
+          <TwIconButton aria-label={t('labels.addConnection')} icon={<MdAdd aria-hidden />} onPress={handlePressAdd} />
         </ScreenLayout.ButtonContent>
       </ScreenLayout.Header>
       <ScreenLayout.ViewContent>

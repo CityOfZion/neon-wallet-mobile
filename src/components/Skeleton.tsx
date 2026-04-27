@@ -15,10 +15,11 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated'
-import tailwindConfig from 'tailwind.config'
 import resolveConfig from 'tailwindcss/resolveConfig'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
+
+import tailwindConfig from '../../tailwind.config'
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 const { theme } = resolveConfig(tailwindConfig)

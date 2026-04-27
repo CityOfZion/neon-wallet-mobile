@@ -125,6 +125,7 @@ export const SupportTicketScreen = ({ navigation }: TMoreStackScreenProps<'Suppo
           <TwButton
             variant="contained-light"
             label={t('submitTicketButtonLabel')}
+            className="mb-2"
             onPress={handleAct(handleSubmit)}
             isLoading={actionState.isActing}
             disabled={isDisabled}

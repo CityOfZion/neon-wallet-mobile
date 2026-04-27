@@ -13,7 +13,7 @@ type TProps = {
 
 export const AccountScreenTitle = ({ account: { blockchain } }: TProps) => {
   const { t } = useTranslation('screens', { keyPrefix: 'account' })
-  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
   const { data, isLoading } = useBlockHeightQuery(blockchain)
 
   return (
@@ -24,7 +24,7 @@ export const AccountScreenTitle = ({ account: { blockchain } }: TProps) => {
 
       <Skeleton.Content className="flex w-full flex-col items-center justify-center">
         <Text className="text-center font-sans-regular text-1xs uppercase text-gray-300">
-          {t('blockHeightTitle', { blockchain: tCommonBlockchainServices(`${blockchain}.label`) })}
+          {t('blockHeightTitle', { blockchain: tCommonBlockchain(blockchain) })}
         </Text>
 
         <Text className="text-center font-sans-medium text-lg text-white">{data}</Text>

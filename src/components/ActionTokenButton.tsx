@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import type { TTwButtonProps } from '@/components/TwButton'
@@ -25,7 +26,9 @@ export const ActionTokenButton = ({
   blockchainClassName,
   ...props
 }: TProps) => {
-  const network = token?.network || token?.blockchain
+  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
+  const network = token?.network
+  const blockchainName = token?.blockchain ? tCommonBlockchain(token.blockchain) : network
 
   return (
     <TwButton
@@ -45,7 +48,7 @@ export const ActionTokenButton = ({
             >
               {token.symbol}
             </Text>
-            {network && (
+            {blockchainName && (
               <Text
                 className={StyleHelper.mergeStyles(
                   'flex-shrink font-sans-regular text-lg uppercase leading-6 text-gray-100',
@@ -53,7 +56,7 @@ export const ActionTokenButton = ({
                 )}
                 numberOfLines={1}
               >
-                {` | ${network}`}
+                {` | ${blockchainName}`}
               </Text>
             )}
           </View>
