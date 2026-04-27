@@ -577,7 +577,7 @@
     },
     "inputPlaceholder": {
       "name": "Digite o Nome da Rede",
-      "url": "Exemplo: https://mainnet1.neo.coz.io:443"
+      "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "O nome deve ter no mínimo 1 caractere e menos de 20 caracteres",
     "invalidUrl": "URL inválida",

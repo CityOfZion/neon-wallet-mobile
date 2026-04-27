@@ -1,45 +1,18 @@
 {
-  "blockchainServices": {
-    "arbitrum": {
-      "accountName": "Arbitrum Konto",
-      "label": "Arbitrum"
-    },
-    "base": {
-      "accountName": "Base Konto",
-      "label": "Base"
-    },
-    "bitcoin": {
-      "accountName": "Bitcoin Konto",
-      "label": "Bitcoin"
-    },
-    "ethereum": {
-      "accountName": "Ethereum Konto",
-      "label": "Ethereum"
-    },
-    "neo3": {
-      "accountName": "Neo 3 Konto",
-      "label": "Neo 3"
-    },
-    "neoLegacy": {
-      "accountName": "Neo Legacy Konto",
-      "label": "Neo Legacy"
-    },
-    "neox": {
-      "accountName": "Neo X Konto",
-      "label": "Neo X"
-    },
-    "polygon": {
-      "accountName": "Polygon Konto",
-      "label": "Polygon"
-    },
-    "solana": {
-      "accountName": "Solana Konto",
-      "label": "Solana"
-    },
-    "stellar": {
-      "accountName": "Stellar Konto",
-      "label": "Stellar"
-    }
+  "account": {
+    "defaultName": "Konto {{accountNumber}}"
+  },
+  "blockchain": {
+    "arbitrum": "Arbitrum",
+    "base": "Base",
+    "bitcoin": "Bitcoin",
+    "ethereum": "Ethereum",
+    "neo3": "Neo 3",
+    "neoLegacy": "Neo Legacy",
+    "neox": "Neo X",
+    "polygon": "Polygon",
+    "solana": "Solana",
+    "stellar": "Stellar"
   },
   "deeplink": {
     "errors": {

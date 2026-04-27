@@ -24,7 +24,7 @@ import { WalletKitHelper } from './helpers/WalletKitHelper'
 import { useMount } from './hooks/useMount'
 import { RootStack } from './routes/stacks/RootStack'
 
-import './styles/global.css'
+import './assets/css/styles.css'
 
 const Alert = lazy(() => import('./components/Alert'))
 const QrCodeScanModal = lazy(() => import('./components/QrCodeScanModal'))
@@ -46,6 +46,7 @@ export const App = () => {
   useMount(async () => {
     try {
       await EnvHelper.setup()
+
       await Promise.all([
         SentryHelper.setup(),
         I18nextHelper.setup(),
@@ -53,8 +54,11 @@ export const App = () => {
         NativeWindHelper.setup(),
         WalletKitHelper.setup(),
       ])
+
       ReduxHelper.setup()
+
       await ReduxHelper.waitForBootstrap()
+
       setReady(true)
     } catch (error: any) {
       alert(JSON.stringify(error.message))
@@ -89,7 +93,7 @@ export const App = () => {
                 {/* IOS already has a native NFC modal */}
                 {Platform.OS === 'android' && <NfcModal />}
 
-                <StatusBar style="light" translucent backgroundColor="transparent" />
+                <StatusBar style="light" />
               </Suspense>
             </KeyboardProvider>
           </SafeAreaProvider>

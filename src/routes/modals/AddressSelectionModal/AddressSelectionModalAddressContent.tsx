@@ -20,7 +20,7 @@ type TProps = {
 
 export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TProps) => {
   const { t } = useTranslation('modals', { keyPrefix: 'addressSelection' })
-  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
 
   const [addressInput, setAddressInput] = useState('')
   const { validateAddressOrNS, validatedAddress, isValidatingAddressOrDomainAddress, isValidAddressOrDomainAddress } =
@@ -45,9 +45,11 @@ export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TP
     }
   }, [addressInput, blockchain, validateAddressOrNS])
 
-  const hasInvalidAddress = blockchain && isValidAddressOrDomainAddress === false
+  const hasBlockchain = !!blockchain
+  const hasErrorAddress = hasBlockchain && isValidAddressOrDomainAddress === false
 
-  const isButtonDisabled = addressInput.length === 0 || isValidatingAddressOrDomainAddress || hasInvalidAddress
+  const isButtonDisabled =
+    !addressInput || isValidatingAddressOrDomainAddress || (hasBlockchain && !isValidAddressOrDomainAddress)
 
   return (
     <ModalLayout.KeyboardAvoidingContent keyboardVerticalOffset={240}>
@@ -57,11 +59,7 @@ export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TP
         clearable
         pastable
         onChangeText={handleChange}
-        error={
-          hasInvalidAddress
-            ? t('errors.invalidAddress', { blockchain: tCommonBlockchainServices(`${blockchain}.label`) })
-            : undefined
-        }
+        error={hasErrorAddress ? t('errors.invalidAddress', { blockchain: tCommonBlockchain(blockchain) }) : undefined}
         loading={isValidatingAddressOrDomainAddress}
       />
 

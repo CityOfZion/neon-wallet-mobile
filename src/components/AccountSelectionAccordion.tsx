@@ -62,7 +62,7 @@ const AccountSelectionAccordionHeader = ({
           ellipsizeMode="tail"
           numberOfLines={1}
         >
-          {tCommon(`blockchainServices.${blockchain}.label`)}
+          {tCommon(`blockchain.${blockchain}`)}
         </Text>
       </View>
 

@@ -42,8 +42,8 @@ const Banners = () => {
       />
 
       {hasCustom && (
-        <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-magenta bg-black p-4">
-          <TbAlertTriangleFilled aria-hidden className="size-6 text-magenta" />
+        <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-neon bg-black p-4">
+          <TbAlertTriangleFilled aria-hidden className="size-6 text-neon" />
           <Text className="font-sans-regular text-lg leading-5 text-white">{t('customMode')}</Text>
         </View>
       )}

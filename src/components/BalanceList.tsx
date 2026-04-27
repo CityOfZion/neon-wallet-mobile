@@ -70,7 +70,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
           </Text>
 
           <Text className="flex-grow font-sans-regular text-sm uppercase text-gray-100" numberOfLines={1}>
-            {t(`common:blockchainServices.${item.blockchain}.label`)}
+            {t(`common:blockchain.${item.blockchain}`)}
           </Text>
         </View>
       </View>

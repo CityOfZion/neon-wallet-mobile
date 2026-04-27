@@ -42,7 +42,7 @@ export const useCreateAccount = () => {
       const newAccount: TAccount = {
         id: id || UtilsHelper.uuid(),
         idWallet: wallet.id,
-        name: name || `${tCommon(`blockchainServices.${blockchain}.accountName`)} ${order + 1}`,
+        name: name || tCommon('account.defaultName', { accountNumber: order + 1 }),
         blockchain,
         skin: { type: 'color', id: SkinHelper.getSkinColor() },
         address: serviceAccount.address,
@@ -83,7 +83,7 @@ export const useImportAccount = () => {
       const newAccount: TAccount = {
         id: UtilsHelper.uuid(),
         idWallet: wallet.id,
-        name: name || `${tCommon(`blockchainServices.${blockchain}.accountName`)} ${currentOrder + 1}`,
+        name: name || tCommon('account.defaultName', { accountNumber: currentOrder + 1 }),
         blockchain,
         skin: skin || { type: 'color', id: SkinHelper.getSkinColor() },
         address,

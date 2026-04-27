@@ -27,7 +27,7 @@ export const BlockchainList = ({
   className,
   ...props
 }: TProps) => {
-  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
   const { t } = useTranslation('components', { keyPrefix: 'blockchainList' })
 
   const blockchainsToIterate = blockchains || BlockchainServiceHelper.blockchainNames
@@ -63,9 +63,7 @@ export const BlockchainList = ({
           >
             <TwBlockchainIcon blockchain={blockchain} className="size-4" />
 
-            <Text className="flex-1 font-sans-bold text-base text-white">
-              {tCommonBlockchainServices(`${blockchain}.label`)}
-            </Text>
+            <Text className="flex-1 font-sans-bold text-base text-white">{tCommonBlockchain(blockchain)}</Text>
 
             {walletAccounts && (
               <Text className="font-sans-regular text-sm text-gray-400">

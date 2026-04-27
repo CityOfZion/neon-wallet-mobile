@@ -72,6 +72,7 @@ export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenP
           <TwButton
             variant="contained-light"
             label={tCommonGeneral('continue')}
+            className="mb-2"
             disabled={actionState.isActing || !actionState.isValid}
             isLoading={actionState.isActing}
             onPress={handleAct(handleSubmit)}
