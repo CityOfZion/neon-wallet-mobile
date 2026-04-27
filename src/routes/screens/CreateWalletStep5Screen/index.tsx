@@ -58,7 +58,7 @@ export const CreateWalletStep5Screen = ({ navigation, route }: TMoreStackScreenP
           selectedBlockchains={actionData.selectedBlockchains}
         />
 
-        <View className="mt-auto py-3">
+        <View className="mt-auto pb-3 pt-6">
           <TwButton
             variant="contained-light"
             label={t('continueButtonLabel')}
