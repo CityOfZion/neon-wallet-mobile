@@ -45,7 +45,7 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
 
         <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
 
-        <View className="mt-auto py-4">
+        <View className="mt-auto pb-4 pt-6">
           <TwButton
             variant="contained-light"
             label={tCommon('general.continue')}

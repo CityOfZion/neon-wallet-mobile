@@ -101,7 +101,12 @@ export const ImportEncryptedKeySelectionModal = ({
       <ModalLayout.ViewContent>
         <Text className="mb-6 text-center font-sans-medium text-lg text-white">{t('description')}</Text>
 
-        <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchain} isMulti={false} />
+        <BlockchainList
+          className="mb-6"
+          onSelect={handleSelect}
+          selectedBlockchains={actionData.blockchain}
+          isMulti={false}
+        />
 
         <TwButton
           className="mb-4 mt-auto"
