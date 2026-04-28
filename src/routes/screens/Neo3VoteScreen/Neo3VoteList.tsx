@@ -280,7 +280,7 @@ export const Neo3VoteList = ({ neo3Account, search, voteErrorMessage, canVote, c
   }, [neo3Account, currentCandidatePubKey, filteredCandidates])
 
   return (
-    <Skeleton.Root loading={isLoading} className="w-full">
+    <Skeleton.Root loading={isLoading} className="w-full flex-shrink flex-grow">
       <Skeleton.Group>
         <Skeleton.Item className="h-7 w-full" />
         <Skeleton.Item className="h-10 w-full" />
@@ -292,11 +292,11 @@ export const Neo3VoteList = ({ neo3Account, search, voteErrorMessage, canVote, c
         ))}
       </Skeleton.Group>
 
-      <Skeleton.Content>
+      <Skeleton.Content className="flex-shrink flex-grow">
         <FlatList
           ref={listRef}
           role="list"
-          className="mb-2 flex w-full flex-col"
+          className="flex w-full flex-col"
           data={items}
           keyExtractor={({ candidate }) => candidate.pubKey}
           showsVerticalScrollIndicator={false}

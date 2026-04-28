@@ -113,11 +113,6 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
     actionData.selectedAddressToReceive.valid === false
 
   const hasExtraIdToReceive = !!actionData.selectedTokenToReceive.value?.hasExtraId
-
-  const isExtraIdToReceiveInvalid =
-    hasExtraIdToReceive &&
-    (!actionData.selectedExtraIdToReceive.valid || !actionData.selectedExtraIdToReceive.value?.trim())
-
   const isExtraIdToReceiveWrong = hasExtraIdToReceive && actionData.selectedExtraIdToReceive.valid === false
 
   const errorMessage = useMemo(() => {
@@ -272,7 +267,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
       !actionData.selectedAddressToReceive.value ||
       !actionData.selectedAddressToReceive.valid ||
       !actionData.selectAmountToUseMinMax.value ||
-      isExtraIdToReceiveInvalid
+      isExtraIdToReceiveWrong
     ) {
       return
     }
@@ -735,7 +730,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
             !actionData.selectedAccountToUse.value ||
             !actionData.selectedAddressToReceive.value ||
             !actionData.selectedAddressToReceive.valid ||
-            isExtraIdToReceiveInvalid ||
+            isExtraIdToReceiveWrong ||
             !service ||
             (isCalculableFee(service) && !actionData.fee)
           }

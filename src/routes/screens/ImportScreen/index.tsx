@@ -139,6 +139,7 @@ export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'Impor
           <TwButton
             variant="contained-light"
             label={tCommon('general.next')}
+            className="mb-2"
             disabled={!actionState.isValid}
             onPress={handleAct(handleSubmit)}
           />
