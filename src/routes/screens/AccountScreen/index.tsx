@@ -171,10 +171,15 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
           />
         }
       >
-        <AccountCard hideBalance={false} account={account} width={Dimensions.get('window').width - 32} />
+        <AccountCard
+          className="mb-2"
+          hideBalance={false}
+          account={account}
+          width={Dimensions.get('window').width - 32}
+        />
 
         <View
-          className={StyleHelper.mergeStyles('mt-5 flex flex-shrink flex-row gap-x-3', {
+          className={StyleHelper.mergeStyles('mt-3 flex flex-shrink flex-row gap-x-3', {
             hidden: !isServiceClaimable && isIos,
           })}
         >
@@ -255,7 +260,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
           </View>
         )}
 
-        <View className="mt-5 flex w-full flex-col gap-y-3">
+        <View className="mb-2 mt-5 flex w-full flex-col gap-y-3">
           <AccountScreenMenuItem
             label={t('tokens')}
             icon={<TbBriefcase aria-hidden className="text-neon" />}

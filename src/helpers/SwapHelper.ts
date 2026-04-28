@@ -7,10 +7,11 @@ export class SwapHelper {
     ['neo3-mainnet', ['neo3']],
     ['ethereum-1', ['eth']],
     ['bitcoin-mainnet', ['btc']],
-    ['neox-47763', ['']],
+    ['stellar-pubnet', ['xlm']],
+    ['solana-mainnet-beta', ['sol']],
     ['polygon-137', ['matic']],
     ['base-8453', ['base', 'baseevm']],
-    ['arbitrum-42161', ['arbitrum', 'arbevm', 'arbnova']],
+    ['arbitrum-42161', ['arbitrum', 'arbevm']],
   ])
 
   static getNetwork(blockchain: TBlockchainServiceKey, network: TNetwork) {
