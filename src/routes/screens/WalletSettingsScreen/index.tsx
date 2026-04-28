@@ -96,7 +96,7 @@ export const WalletSettingsScreen = ({ navigation, route }: TWalletsStackScreenP
           </Fragment>
         )}
 
-        <View className="mt-auto items-center">
+        <View className="mb-2 mt-auto items-center">
           <Text className="font-sans-bold text-sm uppercase text-gray-300">{t('deleteTitle')}</Text>
 
           <Text className="mb-4 text-center font-sans-regular text-white">{t('deleteSubtitle')}</Text>

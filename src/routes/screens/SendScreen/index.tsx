@@ -645,7 +645,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
         <TwButton
           label={t('form.sendTokensButtonLabel')}
-          className="mb-4 mt-auto"
+          className="mb-8 mt-auto"
           variant="card"
           disabled={isButtonDisabled}
           leftElement={<TbStepOut aria-hidden className="text-neon" />}
