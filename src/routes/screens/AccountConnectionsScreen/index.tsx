@@ -46,7 +46,7 @@ const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProp
         <ScreenLayout.ButtonContent position="right">
           <TwIconButton
             aria-label={t('labels.addConnection')}
-            icon={<MdAdd aria-hidden className="size-10 text-white" />}
+            icon={<MdAdd aria-hidden className="text-white" />}
             onPress={handlePressAdd}
           />
         </ScreenLayout.ButtonContent>
@@ -54,7 +54,7 @@ const AccountConnectionsScreen = ({ navigation, route }: TWalletsStackScreenProp
       <ScreenLayout.ViewContent>
         <AccountSubTitle account={account} />
 
-        <View className="my-11">
+        <View className="my-11 w-full">
           <FlatList
             data={sessions}
             renderItem={renderItem}
