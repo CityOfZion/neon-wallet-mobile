@@ -1,6 +1,11 @@
 {
   "notes": [
     {
+      "changes": [],
+      "date": "2026-05-05",
+      "version": "1.13.0"
+    },
+    {
       "changes": [
         "Suporte à blockchain Solana",
         "Proteção Neo X Anti-MEV",
