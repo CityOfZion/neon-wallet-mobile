@@ -138,8 +138,8 @@ async function main() {
     console.log('Installing dependencies…')
     await runCommand('npm install')
 
-    // Fetch the latest master branch
-    await runCommand('git fetch origin master:master')
+    // Fetch the latest main branch
+    await runCommand('git fetch origin main:main')
 
     const { value: isOta } = await inquirer.prompt([
       {
@@ -170,10 +170,10 @@ async function main() {
     // Create a temp branch for the release candidate. This branch is important when we are not running this script for the fist time so we need to update the current release candidate branch
     await runCommand(`git checkout -b release-temp`)
 
-    // Rebase the new branch on top of the latest master
-    console.log('Rebasing the release candidate branch on top of the latest master…')
+    // Rebase the new branch on top of the latest main
+    console.log('Rebasing the release candidate branch on top of the latest main')
 
-    await runCommand('git rebase -i master').catch(async () => {
+    await runCommand('git rebase -i main').catch(async () => {
       await inquirer.prompt([
         {
           type: 'confirm',
