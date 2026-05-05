@@ -51,7 +51,7 @@ async function main() {
 
     console.log('Creating the PR…')
     await runCommand(
-      `gh pr create --base master --head ${releaseCandidateBranchName} --body "" --title "Release ${currentVersion}"`
+      `gh pr create --base main --head ${releaseCandidateBranchName} --body "" --title "Release ${currentVersion}"`
     )
 
     if (isOta) {
