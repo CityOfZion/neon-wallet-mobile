@@ -35,13 +35,13 @@ export async function runCommand(command: string) {
 }
 
 export async function getProductionVersion() {
-  const { stdout } = await execAsync('git show master:package.json')
+  const { stdout } = await execAsync('git show main:package.json')
 
   if (!stdout) {
-    console.error('Failed to get the production version from the master branch.')
+    console.error('Failed to get the production version from the main branch.')
     process.exit(1)
   }
 
-  const masterPackageJson = JSON.parse(stdout)
-  return masterPackageJson.version
+  const mainPackageJson = JSON.parse(stdout)
+  return mainPackageJson.version
 }
