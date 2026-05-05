@@ -15,7 +15,7 @@ const selectHasClaimPendingTransaction = (account: TAccount) =>
       transaction =>
         isClaimable(service) &&
         service.claimService.getTransactionData(transaction) &&
-        AccountHelper.predicate(account)(transaction.data)
+        AccountHelper.predicate(account)({ blockchain: transaction.blockchain, address: transaction.relatedAddress! })
     )
   })
 
