@@ -4,6 +4,7 @@ import type { ImageProps } from 'expo-image'
 import { Image } from 'expo-image'
 
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
+import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useImageError } from '@/hooks/useImageError'
 
@@ -40,7 +41,7 @@ export const TwTokenIcon = React.memo(
     return (
       <Image
         {...props}
-        className={className}
+        className={StyleHelper.mergeStyles('rounded-full', className)}
         source={imageSource}
         placeholder={defaultSource}
         cachePolicy={cachePolicy}
