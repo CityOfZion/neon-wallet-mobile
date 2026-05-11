@@ -51,7 +51,7 @@ export const ConnectHardwareBluetoothModalList = ({
       ToastHelper.success({ message: t('success') })
 
       navigation.pop(2)
-      await UtilsHelper.sleep(500)
+      await UtilsHelper.sleep(1000)
       navigation.navigate('TabStack', {
         screen: 'WalletsStack',
         params: {
