@@ -96,7 +96,7 @@
         "Correção de problema que impedia o uso de NNS em alguns cenários.",
         "Correções de bugs menores"
       ],
-      "date": "29/05/2025",
+      "date": "2025-05-29",
       "version": "1.8.0"
     },
     {
@@ -142,7 +142,7 @@
         "Melhorias na interface do usuário de troca",
         "Correções de pequenos erros"
       ],
-      "date": "23/01/2025",
+      "date": "2025-01-23",
       "version": "1.5.0"
     },
     {
@@ -153,12 +153,12 @@
         "Implementação inicial do recurso de ajuda",
         "Correções de pequenos erros"
       ],
-      "date": "24/12/2024",
+      "date": "2024-12-24",
       "version": "1.4.0"
     },
     {
       "changes": ["Pequena melhoria na entrada de dados para aumentar o número de casas decimais."],
-      "date": "24/11/2024",
+      "date": "2024-11-24",
       "version": "1.3.1"
     },
     {
@@ -170,7 +170,7 @@
         "Melhorias nos dados de preços",
         "Correção de pequenos erros"
       ],
-      "date": "19/11/2024",
+      "date": "2024-11-19",
       "version": "1.3.0"
     },
     {
@@ -180,7 +180,7 @@
         "Correção de problema ao selecionar um token na lista de contas disponível em nosso processo de ENVIO.",
         "Correção de problema de compatibilidade com propriedades ByteArray em alguns cenários."
       ],
-      "date": "27/08/2024",
+      "date": "2024-08-27",
       "version": "1.2.10-1"
     },
     {
@@ -197,7 +197,7 @@
         "Atualize a integração do Wallet Connect para usar a versão 2.0.0-rc.3.",
         "Correções de bugs menores"
       ],
-      "date": "27/09/2022",
+      "date": "2022-09-27",
       "version": "1.1.4-1"
     },
     {
@@ -207,7 +207,7 @@
         "Menu de carteira aprimorado",
         "Menu de conta aprimorado"
       ],
-      "date": "24/08/2022",
+      "date": "2022-08-24",
       "version": "1.1.1-2"
     },
     {
@@ -217,12 +217,12 @@
         "Visualizar transferências de NFTs",
         "Correções de bugs menores"
       ],
-      "date": "09/06/2022",
+      "date": "2022-06-09",
       "version": "1.0.31-1"
     },
     {
       "changes": ["Correções de bugs"],
-      "date": "06/06/2022",
+      "date": "2022-06-06",
       "version": "1.0.30-1"
     },
     {
@@ -232,27 +232,27 @@
         "verificarMensagem",
         "Correções de pequenos erros"
       ],
-      "date": "20/05/2022",
+      "date": "2022-05-20",
       "version": "1.0.29-1"
     },
     {
       "changes": ["Integração do Wallet Connect", "Aprimoramentos de design", "Correções de pequenos erros"],
-      "date": "08/04/2022",
+      "date": "2022-04-08",
       "version": "1.0.28-1"
     },
     {
       "changes": ["Suporte para N3 e correções de bugs menores."],
-      "date": "13/12/2021",
+      "date": "2021-12-13",
       "version": "1.0.27-1"
     },
     {
       "changes": ["Suporte para N3 e correções de bugs menores."],
-      "date": "16/11/2021",
+      "date": "2021-11-16",
       "version": "1.0.25-1"
     },
     {
       "changes": ["Apresentamos a Neon Wallet Mobile"],
-      "date": "20/08/2021",
+      "date": "2021-08-20",
       "version": "1.0.16-54"
     }
   ]

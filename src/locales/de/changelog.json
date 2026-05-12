@@ -22,12 +22,12 @@
         "Leistungsverbesserungen für eine schnellere und reaktionsfähigere Benutzererfahrung",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "10.03.2026",
+      "date": "2026-03-10",
       "version": "1.12.0"
     },
     {
       "changes": ["Verbesserte Fehlerbehandlung bei Wallet Connect", "Kleinere Verbesserung der Benutzeroberfläche"],
-      "date": "08.01.2026",
+      "date": "2026-01-08",
       "version": "1.11.1"
     },
     {
@@ -40,7 +40,7 @@
         "Neue Benachrichtigung – Backup-Erinnerung",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "22.12.2025",
+      "date": "2025-12-22",
       "version": "1.11.0"
     },
     {
@@ -50,12 +50,12 @@
         "Bridge Neo 3 und Neo X Funktion",
         "Fehlerbehebungen"
       ],
-      "date": "30.09.2025",
+      "date": "2025-09-30",
       "version": "1.10.1"
     },
     {
       "changes": ["Android-API-Level aktualisieren", "Verbesserte NFI-Authentifizierung", "Fehlerbehebungen"],
-      "date": "18.08.2025",
+      "date": "2025-08-18",
       "version": "1.10.0"
     },
     {
@@ -65,7 +65,7 @@
         "“Entfernung der Anforderung „Gasanspruch geltend machen” vor der Aktivierung von Neo Legacy > Neo 3 Migration”",
         "Neue Funktion: Mnemonik über Deeplinks importieren"
       ],
-      "date": "31.07.2025",
+      "date": "2025-07-31",
       "version": "1.9.1"
     },
     {
@@ -76,7 +76,7 @@
         "Neue Funktion: NFI als Sicherheitsoption",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "30.06.2025",
+      "date": "2025-06-30",
       "version": "1.9.0"
     },
     {
@@ -85,7 +85,7 @@
         "Behebung des Problems, dass ausstehende Transaktionen doppelt in der Transaktionsliste aufgeführt wurden.",
         "Schneller Zugriff auf Legacy-Migration über die Aktionssuche"
       ],
-      "date": "06.06.2025",
+      "date": "2025-06-06",
       "version": "1.8.1"
     },
     {
@@ -108,7 +108,7 @@
         "Verbesserter Ansatz zum Parsen von Swap-Optionssymbolen, die vom Swap-Partner zurückgegeben werden",
         "Standardknoten für Polygon ändern"
       ],
-      "date": "30.04.2025",
+      "date": "2025-04-30",
       "version": "1.7.1"
     },
     {
@@ -122,7 +122,7 @@
         "Kleinere UX-Verbesserungen",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "17.04.2025",
+      "date": "2025-04-17",
       "version": "1.7.0"
     },
     {
@@ -133,7 +133,7 @@
         "Leistungsverbesserungen",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "17.02.2025",
+      "date": "2025-02-17",
       "version": "1.6.0"
     },
     {
@@ -142,7 +142,7 @@
         "Verbesserungen der Benutzeroberfläche beim Tauschen",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "23.01.2025",
+      "date": "2025-01-23",
       "version": "1.5.0"
     },
     {
@@ -153,12 +153,12 @@
         "Hilfefunktion – Erste Implementierung",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "24.12.2024",
+      "date": "2024-12-24",
       "version": "1.4.0"
     },
     {
       "changes": ["Kleine Eingabeverbesserung zur Beträgen mit Dezimalstellen"],
-      "date": "24.11.2024",
+      "date": "2024-11-24",
       "version": "1.3.1"
     },
     {
@@ -170,7 +170,7 @@
         "Verbesserungen der Preisdaten",
         "Kleinere Fehler behoben"
       ],
-      "date": "19.11.2024",
+      "date": "2024-11-19",
       "version": "1.3.0"
     },
     {
@@ -180,12 +180,12 @@
         "Behebung des Problems bei der Auswahl eines Tokens aus der im SEND-Prozess verfügbaren Kontoliste",
         "Behebung eines WC-Problems im Zusammenhang mit ByteArray-Eigenschaften in bestimmten Szenarien"
       ],
-      "date": "27.08.2024",
+      "date": "2024-08-27",
       "version": "1.2.10-1"
     },
     {
       "changes": ["Kleinere Fehler behoben", "Leistungsverbesserungen", "WC-Erweiterung – Mehrfachbeschilderung"],
-      "date": "07.05.2024",
+      "date": "2024-05-07",
       "version": "1.2.8-1"
     },
     {
@@ -197,7 +197,7 @@
         "Aktualisieren Sie die Wallet Connect-Integration auf Version 2.0.0-rc.3.",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "27.09.2022",
+      "date": "2022-09-27",
       "version": "1.1.4-1"
     },
     {
@@ -207,7 +207,7 @@
         "Erweitertes Wallet-Menü",
         "Erweitertes Kontomenü"
       ],
-      "date": "24.08.2022",
+      "date": "2022-08-24",
       "version": "1.1.1-2"
     },
     {
@@ -217,12 +217,12 @@
         "NFT-Überweisungen anzeigen",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "09.06.2022",
+      "date": "2022-06-09",
       "version": "1.0.31-1"
     },
     {
       "changes": ["Fehlerbehebungen"],
-      "date": "06.06.2022",
+      "date": "2022-06-06",
       "version": "1.0.30-1"
     },
     {
@@ -232,27 +232,27 @@
         "Nachricht überprüfen",
         "Kleinere Fehlerbehebungen"
       ],
-      "date": "20.05.2022",
+      "date": "2022-05-20",
       "version": "1.0.29-1"
     },
     {
       "changes": ["Wallet Connect-Integration", "Designverbesserungen", "Kleinere Fehlerbehebungen"],
-      "date": "08.04.2022",
+      "date": "2022-04-08",
       "version": "1.0.28-1"
     },
     {
       "changes": ["N3-Unterstützung und kleinere Fehlerbehebungen"],
-      "date": "13.12.2021",
+      "date": "2021-12-13",
       "version": "1.0.27-1"
     },
     {
       "changes": ["N3-Unterstützung und kleinere Fehlerbehebungen"],
-      "date": "16.11.2021",
+      "date": "2021-11-16",
       "version": "1.0.25-1"
     },
     {
       "changes": ["Wir präsentieren die Neon Wallet Mobile"],
-      "date": "20.08.2021",
+      "date": "2021-08-20",
       "version": "1.0.16-54"
     }
   ]
