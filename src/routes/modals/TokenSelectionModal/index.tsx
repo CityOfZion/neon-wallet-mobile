@@ -139,7 +139,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
           autoCapitalize="none"
         />
 
-        <Skeleton.Root loading={isLoading} className="mt-8">
+        <Skeleton.Root loading={isLoading} className="mt-8 flex-shrink">
           <Skeleton.Group>
             {Array.from({ length: 6 }).map((_, index) => (
               <Skeleton.Item key={`token-skeleton-${index}`} className="h-12 w-full rounded-md" />
