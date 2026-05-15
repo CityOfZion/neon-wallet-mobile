@@ -35,7 +35,9 @@ export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 
         </Text>
       </View>
 
-      <Text className="font-sans-regular text-lg text-white">{formattedAmount}</Text>
+      <Text className="flex-shrink font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="tail">
+        {formattedAmount}
+      </Text>
     </View>
   )
 }
