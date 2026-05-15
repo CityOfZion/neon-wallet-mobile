@@ -58,7 +58,7 @@ export const ActionFeeStep = ({
         {isCalculatingFee ? (
           <Loader />
         ) : (
-          <Text className="max-w-[60%] font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
+          <Text className="max-w-[40%] font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
             {fee || feePlaceholder}
           </Text>
         )}
