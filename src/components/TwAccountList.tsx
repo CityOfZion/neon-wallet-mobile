@@ -47,7 +47,10 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
       </View>
 
       <View className="min-w-[26%] flex-shrink flex-row items-center">
-        <Text className="font-sans-regular text-sm uppercase text-gray-100">{item.name}</Text>
+        <Text className="font-sans-regular text-sm uppercase text-gray-100" numberOfLines={1} ellipsizeMode="head">
+          {item.name}
+        </Text>
+
         <Text
           className="flex-shrink font-sans-regular text-sm uppercase text-gray-300"
           numberOfLines={1}
