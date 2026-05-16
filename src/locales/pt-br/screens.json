@@ -324,6 +324,7 @@
   },
   "onboardingCompleted": {
     "backupMnemonicButtonLabel": "Fazer backup da carteira",
+    "shouldConfirmActionPasswordCheckboxLabel": "Solicitar senha para confirmar ações",
     "subtitleImport": "Sua carteira e contas importadas agora estão prontas para usar!",
     "subtitleNew": "Sua nova carteira e contas agora estão prontas para usar!",
     "titleImport": "Importação Concluída",
@@ -415,6 +416,7 @@
       },
       "security": {
         "backupButtonLabel": "Backup NEON",
+        "generalButtonLabel": "Geral",
         "importBackupButtonLabel": "Importar Backup NEON",
         "title": "Segurança",
         "verificationButtonLabel": "Verificação",
@@ -427,6 +429,10 @@
       }
     },
     "title": "Configurações"
+  },
+  "settingsGeneral": {
+    "shouldConfirmActionPasswordCheckboxLabel": "Solicitar senha para confirmar ações",
+    "title": "Geral"
   },
   "settingsProtocolEdit": {
     "addCustomNetworkButtonLabel": "Adicionar rede customizada",

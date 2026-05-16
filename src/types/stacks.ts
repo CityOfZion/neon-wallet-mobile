@@ -82,6 +82,7 @@ import type {
   TOnboardingCompletedScreenParams,
   TReceiveScreenParams,
   TSendScreenParams,
+  TSettingsGeneralScreenParams,
   TSettingsProtocolEditScreen,
   TSettingsScreenParams,
   TSettingsWalletBackupStep1ScreenParams,
@@ -146,6 +147,7 @@ export type TMoreStackParamList = {
   CreateWalletStep6Screen: TCreateWalletStep6ScreenParams
   ImportScreen: TImportScreen | undefined
   SettingsScreen?: TSettingsScreenParams
+  SettingsGeneralScreen: TSettingsGeneralScreenParams
   SettingsSecurityBackupScreen: undefined
   SettingsProtocolEditScreen: TSettingsProtocolEditScreen
   SettingsProtocolsScreen: undefined

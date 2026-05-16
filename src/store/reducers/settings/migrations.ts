@@ -161,5 +161,12 @@ export function getSettingsMigrations() {
         canShowNeo3VoteSupportUsModal: true,
       },
     }),
+    13: (state: any) => ({
+      ...state,
+      data: {
+        ...state.data,
+        shouldConfirmAction: true,
+      },
+    }),
   }
 }

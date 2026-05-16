@@ -324,6 +324,7 @@
   },
   "onboardingCompleted": {
     "backupMnemonicButtonLabel": "Machen Sie ein Backup Ihres neuen Wallets",
+    "shouldConfirmActionPasswordCheckboxLabel": "Passwort zur Bestätigung von Aktionen anfordern",
     "subtitleImport": "Ihr importiertes Wallet und Ihre Konten sind bereit!",
     "subtitleNew": "Ihr neues Wallet und Ihre Konten sind bereit!",
     "titleImport": "Import abgeschlossen",
@@ -415,6 +416,7 @@
       },
       "security": {
         "backupButtonLabel": "NEON sichern",
+        "generalButtonLabel": "Allgemein",
         "importBackupButtonLabel": "NEON Backup importieren",
         "title": "Sicherheit",
         "verificationButtonLabel": "Verifizierung",
@@ -427,6 +429,10 @@
       }
     },
     "title": "Einstellungen"
+  },
+  "settingsGeneral": {
+    "shouldConfirmActionPasswordCheckboxLabel": "Passwort zur Bestätigung von Aktionen anfordern",
+    "title": "Allgemein"
   },
   "settingsProtocolEdit": {
     "addCustomNetworkButtonLabel": "Custom Network hinzufügen",

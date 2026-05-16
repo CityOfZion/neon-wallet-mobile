@@ -324,6 +324,7 @@
   },
   "onboardingCompleted": {
     "backupMnemonicButtonLabel": "备份您的新钱包",
+    "shouldConfirmActionPasswordCheckboxLabel": "确认操作时要求输入密码",
     "subtitleImport": "您导入的钱包和账户已准备就绪！",
     "subtitleNew": "您的新钱包和账户已准备就绪！",
     "titleImport": "导入完成",
@@ -415,6 +416,7 @@
       },
       "security": {
         "backupButtonLabel": "备份 NEON",
+        "generalButtonLabel": "通用",
         "importBackupButtonLabel": "导入 NEON 备份",
         "title": "安全",
         "verificationButtonLabel": "验证",
@@ -427,6 +429,10 @@
       }
     },
     "title": "设置"
+  },
+  "settingsGeneral": {
+    "shouldConfirmActionPasswordCheckboxLabel": "确认操作时要求输入密码",
+    "title": "通用"
   },
   "settingsProtocolEdit": {
     "addCustomNetworkButtonLabel": "添加自定义网络",

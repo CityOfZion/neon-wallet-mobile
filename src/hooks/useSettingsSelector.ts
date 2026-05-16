@@ -87,3 +87,11 @@ export const useSurveyInfoSelector = () => {
 
   return { surveyInfo: value, surveyInfoRef: ref }
 }
+
+export const useShouldConfirmActionSelector = () => {
+  const { value: shouldConfirmAction, ref: shouldConfirmActionRef } = useAppSelector(
+    ({ settings }) => settings.data.shouldConfirmAction
+  )
+
+  return { shouldConfirmAction, shouldConfirmActionRef }
+}

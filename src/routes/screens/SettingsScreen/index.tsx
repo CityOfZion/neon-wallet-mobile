@@ -7,10 +7,12 @@ import { TwMenuButton } from '@/components/TwMenuButton'
 import { TwSeparator } from '@/components/TwSeparator'
 import { TwTabs } from '@/components/TwTabs'
 
+import { useIsGeneralSettingsDisabledSelector } from '@/hooks/useGeneralSettingsSelector'
 import { useCurrencySelector, useLanguageSelector, useSecuritySelector } from '@/hooks/useSettingsSelector'
 
 import { ScreenLayout } from '@/layouts/ScreenLayout'
 
+import MdOutlineLanguage from '@/assets/images/md-outline-language.svg'
 import TbAlertTriangle from '@/assets/images/tb-alert-triangle.svg'
 import TbCashBanknote from '@/assets/images/tb-cash-banknote.svg'
 import TbCube3dSphere from '@/assets/images/tb-cube-3d-sphere.svg'
@@ -28,6 +30,7 @@ export const SettingsScreen = ({ navigation, route }: TMoreStackScreenProps<'Set
   const { language } = useLanguageSelector()
   const { t } = useTranslation('screens', { keyPrefix: 'settings' })
   const { security } = useSecuritySelector()
+  const { isGeneralSettingsDisabled } = useIsGeneralSettingsDisabledSelector()
 
   const [selectedTab, setSelectedTab] = useState<TSettingsTab>(route?.params?.tab || 'personalisation')
 
@@ -49,6 +52,15 @@ export const SettingsScreen = ({ navigation, route }: TMoreStackScreenProps<'Set
               label={t('tabs.personalisation.networkConfigurationButtonLabel')}
               leftElement={<TbCube3dSphere aria-hidden />}
               onPress={() => navigation.navigate('SettingsProtocolsScreen')}
+            />
+
+            <TwSeparator />
+
+            <TwMenuButton
+              disabled={isGeneralSettingsDisabled}
+              label={t('tabs.security.generalButtonLabel')}
+              leftElement={<MdOutlineLanguage aria-hidden />}
+              onPress={() => navigation.navigate('SettingsGeneralScreen')}
             />
 
             <TwSeparator />

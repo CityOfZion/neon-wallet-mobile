@@ -120,6 +120,10 @@ const setIsOnboardingCompleted: CaseReducer<TSettingsReducer, PayloadAction<bool
   state.data.isOnboardingCompleted = action.payload
 }
 
+const setShouldConfirmAction: CaseReducer<TSettingsReducer, PayloadAction<boolean>> = (state, action) => {
+  state.data.shouldConfirmAction = action.payload
+}
+
 export const settingsSliceReducers = {
   setSecurity,
   setCurrency,
@@ -133,4 +137,5 @@ export const settingsSliceReducers = {
   dontShowNeo3VoteSupportUsModalAgain,
   setSelectedNetworkByBlockchain,
   setIsOnboardingCompleted,
+  setShouldConfirmAction,
 }

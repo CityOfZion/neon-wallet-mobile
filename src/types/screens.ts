@@ -130,6 +130,8 @@ export type TSettingsScreenParams = {
   tab?: TSettingsTab
 }
 
+export type TSettingsGeneralScreenParams = undefined
+
 export type TReceiveScreenParams = {
   account: TAccount
 }

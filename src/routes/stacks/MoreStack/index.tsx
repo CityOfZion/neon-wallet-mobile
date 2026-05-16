@@ -44,6 +44,10 @@ export const MoreStack = () => {
         getComponent={() => require('@/routes/screens/SettingsScreen').SettingsScreen}
       />
       <MoreNavigator.Screen
+        name="SettingsGeneralScreen"
+        getComponent={() => require('@/routes/screens/SettingsGeneralScreen').SettingsGeneralScreen}
+      />
+      <MoreNavigator.Screen
         name="SettingsProtocolsScreen"
         getComponent={() => require('@/routes/screens/SettingsProtocolsScreen').SettingsProtocolsScreen}
       />

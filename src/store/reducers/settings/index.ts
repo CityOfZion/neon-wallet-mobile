@@ -24,6 +24,7 @@ export type TSettingsReducer = {
     language: TLanguage
     canShowNeo3VoteSupportUsModal: boolean
     surveyInfo: TSurveyInfo
+    shouldConfirmAction: boolean
   }
 }
 
@@ -65,6 +66,7 @@ export function getSettingsReducer() {
       language: LanguageHelper.detectDeviceLanguage(),
       canShowNeo3VoteSupportUsModal: true,
       surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
+      shouldConfirmAction: true,
     },
   }
 
@@ -73,7 +75,7 @@ export function getSettingsReducer() {
     storage,
     timeout: 0,
     migrate: createMigrate(settingsMigrations),
-    version: 12,
+    version: 13,
   }
 
   const settingsSlice = createSlice({

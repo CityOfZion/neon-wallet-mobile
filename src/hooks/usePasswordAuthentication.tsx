@@ -8,6 +8,7 @@ import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import TbDialpad from '@/assets/images/tb-dialpad.svg'
 
 import { useAppDispatch } from './useRedux'
+import { useShouldConfirmActionSelector } from './useSettingsSelector'
 
 import { settingsReducerActions } from '@/store/reducers/settings'
 
@@ -15,6 +16,7 @@ export const usePasswordAuthentication = () => {
   const { t } = useTranslation('hooks', { keyPrefix: 'usePasswordAuthentication' })
   const navigation = useNavigation()
   const dispatch = useAppDispatch()
+  const { shouldConfirmAction } = useShouldConfirmActionSelector()
 
   const linkPassword = async () => {
     return new Promise<void>(async (resolve, reject) => {
@@ -73,6 +75,11 @@ export const usePasswordAuthentication = () => {
       const currentPassword = await SecureStoreHelper.getPassword()
       if (!currentPassword) {
         reject(new Error(t('getPasswordError')))
+        return
+      }
+
+      if (!shouldConfirmAction) {
+        resolve()
         return
       }
 
