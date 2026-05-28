@@ -1,7 +1,12 @@
 {
   "notes": [
     {
-      "changes": [],
+      "changes": [
+        "Neues Netzwerk - Stellar-Unterstützung",
+        "Neues Netzwerk - Bitcoin-Unterstützung",
+        "UX-Verbesserungen",
+        "Kleine Fehlerbehebungen"
+      ],
       "date": "2026-05-05",
       "version": "1.13.0"
     },
