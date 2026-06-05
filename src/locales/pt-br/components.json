@@ -75,6 +75,10 @@
   },
   "setup": {
     "accountTasksManager": {
+      "useBNeoShutdownNotificationProcess": {
+        "description": "BNeo será encerrado em 1º de agosto de 2026. A distribuição de GAS já foi interrompida. Troque seu BNeo agora para evitar perder o acesso aos seus fundos.",
+        "title": "BNeo está sendo encerrado!"
+      },
       "useFraudulentTokensNotificationProcess": {
         "notificationDescription": "Identificamos \"{{ value }}\" que foi sinalizado como token fraudulento pela comunidade. Sugerimos ocultá-lo e evitar qualquer outro tipo de interação com ele.",
         "notificationTitle": "\"{{ value }}\" é um token fraudulento!"

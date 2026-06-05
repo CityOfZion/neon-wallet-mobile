@@ -121,6 +121,17 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
 
         navigation.navigate('CreateBackupModal')
       })
+      .with({ to: 'bneo-shutdown' }, payload => {
+        const { account, wallet } = getAccountAndWallet(payload)
+
+        navigation.navigate('TabStack', {
+          screen: 'WalletsStack',
+          params: {
+            screen: 'AccountAssetsScreen',
+            params: { account, wallet },
+          },
+        })
+      })
       .exhaustive()
   },
 }
