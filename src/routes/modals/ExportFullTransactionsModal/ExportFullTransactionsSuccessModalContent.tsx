@@ -12,17 +12,17 @@ import { LinkHelper } from '@/helpers/LinkHelper'
 import MdLaunch from '@/assets/images/md-launch.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
   formattedDateTo: string
   formattedDateFrom: string
 }
 
 export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDateFrom, formattedDateTo }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactionsModal.successModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactions.success' })
+  const { t: tCommon } = useTranslation('common')
 
   const handlePressDiscord = () => {
     LinkHelper.open(ConstantsHelper.cozDiscordUrl)
@@ -54,7 +54,7 @@ export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDa
             {account.address}
           </Text>
           <Text className="font-sans-regular text-lg text-gray-100">
-            {commonT(`blockchainServices.${account.blockchain}.label`)}
+            {tCommon(`blockchainServices.${account.blockchain}.label`)}
           </Text>
         </View>
 

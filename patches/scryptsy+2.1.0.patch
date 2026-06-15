@@ -1,0 +1,69 @@
+diff --git a/node_modules/scryptsy/lib/scrypt.js b/node_modules/scryptsy/lib/scrypt.js
+index 7d6138b..95e780f 100644
+--- a/node_modules/scryptsy/lib/scrypt.js
++++ b/node_modules/scryptsy/lib/scrypt.js
+@@ -1,26 +1,12 @@
+ const crypto = require('crypto')
+-const {
+-  checkAndInit,
+-  smix
+-} = require('./utils')
+ 
+-// N = Cpu cost, r = Memory cost, p = parallelization cost
+ async function scrypt (key, salt, N, r, p, dkLen, progressCallback, promiseInterval) {
+-  const {
+-    XY,
+-    V,
+-    B32,
+-    x,
+-    _X,
+-    B,
+-    tickCallback
+-  } = checkAndInit(key, salt, N, r, p, dkLen, progressCallback)
+-
+-  for (var i = 0; i < p; i++) {
+-    await smix(B, i * 128 * r, r, N, V, XY, _X, B32, x, tickCallback, promiseInterval)
+-  }
+-
+-  return crypto.pbkdf2Sync(key, B, 1, dkLen, 'sha256')
++  return new Promise(function (resolve, reject) {
++    crypto.scrypt(key, salt, dkLen, { N: N, r: r, p: p, maxmem: 256 * 1024 * 1024 }, function (err, buf) {
++      if (err) reject(err)
++      else resolve(buf)
++    })
++  })
+ }
+ 
+ module.exports = scrypt
+diff --git a/node_modules/scryptsy/lib/scryptSync.js b/node_modules/scryptsy/lib/scryptSync.js
+index f90d688..b2e636b 100644
+--- a/node_modules/scryptsy/lib/scryptSync.js
++++ b/node_modules/scryptsy/lib/scryptSync.js
+@@ -1,26 +1,7 @@
+ const crypto = require('crypto')
+-const {
+-  checkAndInit,
+-  smixSync
+-} = require('./utils')
+ 
+-// N = Cpu cost, r = Memory cost, p = parallelization cost
+ function scrypt (key, salt, N, r, p, dkLen, progressCallback) {
+-  const {
+-    XY,
+-    V,
+-    B32,
+-    x,
+-    _X,
+-    B,
+-    tickCallback
+-  } = checkAndInit(key, salt, N, r, p, dkLen, progressCallback)
+-
+-  for (var i = 0; i < p; i++) {
+-    smixSync(B, i * 128 * r, r, N, V, XY, _X, B32, x, tickCallback)
+-  }
+-
+-  return crypto.pbkdf2Sync(key, B, 1, dkLen, 'sha256')
++  return crypto.scryptSync(key, salt, dkLen, { N: N, r: r, p: p, maxmem: 256 * 1024 * 1024 })
+ }
+ 
+ module.exports = scrypt

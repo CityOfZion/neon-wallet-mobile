@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 import { hasWalletConnect } from '@cityofzion/blockchain-service'
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
@@ -12,7 +11,7 @@ import { SkinHelper } from '@/helpers/SkinHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 
-import { useAccountMapSelector, useAccountsSelector } from './useAccountSelector'
+import { useAccountsMapSelector, useAccountsSelector } from './useAccountSelector'
 import { useAppDispatch } from './useRedux'
 
 import { accountReducerActions } from '@/store/reducers/account'
@@ -24,7 +23,7 @@ import type {
   TUseImportAccountParams,
   TUseImportAccountsParams,
 } from '@/types/hooks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export const useCreateAccount = () => {
   const dispatch = useAppDispatch()
@@ -32,7 +31,7 @@ export const useCreateAccount = () => {
   const { t: tCommon } = useTranslation('common')
 
   const createAccount = useCallback(
-    async ({ blockchain, name, wallet, id }: TUseCreateAccountParams): Promise<IAccountState> => {
+    async ({ blockchain, name, wallet, id }: TUseCreateAccountParams): Promise<TAccount> => {
       const mnemonic = await SecureStoreHelper.getMnemonic(wallet)
       if (!mnemonic) throw new AppError(tCommon('errors.unexpected'))
 
@@ -40,10 +39,10 @@ export const useCreateAccount = () => {
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
       const serviceAccount = await service.generateAccountFromMnemonic(mnemonic, order)
 
-      const newAccount: IAccountState = {
-        id: id ?? UtilsHelper.uuid(),
+      const newAccount: TAccount = {
+        id: id || UtilsHelper.uuid(),
         idWallet: wallet.id,
-        name: name ?? `${tCommon(`blockchainServices.${blockchain}.accountName`)} ${order + 1}`,
+        name: name || `${tCommon(`blockchainServices.${blockchain}.accountName`)} ${order + 1}`,
         blockchain,
         skin: { type: 'color', id: SkinHelper.getSkinColor() },
         address: serviceAccount.address,
@@ -75,25 +74,25 @@ export const useCreateAccount = () => {
 export const useImportAccount = () => {
   const dispatch = useAppDispatch()
   const { accountsRef } = useAccountsSelector()
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
 
   const importAccount = useCallback(
     async ({ address, blockchain, type, wallet, key, name, skin, order }: TUseImportAccountParams) => {
       const currentOrder = order ?? AccountHelper.getNextOrderOrMissing(accountsRef.current, blockchain, wallet.id)
 
-      const newAccount: IAccountState = {
+      const newAccount: TAccount = {
         id: UtilsHelper.uuid(),
         idWallet: wallet.id,
-        name: name ?? `${commonT(`blockchainServices.${blockchain}.accountName`)} ${currentOrder + 1}`,
+        name: name || `${tCommon(`blockchainServices.${blockchain}.accountName`)} ${currentOrder + 1}`,
         blockchain,
-        skin: skin ?? { type: 'color', id: SkinHelper.getSkinColor() },
+        skin: skin || { type: 'color', id: SkinHelper.getSkinColor() },
         address,
         type,
         order: currentOrder,
       }
 
       if (type !== 'watch') {
-        if (!key) throw new AppError(commonT('errors.mustHaveKey'))
+        if (!key) throw new AppError(tCommon('errors.mustHaveKey'))
 
         await SecureStoreHelper.saveKey(newAccount, key)
       }
@@ -102,7 +101,7 @@ export const useImportAccount = () => {
 
       return newAccount
     },
-    [accountsRef, commonT, dispatch]
+    [accountsRef, tCommon, dispatch]
   )
 
   return { importAccount }
@@ -112,7 +111,7 @@ export const useImportAccounts = () => {
   const { importAccount } = useImportAccount()
 
   const importAccounts = useCallback(
-    async ({ accounts: accountsToImport, wallet }: TUseImportAccountsParams) => {
+    async ({ accountsToImport, wallet }: TUseImportAccountsParams) => {
       const accounts = []
 
       for (const accountToImport of accountsToImport) accounts.push(await importAccount({ ...accountToImport, wallet }))
@@ -129,14 +128,14 @@ export const useDeleteAccount = () => {
   const dispatch = useAppDispatch()
 
   const deleteAccount = useCallback(
-    async (account: IAccountState) => {
+    async (account: TAccount) => {
       dispatch(accountReducerActions.deleteAccount(account))
 
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
       if (!hasWalletConnect(service)) return
 
       const sessions = WalletKitHelper.kit.getActiveSessions()
-      const accountSessions = BSWalletKitHelper.filterSessions(Object.values(sessions), {
+      const accountSessions = WalletKitHelper.filterSessions(Object.values(sessions), {
         addresses: [account.address],
         chains: [service.walletConnectService.chain],
       })
@@ -144,7 +143,7 @@ export const useDeleteAccount = () => {
         accountSessions.map(session =>
           WalletKitHelper.kit.disconnectSession({
             topic: session.topic,
-            reason: BSWalletKitHelper.getError('USER_DISCONNECTED'),
+            reason: WalletKitHelper.getError('USER_DISCONNECTED'),
           })
         )
       )
@@ -167,7 +166,7 @@ export const useEditAccount = () => {
       }
 
       const updatedAccount = accountsRef.current.find(({ id }) => id === account.id)!
-      const editedAccount: IAccountState = Object.assign({}, updatedAccount, data)
+      const editedAccount: TAccount = Object.assign({}, updatedAccount, data)
 
       dispatch(accountReducerActions.saveAccount(editedAccount))
 
@@ -180,14 +179,12 @@ export const useEditAccount = () => {
 }
 
 export const useDoesAccountExist = () => {
-  const { accountsMapRef } = useAccountMapSelector()
+  const { accountsMapRef } = useAccountsMapSelector()
 
   const doesAccountExist = useCallback(
     (params: TAccountHelperPredicateParams) => accountsMapRef.current.has(AccountHelper.buildAccountKey(params)),
     [accountsMapRef]
   )
 
-  return {
-    doesAccountExist,
-  }
+  return { doesAccountExist }
 }

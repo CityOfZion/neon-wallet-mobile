@@ -15,11 +15,10 @@ import { useBalances } from '@/hooks/useBalances'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProps<'WalletSelectionModal'>) => {
   const {
@@ -32,7 +31,7 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
     walletTypes = ['hardware', 'standard', 'non-standard'],
   } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'walletSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'walletSelection' })
 
   const { wallets } = useWalletsSelector()
   const { accounts } = useAccountsSelector()
@@ -56,12 +55,12 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
     return true
   })
 
-  const [selectedWallet, setSelectedWallet] = useState<IWalletState | undefined>(wallets[0])
-  const { accountsByWalletId } = useAccountsByWalletIdSelector(selectedWallet?.id ?? '')
+  const [selectedWallet, setSelectedWallet] = useState<TWallet | undefined>(wallets[0])
+  const { accountsByWalletId } = useAccountsByWalletIdSelector(selectedWallet?.id || '')
 
   const balances = useBalances(accountsByWalletId)
 
-  const handlePress = (wallet: IWalletState, ref: TWalletCardRef) => {
+  const handlePress = (wallet: TWallet, ref: TWalletCardRef) => {
     ref.runOutAnimation(async () => {
       onSelect(wallet)
 
@@ -72,36 +71,36 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
   }
 
   return (
-    <TwModalLayout
-      title={title ?? t('title')}
-      rightElement={<TwModalLayoutCloseIconButton onPress={onRequestClose ?? navigation.goBack} />}
-      contentContainerClassName="px-0"
-      onRequestClose={onRequestClose}
-      withoutScroll
-    >
-      <Text className="mb-5 px-5 text-center font-sans-medium text-lg text-white">
-        {description ?? t('description')}
-      </Text>
+    <ModalLayout.Root onRequestClose={onRequestClose}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{title || t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={onRequestClose || navigation.goBack} />
+      </ModalLayout.Header>
+      <ModalLayout.ViewContent className="px-0">
+        <Text className="mb-5 px-5 text-center font-sans-medium text-lg text-white">
+          {description || t('description')}
+        </Text>
 
-      <WalletCarousel
-        wallets={filteredWallets}
-        selectedWallet={selectedWallet}
-        onSelect={setSelectedWallet}
-        onPress={handlePress}
-        blockchains={blockchains}
-      />
+        <WalletCarousel
+          wallets={filteredWallets}
+          selectedWallet={selectedWallet}
+          onSelect={setSelectedWallet}
+          onPress={handlePress}
+          blockchains={blockchains}
+        />
 
-      <Skeleton.Root loading={balances.isLoading} className="mt-6 items-center">
-        <Skeleton.Group>
-          <Skeleton.Item className="h-9 w-24" />
-        </Skeleton.Group>
+        <Skeleton.Root loading={balances.isLoading} className="mt-6 items-center">
+          <Skeleton.Group>
+            <Skeleton.Item className="h-9 w-24" />
+          </Skeleton.Group>
 
-        <Skeleton.Content>
-          <Text className="font-sans-medium text-4xl text-white">
-            {CurrencyHelper.format(balances.exchangeTotal, { currency })}
-          </Text>
-        </Skeleton.Content>
-      </Skeleton.Root>
-    </TwModalLayout>
+          <Skeleton.Content>
+            <Text className="font-sans-medium text-4xl text-white">
+              {CurrencyHelper.format(balances.exchangeTotal, { currency })}
+            </Text>
+          </Skeleton.Content>
+        </Skeleton.Root>
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

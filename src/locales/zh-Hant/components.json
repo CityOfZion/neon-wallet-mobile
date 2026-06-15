@@ -8,6 +8,27 @@
     "notFoundLabel": "找不到帳戶或已存在，請檢查您的輸入並稍後再試。",
     "selectedOfTotal": "已選擇 {{selectedCount}} / 共 {{totalCount}} 個地址"
   },
+  "accountTransactionsTransactionCard": {
+    "blockToolTipLabel": "區塊：{{ block }}",
+    "bridgeNeo3NeoXButtonLabel": "跨鏈橋",
+    "feeTooltipLabel": "網路費：{{ networkFee }} | 系統費：{{ systemFee }}",
+    "invocationsToolTipLabel": "呼叫：{{ invocations }}",
+    "nftsTooltipLabel": "NFTs：{{ nfts }}",
+    "notificationToolTipLabel": "通知：{{ notifications }}",
+    "pendingLabel": "處理中…",
+    "seeOnExplorerButtonLabel": "在瀏覽器中查看",
+    "swapButtonLabel": "兌換",
+    "totalAmountTooltipLabel": "總計：{{ totalAmount }}",
+    "txIdLabel": "交易 ID："
+  },
+  "accountTransactionsTransactionDefaultEvent": {
+    "fromLabel": "從",
+    "toLabel": "到",
+    "type": {
+      "nft": "NFT",
+      "token": "代幣"
+    }
+  },
   "actionInput": {
     "maxButtonLabel": "最大"
   },
@@ -19,14 +40,22 @@
   "blockchainList": {
     "xExisting": "已有 {{amount}} 個"
   },
-  "nfcModal": {
+  "modalLayout": {
+    "labels": {
+      "closeButton": "關閉視窗"
+    }
+  },
+  "nfc": {
     "description": "請輕觸 NFC 標籤",
     "title": "準備掃描"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "關閉二維碼掃描器",
     "permissionOffMessage": "掃描二維碼需要相機權限。請在設備設定中授予權限。",
     "permissionOffTitle": "需要攝影機存取權限"
+  },
+  "screenLayout": {
+    "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
     "customMode": "自訂網路模式",
@@ -95,11 +124,6 @@
       "clearButton": "清除輸入",
       "hideButton": "隱藏輸入",
       "showButton": "顯示輸入"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "關閉視窗"
     }
   }
 }

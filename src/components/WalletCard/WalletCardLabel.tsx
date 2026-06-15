@@ -7,10 +7,10 @@ import WalletIconLedger from '@/assets/images/wallet-icon-ledger.svg'
 import WalletIconNonStandard from '@/assets/images/wallet-icon-non-standard.svg'
 import WalletIconStandard from '@/assets/images/wallet-icon-standard.svg'
 
-import type { IWalletState, TWalletType } from '@/types/store'
+import type { TWallet, TWalletType } from '@/types/store'
 
 type TProps = {
-  wallet: IWalletState
+  wallet: TWallet
   isInactive?: boolean
 }
 
@@ -29,7 +29,7 @@ export const WalletCardLabel = ({ wallet, isInactive }: TProps) => {
       }}
     >
       {wallet.type && (
-        <View className="h-full w-full flex-row items-center gap-4 px-4">
+        <View className="size-full flex-row items-center gap-4 px-4">
           {WALLET_ICON_BY_TYPE[wallet.type]}
 
           <Text

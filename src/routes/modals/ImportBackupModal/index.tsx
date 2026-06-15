@@ -11,8 +11,7 @@ import type { TValidationSchemaHelperBackupFileSchema } from '@/helpers/Validati
 
 import { useNeonImportBackup } from '@/hooks/useNeonBackup'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import MdArrowForward from '@/assets/images/md-arrow-forward.svg'
 import TbEyeSearch from '@/assets/images/tb-eye-search.svg'
@@ -21,7 +20,7 @@ import TbFileImport from '@/assets/images/tb-file-import.svg'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const ImportBackupModal = ({ navigation }: TRootStackScreenProps<'ImportBackupModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'importBackupModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'importBackup' })
   const { t: tCommon } = useTranslation('common')
 
   const { handleBrowserFile, handleTryDecryptData, handleImportBackupData } = useNeonImportBackup()
@@ -37,13 +36,13 @@ export const ImportBackupModal = ({ navigation }: TRootStackScreenProps<'ImportB
     navigation.navigate('PasswordModal', {
       title: t('title'),
       buttonProps: {
-        label: t('passwordModal.buttonLabel'),
+        label: t('password.buttonLabel'),
         leftElement: <TbFileImport aria-hidden />,
       },
       inputProps: {
-        label: t('passwordModal.inputLabel'),
+        label: t('password.inputLabel'),
       },
-      description: t('passwordModal.description'),
+      description: t('password.description'),
       async onConfirm(password) {
         const backupData = handleTryDecryptData(backupFile!, password)
         await handleImportBackupData(backupData)
@@ -51,50 +50,50 @@ export const ImportBackupModal = ({ navigation }: TRootStackScreenProps<'ImportB
       onSuccess() {
         navigation.navigate('SuccessModal', {
           title: t('title'),
-          content: t('successModal.description'),
-          buttonProps: {
-            label: t('successModal.submitButtonLabel'),
-          },
+          content: t('success.description'),
+          buttonLabel: t('success.submitButtonLabel'),
         })
       },
     })
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      rightElement={<TwModalLayoutCloseIconButton />}
-      contentContainerClassName="justify-between"
-    >
-      <View>
-        <Text className="font-sans-regular text-lg text-white">{t('description1')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="justify-between">
+        <View>
+          <Text className="font-sans-regular text-lg text-white">{t('description1')}</Text>
 
-        <TwSeparator className="my-7" />
+          <TwSeparator className="my-7" />
 
-        <Text className="font-sans-regular text-lg text-white">{t('description2')}</Text>
+          <Text className="font-sans-regular text-lg text-white">{t('description2')}</Text>
 
-        <TwButton
-          className="mt-6"
-          label={t('locateButtonLabel')}
-          variant="outline"
-          leftElement={<TbEyeSearch aria-hidden />}
-          onPress={handleBrowseClick}
-        />
-      </View>
+          <TwButton
+            className="mt-6"
+            label={t('locateButtonLabel')}
+            variant="outline"
+            leftElement={<TbEyeSearch aria-hidden />}
+            onPress={handleBrowseClick}
+          />
+        </View>
 
-      <View className="mt-7 gap-7">
-        {backupFile && <TwBanner type="success">{t('successFile')}</TwBanner>}
+        <View className="mt-7 gap-7">
+          {backupFile && <TwBanner type="success">{t('successFile')}</TwBanner>}
 
-        <TwSeparator />
+          <TwSeparator />
 
-        <TwButton
-          label={tCommon('general.next')}
-          variant="contained-light"
-          rightElement={<MdArrowForward aria-hidden />}
-          disabled={!backupFile}
-          onPress={handleConfirm}
-        />
-      </View>
-    </TwModalLayout>
+          <TwButton
+            label={tCommon('general.next')}
+            variant="contained-light"
+            rightElement={<MdArrowForward aria-hidden />}
+            disabled={!backupFile}
+            onPress={handleConfirm}
+          />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

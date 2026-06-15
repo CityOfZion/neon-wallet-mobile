@@ -1,5 +1,5 @@
 {
-  "aboutExtraIdToReceiveModal": {
+  "aboutExtraIdToReceive": {
     "title": "Sobre tags de destino",
     "what": {
       "description": "Uma tag de destino ou memo é um identificador único que ajuda a garantir que um depósito de criptomoeda seja creditado ao destinatário correto. Geralmente é necessário ao enviar fundos para serviços ou exchanges que usam endereços de carteira compartilhados.",
@@ -14,25 +14,44 @@
       "title": "Por que eu preciso de um?"
     }
   },
-  "accountAssetActionsModal": {
+  "accountAssetActions": {
     "receiveButtonLabel": "Receber tokens",
     "sendButtonLabel": "Enviar tokens"
   },
-  "accountAssetTokenActionsModal": {
+  "accountAssetTokenActions": {
     "hideButtonLabel": "Ocultar este token",
     "showButtonLabel": "Mostrar este token"
   },
-  "accountQRCodeModal": {
+  "accountQRCode": {
     "address": "Endereço",
     "title": "QR Code da Conta"
   },
-  "accountSelectionModal": {
+  "accountSelection": {
     "accountsAccordionLabel": "Contas",
     "description": "Primeiro selecione a carteira, depois a conta",
     "title": "Selecione uma conta",
     "walletsAccordionLabel": "Carteiras"
   },
-  "addressSelectionModal": {
+  "accountTransactionsContext": {
+    "dateSelection": {
+      "description": "Você precisa selecionar as datas para filtrar as transações.",
+      "title": "Selecione as datas"
+    },
+    "exportButtonLabel": "Exportar",
+    "filtersButtonLabel": "Filtros"
+  },
+  "accountTransactionsUtxoDetails": {
+    "fromLabel": "De",
+    "inputTitle": "{{ value }} entrada",
+    "inputsLabel": "Entradas",
+    "inputsTitle": "{{ value }} entradas",
+    "outputTitle": "{{ value }} saída",
+    "outputsLabel": "Saídas",
+    "outputsTitle": "{{ value }} saídas",
+    "title": "Detalhes da transação",
+    "toLabel": "Para"
+  },
+  "addressSelection": {
     "accountsTabLabel": "Minhas contas",
     "addressTabLabel": "Digite o endereço",
     "buttonLabel": "Usar este endereço",
@@ -43,57 +62,17 @@
     "inputPlaceholder": "Digite o endereço…",
     "title": "Selecione um endereço"
   },
-  "backupAlertModal": {
+  "backupAlert": {
     "buttonLabel": "Fazer backup agora",
     "description1": "Fazer backup de sua carteira é um passo de precaução crucial no gerenciamento de seus ativos.",
     "description2": "Ter um backup evitará que você perca seus fundos caso perca o telefone ou não consiga acessar este aplicativo.",
     "description3": "Para fazer backup, simplesmente feche este painel, clique nos 3 pontos no canto superior direito da tela e selecione Fazer backup da carteira. Você será guiado pelo processo rápido.",
     "title": "Backup da carteira"
   },
-  "blockchainSelectionModal": {
+  "blockchainSelection": {
     "title": "Selecionar blockchain"
   },
-  "bridgeNeo3NeoXAboutModal": {
-    "description": "Faça bridge facilmente de seus ativos cripto entre redes, sem nunca sair da sua carteira.",
-    "explanation": "Blockchains são independentes uma da outra e não podem interagir - é aí que os bridges entram. É semelhante em princípio a trocar dinheiro ao viajar para diferentes países, um bridge permite que você transfira ativos em várias blockchains.",
-    "neonAdvantage": "Fazer bridge de tokens diretamente e imediatamente na NEON é conveniente e permite que você economize tempo e pague taxas mais baixas.",
-    "title": "Sobre bridge de tokens",
-    "warningLabel": "A COZ não é mantenedora deste processo de bridge - Neo Global Development é a mantenedora."
-  },
-  "bridgeNeo3NeoXConfirmationModal": {
-    "bridgeFromLabel": "Bridge de",
-    "bridgeToLabel": "Bridge para",
-    "description": "Por favor, revise os detalhes abaixo e confirme que deseja prosseguir.",
-    "details": "Detalhes da transação",
-    "receivingAddressLabel": "Endereço de recebimento",
-    "sendingAddressLabel": "Endereço de envio",
-    "submitButtonLabel": "Confirmar",
-    "title": "Confirme seu bridge",
-    "tokenLabel": "Token",
-    "totalFeeLabel": "Taxa total",
-    "wantBridgeLabel": "Você quer fazer bridge de"
-  },
-  "bridgeNeo3NeoXDetailsModal": {
-    "bridgeFromLabel": "Bridge de",
-    "bridgeToLabel": "Bridge para",
-    "details": "Detalhes",
-    "errorsByCode": {
-      "FAILED_TO_GET_NONCE": "Falhou ao obter nonce para essa transação",
-      "FAILED_TO_GET_TRANSACTION_BY_NONCE": "Falhou ao obter transação por nonce",
-      "INVALID_TRANSACTION": "A transação não foi confirmada com sucesso pela rede",
-      "NONCE_NOT_FOUND": "Nonce não encontrado para a transação",
-      "TXID_NOT_FOUND": "ID da transação não encontrado",
-      "UNEXPECTED_ERROR": "Erro inesperado ocorreu. Por favor, contate o suporte se o problema persistir."
-    },
-    "helpButtonLabel": "Precisa de ajuda? Converse conosco",
-    "receivingAddressLabel": "Endereço de recebimento",
-    "sendingAddressLabel": "Endereço de envio",
-    "statusLabel": "Status",
-    "steps": ["Enviar", "Concluir"],
-    "title": "Detalhes do seu bridge",
-    "tokenLabel": "Token"
-  },
-  "buyAndSellTokensAboutDataModal": {
+  "buyAndSellTokensAboutData": {
     "description": "Nosso parceiro de on/off ramp mantém apenas uma referência de ID dos seus dados e usa o e-mail que você fornece para atualizá-lo sobre suas vendas e compras.",
     "info": "A COZ não armazena nenhum dos seus dados",
     "labels": {
@@ -109,7 +88,7 @@
       "link": "Sobre o serviço da Unlimit"
     }
   },
-  "buyAndSellTokensAccountsModal": {
+  "buyAndSellTokensAccounts": {
     "description": "Copie o endereço da conta para a qual você deseja que seus tokens comprados sejam transferidos:",
     "labels": {
       "copyAddress": "Copiar endereço da conta",
@@ -120,7 +99,7 @@
     },
     "title": "Suas contas"
   },
-  "buyAndSellTokensInfoModal": {
+  "buyAndSellTokensInfo": {
     "aboutData": "<1>Este processo usa um widget incorporado.</1> Ao comprar e vender tokens, alguns dados pessoais podem ser solicitados para fins de KYC. <2>Transações maiores requerem uma maior quantidade de dados de KYC.</2>",
     "buttons": {
       "aboutData": "Sobre seus dados",
@@ -140,12 +119,12 @@
     },
     "title": "Compra e venda de tokens"
   },
-  "changelogModal": {
+  "changelog": {
     "cozTeam": "- Equipe COZ",
     "thankYouText": "Obrigado por escolher a Neon Wallet Mobile. Sinta-se à vontade para nos contatar através de qualquer um de nossos canais públicos, para que possamos continuar melhorando juntos!",
     "title": "Histórico de Alterações"
   },
-  "connectHardwareBluetoothModal": {
+  "connectHardwareBluetooth": {
     "bluetoothDisabled": {
       "description": "Bluetooth é necessário para parear seu dispositivo. Por favor, ative Bluetooth nas configurações do seu dispositivo",
       "title": "Bluetooth desligado"
@@ -164,13 +143,13 @@
     },
     "title": "Conectar Hardware"
   },
-  "connectHardwareTypeSelectionModal": {
+  "connectHardwareTypeSelection": {
     "bluetoothLabel": "Por Bluetooth",
     "description": "Como você deseja conectar?",
     "title": "Conectar Hardware",
     "usbLabel": "Por USB"
   },
-  "connectHardwareUsbModal": {
+  "connectHardwareUsb": {
     "description1": "Procurando sua carteira",
     "description2": "Escaneando dispositivos conectados…",
     "description3": "Certifique-se de que sua carteira de hardware está desbloqueada, conectada a um app suportado e conectada a este dispositivo",
@@ -180,14 +159,14 @@
     "success": "Carteira de hardware conectada",
     "title": "Conectar Hardware"
   },
-  "createAccountBlockchainSelectionModal": {
+  "createAccountBlockchainSelection": {
     "description": "Selecione a blockchain desejada para sua nova conta",
     "errors": {
       "walletCannotDerivate": "Esta carteira não pode criar contas"
     },
     "title": "Adicionar nova conta"
   },
-  "createBackupModal": {
+  "createBackup": {
     "confirmPasswordLabel": "Confirme sua Senha de Backup",
     "confirmPasswordPlaceholder": "Digite sua senha…",
     "description": "Salve um arquivo de backup no seu telefone que permitirá restaurar sua carteira caso perca acesso ou danifique seu dispositivo.",
@@ -199,28 +178,22 @@
     "passwordLabel": "Criar Senha de Backup",
     "passwordPlaceholder": "Digite sua senha…",
     "submitButtonLabel": "Fazer Backup Agora",
-    "successModal": {
+    "success": {
       "description": "Backup criado com sucesso!",
       "savePasswordButtonLabel": "Salvar QR Code da Senha",
       "submitButtonLabel": "Voltar para Configurações"
     },
     "title": "Backup NEON"
   },
-  "createPasswordModal": {
+  "createPassword": {
     "errors": {
       "passwordsDoNotMatch": "As senhas não correspondem"
     }
   },
-  "currencySelectionModal": {
+  "currencySelection": {
     "title": "Moeda"
   },
-  "dappConnectionDetailsModal": {
-    "accountPanelTitle": "Conta conectada",
-    "expiresAtPanelTitle": "Expira em",
-    "title": "Detalhes de conexão do dApp",
-    "walletPanelTitle": "Carteira conectada"
-  },
-  "dappConnectionModal": {
+  "dappConnection": {
     "accountSelection": {
       "description": "Por favor, selecione a conta que deseja conectar",
       "title": "Seleção de Conta"
@@ -240,20 +213,20 @@
       "title": "Seleção de Carteira"
     }
   },
-  "dappConnectionRequestModal": {
+  "dappConnectionDetails": {
+    "accountPanelTitle": "Conta conectada",
+    "expiresAtPanelTitle": "Expira em",
+    "title": "Detalhes de conexão do dApp",
+    "walletPanelTitle": "Carteira conectada"
+  },
+  "dappConnectionRequest": {
     "messages": {
       "connected": "{{dappName}} agora está conectado."
     },
     "subtitle": "<0>{{dAppName}}</0> quer se conectar à sua carteira",
     "title": "Conectar com um dApp"
   },
-  "dappPermissionContractDetailsModal": {
-    "externalButtonLabel": "Ver no explorador",
-    "hashDetailsHeaderLabel": "Hash",
-    "parametersDetailsLabel": "Parâmetros da solicitação",
-    "title": "Detalhes do contrato"
-  },
-  "dappPermissionModal": {
+  "dappPermission": {
     "customContents": {
       "invokeNeo3": {
         "amountDetailsItemLabel": "Quantidade",
@@ -286,7 +259,13 @@
     },
     "title": "Permitir solicitação do dApp"
   },
-  "dappPermissionSignatureScopeModal": {
+  "dappPermissionContractDetails": {
+    "externalButtonLabel": "Ver no explorador",
+    "hashDetailsHeaderLabel": "Hash",
+    "parametersDetailsLabel": "Parâmetros da solicitação",
+    "title": "Detalhes do contrato"
+  },
+  "dappPermissionSignatureScope": {
     "allowListDetailsHeaderLabel": "Lista de permissão",
     "explanationDetailsHeaderLabel": "Explicação",
     "scopeDetailsHeaderLabel": "Escopo",
@@ -301,14 +280,12 @@
     },
     "title": "Escopo da assinatura"
   },
-  "dateSelectionModal": {
-    "description": "Selecione um período",
+  "dateSelection": {
     "endDateAccordionLabel": "Data de fim",
-    "maxMonthLabel": "(máx. {{months}} meses)",
-    "startDateAccordionLabel": "Data de início",
-    "title": "Selecione uma data"
+    "maxMonthLabel": "(máx. 12 meses)",
+    "startDateAccordionLabel": "Data de início"
   },
-  "editAccountModal": {
+  "editAccount": {
     "accountInput": {
       "placeholder": "Digite um nome para a conta",
       "title": "Nome da conta"
@@ -321,13 +298,13 @@
     "selectPremiumThemesTitle": "Temas premium",
     "title": "Personalizar conta"
   },
-  "editWalletModal": {
+  "editWallet": {
     "invalidName": "O nome deve ter no mínimo 1 caractere e menos de 20 caracteres",
     "nameLabel": "Nome da Carteira",
     "namePlaceholder": "Digite o nome da carteira",
     "title": "Personalizar carteira"
   },
-  "exportFullTransactionsModal": {
+  "exportFullTransactions": {
     "accountLabel": "Conta a exportar…",
     "accountSelectionModalTitle": "Conta a exportar",
     "dateSelectionModalDescription": "Selecione um período para exportar",
@@ -336,7 +313,7 @@
     "errorMessage": "Houve um erro ao tentar exportar seu CSV. Por favor, tente novamente.",
     "exportButtonLabel": "Exportar CSV",
     "formLabel": "Detalhes a exportar",
-    "successModal": {
+    "success": {
       "description": "Suas transações foram exportadas!",
       "detailsExportedAccountLabel": "Conta exportada",
       "detailsSubtitle": "Arquivo CSV",
@@ -353,12 +330,12 @@
     "timePeriodValue": "{{from}} - {{to}}",
     "title": "Exportar"
   },
-  "exportKeyModal": {
+  "exportKey": {
     "details": "DETALHES DA CHAVE",
     "title": "Exportar Chave",
     "unexpectedError": "Erro inesperado ao obter a chave"
   },
-  "hideFraudulentTokenModal": {
+  "hideFraudulentToken": {
     "amountLabel": "Quantidade:",
     "blockchainLabel": "Blockchain:",
     "details": "Detalhes:",
@@ -370,58 +347,197 @@
     "tokenHashLabel": "Hash:",
     "tokenNameLabel": "Nome:"
   },
-  "importBackupModal": {
+  "importBackup": {
     "description1": "No caso de perder acesso à sua carteira, você pode importá-la de um arquivo de backup local. Simplesmente localize seu arquivo de backup local e digite a senha que usou ao criar o arquivo de backup e seu acesso será restaurado.",
     "description2": "Para começar, localize seu arquivo de backup:",
     "locateButtonLabel": "Localizar backup",
-    "passwordModal": {
+    "password": {
       "buttonLabel": "Importar backup",
       "description": "Para importar seu arquivo de backup, por favor, forneça a senha que você usou para criar o backup:",
       "inputLabel": "Senha do Backup Neon"
     },
-    "successFile": "Backup identificado!",
-    "successModal": {
+    "success": {
       "description": "Backup importado com sucesso!",
       "submitButtonLabel": "Voltar para Configurações"
     },
+    "successFile": "Backup identificado!",
     "title": "Importar Backup NEON"
   },
-  "languageSelectionModal": {
+  "importEncryptedKeySelection": {
+    "accountAlreadyExists": "Esta conta já existe",
+    "decryptError": "Senha incorreta",
+    "description": "Selecione a blockchain da chave criptografada que deseja importar",
+    "importEncryptedConfirmPasswordLabel": "Para continuar, você precisará inserir a senha usada para criptografar a chave:",
+    "importEncryptedKeyInputPlaceholder": "Digite a senha",
+    "title": "Importar carteira"
+  },
+  "importMnemonicSelection": {
+    "buttonLabel": "Importar",
+    "foundAccountsMnemonicLabel": "Encontramos a(s) seguinte(s) conta(s) para importar:",
+    "title": "Importar"
+  },
+  "languageSelection": {
     "title": "Idioma"
   },
-  "nodeSelectionModal": {
+  "neo3NeoXBridgeAbout": {
+    "description": "Faça bridge facilmente de seus ativos cripto entre redes, sem nunca sair da sua carteira.",
+    "explanation": "Blockchains são independentes uma da outra e não podem interagir - é aí que os bridges entram. É semelhante em princípio a trocar dinheiro ao viajar para diferentes países, um bridge permite que você transfira ativos em várias blockchains.",
+    "neonAdvantage": "Fazer bridge de tokens diretamente e imediatamente na NEON é conveniente e permite que você economize tempo e pague taxas mais baixas.",
+    "title": "Sobre bridge de tokens",
+    "warningLabel": "A COZ não é mantenedora deste processo de bridge - Neo Global Development é a mantenedora."
+  },
+  "neo3NeoXBridgeConfirmation": {
+    "bridgeFromLabel": "Bridge de",
+    "bridgeToLabel": "Bridge para",
+    "description": "Por favor, revise os detalhes abaixo e confirme que deseja prosseguir.",
+    "details": "Detalhes da transação",
+    "receivingAddressLabel": "Endereço de recebimento",
+    "sendingAddressLabel": "Endereço de envio",
+    "submitButtonLabel": "Confirmar",
+    "title": "Confirme seu bridge",
+    "tokenLabel": "Token",
+    "totalFeeLabel": "Taxa total",
+    "wantBridgeLabel": "Você quer fazer bridge de"
+  },
+  "neo3NeoXBridgeDetails": {
+    "bridgeFromLabel": "Bridge de",
+    "bridgeToLabel": "Bridge para",
+    "details": "Detalhes",
+    "errorsByCode": {
+      "FAILED_TO_GET_NONCE": "Falhou ao obter nonce para essa transação",
+      "FAILED_TO_GET_TRANSACTION_BY_NONCE": "Falhou ao obter transação por nonce",
+      "INVALID_TRANSACTION": "A transação não foi confirmada com sucesso pela rede",
+      "NONCE_NOT_FOUND": "Nonce não encontrado para a transação",
+      "TXID_NOT_FOUND": "ID da transação não encontrado",
+      "UNEXPECTED_ERROR": "Erro inesperado ocorreu. Por favor, contate o suporte se o problema persistir."
+    },
+    "helpButtonLabel": "Precisa de ajuda? Converse conosco",
+    "receivingAddressLabel": "Endereço de recebimento",
+    "sendingAddressLabel": "Endereço de envio",
+    "statusLabel": "Status",
+    "steps": ["Enviar", "Concluir"],
+    "title": "Detalhes do seu bridge",
+    "tokenLabel": "Token"
+  },
+  "neo3VoteCandidateDetails": {
+    "accountCanNotBeWatchTitle": "Use uma conta Neo 3 que não seja watch",
+    "castVoteButtonLabel": "Dar voto para este candidato",
+    "descriptionLabel": "Descrição",
+    "insufficientGasDescription": "Transfira GAS para esta conta, ou mude de conta para prosseguir.",
+    "insufficientGasTitle": "Você tem GAS insuficiente para cobrir a taxa de votação.",
+    "nameLabel": "Candidato",
+    "positionLabel": "Posição atual",
+    "pubKeyLabel": "Chave pública",
+    "selectNeo3AccountTitle": "Selecione uma conta Neo 3 para continuar",
+    "thereIsNoNeoTitle": "Não há NEO nesta conta Neo 3",
+    "title": "Sobre este candidato",
+    "voteAlreadyCastButtonLabel": "Voto já dado para este candidato!",
+    "votesLabel": "Total de votos"
+  },
+  "neo3VoteConfirmation": {
+    "castVoteButtonLabel": "Dar seu voto",
+    "detailsFeeLabel": "Taxa total",
+    "holderDescription": "Como detentor de token, você pode influenciar decisões de protocolo importantes para que a rede tenha um caminho de desenvolvimento que corresponda aos interesses da comunidade.",
+    "messages": {
+      "voteError": "Houve um erro ao votar, por favor, tente novamente"
+    },
+    "notifications": {
+      "voteFailureNotification": {
+        "previewBody": "Não conseguimos verificar a conclusão de seu voto",
+        "title": "Votação falhou"
+      },
+      "voteSuccessNotification": {
+        "previewBody": "Seu voto foi concluído com sucesso",
+        "title": "Votação concluída"
+      }
+    },
+    "successContent": {
+      "successDescription": "Seu voto foi dado!",
+      "successDetailsTitle": "Seu voto",
+      "viewTransactionButtonLabel": "Ver transação"
+    },
+    "summary": {
+      "detailsAccountAddressLabel": "Endereço",
+      "detailsAccountNameLabel": "Nome da conta",
+      "detailsCandidateLabel": "Candidato",
+      "detailsPubKeyLabel": "Chave pública",
+      "detailsVotesLabel": "N. de votos"
+    },
+    "systemDescription": "Pesquisa detalhada de propostas e práticas de votação inteligente são muito importantes. O sistema usa verificação confiável e processos claros que permitem aos indivíduos contribuir significativamente para o crescimento e desenvolvimento do ecossistema NEO.",
+    "title": "Revise e confirme seu voto",
+    "voteDetailsTitle": "Detalhes da votação",
+    "voteErrorMessages": {
+      "canNotPayGasFeeLabel": "Não é possível pagar a taxa de GAS",
+      "noNeoLabel": "Você não tem NEO suficiente para votar com esta conta Neo 3",
+      "watchAccountLabel": "Sua conta Neo 3 está no modo watch"
+    }
+  },
+  "neo3VoteHowItWorks": {
+    "alertLabel": "Se você vender seu NEO, seus votos serão reduzidos pela quantidade que você vendeu e sua recompensa de GAS será reduzida proporcionalmente",
+    "explanationLabel": "A quantidade de NEO que você possui corresponde ao número de votos que você pode dar a um candidato.",
+    "noteDescription": "Ao não votar, você perderá este benefício.",
+    "noteTitle": "Nota:",
+    "title": "Como funciona?",
+    "whyVoteDescription": "Ao votar, você está participando ativamente do ecossistema NEO e é elegível para receber GAS como benefício de detentor.",
+    "whyVoteTitle": "Por que votar?"
+  },
+  "neo3VoteSupportUs": {
+    "aboutNeonWalletDescription": "Como usuário da Neon Wallet e detentor de token, você pode influenciar decisões de protocolo importantes para que a rede tenha um caminho de desenvolvimento que corresponda aos seus interesses.",
+    "cozLogoAlt": "Logo da COZ",
+    "cozTeamLabel": "O Time da COZ.",
+    "dontShowAgainLabel": "Não mostrar novamente",
+    "hiLabel": "Olá!",
+    "importantThingsLabel": "Pesquisa detalhada de propostas e práticas de votação inteligente são muito importantes.",
+    "scanOurWebsite": "Se você não nos conhece, por favor, tire um momento para verificar <1>nosso site</1>.",
+    "skipButtonLabel": "Pular",
+    "thankYouLabel": "Obrigado!",
+    "title": "Quer nos apoiar?",
+    "voteForCozButtonLabel": "Dar seu voto para a COZ",
+    "youCanSupportUsLabel": "Se gosta de usar a Neon ou qualquer um de nossos outros produtos, você pode querer nos apoiar com seu voto para ajudar a impulsionar nosso desenvolvimento."
+  },
+  "networkUrlSelection": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Altura do bloco:",
-    "description": "Se você está tendo problemas de desempenho, tente selecionar um nó customizado abaixo",
+    "description": "Se você estiver enfrentando problemas de desempenho, tente selecionar uma rede personalizada abaixo",
     "latencyLabel": "{{latency}}ms",
-    "nodesListLabel": "Nós",
+    "listLabel": "Lista de URLs de rede",
     "refreshButtonLabel": "Atualizar",
-    "selectAutomaticallyCheckboxLabel": "Selecionar automaticamente",
-    "title": "Seleção de nó"
+    "selectAutomaticallyCheckboxLabel": "Auto",
+    "title": "Seleção de URL de rede"
   },
-  "notificationContextModal": {
+  "notificationContext": {
     "markAsReadButtonLabel": "Marcar como lido",
     "markAsUnreadButtonLabel": "Marcar como não lido"
   },
-  "onboardingBackupMnemonicModal": {
+  "onboardingBackupMnemonic": {
     "backupAndContinueButtonLabel": "Fazer backup e continuar",
-    "description": "Faça backup de sua frase mnemônica. Isso é importante para recuperar sua carteira se você perder o acesso ou desinstalar o aplicativo.",
-    "title": "Backup de frase mnemônica",
-    "warningLabel": "Qualquer pessoa com essa frase pode acessar sua carteira, portanto, mantenha-a segura."
+    "description": "Uma frase mnemônica é <1>essencial</1> para restaurar sua carteira se você perder o acesso ou desinstalar o aplicativo!",
+    "subtitle": "Faça backup da sua mnemônica!",
+    "title": "Sua frase mnemônica",
+    "warningLabel": "Qualquer pessoa com sua frase mnemônica pode acessar sua carteira… mantenha-a segura!"
   },
-  "persistContactAddressModal": {
-    "addressLabel": "Endereço ou alias",
-    "addressPlaceholder": "Digite o endereço ou alias",
-    "chainLabel": "BLOCKCHAIN",
-    "chainPlaceholder": "Selecione a blockchain",
-    "invalidMessage": "Endereço ou alias inválido",
-    "successMessage": "Endereço ou alias válido",
-    "title": {
-      "create": "Adicionar um endereço",
-      "edit": "Editar endereço"
-    }
+  "onboardingImport": {
+    "backupImportDescription": "Você também pode restaurar uma carteira a partir de um arquivo de backup Neon",
+    "importBackupConfirmPassword": {
+      "backupPasswordLabel": "Senha de backup",
+      "backupPasswordPlaceholder": "Digite a senha de backup…",
+      "description": "Para importar seu arquivo de backup, forneça a senha que você usou para criar o backup",
+      "importBackupButtonLabel": "Importar backup",
+      "importBackupTitle": "Importar backup Neon"
+    },
+    "importDescription": "Digite um endereço, chave criptografada, chave privada ou mnemônico: ",
+    "importDetailsLabel": "Detalhes de importação",
+    "importDetailsPlaceholder": "Digite os detalhes…",
+    "locateButtonLabel": "Localizar backup",
+    "messages": {
+      "mnemonicComplete": "Mnemônico completo",
+      "mnemonicIncorrect": "Mnemônico incorreto",
+      "successFile": "Backup localizado!"
+    },
+    "scanButtonLabel": "Escanear QR code",
+    "title": "Importar carteira"
   },
-  "persistContactModal": {
+  "persistContact": {
     "addAddress": "Adicionar endereço",
     "addAnotherAddress": "Adicionar outro endereço",
     "addressLabel": "Endereço",
@@ -437,7 +553,19 @@
       "edit": "Editar contato"
     }
   },
-  "persistNetworkModal": {
+  "persistContactAddress": {
+    "addressLabel": "Endereço ou alias",
+    "addressPlaceholder": "Digite o endereço ou alias",
+    "chainLabel": "Blockchain",
+    "chainPlaceholder": "Selecione a blockchain",
+    "invalidMessage": "Endereço ou alias inválido",
+    "successMessage": "Endereço ou alias válido",
+    "title": {
+      "create": "Adicionar um endereço",
+      "edit": "Editar endereço"
+    }
+  },
+  "persistNetwork": {
     "connected": "Conexão boa",
     "createTitle": "Rede customizada",
     "delete": "Deletar Rede",
@@ -445,7 +573,7 @@
     "inputLabels": {
       "name": "Nome da Rede",
       "nameDescription": "(Máximo 20 Caracteres)",
-      "url": "Nova URL RPC"
+      "url": "Nova URL"
     },
     "inputPlaceholder": {
       "name": "Digite o Nome da Rede",
@@ -455,21 +583,24 @@
     "invalidUrl": "URL inválida",
     "notConnected": "Não conectado"
   },
-  "qrCodeAddressContextModal": {
+  "qrCodeAddressContext": {
     "contactButtonLabel": "Adicionar contato",
     "sendButtonLabel": "Enviar",
     "watchButtonLabel": "Adicionar conta watch"
   },
-  "quickToolsModal": {
-    "bridgeNeo3NeoX": {
-      "title": "Bridge de tokens (Neo 3 e Neo X)"
-    },
+  "quickTools": {
     "buyAndSellTokens": {
       "title": "Comprar + Vender tokens"
     },
     "hardware": {
       "connectTitle": "Conectar carteira de hardware",
       "disconnectTitle": "Desconectar carteira de hardware"
+    },
+    "neo3NeoXBridge": {
+      "title": "Bridge de tokens (Neo 3 e Neo X)"
+    },
+    "neo3Vote": {
+      "title": "Votação Neo 3"
     },
     "qrCode": {
       "title": "Escanear QR code"
@@ -482,22 +613,19 @@
     },
     "swap": {
       "title": "Fazer swap de tokens"
-    },
-    "voteNeo3": {
-      "title": "Votação Neo 3"
     }
   },
-  "removeNfiModal": {
+  "removeNfi": {
     "description": "Se você quiser remover ou substituir seu NFI, escolha uma opção para prosseguir:",
     "haveNfiLabelButton": "Eu <1>tenho</1> meu NFI",
     "noNfiLabelButton": "Eu <1>não tenho</1> meu NFI",
     "title": "Remover NFI"
   },
-  "reorderWalletsModal": {
+  "reorderWallets": {
     "subtitle": "Arraste uma carteira para uma nova posição para reorganizar",
     "title": "Reorganizar carteiras"
   },
-  "securitySelectionModal": {
+  "securitySelection": {
     "alert": "A autenticação oferece uma camada extra de segurança projetada para proteger sua carteira contra o uso não autorizado",
     "description": "Autentique as transações feitas usando esta carteira, garantindo que sejam iniciadas por você, o titular da conta legítimo e não por um fraudador",
     "deviceTypeButtonLabel": "Biometria do dispositivo",
@@ -506,7 +634,7 @@
     "removeNfiButtonLabel": "Remover…",
     "title": "Verificação"
   },
-  "sellTokensDepositModal": {
+  "sellTokensDeposit": {
     "accountSelection": {
       "title": "Selecione a conta"
     },
@@ -563,28 +691,16 @@
     },
     "title": "Fazer um depósito"
   },
-  "sellTokensDepositSuccessModal": {
-    "amount": {
-      "label": "Quantidade"
-    },
-    "details": {
-      "label": "Detalhes da transação"
-    },
-    "recipient": {
-      "copy": "Copiar destinatário",
-      "label": "Destinatário"
-    },
+  "sellTokensDepositSuccess": {
+    "amountLabel": "Quantidade",
+    "detailsLabel": "Detalhes da transação",
+    "recipientLabel": "Destinatário",
     "subtitle": "Seus tokens foram enviados com sucesso!",
     "title": "Fazer um depósito",
-    "transaction": {
-      "label": "Transação"
-    },
-    "transactionHash": {
-      "copy": "Copiar hash da transação",
-      "label": "Hash da transação"
-    }
+    "transactionHashLabel": "Hash da transação",
+    "transactionLabel": "Transação"
   },
-  "sendConfirmModal": {
+  "sendConfirm": {
     "amountLabel": "Valor",
     "confirmButtonLabel": "Confirmar",
     "description": "Por favor, revise os detalhes abaixo e confirme que deseja prosseguir.",
@@ -604,14 +720,30 @@
     "transactionHashLabel": "Hash da transação",
     "transactionLabel": "Transação {{ order }}"
   },
-  "sendTipUncheckedConfirmationModal": {
+  "sendTipUncheckedConfirmation": {
     "description": "A COZ adora criar produtos para nossa comunidade de usuários. Gorjetas são uma ótima forma de mostrar ao time que você aprecia o nosso trabalho e nos permite manter a carteira livre de influências externas. Por que não dar uma moeda aos seus devs?",
     "keepTip": "Manter Gorjeta (Recomendado)",
     "removeTip": "Remover Gorjeta",
     "subtitle": "Benefícios da gorjeta",
     "title": "Gorjeta"
   },
-  "surveyModal": {
+  "stellarPersistTrustline": {
+    "errors": {
+      "invalidLimit": "Limite inválido"
+    },
+    "limitLabel": "Limite (Opcional)",
+    "limitPlaceholder": "Insira um valor limite",
+    "title": "Trustline",
+    "tokenLabel": "Token",
+    "tokenPlaceholder": "Selecione um token"
+  },
+  "stellarTrustilneTokenSelection": {
+    "noTokensFound": "Nenhum token encontrado",
+    "placeholderMessage": "Digite para pesquisar tokens",
+    "searchInputPlaceholder": "Buscar um token",
+    "title": "Trustline"
+  },
+  "survey": {
     "descriptionFeedbackSubmitted": "Agradecemos pelo feedback!",
     "detailsInputLabel": "O que podemos melhorar?",
     "detailsInputPlaceholder": "Adicione mais detalhes aqui…",
@@ -626,12 +758,7 @@
     "title": "Como foi sua experiência?",
     "titleFeedbackSubmitted": "Obrigado!"
   },
-  "swapDetailsLogModal": {
-    "copySwapLog": "Copiar log do swap para a área de transferência",
-    "thereIsNoLog": "Não há log do swap",
-    "title": "Log do swap"
-  },
-  "swapDetailsModal": {
+  "swapDetails": {
     "details": "Detalhes",
     "errors": {
       "initialPart": "Oops! Encontramos um erro:",
@@ -663,102 +790,30 @@
     "unknownTransactionFrom": "Transação de origem desconhecida",
     "unknownTransactionTo": "Transação de destino desconhecida"
   },
-  "swapExplanationModal": {
+  "swapDetailsLog": {
+    "copySwapLog": "Copiar log do swap para a área de transferência",
+    "thereIsNoLog": "Não há log do swap",
+    "title": "Log do swap"
+  },
+  "swapExplanation": {
     "description1": "Troque tokens por outros tokens, entre blockchains, sem usar uma exchange.",
     "description2": "Trocar tokens diretamente e imediatamente na NEON é conveniente e permite que você economize tempo e pague taxas mais baixas.",
     "help": "Precisa de ajuda? Converse conosco",
     "title": "Como o swap funciona?"
   },
-  "tokenSelectionModal": {
+  "tokenSelection": {
     "balanceLabel": "Saldo",
     "emptyList": "Nenhum token",
     "inputPlaceholder": "Procure um token…",
     "title": "Tokens",
     "tokenLabel": "Token"
   },
-  "voteNeo3CandidateDetailsModal": {
-    "accountCanNotBeWatchTitle": "Use uma conta Neo 3 que não seja watch",
-    "castVoteButtonLabel": "Dar voto para este candidato",
-    "descriptionLabel": "Descrição",
-    "insufficientGasDescription": "Transfira GAS para esta conta, ou mude de conta para prosseguir.",
-    "insufficientGasTitle": "Você tem GAS insuficiente para cobrir a taxa de votação.",
-    "nameLabel": "Candidato",
-    "positionLabel": "Posição atual",
-    "pubKeyLabel": "Chave pública",
-    "selectNeo3AccountTitle": "Selecione uma conta Neo 3 para continuar",
-    "thereIsNoNeoTitle": "Não há NEO nesta conta Neo 3",
-    "title": "Sobre este candidato",
-    "voteAlreadyCastButtonLabel": "Voto já dado para este candidato!",
-    "votesLabel": "Total de votos"
-  },
-  "voteNeo3ConfirmationModal": {
-    "castVoteButtonLabel": "Dar seu voto",
-    "detailsFeeLabel": "Taxa total",
-    "holderDescription": "Como detentor de token, você pode influenciar decisões de protocolo importantes para que a rede tenha um caminho de desenvolvimento que corresponda aos interesses da comunidade.",
-    "messages": {
-      "invalidKey": "Sua conta não tem chave",
-      "voteError": "Houve um erro ao votar, por favor, tente novamente"
-    },
-    "notifications": {
-      "voteFailureNotification": {
-        "previewBody": "Não conseguimos verificar a conclusão de seu voto",
-        "title": "Votação falhou"
-      },
-      "voteSuccessNotification": {
-        "previewBody": "Seu voto foi concluído com sucesso",
-        "title": "Votação concluída"
-      }
-    },
-    "successContent": {
-      "successDescription": "Seu voto foi dado!",
-      "successDetailsTitle": "Seu voto",
-      "viewTransactionButtonLabel": "Ver transação"
-    },
-    "summary": {
-      "detailsAccountAddressLabel": "Endereço",
-      "detailsAccountNameLabel": "Nome da conta",
-      "detailsCandidateLabel": "Candidato",
-      "detailsPubKeyLabel": "Chave pública",
-      "detailsVotesLabel": "N. de votos"
-    },
-    "systemDescription": "Pesquisa detalhada de propostas e práticas de votação inteligente são muito importantes. O sistema usa verificação confiável e processos claros que permitem aos indivíduos contribuir significativamente para o crescimento e desenvolvimento do ecossistema NEO.",
-    "title": "Revise e confirme seu voto",
-    "voteDetailsTitle": "Detalhes da votação",
-    "voteErrorMessages": {
-      "canNotPayGasFeeLabel": "Não é possível pagar a taxa de GAS",
-      "noNeoLabel": "Você não tem NEO suficiente para votar com esta conta Neo 3",
-      "watchAccountLabel": "Sua conta Neo 3 está no modo watch"
-    }
-  },
-  "voteNeo3HowItWorksModal": {
-    "alertLabel": "Se você vender seu NEO, seus votos serão reduzidos pela quantidade que você vendeu e sua recompensa de GAS será reduzida proporcionalmente",
-    "explanationLabel": "A quantidade de NEO que você possui corresponde ao número de votos que você pode dar a um candidato.",
-    "noteDescription": "Ao não votar, você perderá este benefício.",
-    "noteTitle": "Nota:",
-    "title": "Como funciona?",
-    "whyVoteDescription": "Ao votar, você está participando ativamente do ecossistema NEO e é elegível para receber GAS como benefício de detentor.",
-    "whyVoteTitle": "Por que votar?"
-  },
-  "voteNeo3SupportUsModal": {
-    "aboutNeonWalletDescription": "Como usuário da Neon Wallet e detentor de token, você pode influenciar decisões de protocolo importantes para que a rede tenha um caminho de desenvolvimento que corresponda aos seus interesses.",
-    "cozLogoAlt": "Logo da COZ",
-    "cozTeamLabel": "O Time da COZ.",
-    "dontShowAgainLabel": "Não mostrar novamente",
-    "hiLabel": "Olá!",
-    "importantThingsLabel": "Pesquisa detalhada de propostas e práticas de votação inteligente são muito importantes.",
-    "scanOurWebsite": "Se você não nos conhece, por favor, tire um momento para verificar <1>nosso site</1>.",
-    "skipButtonLabel": "Pular",
-    "thankYouLabel": "Obrigado!",
-    "title": "Quer nos apoiar?",
-    "voteForCozButtonLabel": "Dar seu voto para a COZ",
-    "youCanSupportUsLabel": "Se gosta de usar a Neon ou qualquer um de nossos outros produtos, você pode querer nos apoiar com seu voto para ajudar a impulsionar nosso desenvolvimento."
-  },
-  "walletContextModal": {
+  "walletContext": {
     "backup": "Fazer backup da carteira",
     "create": "Criar nova carteira",
     "reorder": "Reorganizar carteiras"
   },
-  "walletSelectionModal": {
+  "walletSelection": {
     "description": "Por favor, selecione uma carteira",
     "title": "Seleção de carteira"
   }

@@ -21,17 +21,17 @@ import TbArrowLeft from '@/assets/images/tb-arrow-left.svg'
 
 import type { TDepositActionsData } from './index'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
   baseUrl: string
   hidden: boolean
-  account?: IAccountState
+  account?: TAccount
   setDepositActionsData?: Dispatch<TDepositActionsData | null>
 }
 
 export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDepositActionsData }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokensScreen.iframeContent' })
+  const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokens.iframeContent' })
   const { currency } = useCurrencySelector()
   const navigation = useNavigation()
 
@@ -103,7 +103,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
             <WebView
               source={{ uri: url }}
               nestedScrollEnabled
-              containerClassName="h-full w-full"
+              containerClassName="size-full"
               originWhitelist={['*']}
               onLoad={handleLoad}
               onError={handleError}
@@ -119,7 +119,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
           className="h-11 w-[48%]"
           contentProps={{ className: 'gap-x-2 items-center' }}
           labelProps={{ className: 'w-fit' }}
-          leftElement={<TbArrowLeft aria-hidden className="h-5 min-h-5 w-5 min-w-5 fill-neon" />}
+          leftElement={<TbArrowLeft aria-hidden className="size-5 fill-neon min-size-5" />}
           onPress={handleBack}
         />
 
@@ -130,7 +130,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
           disabled={isIframeLoading}
           contentProps={{ className: 'gap-x-2 items-center' }}
           labelProps={{ className: 'w-fit' }}
-          leftElement={<MdRestartAlt aria-hidden className="h-5 min-h-5 w-5 min-w-5 fill-neon" />}
+          leftElement={<MdRestartAlt aria-hidden className="size-5 fill-neon min-size-5" />}
           onPress={handleRestart}
         />
       </View>

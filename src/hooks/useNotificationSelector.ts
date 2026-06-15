@@ -1,5 +1,7 @@
 import lodash from 'lodash'
 
+import { SelectorHelper } from '@/helpers/SelectorHelper'
+
 import { createAppSelector, useAppSelector } from './useRedux'
 
 import type { TNotification, TNotificationPriority } from '@/types/store'
@@ -13,13 +15,13 @@ const priorityOrder: Record<TNotificationPriority, number> = {
 const orderNotifications = <T extends TNotification>(notifications: T[]): T[] => {
   return lodash.orderBy(
     [...notifications],
-    [item => item.read, item => priorityOrder[item.priority], 'date'],
+    [notification => notification.read, notification => priorityOrder[notification.priority], 'date'],
     ['asc', 'asc', 'desc']
   )
 }
 
 const selectOrderedNotifications = createAppSelector([state => state.notification.data], notifications =>
-  orderNotifications(notifications)
+  SelectorHelper.fallbackToEmptyArray<TNotification>(orderNotifications(notifications))
 )
 
 const selectHasNewNotifications = createAppSelector([state => state.notification.data], notifications =>
@@ -27,31 +29,25 @@ const selectHasNewNotifications = createAppSelector([state => state.notification
 )
 
 const selectUnreadNotifications = createAppSelector([state => state.notification.data], notifications =>
-  orderNotifications(notifications.filter(notification => !notification.read))
+  SelectorHelper.fallbackToEmptyArray<TNotification>(
+    orderNotifications(notifications.filter(notification => !notification.read))
+  )
 )
 
 export const useNotificationsSelector = () => {
-  const { ref, value } = useAppSelector(selectOrderedNotifications)
+  const { value, ref } = useAppSelector(selectOrderedNotifications)
 
-  return {
-    notifications: value,
-    notificationsRef: ref,
-  }
+  return { notifications: value, notificationsRef: ref }
 }
 
 export const useHasNewNotificationsSelector = () => {
-  const { ref, value } = useAppSelector(selectHasNewNotifications)
+  const { value, ref } = useAppSelector(selectHasNewNotifications)
 
-  return {
-    hasNewNotifications: value,
-    hasNewNotificationsRef: ref,
-  }
+  return { hasNewNotifications: value, hasNewNotificationsRef: ref }
 }
 
 export const useUnreadNotificationsSelector = () => {
-  const { ref, value } = useAppSelector(selectUnreadNotifications)
-  return {
-    unreadNotifications: value,
-    unreadNotificationsRef: ref,
-  }
+  const { value, ref } = useAppSelector(selectUnreadNotifications)
+
+  return { unreadNotifications: value, unreadNotificationsRef: ref }
 }

@@ -33,7 +33,7 @@ export const TwSelectButton = ({
       {label && <TwInputLabel label={label} description={labelDescription} />}
 
       <TwButton
-        label={value ?? placeholder}
+        label={value || placeholder}
         variant="contained-darker"
         style={{ boxShadow: undefined }}
         iconsOnEdge

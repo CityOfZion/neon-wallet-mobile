@@ -4,8 +4,7 @@ import { Text, View } from 'react-native'
 
 import { TwButton } from '@/components/TwButton'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import Fa6RegStar from '@/assets/images/fa6-regular-star.svg'
 
@@ -17,7 +16,7 @@ export const SendTipUncheckedConfirmationModal = ({
 }: TRootStackScreenProps<'SendTipUncheckedConfirmationModal'>) => {
   const { onConfirmation } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'sendTipUncheckedConfirmationModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'sendTipUncheckedConfirmation' })
 
   const handlePress = (value: boolean) => {
     navigation.goBack()
@@ -25,20 +24,26 @@ export const SendTipUncheckedConfirmationModal = ({
   }
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton onPress={navigation.goBack} />}>
-      <Image contentFit="contain" className="-mr-12 h-52" source={require('@/assets/images/neo-tipping-logo.png')} />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={navigation.goBack} />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Image contentFit="contain" className="-mr-12 h-52" source={require('@/assets/images/neo-tipping-logo.png')} />
 
-      <View className="mb-4 flex-row justify-center gap-x-2">
-        <Fa6RegStar className="size-6 text-neon" aria-hidden />
-        <Text className="font-sans-medium text-1xl text-white">{t('subtitle')}</Text>
-      </View>
+        <View className="mb-4 flex-row justify-center gap-x-2">
+          <Fa6RegStar className="size-6 text-neon" aria-hidden />
+          <Text className="font-sans-medium text-1xl text-white">{t('subtitle')}</Text>
+        </View>
 
-      <Text className="text-center font-sans-light text-lg text-white">{t('description')}</Text>
+        <Text className="text-center font-sans-light text-lg text-white">{t('description')}</Text>
 
-      <View className="mb-2 mt-auto flex flex-col gap-6">
-        <TwButton variant="contained-light" label={t('keepTip')} onPress={handlePress.bind(null, true)} />
-        <TwButton variant="contained-light" label={t('removeTip')} onPress={handlePress.bind(null, false)} />
-      </View>
-    </TwModalLayout>
+        <View className="mb-2 mt-auto flex flex-col gap-6">
+          <TwButton variant="contained-light" label={t('keepTip')} onPress={handlePress.bind(null, true)} />
+          <TwButton variant="contained-light" label={t('removeTip')} onPress={handlePress.bind(null, false)} />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

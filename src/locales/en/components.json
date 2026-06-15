@@ -8,6 +8,27 @@
     "notFoundLabel": "No accounts found or already exist, check your input and try again later, please.",
     "selectedOfTotal": "{{selectedCount}} selected of {{totalCount}} addresses"
   },
+  "accountTransactionsTransactionCard": {
+    "blockToolTipLabel": "Block: {{ block }}",
+    "bridgeNeo3NeoXButtonLabel": "Bridge",
+    "feeTooltipLabel": "Network fee: {{ networkFee }} | System fee: {{ systemFee }}",
+    "invocationsToolTipLabel": "Invocations: {{ invocations }}",
+    "nftsTooltipLabel": "NFTs: {{ nfts }}",
+    "notificationToolTipLabel": "Notifications: {{ notifications }}",
+    "pendingLabel": "Pending…",
+    "seeOnExplorerButtonLabel": "See on explorer",
+    "swapButtonLabel": "Swap",
+    "totalAmountTooltipLabel": "Total: {{ totalAmount }}",
+    "txIdLabel": "Tx ID:"
+  },
+  "accountTransactionsTransactionDefaultEvent": {
+    "fromLabel": "From",
+    "toLabel": "To",
+    "type": {
+      "nft": "NFT",
+      "token": "Token"
+    }
+  },
   "actionInput": {
     "maxButtonLabel": "Max"
   },
@@ -19,14 +40,22 @@
   "blockchainList": {
     "xExisting": "{{amount}} existing"
   },
-  "nfcModal": {
+  "modalLayout": {
+    "labels": {
+      "closeButton": "Close modal"
+    }
+  },
+  "nfc": {
     "description": "Please tap NFC tags",
     "title": "Ready to Scan"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "Close qrcode scanner",
     "permissionOffMessage": "Camera permission is required to scan QR codes. Please grant permission in your device settings.",
     "permissionOffTitle": "Camera Access Required"
+  },
+  "screenLayout": {
+    "backButtonLabel": "Go back"
   },
   "screenLayoutBars": {
     "customMode": "Custom Network Mode",
@@ -95,11 +124,6 @@
       "clearButton": "Clear input",
       "hideButton": "Hide input",
       "showButton": "Show input"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "Close modal"
     }
   }
 }

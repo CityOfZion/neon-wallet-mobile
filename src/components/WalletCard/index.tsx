@@ -16,7 +16,7 @@ import { AccountCardNoContent } from '../AccountCard/AccountCardNoContent'
 import { WalletCardLabel } from './WalletCardLabel'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 const WalletCardBalanceBar = React.lazy(() =>
   import('./WalletCardBalanceBar').then(module => ({ default: module.WalletCardBalanceBar }))
@@ -29,9 +29,9 @@ export type TWalletCardRef = {
 }
 
 type TProps = {
-  wallet: IWalletState
+  wallet: TWallet
   isInactive?: boolean
-  onPress?: (wallet: IWalletState, ref: TWalletCardRef) => void | Promise<void>
+  onPress?: (wallet: TWallet, ref: TWalletCardRef) => void | Promise<void>
   withBalanceBar?: boolean
   width?: number
   blockchains?: TBlockchainServiceKey[]
@@ -43,10 +43,18 @@ export const WALLET_CARD_HEIGHT = 385
 export const WALLET_CARD_HEIGHT_RATIO = WALLET_CARD_HEIGHT / WALLET_CARD_WIDTH
 
 export const getWalletCardDimensions = (width?: number) => {
-  let newWidth = width ? width : WALLET_CARD_WIDTH
-  newWidth = Math.min(newWidth, Dimensions.get('window').width * 0.9)
+  const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
-  const newHeight = newWidth * WALLET_CARD_HEIGHT_RATIO
+  let newWidth = width ? width : WALLET_CARD_WIDTH
+  newWidth = Math.min(newWidth, windowWidth * 0.9)
+
+  let newHeight = newWidth * WALLET_CARD_HEIGHT_RATIO
+  const maxHeight = windowHeight * 0.45
+
+  if (newHeight > maxHeight) {
+    newHeight = maxHeight
+    newWidth = newHeight / WALLET_CARD_HEIGHT_RATIO
+  }
 
   return {
     width: newWidth,
@@ -151,7 +159,7 @@ const WalletCardComponent = forwardRef<TWalletCardRef, TProps>(
           }}
         >
           <View
-            className="relative h-full w-full items-center justify-center rounded-3xl bg-gray-750"
+            className="relative size-full items-center justify-center rounded-3xl bg-gray-750"
             style={{
               boxShadow:
                 '-1px -1px 6px 0px #00000066 inset, 1px 1px 2px 0px #D6D2D266 inset, 13px 13px 40px 0px #111316E0',

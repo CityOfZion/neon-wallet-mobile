@@ -14,18 +14,18 @@ import { TwInput } from './TwInput'
 import { TwSeparator } from './TwSeparator'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IContactState, TContactAddress } from '@/types/store'
+import type { TContact, TContactAddress } from '@/types/store'
 
 type TAddressItem = TContactAddress & { isSelected: boolean; onPress: () => void }
 
-type TItem = Omit<IContactState, 'addresses'> & {
+type TItem = Omit<TContact, 'addresses'> & {
   addresses: TAddressItem[]
 }
 
 type TProps = {
-  selectedContact?: IContactState
+  selectedContact?: TContact
   selectedContactAddress?: TContactAddress
-  onPress?: (contact?: IContactState, address?: TContactAddress) => void
+  onPress?: (contact?: TContact, address?: TContactAddress) => void
   containerProps?: ViewProps
   inputProps?: TTwInputProps
   blockchains?: TBlockchainServiceKey[]
@@ -46,7 +46,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
             )}
           >
             <View className="flex-shrink flex-grow flex-row items-center gap-3">
-              <TwBlockchainIcon blockchain={contactAddress.blockchain} type="gray" className="mt-0.5 h-3.5 w-3.5" />
+              <TwBlockchainIcon blockchain={contactAddress.blockchain} className="mt-0.5 size-3.5 text-gray-300" />
 
               <Text className="flex-shrink font-sans-medium text-lg text-white" numberOfLines={1}>
                 {item.name}
@@ -129,7 +129,7 @@ export const TwContactList = ({
 
       if (addresses.length === 0) return
 
-      const lastContacts = contactsByFirstLetter.get(key) ?? []
+      const lastContacts = contactsByFirstLetter.get(key) || []
       contactsByFirstLetter.set(key, [
         ...lastContacts,
         {

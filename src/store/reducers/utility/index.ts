@@ -7,15 +7,11 @@ import { createMigrate, getStoredState, persistReducer } from 'redux-persist'
 import { getUtilityMigrations } from './migrations'
 import { utilitySliceReducers } from './reducers'
 
-import type {
-  THiddenTokenByBlockchain,
-  TLastIndexesByWallet,
-  TSwapRecord,
-  TUseTransactionsTransaction,
-} from '@/types/store'
+import type { TUseTransactionsTransaction } from '@/types/hooks'
+import type { THiddenTokenByBlockchain, TLastIndexesByWallet, TSwapRecord } from '@/types/store'
 
-export interface IUtilityReducer {
-  inMemoryData: {
+export type TUtilityReducer = {
+  memoryData: {
     pendingTransactions: TUseTransactionsTransaction[]
     isConnected?: boolean
   }
@@ -32,10 +28,10 @@ export let utilityReducerActions: CaseReducerActions<typeof utilitySliceReducers
 export function getUtilityReducer() {
   const utilityMigrations = getUtilityMigrations()
 
-  const utilityReducerInitialState: IUtilityReducer = {
-    inMemoryData: {
-      isConnected: undefined,
+  const utilityReducerInitialState: TUtilityReducer = {
+    memoryData: {
       pendingTransactions: [],
+      isConnected: undefined,
     },
     data: {
       swapRecords: [],
@@ -45,20 +41,22 @@ export function getUtilityReducer() {
     },
   }
 
-  const utilityReducerConfig: PersistConfig<IUtilityReducer> = {
+  const utilityReducerConfig: PersistConfig<TUtilityReducer> = {
     key: 'utilityReducer',
     storage,
     timeout: 0,
-    blacklist: ['inMemoryData'],
+    blacklist: ['memoryData'],
     migrate: createMigrate(utilityMigrations),
     version: 3,
     getStoredState: async (config: any) => {
       const storedState = await config.storage.getItem(`persist:${config.key}`)
+
       if (storedState) {
         return (await getStoredState(config)) as PersistedState
       }
 
       const accountStore = await storage.getItem('persist:accountReducer')
+
       if (accountStore) {
         const accountStoreJSON = JSON.parse(accountStore)
 

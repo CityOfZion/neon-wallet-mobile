@@ -37,7 +37,7 @@ export const ActionFeeStep = ({
   className,
   iconClassName,
 }: TProps) => {
-  const { t: tCommon } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const { currency } = useCurrencySelector()
   const exchange = useExchange(service ? [{ blockchain: service.name, tokens: [service.feeToken] }] : [])
 
@@ -46,7 +46,7 @@ export const ActionFeeStep = ({
       ? ExchangeHelper.getExchangeConvertedPrice(service.feeToken.hash, service.name, exchange.data)
       : 0
 
-  const fiatFee = NumberHelper.number(fee ?? 0) * convertedFeeTokenPrice
+  const fiatFee = NumberHelper.number(fee || 0) * convertedFeeTokenPrice
 
   return (
     <View className={StyleHelper.mergeStyles('mt-3 rounded bg-gray-700/60 px-1 py-2', className)}>
@@ -58,8 +58,8 @@ export const ActionFeeStep = ({
         {isCalculatingFee ? (
           <Loader />
         ) : (
-          <Text className="max-w-[60%] font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
-            {fee ?? feePlaceholder}
+          <Text className="max-w-[40%] font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
+            {fee || feePlaceholder}
           </Text>
         )}
       </ActionStep>
@@ -72,7 +72,7 @@ export const ActionFeeStep = ({
         {service && !isCalculatingFee && fee && (
           <View className="flex-row">
             <Text className="font-sans-regular text-lg text-white">{service.feeToken.symbol}</Text>
-            <Text className="font-sans-regular text-lg text-gray-100">{` | ${tCommon(`${service.name}.id`)}`}</Text>
+            <Text className="font-sans-regular text-lg text-gray-100">{` | ${tCommonBlockchainServices(`${service.name}.label`)}`}</Text>
           </View>
         )}
       </View>

@@ -14,15 +14,15 @@ import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
 import TbAlertTriangle from '@/assets/images/tb-alert-triangle.svg'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
-interface Props {
-  selectedWalletAccounts: IAccountState[]
+type Props = {
+  selectedWalletAccounts: TAccount[]
 }
 
 export const WalletsScreenWalletInfo = ({ selectedWalletAccounts }: Props) => {
   const { currency } = useCurrencySelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'walletsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'wallets' })
   const balances = useBalances(selectedWalletAccounts)
 
   const showBalanceAlert = balances.data.some(item =>

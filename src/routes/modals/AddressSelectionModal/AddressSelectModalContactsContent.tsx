@@ -1,15 +1,16 @@
 import { useState } from 'react'
 
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
 
 import { TwButton } from '@/components/TwButton'
 import { TwContactList } from '@/components/TwContactList'
 
 import { useNameServiceLazy } from '@/hooks/useNameService'
 
+import { ModalLayout } from '@/layouts/ModalLayout'
+
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IContactState, TContactAddress } from '@/types/store'
+import type { TContact, TContactAddress } from '@/types/store'
 
 type TProps = {
   onSelect: (address: string) => void
@@ -17,14 +18,14 @@ type TProps = {
 }
 
 export const AddressSelectionModalContactsContent = ({ onSelect, blockchain }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'addressSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'addressSelection' })
   const { validateAddressOrNS } = useNameServiceLazy()
 
-  const [selectedContact, setSelectedContact] = useState<IContactState>()
+  const [selectedContact, setSelectedContact] = useState<TContact>()
   const [selectedContactAddress, setSelectedContactAddress] = useState<TContactAddress>()
   const [isLoading, setIsLoading] = useState(false)
 
-  const handlePress = (contact?: IContactState, address?: TContactAddress) => {
+  const handlePress = (contact?: TContact, address?: TContactAddress) => {
     setSelectedContact(contact)
     setSelectedContactAddress(address)
   }
@@ -44,7 +45,7 @@ export const AddressSelectionModalContactsContent = ({ onSelect, blockchain }: T
   }
 
   return (
-    <View className="flex-shrink flex-grow justify-between">
+    <ModalLayout.ViewContent className="justify-between">
       <TwContactList
         selectedContact={selectedContact}
         selectedContactAddress={selectedContactAddress}
@@ -53,12 +54,13 @@ export const AddressSelectionModalContactsContent = ({ onSelect, blockchain }: T
       />
 
       <TwButton
+        className="mt-8"
         variant="contained-light"
         label={t('buttonLabel')}
         disabled={!selectedContact || !selectedContactAddress}
         onPress={handleSelect}
         isLoading={isLoading}
       />
-    </View>
+    </ModalLayout.ViewContent>
   )
 }

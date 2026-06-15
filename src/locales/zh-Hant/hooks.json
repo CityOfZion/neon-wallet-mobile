@@ -17,7 +17,7 @@
   "useItemNfiAuthentication": {
     "authenticateMessage": "掃描您目前的 NFI 物件",
     "confirmLinkMessage": "請重新確認您的 NFI 物件",
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "確認密碼",
       "confirmPasswordInputPlaceholder": "請輸入您的密碼…",
       "description": "如果您遺失了 NFI，此密碼將允許您完成交易或註冊新的 NFI。",
@@ -33,7 +33,7 @@
     "nfcNotEnabledError": "請在裝置設定中啟用 NFC",
     "nfcRequestNotFoundError": "NFC 請求已取消或失敗",
     "noNfiObjectError": "找不到 NFI 物件",
-    "passwordModal": {
+    "password": {
       "alert": "您需要密碼才能變更/移除您的 NFI",
       "description": "如果您遺失了 NFI，請輸入密碼以移除",
       "inputLabel": "輸入密碼",
@@ -54,7 +54,7 @@
     }
   },
   "usePasswordAuthentication": {
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "確認密碼",
       "confirmPasswordInputPlaceholder": "請輸入您的密碼…",
       "description": "此密碼將保護您的錢包並授權操作。",
@@ -66,7 +66,7 @@
       "title": "密碼"
     },
     "getPasswordError": "取得密碼時發生錯誤。請聯繫支援。",
-    "passwordModal": {
+    "password": {
       "alert": "您需要密碼才能授權此操作",
       "description": "為了進行身份驗證，請提供您的密碼",
       "inputLabel": "輸入密碼",
@@ -75,6 +75,18 @@
       "title": "密碼"
     },
     "wrongPasswordError": "密碼錯誤。請再試一次。"
+  },
+  "usePersistTrustlineMutation": {
+    "errorToastMessage": "保存信任線失敗",
+    "failureNotification": {
+      "previewBody": "我們無法確認您的信任線操作已完成",
+      "title": "更改信任線失敗"
+    },
+    "successNotification": {
+      "previewBody": "您的信任線已成功更改",
+      "title": "更改信任線已完成"
+    },
+    "successToastMessage": "信任線已成功保存"
   },
   "useUnclaimedMutation": {
     "errors": {

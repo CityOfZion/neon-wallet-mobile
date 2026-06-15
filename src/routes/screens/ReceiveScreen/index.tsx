@@ -11,28 +11,29 @@ import { ActionStep } from '@/components/ActionStep'
 import { TwButton } from '@/components/TwButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
+import { DateHelper } from '@/helpers/DateHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useActions } from '@/hooks/useActions'
 import { useFileSystem } from '@/hooks/useFileSystem'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbQrCode from '@/assets/images/tb-qrcode.svg'
 import TbStepInto from '@/assets/images/tb-step-into.svg'
 import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
 
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TActionData = {
-  selectedAccount?: IAccountState
+  selectedAccount?: TAccount
 }
 
 const { theme } = resolveConfig(tailwindConfig)
 
 export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'ReceiveScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'receiveScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'receive' })
   const { writeFile } = useFileSystem()
 
   const { actionData, setDataWrapper } = useActions<TActionData>({
@@ -45,80 +46,91 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
     if (!qrRef.current || !actionData.selectedAccount?.address) return
 
     qrRef.current.toDataURL(async (dataURL: string) => {
-      await writeFile(`qr_code_${actionData.selectedAccount?.address}`, dataURL, 'image/png')
+      await writeFile(
+        `NEON-address-${actionData.selectedAccount?.address}-${DateHelper.getNowUnix()}`,
+        dataURL,
+        'image/png'
+      )
+
       ToastHelper.success({ message: t('successfulDownloadMessage') })
     })
   }
 
   return (
-    <TwScreenLayout title={t('title')}>
-      <View className="rounded bg-gray-700/60 px-2 pb-6">
-        <ActionStep
-          title={t('accountStepTitle')}
-          titleClassName="font-sans-bold"
-          leftElement={<TbStepInto aria-hidden className="text-blue" />}
-        >
-          <ActionAddressButton
-            label={t('accountSelectPlaceholder')}
-            address={actionData.selectedAccount?.address}
-            blockchain={actionData.selectedAccount?.blockchain}
-            onPress={() =>
-              navigation.navigate('AccountSelectionModal', {
-                title: t('accountSelectionModalTitle'),
-                onSelect: setDataWrapper('selectedAccount'),
-              })
-            }
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ScrollContent>
+        <View className="rounded bg-gray-700/60 px-2 pb-6">
+          <ActionStep
+            title={t('accountStepTitle')}
+            titleClassName="font-sans-bold"
+            leftElement={<TbStepInto aria-hidden className="text-blue" />}
+          >
+            <ActionAddressButton
+              label={t('accountSelectPlaceholder')}
+              address={actionData.selectedAccount?.address}
+              blockchain={actionData.selectedAccount?.blockchain}
+              onPress={() =>
+                navigation.navigate('AccountSelectionModal', {
+                  title: t('accountSelectionModalTitle'),
+                  onSelect: setDataWrapper('selectedAccount'),
+                })
+              }
+            />
+          </ActionStep>
+
+          <TwSeparator />
+
+          <ActionStep
+            title={t('qrCodeStepTitle')}
+            leftElement={<VscCircleFilled aria-hidden className="size-2" />}
+            className="items-start"
           />
-        </ActionStep>
 
-        <TwSeparator />
-
-        <ActionStep
-          title={t('qrCodeStepTitle')}
-          leftElement={<VscCircleFilled aria-hidden className="h-2 w-2" />}
-          className="items-start"
-        />
-
-        <View className="mt-4 items-center">
-          <View className="items-center justify-center rounded-xl border-2 border-gray-700 bg-asphalt p-4">
-            {actionData.selectedAccount ? (
-              <QRCode
-                value={actionData.selectedAccount?.address}
-                backgroundColor="transparent"
-                color={theme.colors.neon.DEFAULT}
-                getRef={ref => {
-                  qrRef.current = ref
-                }}
-                size={208}
-              />
-            ) : (
-              <TbQrCode aria-hidden className="size-52 stroke-1 text-green-700" />
-            )}
+          <View className="mt-4 items-center">
+            <View className="items-center justify-center rounded-xl border-2 border-gray-700 bg-asphalt p-4">
+              {actionData.selectedAccount ? (
+                <QRCode
+                  value={actionData.selectedAccount?.address}
+                  backgroundColor="transparent"
+                  color={theme.colors.neon.DEFAULT}
+                  getRef={ref => {
+                    qrRef.current = ref
+                  }}
+                  size={208}
+                />
+              ) : (
+                <TbQrCode aria-hidden className="size-52 stroke-1 text-green-700" />
+              )}
+            </View>
           </View>
+
+          <View className="mt-8 items-center justify-center rounded-lg bg-asphalt px-6 py-3">
+            <Text className="text-center font-sans-regular text-[1.125rem] text-gray-300">
+              {actionData.selectedAccount?.address || t('addressInputPlaceholder')}
+            </Text>
+          </View>
+
+          {!actionData.selectedAccount && (
+            <Text className="mt-4 px-6 text-center font-sans-regular text-lg text-gray-300">
+              {t('noAccountSelectAlert')}
+            </Text>
+          )}
         </View>
 
-        <View className="mt-8 items-center justify-center rounded-lg bg-asphalt px-6 py-3">
-          <Text className="text-center font-sans-regular text-[1.125rem] text-gray-300">
-            {actionData.selectedAccount?.address ?? t('addressInputPlaceholder')}
-          </Text>
+        <View className="mt-auto py-4">
+          <TwButton
+            variant="contained-light"
+            label={t('downloadButtonLabel')}
+            leftElement={<TbQrCode aria-hidden />}
+            onPress={handleCopyQRCode}
+            disabled={!actionData.selectedAccount}
+          />
         </View>
-
-        {!actionData.selectedAccount && (
-          <Text className="mt-4 px-6 text-center font-sans-regular text-lg text-gray-300">
-            {t('noAccountSelectAlert')}
-          </Text>
-        )}
-      </View>
-
-      <View className="mt-auto py-4">
-        <TwButton
-          variant="contained-light"
-          label={t('downloadButtonLabel')}
-          leftElement={<TbQrCode aria-hidden />}
-          onPress={handleCopyQRCode}
-          disabled={!actionData.selectedAccount}
-        />
-      </View>
-    </TwScreenLayout>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

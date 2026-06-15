@@ -17,8 +17,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { useActions } from '@/hooks/useActions'
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbPlus from '@/assets/images/tb-plus.svg'
 import TbTrash from '@/assets/images/tb-trash.svg'
@@ -38,12 +37,12 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
   const addresses = route.params?.addresses
 
   const dispatch = useAppDispatch()
-  const { t } = useTranslation('modals', { keyPrefix: 'persistContactModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'persistContact' })
+  const { t: tCommon } = useTranslation('common')
 
   const { actionData, actionState, setData, setError, handleAct } = useActions<TActionData>({
-    addresses: contact?.addresses ?? addresses ?? [],
-    name: contact?.name ?? '',
+    addresses: contact?.addresses || addresses || [],
+    name: contact?.name || '',
   })
 
   const handleAddAddress = () => {
@@ -108,9 +107,9 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
     AlertHelper.show({
       subtitle: t('deleteContactAlert'),
       buttons: [
-        { label: commonT('general.cancel') },
+        { label: tCommon('general.cancel') },
         {
-          label: commonT('general.delete'),
+          label: tCommon('general.delete'),
           onPress: handleConfirmDelete,
         },
       ],
@@ -118,87 +117,87 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
   }
 
   return (
-    <TwModalLayout
-      title={contact ? t('title.edit') : t('title.create')}
-      rightElement={
-        <TwModalLayoutButton
-          label={commonT('general.save')}
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Button
+          position="left"
+          label={tCommon('general.cancel')}
+          onPress={navigation.goBack}
+          colorSchema="white"
+        />
+        <ModalLayout.Title>{contact ? t('title.edit') : t('title.create')}</ModalLayout.Title>
+        <ModalLayout.Button
+          position="right"
+          label={tCommon('general.save')}
           onPress={handleAct(handleSave)}
           disabled={!actionState.isValid || actionData.addresses.length === 0}
         />
-      }
-      leftElement={
-        <TwModalLayoutButton
-          labelProps={{ className: 'text-white' }}
-          label={commonT('general.cancel')}
-          onPress={navigation.goBack}
-        />
-      }
-      contentContainerClassName="justify-between"
-    >
-      <View className="gap-6">
-        <TwInput
-          label={t('nameLabel')}
-          placeholder={t('namePlaceholder')}
-          onChangeText={handleChangeName}
-          value={actionData.name}
-          error={actionState.errors.name}
-        />
-
-        <View>
-          <TwInputLabel label={t('addressLabel')} />
-
-          {actionData.addresses.map((address, index) => (
-            <Fragment key={index}>
-              <TouchableOpacity
-                className="flex-row items-center gap-3 py-3"
-                onPress={() => handleEditAddress(index, address)}
-              >
-                <TwBlockchainIcon blockchain={address.blockchain} className="h-5 w-5" />
-
-                <Text className="flex-1 font-sans-regular text-lg text-neon" numberOfLines={1} ellipsizeMode="middle">
-                  {address.address}
-                </Text>
-
-                <TwIconButton
-                  size="sm"
-                  icon={<TbX aria-hidden className="text-white" />}
-                  onPress={() => handleDeleteAddress(index)}
-                />
-              </TouchableOpacity>
-
-              <TwSeparator />
-            </Fragment>
-          ))}
-
-          <TwButton
-            label={actionData.addresses.length > 0 ? t('addAnotherAddress') : t('addAddress')}
-            variant="outline"
-            className={StyleHelper.mergeStyles('border-dashed', {
-              'mt-6': actionData.addresses.length !== 0,
-            })}
-            leftElement={<TbPlus className="text-neon" aria-hidden />}
-            onPress={handleAddAddress}
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="justify-between">
+        <View className="gap-6">
+          <TwInput
+            label={t('nameLabel')}
+            placeholder={t('namePlaceholder')}
+            onChangeText={handleChangeName}
+            value={actionData.name}
+            error={actionState.errors.name}
           />
+
+          <View>
+            <TwInputLabel label={t('addressLabel')} />
+
+            {actionData.addresses.map((address, index) => (
+              <Fragment key={index}>
+                <TouchableOpacity
+                  className="flex-row items-center gap-3 py-3"
+                  onPress={() => handleEditAddress(index, address)}
+                >
+                  <TwBlockchainIcon blockchain={address.blockchain} className="size-5" />
+
+                  <Text className="flex-1 font-sans-regular text-lg text-neon" numberOfLines={1} ellipsizeMode="middle">
+                    {address.address}
+                  </Text>
+
+                  <TwIconButton
+                    size="sm"
+                    icon={<TbX aria-hidden className="text-white" />}
+                    onPress={() => handleDeleteAddress(index)}
+                  />
+                </TouchableOpacity>
+
+                <TwSeparator />
+              </Fragment>
+            ))}
+
+            <TwButton
+              label={actionData.addresses.length > 0 ? t('addAnotherAddress') : t('addAddress')}
+              variant="outline"
+              className={StyleHelper.mergeStyles('border-dashed', {
+                'mt-6': actionData.addresses.length !== 0,
+              })}
+              leftElement={<TbPlus className="text-neon" aria-hidden />}
+              onPress={handleAddAddress}
+            />
+          </View>
         </View>
-      </View>
 
-      {contact && (
-        <View>
-          <TwSeparator className="my-8" />
+        {contact && (
+          <View>
+            <TwSeparator className="my-8" />
 
-          <Text className="font-sans-bold text-sm text-gray-300">{t('deleteContact')}</Text>
+            <Text className="font-sans-bold text-sm text-gray-300">{t('deleteContact')}</Text>
 
-          <Text className="mb-8 mt-1.5 font-sans-regular text-white">{t('deleteContactSubtitle')}</Text>
+            <Text className="mb-8 mt-1.5 font-sans-regular text-white">{t('deleteContactSubtitle')}</Text>
 
-          <TwButton
-            label={t('deleteButton')}
-            variant="outline"
-            leftElement={<TbTrash aria-hidden className="text-neon" />}
-            onPress={handleDelete}
-          />
-        </View>
-      )}
-    </TwModalLayout>
+            <TwButton
+              label={t('deleteButton')}
+              variant="outline"
+              leftElement={<TbTrash aria-hidden className="text-neon" />}
+              onPress={handleDelete}
+            />
+          </View>
+        )}
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

@@ -1,119 +1,132 @@
 import React from 'react'
 
-import type { TTransactionTokenEvent } from '@cityofzion/blockchain-service'
+import type { TBSToken } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 
+import { Details } from '@/components/Details'
 import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
-import { TwIconButton } from '@/components/TwIconButton'
-import { TwSeparator } from '@/components/TwSeparator'
 
-import { ClipboardHelper } from '@/helpers/ClipboardHelper'
+import { AccountHelper } from '@/helpers/AccountHelper'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
+
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import PiSealCheck from '@/assets/images/pi-seal-check.svg'
-import TbCopy from '@/assets/images/tb-copy.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
+import type { TAccount } from '@/types/store'
 
 export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'SellTokensDepositSuccessModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositSuccessModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositSuccess' })
   const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
-
+  const { accountsMapRef } = useAccountsMapSelector()
   const { transaction } = route.params
-  const event = transaction.events[0] as TTransactionTokenEvent
+
+  let token: TBSToken | undefined
+  let amount: string | undefined
+  let receiverAddress: string | undefined
+  let receiverAccount: TAccount | undefined
+
+  if (transaction.view === 'utxo') {
+    const output = transaction.outputs.at(-1)
+    token = output?.token
+    amount = output?.amount
+    receiverAddress = output?.address
+    receiverAccount = output?.address
+      ? accountsMapRef.current.get(
+          AccountHelper.buildAccountKey({ address: output.address, blockchain: transaction.blockchain })
+        )
+      : undefined
+  } else {
+    const event = transaction.events.at(-1)
+    token = event?.eventType === 'token' ? event.token : undefined
+    amount = event?.amount
+    receiverAddress = event?.to
+    receiverAccount = event?.to
+      ? accountsMapRef.current.get(
+          AccountHelper.buildAccountKey({ address: event.to, blockchain: transaction.blockchain })
+        )
+      : undefined
+  }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      contentContainerClassName="pt-4"
-      titleClassName="text-white"
-      rightElement={<TwModalLayoutCloseIconButton />}
-    >
-      <PiSealCheck aria-hidden className="mx-auto h-24 w-24 text-blue" />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="pt-4">
+        <PiSealCheck aria-hidden className="mx-auto size-24 text-blue" />
 
-      <Text className="mx-12 mt-4 text-center font-sans-medium text-xl text-white">{t('subtitle')}</Text>
+        <Text className="mx-12 mt-4 text-center font-sans-medium text-xl text-white">{t('subtitle')}</Text>
 
-      <View className="mt-6 w-full gap-2 rounded bg-asphalt p-3 py-3">
-        <View className="mb-1 flex-row items-center gap-x-2">
-          <TbReceipt aria-hidden className="h-5 w-5 text-blue" />
-          <Text className="font-sans-regular text-sm text-white">{t('details.label')}</Text>
-        </View>
+        <Details.Root className="mt-6 gap-3">
+          <Details.Header
+            className="mb-1 gap-x-2"
+            labelClassName="font-sans-regular text-sm"
+            leftElement={<TbReceipt aria-hidden className="size-5" />}
+          >
+            {t('detailsLabel')}
+          </Details.Header>
 
-        <TwSeparator />
+          <Details.HeaderSeparator />
 
-        <Text className="mt-4 bg-gray-700/60 px-2 py-1.5 font-sans-medium text-blue">{t('transaction.label')}</Text>
-
-        <View className="flex flex-col gap-y-2 px-2 py-1">
-          <Text className="font-sans-medium text-xs uppercase text-gray-100">{t('recipient.label')}</Text>
-
-          <View className="flex flex-row items-center justify-between gap-x-3">
-            <Text
-              className="max-w-[60%] flex-shrink flex-grow font-sans-regular text-sm text-white"
-              numberOfLines={1}
-              ellipsizeMode="middle"
+          <Details.Panel label={t('transactionLabel')} labelClassName="mt-4 bg-gray-700/60 px-2 font-sans-medium">
+            <Details.Item
+              label={t('recipientLabel')}
+              labelClassName="font-sans-medium text-xs"
+              className="flex-col gap-y-2 py-1"
+              contentClassName="gap-x-3"
+              textToCopy={receiverAddress}
             >
-              {event.to}
-            </Text>
-
-            <TwIconButton
-              aria-label={t('recipient.copy')}
-              size="sm"
-              className="mt-1 h-4 w-4"
-              icon={<TbCopy aria-hidden className="text-neon" />}
-              onPress={() => ClipboardHelper.write(event.to)}
-            />
-          </View>
-        </View>
-
-        <TwSeparator />
-
-        <View className="flex flex-col gap-y-2 px-2 py-1">
-          <Text className="font-sans-medium text-xs uppercase text-gray-100">{t('amount.label')}</Text>
-
-          <View className="flex w-full flex-row items-center gap-x-2">
-            <TwBlockchainIcon blockchain={transaction.blockchain} type="gray" className="h-3 w-3" />
-
-            <Text
-              className="flex-shrink flex-grow font-sans-regular text-sm text-white"
-              numberOfLines={1}
-              ellipsizeMode="middle"
-            >
-              {event.token!.symbol}{' '}
-              <Text className="font-sans-regular text-sm uppercase text-gray-100">
-                | {tCommonBlockchainServices(`${transaction.blockchain}.label`)}
+              <Text className="flex-shrink flex-grow font-sans-regular text-sm text-white">
+                {receiverAccount?.name ? `${receiverAccount.name} (${receiverAccount.address})` : receiverAddress}
               </Text>
-            </Text>
+            </Details.Item>
 
-            <Text className="max-w-[50%] font-sans-regular text-sm text-white" numberOfLines={1}>
-              {event.amount}
-            </Text>
-          </View>
-        </View>
+            <Details.ItemSeparator />
 
-        <TwSeparator />
+            <Details.Item
+              label={t('amountLabel')}
+              labelClassName="font-sans-medium text-xs"
+              className="flex-col gap-y-2 py-1"
+              contentClassName="justify-start w-full"
+            >
+              <TwBlockchainIcon blockchain={transaction.blockchain} className="size-3 text-gray-300" />
 
-        <View className="flex flex-col gap-y-2 px-2 py-1">
-          <Text className="font-sans-medium text-xs uppercase text-gray-100">{t('transactionHash.label')}</Text>
+              <Text
+                className="flex-shrink flex-grow font-sans-regular text-sm text-white"
+                ellipsizeMode="middle"
+                numberOfLines={1}
+              >
+                {token?.symbol}
+                <Text className="font-sans-regular text-sm uppercase text-gray-100">{` | ${tCommonBlockchainServices(`${transaction.blockchain}.label`)}`}</Text>
+              </Text>
 
-          <View className="flex w-full flex-row items-center gap-x-3">
-            <Text className="flex-shrink flex-grow break-all font-sans-regular text-sm text-white">
-              {transaction.txId}
-            </Text>
+              <Text className="max-w-[50%] font-sans-regular text-sm text-white" numberOfLines={1}>
+                {amount}
+              </Text>
+            </Details.Item>
 
-            <TwIconButton
-              aria-label={t('transactionHash.copy')}
-              size="sm"
-              className="mt-1 h-4 w-4"
-              icon={<TbCopy aria-hidden className="text-neon" />}
-              onPress={() => ClipboardHelper.write(transaction.txId)}
-            />
-          </View>
-        </View>
-      </View>
-    </TwModalLayout>
+            <Details.ItemSeparator />
+
+            <Details.Item
+              label={t('transactionHashLabel')}
+              labelClassName="font-sans-medium text-xs"
+              className="flex-col gap-y-2 py-1"
+              contentClassName="gap-x-3"
+              textToCopy={transaction.txId}
+            >
+              <Text className="flex-shrink flex-grow break-all font-sans-regular text-sm text-white">
+                {transaction.txId}
+              </Text>
+            </Details.Item>
+          </Details.Panel>
+        </Details.Root>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

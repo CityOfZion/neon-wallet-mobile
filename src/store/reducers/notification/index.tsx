@@ -9,7 +9,7 @@ import { notificationSliceReducers } from './reducers'
 
 import type { TNotification } from '@/types/store'
 
-export interface INotificationReducer {
+export type TNotificationReducer = {
   data: TNotification[]
 }
 
@@ -18,11 +18,11 @@ export let notificationReducerActions: CaseReducerActions<typeof notificationSli
 export function getNotificationReducer() {
   const notificationMigrations = getNotificationMigrations()
 
-  const notificationReducerInitialState: INotificationReducer = {
+  const notificationReducerInitialState: TNotificationReducer = {
     data: [],
   }
 
-  const notificationReducerConfig: PersistConfig<INotificationReducer> = {
+  const notificationReducerConfig: PersistConfig<TNotificationReducer> = {
     key: 'notificationReducer',
     storage,
     timeout: 0,

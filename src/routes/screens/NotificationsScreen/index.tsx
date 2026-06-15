@@ -22,7 +22,7 @@ import { useNotificationsSelector } from '@/hooks/useNotificationSelector'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdCircleMedium from '@/assets/images/md-circle-medium.svg'
 import MdMoreVert from '@/assets/images/md-more-vert.svg'
@@ -34,12 +34,12 @@ import { functionByNotificationActionType } from './functionByNotificationAction
 
 import { notificationReducerActions } from '@/store/reducers/notification'
 import type { TMoreStackScreenProps } from '@/types/stacks'
-import type { IAccountState, TNotification, TNotificationPriority } from '@/types/store'
+import type { TAccount, TNotification, TNotificationPriority } from '@/types/store'
 
 type TItem = {
   notification: TNotification
   localizedDate: string
-  relatedAccount?: IAccountState
+  relatedAccount?: TAccount
   onPress(notification: TNotification): void
   onMorePress(notification: TNotification): void
 }
@@ -65,16 +65,16 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
     >
       {cloneElement(icon, {
         'aria-hidden': true,
-        className: StyleHelper.mergeStyles(icon.props?.className, 'w-5 h-5 mt-7', {
+        className: StyleHelper.mergeStyles(icon.props?.className, 'size-5 mt-7', {
           'text-gray-300': item.notification.read,
         }),
       })}
 
       <View className="ml-3 w-full flex-shrink">
         <View className="mb-0.5 flex-row items-center gap-2.5">
-          <Text className="text-md font-sans-regular text-gray-300">{item.localizedDate}</Text>
+          <Text className="font-sans-regular text-base text-gray-300">{item.localizedDate}</Text>
 
-          <Text className="text-md rounded-full bg-gray-800 px-2.5 py-0.5 font-sans-regular capitalize text-gray-300">
+          <Text className="rounded-full bg-gray-800 px-2.5 py-0.5 font-sans-regular text-base capitalize text-gray-300">
             {item.notification.provider}
           </Text>
         </View>
@@ -102,7 +102,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
           <View className="flex-row gap-2.5">
             {item.relatedAccount && (
               <View className="flex-1 flex-row">
-                <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notificationsScreen.relatedAccountLabel')} `}</Text>
+                <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notifications.relatedAccountLabel')} `}</Text>
 
                 <Text className="flex-shrink font-sans-regular text-sm text-gray-300" numberOfLines={1}>
                   {item.relatedAccount.name}
@@ -111,7 +111,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
             )}
 
             <View className="flex-1 flex-row">
-              <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notificationsScreen.relatedAddressLabel')} `}</Text>
+              <Text className="font-sans-regular text-sm text-gray-300">{`${t('screens:notifications.relatedAddressLabel')} `}</Text>
 
               <Text
                 className="w-12 flex-shrink font-sans-regular text-sm text-gray-300"
@@ -126,7 +126,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
       </View>
 
       <TwIconButton
-        aria-label={t('screens:notificationsScreen.actionsButtonLabel')}
+        aria-label={t('screens:notifications.actionsButtonLabel')}
         icon={<MdMoreVert className="text-gray-100" aria-hidden />}
         onPress={item.onMorePress.bind(null, item.notification)}
       />
@@ -135,7 +135,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
 }
 
 export const NotificationsScreen = ({ navigation }: TMoreStackScreenProps<'NotificationsScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'notificationsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'notifications' })
   const { notifications } = useNotificationsSelector()
   const { accounts } = useAccountsSelector()
   const { language } = useLanguageSelector()
@@ -200,24 +200,30 @@ export const NotificationsScreen = ({ navigation }: TMoreStackScreenProps<'Notif
   }
 
   return (
-    <TwScreenLayout title={t('title')} contentContainerClassName="items-center" withoutScroll onBack={handleBack}>
-      {!items.length ? (
-        <Fragment>
-          <TbBell className="mt-20 h-28 w-28 stroke-1 text-gray-300" aria-hidden />
-          <Text className="mt-7 font-sans-medium text-2xl text-white">{t('emptyListTitle')}</Text>
-          <Text className="mt-3.5 font-sans-regular text-lg text-gray-100">{t('emptyListBody')}</Text>
-        </Fragment>
-      ) : (
-        <Animated.FlatList
-          showsVerticalScrollIndicator={false}
-          itemLayoutAnimation={LinearTransition}
-          className="w-full"
-          data={items}
-          ItemSeparatorComponent={TwSeparator}
-          keyExtractor={item => item.notification.id}
-          renderItem={renderItem}
-        />
-      )}
-    </TwScreenLayout>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton onPress={handleBack} />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent className="items-center">
+        {!items.length ? (
+          <Fragment>
+            <TbBell className="mt-20 size-28 stroke-1 text-gray-300" aria-hidden />
+            <Text className="mt-7 font-sans-medium text-2xl text-white">{t('emptyListTitle')}</Text>
+            <Text className="mt-3.5 font-sans-regular text-lg text-gray-100">{t('emptyListBody')}</Text>
+          </Fragment>
+        ) : (
+          <Animated.FlatList
+            showsVerticalScrollIndicator={false}
+            itemLayoutAnimation={LinearTransition}
+            className="w-full"
+            data={items}
+            ItemSeparatorComponent={TwSeparator}
+            keyExtractor={item => item.notification.id}
+            renderItem={renderItem}
+          />
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

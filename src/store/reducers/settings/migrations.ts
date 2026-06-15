@@ -140,5 +140,26 @@ export function getSettingsMigrations() {
         surveyInfo: { status: 'not-submitted', updatedAt: Date.now() },
       },
     }),
+    12: (state: any) => ({
+      ...state,
+      data: {
+        ...state.data,
+        customNetworksByBlockchain: {
+          ...state.data.customNetworksByBlockchain,
+          ethereum: [],
+          polygon: [],
+          bitcoin: [],
+          stellar: [],
+        },
+        selectedNetworkByBlockchain: {
+          ...state.data.selectedNetworkByBlockchain,
+          ethereum: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.ethereum.defaultNetwork,
+          polygon: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.polygon.defaultNetwork,
+          bitcoin: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.bitcoin.defaultNetwork,
+          stellar: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.stellar.defaultNetwork,
+        },
+        canShowNeo3VoteSupportUsModal: true,
+      },
+    }),
   }
 }

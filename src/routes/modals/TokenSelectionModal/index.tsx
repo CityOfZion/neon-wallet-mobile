@@ -14,8 +14,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useBalance } from '@/hooks/useBalances'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TTokenSelectionModalToken } from '@/types/modals'
 import type { TRootStackScreenProps } from '@/types/stacks'
@@ -55,7 +54,7 @@ const renderItem: ListRenderItem<TItem> = ({ item, index }) => {
           ellipsizeMode="tail"
           numberOfLines={1}
         >
-          {item.amount ?? '0.00'}
+          {item.amount || '0.00'}
         </Text>
       )}
     </Pressable>
@@ -63,7 +62,7 @@ const renderItem: ListRenderItem<TItem> = ({ item, index }) => {
 }
 
 export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps<'TokenSelectionModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'tokenSelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'tokenSelection' })
   const { onSelect, tokens, account, blockchain, title, selectedToken } = route.params
   const hideBalance = !account
   const balance = useBalance(hideBalance ? undefined : account)
@@ -103,7 +102,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
       filtered.push(item)
     })
 
-    filtered.sort((a, b) => NumberHelper.number(a.amount ?? 0) - NumberHelper.number(b.amount ?? 0))
+    filtered.sort((a, b) => NumberHelper.number(a.amount || 0) - NumberHelper.number(b.amount || 0))
 
     return filtered
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,52 +119,59 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
   }, [filter, filteredAndSortedTokens])
 
   return (
-    <TwModalLayout title={title ?? t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      <TwInput
-        className="placeholder:text-neon"
-        placeholder={t('inputPlaceholder')}
-        containerProps={{
-          className: 'mt-6 mx-4.5',
-        }}
-        value={filter}
-        disabled={isLoading || filteredAndSortedTokens.length === 0}
-        onChangeText={setFilter}
-        clearable
-        autoCapitalize="none"
-      />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title className="text-xl">{title || t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
 
-      <Skeleton.Root loading={isLoading} className="mt-9">
-        <Skeleton.Group>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton.Item key={`token-skeleton-${index}`} className="h-12 w-full rounded-md" />
-          ))}
-        </Skeleton.Group>
+      <ModalLayout.ViewContent>
+        <TwInput
+          className="placeholder:text-neon"
+          placeholder={t('inputPlaceholder')}
+          containerProps={{
+            className: 'mt-4 mx-4.5',
+          }}
+          value={filter}
+          disabled={isLoading || filteredAndSortedTokens.length === 0}
+          onChangeText={setFilter}
+          clearable
+          autoCapitalize="none"
+        />
 
-        <Skeleton.Content>
-          <FlatList
-            className="w-full"
-            data={filteredTokensByText}
-            keyExtractor={(item, index) => `${item.symbol}-${index}`}
-            renderItem={renderItem}
-            getItemLayout={(_data, index) => ({ length: 52, offset: 52 * index, index })}
-            removeClippedSubviews
-            initialNumToRender={15}
-            showsVerticalScrollIndicator={false}
-            windowSize={11}
-            ListHeaderComponent={
-              filteredTokensByText.length > 0 ? (
-                <View className="flex-row justify-between px-4.5">
-                  <Text className="font-sans-bold text-sm text-gray-300">{t('tokenLabel')}</Text>
-                  {!hideBalance && <Text className="font-sans-bold text-sm text-gray-300">{t('balanceLabel')}</Text>}
-                </View>
-              ) : undefined
-            }
-            ListEmptyComponent={
-              <Text className="mt-5 text-center font-sans-medium text-lg text-white">{t('emptyList')}</Text>
-            }
-          />
-        </Skeleton.Content>
-      </Skeleton.Root>
-    </TwModalLayout>
+        <Skeleton.Root loading={isLoading} className="mt-8 flex-shrink">
+          <Skeleton.Group>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton.Item key={`token-skeleton-${index}`} className="h-12 w-full rounded-md" />
+            ))}
+          </Skeleton.Group>
+
+          <Skeleton.Content>
+            <FlatList
+              className="w-full"
+              data={filteredTokensByText}
+              keyExtractor={(item, index) => `${item.symbol}-${index}`}
+              renderItem={renderItem}
+              getItemLayout={(_data, index) => ({ length: 52, offset: 52 * index, index })}
+              removeClippedSubviews
+              initialNumToRender={15}
+              showsVerticalScrollIndicator={false}
+              windowSize={11}
+              ListHeaderComponent={
+                filteredTokensByText.length > 0 ? (
+                  <View className="mb-1 flex-row justify-between px-4.5">
+                    <Text className="font-sans-bold text-sm text-gray-300">{t('tokenLabel')}</Text>
+                    {!hideBalance && <Text className="font-sans-bold text-sm text-gray-300">{t('balanceLabel')}</Text>}
+                  </View>
+                ) : undefined
+              }
+              ListEmptyComponent={
+                <Text className="mt-5 text-center font-sans-medium text-lg text-white">{t('emptyList')}</Text>
+              }
+            />
+          </Skeleton.Content>
+        </Skeleton.Root>
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

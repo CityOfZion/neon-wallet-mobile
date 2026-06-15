@@ -14,8 +14,8 @@ type TProps = {
 }
 
 export const DappPermissionSuccessContent = ({ response }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal.successContent' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission.successContent' })
+  const { t: tCommon } = useTranslation('common')
 
   const stringifiedResponse = typeof response === 'string' ? response : JSON.stringify(response, null, 2)
 
@@ -29,7 +29,7 @@ export const DappPermissionSuccessContent = ({ response }: TProps) => {
             <Text className="font-sans-bold uppercase text-gray-300">{t('resultBoxLabel')}</Text>
 
             <TwIconButton
-              aria-label={commonT('general.copy')}
+              aria-label={tCommon('general.copy')}
               icon={<TbCopy className="text-neon" aria-hidden />}
               onPress={() => ClipboardHelper.write(stringifiedResponse)}
             />

@@ -5,6 +5,7 @@ import { Text, View } from 'react-native'
 import type { ViewProps } from 'react-native-svg/lib/typescript/fabric/utils'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
@@ -22,6 +23,7 @@ type TPanelProps = { label?: string; labelClassName?: string } & ViewProps
 
 type TItemProps = {
   label?: string | JSX.Element
+  labelClassName?: string
   description?: string | JSX.Element
   textToCopy?: string
   contentClassName?: string
@@ -53,7 +55,7 @@ const Header = ({ leftElement, rightElement, children, className, labelClassName
         })}
 
       <View className="flex-grow">
-        {typeof children === 'string' ? (
+        {ElementHelper.isTextContentValid(children) ? (
           <Text
             className={StyleHelper.mergeStyles('font-sans-medium text-base text-white', labelClassName)}
             role="heading"
@@ -103,38 +105,50 @@ const Panel = ({ className, children, label, labelClassName, ...props }: TPanelP
   )
 }
 
-const Item = ({ label, className, children, description, textToCopy, contentClassName, ...props }: TItemProps) => {
+const Item = ({
+  label,
+  labelClassName,
+  className,
+  children,
+  description,
+  textToCopy,
+  contentClassName,
+  ...props
+}: TItemProps) => {
   const { t: tCommon } = useTranslation('common')
 
   return (
     <View className={StyleHelper.mergeStyles('w-full gap-2 px-2', className)} role="listitem" {...props}>
       {label && (
-        <View className="flex-row items-center justify-between gap-x-2">
-          {typeof label === 'object' ? (
-            label
-          ) : (
-            <Text className="font-sans-bold text-sm uppercase text-gray-100" accessibilityRole="text">
+        <View className="flex flex-row items-center justify-between gap-x-2">
+          {ElementHelper.isTextContentValid(label) ? (
+            <Text
+              className={StyleHelper.mergeStyles('font-sans-bold text-sm uppercase text-gray-100', labelClassName)}
+              accessibilityRole="text"
+            >
               {label}
             </Text>
+          ) : (
+            label
           )}
 
-          {typeof description === 'object'
-            ? description
-            : description && (
-                <Text className="font-sans-medium text-sm uppercase text-gray-100" accessibilityRole="text">
-                  {description}
-                </Text>
-              )}
+          {ElementHelper.isTextContentValid(description) ? (
+            <Text className="font-sans-medium text-sm uppercase text-gray-100" accessibilityRole="text">
+              {description}
+            </Text>
+          ) : (
+            description
+          )}
         </View>
       )}
 
-      <View className={StyleHelper.mergeStyles('flex-row items-center justify-between gap-x-2', contentClassName)}>
-        {typeof children === 'object' ? (
-          children
-        ) : (
+      <View className={StyleHelper.mergeStyles('flex flex-row items-center justify-between gap-x-2', contentClassName)}>
+        {ElementHelper.isTextContentValid(children) ? (
           <Text className="w-[85%] flex-shrink font-sans-medium text-base text-white" accessibilityRole="text">
             {children}
           </Text>
+        ) : (
+          children
         )}
 
         {textToCopy && (

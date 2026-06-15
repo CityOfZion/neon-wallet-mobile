@@ -12,17 +12,17 @@ import { TwBlockchainIcon } from './TwBlockchainIcon'
 import { TwSeparator } from './TwSeparator'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IAccountState, IWalletState, TAccountWithWallet } from '@/types/store'
+import type { TAccount, TAccountWithWallet, TWallet } from '@/types/store'
 
-type TItem = IAccountState & {
-  wallet: IWalletState
+type TItem = TAccount & {
+  wallet: TWallet
   isSelected: boolean
   onPress: () => void
 }
 
 type TProps = {
-  onPress: (account: IAccountState) => void
-  selectedAccount?: IAccountState | null
+  onPress: (account: TAccount) => void
+  selectedAccount?: TAccount | null
   blockchains?: TBlockchainServiceKey[]
   accountsWithWallet?: TAccountWithWallet[]
 } & Omit<FlatListProps<TItem>, 'data' | 'renderItem'>
@@ -39,7 +39,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
       )}
     >
       <View className="flex-shrink flex-grow flex-row items-center gap-3">
-        <TwBlockchainIcon blockchain={item.blockchain} type="gray" className="mt-0.5 h-3.5 w-3.5" />
+        <TwBlockchainIcon blockchain={item.blockchain} className="mt-0.5 size-3.5 text-gray-300" />
 
         <Text className="flex-shrink font-sans-medium text-lg text-white" numberOfLines={1} ellipsizeMode="middle">
           {item.address}
@@ -47,7 +47,10 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
       </View>
 
       <View className="min-w-[26%] flex-shrink flex-row items-center">
-        <Text className="font-sans-regular text-sm uppercase text-gray-100">{item.name}</Text>
+        <Text className="font-sans-regular text-sm uppercase text-gray-100" numberOfLines={1} ellipsizeMode="head">
+          {item.name}
+        </Text>
+
         <Text
           className="flex-shrink font-sans-regular text-sm uppercase text-gray-300"
           numberOfLines={1}
@@ -65,7 +68,7 @@ export const TwAccountList = ({ onPress, selectedAccount, blockchains, accountsW
   const { t } = useTranslation('components', { keyPrefix: 'twAccountList' })
 
   const items = useMemo(() => {
-    const accountsWithWalletsToFilter = accountsWithWallet ?? internalAccountsWithWallet
+    const accountsWithWalletsToFilter = accountsWithWallet || internalAccountsWithWallet
     const filtered: TItem[] = []
 
     accountsWithWalletsToFilter.forEach(account => {

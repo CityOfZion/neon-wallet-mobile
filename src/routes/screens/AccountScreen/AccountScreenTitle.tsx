@@ -5,14 +5,14 @@ import { Skeleton } from '@/components/Skeleton'
 
 import { useBlockHeightQuery } from '@/hooks/useBlockHeightQuery'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
 }
 
 export const AccountScreenTitle = ({ account: { blockchain } }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'accountScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'account' })
   const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const { data, isLoading } = useBlockHeightQuery(blockchain)
 

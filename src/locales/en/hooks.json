@@ -17,7 +17,7 @@
   "useItemNfiAuthentication": {
     "authenticateMessage": "Scan your CURRENT NFI object",
     "confirmLinkMessage": "Please re-confirm your NFI object",
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "Confirm your passcode",
       "confirmPasswordInputPlaceholder": "Enter your passcode…",
       "description": "If you lose your NFI, this passcode will allow you to complete transactions or register a new NFI.",
@@ -33,7 +33,7 @@
     "nfcNotEnabledError": "Please enable NFC in your device settings",
     "nfcRequestNotFoundError": "NFC request cancelled or failed",
     "noNfiObjectError": "No NFI object found",
-    "passwordModal": {
+    "password": {
       "alert": "You need a passcode to change/remove your NFI",
       "description": "If you’ve lost your NFI, enter your passcode to remove it",
       "inputLabel": "Enter passcode",
@@ -54,7 +54,7 @@
     }
   },
   "usePasswordAuthentication": {
-    "createPasswordModal": {
+    "createPassword": {
       "confirmPasswordInputLabel": "Confirm your password",
       "confirmPasswordInputPlaceholder": "Enter your password…",
       "description": "This password will allow you to protect your wallet and authorize actions.",
@@ -66,7 +66,7 @@
       "title": "Password"
     },
     "getPasswordError": "Error to get the password. Please contact support.",
-    "passwordModal": {
+    "password": {
       "alert": "You need a passcode to authorize this action",
       "description": "In order to authenticate, please provide your password",
       "inputLabel": "Enter password",
@@ -75,6 +75,18 @@
       "title": "Password"
     },
     "wrongPasswordError": "Wrong password. Please try again."
+  },
+  "usePersistTrustlineMutation": {
+    "errorToastMessage": "Failed to persist trustline",
+    "failureNotification": {
+      "previewBody": "We couldn't verify the completion of your trustline",
+      "title": "Change Trustline failed"
+    },
+    "successNotification": {
+      "previewBody": "Your trustline has been changed successfully",
+      "title": "Change Trustline completed"
+    },
+    "successToastMessage": "Trustline persisted successfully"
   },
   "useUnclaimedMutation": {
     "errors": {

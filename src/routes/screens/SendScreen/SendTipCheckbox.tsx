@@ -1,4 +1,4 @@
-import { BSBigNumberHelper, type TBSToken } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, type TBSToken } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import * as CheckboxPrimitive from '@rn-primitives/checkbox'
 import { useTranslation } from 'react-i18next'
@@ -33,7 +33,7 @@ export const SendTipCheckbox = ({
   onCheckChange,
 }: TProps) => {
   const navigation = useNavigation()
-  const { t } = useTranslation('screens', { keyPrefix: 'sendScreen.tipCheckbox' })
+  const { t } = useTranslation('screens', { keyPrefix: 'send.tipCheckbox' })
   const { currency } = useCurrencySelector()
 
   const isInternalDisabled = isDisabled || isLoading
@@ -72,7 +72,7 @@ export const SendTipCheckbox = ({
       <View className="-mt-1 flex flex-1 gap-x-2">
         <Text className="font-sans-regular text-lg text-neon">
           {t('tipCheckboxLabel', {
-            amount: BSBigNumberHelper.format(amountBn, { decimals: tokenSymbol?.decimals }),
+            amount: new BSBigHumanAmount(amountBn, tokenSymbol?.decimals).toFormatted(),
             tokenSymbol: tokenSymbol?.symbol,
             fiatAmount: CurrencyHelper.format(fiatPriceBn.toFixed(), { currency, maximumFractionDigits: 2 }),
           })}

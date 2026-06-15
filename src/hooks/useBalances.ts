@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import type { QueryClient } from '@tanstack/react-query'
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { cloneDeep } from 'lodash'
@@ -8,7 +8,6 @@ import { match } from 'ts-pattern'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ExchangeHelper } from '@/helpers/ExchangeHelper'
-import { NumberHelper } from '@/helpers/NumberHelper'
 import { TokenHelper } from '@/helpers/TokenHelper'
 
 import { useCurrencyRatio } from './useCurrencyRatio'
@@ -33,11 +32,18 @@ export function buildQueryKeyBalance(
   address: string,
   blockchain: TBlockchainServiceKey,
   network: TNetwork,
-  currency?: TCurrency
+  currency?: TCurrency,
+  hasCurrencyRatio?: boolean
 ) {
   const key: any[] = ['balance', address, blockchain, network]
 
-  if (currency) key.push(currency)
+  if (currency) {
+    key.push(currency)
+
+    if (hasCurrencyRatio !== undefined) {
+      key.push(hasCurrencyRatio)
+    }
+  }
 
   return key
 }
@@ -64,8 +70,9 @@ const fetchBalance = async (
           exchange
         )
 
-        const amount = BSBigNumberHelper.format(balance.amount, { decimals: balance.token.decimals })
-        const amountNumber = NumberHelper.number(amount)
+        const amountBn = new BSBigHumanAmount(balance.amount, balance.token.decimals)
+        const amount = amountBn.toFormatted()
+        const amountNumber = amountBn.toNumber()
         const exchangeAmount = amountNumber * exchangeConvertedPrice
 
         tokensBalancesMap.set(service.tokenService.normalizeHash(balance.token.hash), {
@@ -100,7 +107,7 @@ const fixBalanceResult = (
 ): TBalance => {
   const tokensBalancesMapClone = cloneDeep(result.tokensBalancesMap)
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[result.blockchain]
-  const mandatorySymbols = TokenHelper.mandatorySymbolsMap.get(result.blockchain) ?? []
+  const mandatorySymbols = TokenHelper.mandatorySymbolsMap.get(result.blockchain) || []
 
   mandatorySymbols.forEach(symbol => {
     const token = TokenHelper.getTokenBySymbol(symbol, result.blockchain)
@@ -155,16 +162,17 @@ export function useBalances(params: TUseBalancesParams[], options?: TUseBalances
   const { isLoading: isCurrencyRatioLoading, data: currencyRatio } = useCurrencyRatio()
   const { hiddenTokensByBlockchain } = useHiddenTokensByBlockchainSelector()
 
-  const { showType = 'active', queryOptions } = options ?? {}
+  const { showType = 'active', queryOptions } = options || {}
+  const hasCurrencyRatio = typeof currencyRatio === 'number'
 
   return useQueries({
     queries: params.map(param => {
       const network = selectedNetworkByBlockchain[param.blockchain]
 
       return {
-        queryKey: buildQueryKeyBalance(param.address, param.blockchain, network, currency),
-        queryFn: fetchBalance.bind(null, param, network, queryClient, currency, currencyRatio!),
-        enabled: !isCurrencyRatioLoading && typeof currencyRatio === 'number',
+        queryKey: buildQueryKeyBalance(param.address, param.blockchain, network, currency, hasCurrencyRatio),
+        queryFn: fetchBalance.bind(null, param, network, queryClient, currency, currencyRatio || 0),
+        enabled: !isCurrencyRatioLoading && hasCurrencyRatio,
         ...queryOptions,
       }
     }),
@@ -180,7 +188,7 @@ export function useBalances(params: TUseBalancesParams[], options?: TUseBalances
           data.push(fixBalanceResult(result.data, showType, hiddenTokensByBlockchain))
         })
 
-        exchangeTotal = data.reduce((acc, result) => acc + (result.exchangeTotal ?? 0), 0)
+        exchangeTotal = data.reduce((accumulator, result) => accumulator + (result.exchangeTotal || 0), 0)
       }
 
       return {
@@ -206,14 +214,15 @@ export function useBalance(
   const { isLoading: isCurrencyRatioLoading, data: currencyRatio } = useCurrencyRatio()
   const { hiddenTokensByBlockchain } = useHiddenTokensByBlockchainSelector()
 
-  const params = balanceParams ?? { address: '', blockchain: 'neo3' }
+  const params = balanceParams || { address: '', blockchain: 'neo3' }
   const network = selectedNetworkByBlockchain[params.blockchain]
-  const { showType = 'active', queryOptions } = options ?? {}
+  const { showType = 'active', queryOptions } = options || {}
+  const hasCurrencyRatio = typeof currencyRatio === 'number'
 
   const query = useQuery({
-    queryKey: buildQueryKeyBalance(params.address, params.blockchain, network, currency),
-    queryFn: fetchBalance.bind(null, params, network, queryClient, currency, currencyRatio!),
-    enabled: !!balanceParams && !isCurrencyRatioLoading && typeof currencyRatio === 'number',
+    queryKey: buildQueryKeyBalance(params.address, params.blockchain, network, currency, hasCurrencyRatio),
+    queryFn: fetchBalance.bind(null, params, network, queryClient, currency, currencyRatio || 0),
+    enabled: !!balanceParams && !isCurrencyRatioLoading && hasCurrencyRatio,
     ...queryOptions,
   })
 
@@ -235,15 +244,23 @@ export const useLazyBalance = () => {
   const { currency } = useCurrencySelector()
   const { isLoading: isCurrencyRatioLoading, data: currencyRatio } = useCurrencyRatio()
 
+  const hasCurrencyRatio = typeof currencyRatio === 'number'
+
   const getBalance = useCallback(
     async (accountParams: TUseBalancesParams, options?: TUseBalancesOptions) => {
-      const { showType = 'active', queryOptions } = options ?? {}
+      const { showType = 'active', queryOptions } = options || {}
       const network = selectedNetworkByBlockchain[accountParams.blockchain]
 
       const data = await queryClient.ensureQueryData({
-        queryKey: buildQueryKeyBalance(accountParams.address, accountParams.blockchain, network, currency),
-        queryFn: fetchBalance.bind(null, accountParams, network, queryClient, currency, currencyRatio!),
-        enabled: !isCurrencyRatioLoading && typeof currencyRatio === 'number',
+        queryKey: buildQueryKeyBalance(
+          accountParams.address,
+          accountParams.blockchain,
+          network,
+          currency,
+          hasCurrencyRatio
+        ),
+        queryFn: fetchBalance.bind(null, accountParams, network, queryClient, currency, currencyRatio || 0),
+        enabled: !isCurrencyRatioLoading && hasCurrencyRatio,
         ...queryOptions,
       })
 
@@ -252,6 +269,7 @@ export const useLazyBalance = () => {
     [
       currency,
       currencyRatio,
+      hasCurrencyRatio,
       hiddenTokensByBlockchain,
       isCurrencyRatioLoading,
       queryClient,

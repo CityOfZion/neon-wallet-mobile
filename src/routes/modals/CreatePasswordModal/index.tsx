@@ -13,8 +13,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -38,7 +37,7 @@ export const CreatePasswordModal = ({ navigation, route }: TRootStackScreenProps
     onRequestClose,
   } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'createPasswordModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'createPassword' })
 
   const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionData>(
     {
@@ -86,13 +85,13 @@ export const CreatePasswordModal = ({ navigation, route }: TRootStackScreenProps
   }, [actionData.confirmPassword, actionData.password, setError, clearErrors, t])
 
   return (
-    <TwModalLayout
-      title={title}
-      rightElement={<TwModalLayoutCloseIconButton onPress={handleClose} />}
-      contentContainerClassName="justify-between"
-      onRequestClose={handleClose}
-    >
-      <View>
+    <ModalLayout.Root onRequestClose={handleClose}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{title}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={handleClose} />
+      </ModalLayout.Header>
+
+      <ModalLayout.KeyboardAvoidingContent>
         {description && (
           <Fragment>
             <Text className="font-sans-regular text-lg text-white">{description}</Text>
@@ -123,19 +122,19 @@ export const CreatePasswordModal = ({ navigation, route }: TRootStackScreenProps
         {actionState.errors.confirmPassword && (
           <TwAlertErrorBanner className="mt-2.5" message={actionState.errors.confirmPassword} />
         )}
-      </View>
 
-      <View className="mt-7 gap-7">
-        {bannerProps && <TwBanner {...bannerProps} />}
+        <View className="mt-auto pt-7">{bannerProps && <TwBanner {...bannerProps} />}</View>
 
-        <TwButton
-          {...buttonProps}
-          variant="contained-light"
-          onPress={handleAct(handleSubmit)}
-          isLoading={actionState.isActing}
-          disabled={!actionState.isValid}
-        />
-      </View>
-    </TwModalLayout>
+        <ModalLayout.KeyboardAvoidingArea className="pt-7">
+          <TwButton
+            {...buttonProps}
+            variant="contained-light"
+            onPress={handleAct(handleSubmit)}
+            isLoading={actionState.isActing}
+            disabled={!actionState.isValid}
+          />
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }

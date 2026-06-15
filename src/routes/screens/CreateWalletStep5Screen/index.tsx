@@ -8,7 +8,7 @@ import { useCreateAccount } from '@/hooks/useAccountActions'
 import { useActions } from '@/hooks/useActions'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TMoreStackScreenProps } from '@/types/stacks'
@@ -20,7 +20,7 @@ type TActionData = {
 export const CreateWalletStep5Screen = ({ navigation, route }: TMoreStackScreenProps<'CreateWalletStep5Screen'>) => {
   const { mnemonic, name, hasBackup } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep5Screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep5' })
   const { createWallet } = useCreateWallet()
   const { createAccount } = useCreateAccount()
 
@@ -43,25 +43,31 @@ export const CreateWalletStep5Screen = ({ navigation, route }: TMoreStackScreenP
   }
 
   return (
-    <TwScreenLayout title={t('title')} contentContainerClassName="justify-between">
-      <Text className="text-center font-sans-medium text-lg text-white">{t('subtitle')}</Text>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ScrollContent contentContainerClassName="justify-between">
+        <Text className="text-center font-sans-medium text-lg text-white">{t('subtitle')}</Text>
 
-      <BlockchainList
-        className="mt-6"
-        isMulti
-        onSelect={setDataWrapper('selectedBlockchains')}
-        selectedBlockchains={actionData.selectedBlockchains}
-      />
-
-      <View className="mt-auto py-3">
-        <TwButton
-          variant="contained-light"
-          label={t('continueButtonLabel')}
-          disabled={actionData.selectedBlockchains.length <= 0}
-          onPress={handleAct(handlePressContinue)}
-          isLoading={actionState.isActing}
+        <BlockchainList
+          className="mt-6"
+          isMulti
+          onSelect={setDataWrapper('selectedBlockchains')}
+          selectedBlockchains={actionData.selectedBlockchains}
         />
-      </View>
-    </TwScreenLayout>
+
+        <View className="mt-auto pb-3 pt-6">
+          <TwButton
+            variant="contained-light"
+            label={t('continueButtonLabel')}
+            disabled={actionData.selectedBlockchains.length <= 0}
+            onPress={handleAct(handlePressContinue)}
+            isLoading={actionState.isActing}
+          />
+        </View>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

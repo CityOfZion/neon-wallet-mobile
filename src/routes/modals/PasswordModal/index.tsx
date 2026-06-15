@@ -4,15 +4,13 @@ import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
 import { TwBanner } from '@/components/TwBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
-import { TwSeparator } from '@/components/TwSeparator'
 
 import { AppError } from '@/helpers/ErrorHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -48,16 +46,14 @@ export const PasswordModal = ({ route, navigation }: TRootStackScreenProps<'Pass
   }
 
   return (
-    <TwModalLayout
-      title={title}
-      contentContainerClassName="justify-between"
-      onRequestClose={handleClose}
-      rightElement={<TwModalLayoutCloseIconButton onPress={handleClose} />}
-    >
-      <View>
-        {description && <Text className="font-sans-regular text-lg text-white">{description}</Text>}
+    <ModalLayout.Root onRequestClose={handleClose}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{title}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={handleClose} />
+      </ModalLayout.Header>
 
-        <TwSeparator className="my-7" />
+      <ModalLayout.KeyboardAvoidingContent>
+        {description && <Text className="mb-6 font-sans-regular text-lg text-white">{description}</Text>}
 
         <TwInput
           secureTextEntry
@@ -68,19 +64,19 @@ export const PasswordModal = ({ route, navigation }: TRootStackScreenProps<'Pass
         />
 
         {actionState.errors.password && <TwAlertErrorBanner className="mt-2.5" message={actionState.errors.password} />}
-      </View>
 
-      <View className="gap-10">
-        {bannerProps && <TwBanner {...bannerProps} />}
+        <View className="mt-auto pt-7">{bannerProps && <TwBanner {...bannerProps} />}</View>
 
-        <TwButton
-          {...buttonProps}
-          variant="contained-light"
-          onPress={handleAct(handlePress)}
-          disabled={!actionState.isValid}
-          isLoading={actionState.isActing}
-        />
-      </View>
-    </TwModalLayout>
+        <ModalLayout.KeyboardAvoidingArea className="pt-7">
+          <TwButton
+            {...buttonProps}
+            variant="contained-light"
+            onPress={handleAct(handlePress)}
+            disabled={!actionState.isValid}
+            isLoading={actionState.isActing}
+          />
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }

@@ -1,11 +1,10 @@
-import type { TBSToken } from '@cityofzion/blockchain-service'
 import type { NavigationProp } from '@react-navigation/native'
 import type { Event } from '@sentry/react-native'
 import type { CoreTypes } from '@walletconnect/types'
 
 import type { TBlockchainServiceKey } from './blockchain'
 import type { Optional } from './global'
-import type { IAccountState, TCurrency, TLanguage, TUseTransactionsTransaction } from './store'
+import type { TAccount, TCurrency, TLanguage } from './store'
 import type { TToasterToastOptions } from './toaster'
 
 export type TWalletConnectRedirectParams = {
@@ -29,7 +28,7 @@ export type TClickupHelperCreateSupportTicketParams = {
 
 export type TBuyAndSellTokensHelperBuildIframeParams = {
   currency: TCurrency
-  account?: IAccountState
+  account?: TAccount
   baseUrl: string
   id: string
 }
@@ -69,19 +68,19 @@ export type THardwareWalletHelperConnectByUsbParams = {
   abortSignal?: AbortSignal
 }
 
-export type TExportTransactionsHelperCalculateDateSelectionMaxOneYearParams = {
+export type TDateHelperCalculateDateSelectionMaxOneYearParams = {
   dateFrom: Date
   dateTo: Date
 }
 
-export type TExportTransactionsHelperCalculateDateToSelectionMaxOneYearResponse = {
-  dateTo: Date
-  dateFrom?: Date
-}
-
-export type TExportTransactionsHelperCalculateDateFromSelectionMaxOneYearResponse = {
+export type TDateHelperCalculateDateFromSelectionMaxOneYearResponse = {
   dateFrom: Date
   dateTo?: Date
+}
+
+export type TDateHelperCalculateDateToSelectionMaxOneYearResponse = {
+  dateTo: Date
+  dateFrom?: Date
 }
 
 export type TLoggerHelperOptions = {
@@ -91,11 +90,4 @@ export type TLoggerHelperOptions = {
 
 export type TSentryHelperOptions = TLoggerHelperOptions & {
   level: Event['level']
-}
-
-export type TTransactionHelperBuildPendingTransactionParams = {
-  txId: string
-  fromAccount: IAccountState
-  type?: Exclude<TUseTransactionsTransaction['type'], 'bridgeNeo3NeoX'>
-  events?: { toAccount?: IAccountState; toAddress: string; token: TBSToken; amount: string }[]
 }

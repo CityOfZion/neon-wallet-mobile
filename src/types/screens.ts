@@ -1,46 +1,54 @@
+import type { TBSBridgeName } from '@cityofzion/blockchain-service'
+import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
+import type { TBSStellarName } from '@cityofzion/bs-stellar'
+
 import type { EBuyAndSellTokensScreenTabValue } from '@/routes/screens/BuyAndSellTokensScreen'
 import type { TSettingsTab } from '@/routes/screens/SettingsScreen'
 
 import type { TBlockchainServiceKey } from './blockchain'
-import type { IAccountState, IContactState, IWalletState } from './store'
+import type { TAccount, TContact, TWallet } from './store'
+
+export type TOnboardingCompletedScreenParams = {
+  isImport?: boolean
+}
 
 export type TWalletsScreenParams = {
-  wallet?: IWalletState
+  wallet?: TWallet
 }
 
 export type TWalletScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TWalletSettingsScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TAccountScreenParams = {
-  account: IAccountState
-  wallet: IWalletState
+  account: TAccount
+  wallet: TWallet
 }
 
 export type TAccountAssetsScreenParams = {
-  account: IAccountState
-  wallet: IWalletState
+  account: TAccount
+  wallet: TWallet
 }
 
 export type TAccountTransactionsScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TAccountConnectionsScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TAccountNftsScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TAccountSettingsScreenParams = {
-  account: IAccountState
-  wallet: IWalletState
+  account: TAccount
+  wallet: TWallet
 }
 
 export type TDappConnectionsScreenParams = {
@@ -49,7 +57,7 @@ export type TDappConnectionsScreenParams = {
 }
 
 export type TContactScreenParams = {
-  contact: IContactState
+  contact: TContact
 }
 
 export type TMoreScreenParams = {
@@ -73,36 +81,15 @@ export type TCreateWalletStep5ScreenParams = {
 }
 
 export type TCreateWalletStep6ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TImportScreen = {
   data: string
 }
 
-export type TImportPassphraseScreenParams = {
-  encryptedKey: string
-  blockchain: TBlockchainServiceKey
-}
-
-export type TImportBlockchainSelectionScreenParams = {
-  encryptedKey: string
-}
-
-export type TImportMnemonicSelectionScreenParams = {
-  mnemonic: string
-}
-
-export type TImportKeySelectionScreenParams = {
-  key: string
-}
-
-export type TImportAddressSelectionScreenParams = {
-  address: string
-}
-
 export type TSendScreenParams = {
-  account?: IAccountState
+  account?: TAccount
 }
 
 export type TSettingsProtocolEditScreen = {
@@ -110,33 +97,33 @@ export type TSettingsProtocolEditScreen = {
 }
 
 export type TSettingsWalletBackupStep1ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TSettingsWalletBackupStep2ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
   words: string[]
 }
 
 export type TSettingsWalletBackupStep3ScreenParams = {
-  wallet: IWalletState
+  wallet: TWallet
 }
 
 export type TSwapScreenParams = {
-  account: IAccountState
+  account: TAccount
 }
 
 export type TBuyAndSellTokensScreenParams = {
-  account?: IAccountState
+  account?: TAccount
   screenType?: EBuyAndSellTokensScreenTabValue
 }
 
-export type TVoteNeo3ScreenParams = {
-  defaultNeo3Account?: IAccountState
+export type TNeo3VoteScreenParams = {
+  defaultNeo3Account?: TAccount<TBSNeo3Name>
 }
 
-export type TBridgeNeo3NeoXScreenParams = {
-  account?: IAccountState
+export type TNeo3NeoXBridgeScreenParams = {
+  account?: TAccount<TBSBridgeName>
 }
 
 export type TSettingsScreenParams = {
@@ -144,5 +131,9 @@ export type TSettingsScreenParams = {
 }
 
 export type TReceiveScreenParams = {
-  account: IAccountState
+  account: TAccount
+}
+
+export type TStellarTrustlineScreenParams = {
+  stellarAccount: TAccount<TBSStellarName>
 }

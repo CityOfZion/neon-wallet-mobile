@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import { BSKeychainHelper } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
@@ -7,7 +7,6 @@ import { Text, useWindowDimensions, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import type { CarouselRenderItem } from 'react-native-reanimated-carousel'
 import Carousel from 'react-native-reanimated-carousel'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { TwButton } from '@/components/TwButton'
 
@@ -21,14 +20,16 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import { useCreateWallet } from '@/hooks/useWalletActions'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
+
+import MdOutlineAutoAwesome from '@/assets/images/md-outline-auto-awesome.svg'
 
 import { OnboardingScreenPagination } from './OnboardingScreenPagination'
 import { OnboardingScreenProgress } from './OnboardingScreenProgress'
 
 import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
 type TStep = 'wallet' | 'account' | 'finalizing'
 
@@ -36,24 +37,24 @@ const { t } = I18nextHelper.get()
 
 const DATA = [
   {
-    header: t('screens:onboardingScreen.feature1.header'),
+    header: t('screens:onboarding.feature1.header'),
     image: require('@/assets/images/onboarding-1.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature1.subtitle'),
+    subtitle: t('screens:onboarding.feature1.subtitle'),
   },
   {
-    header: t('screens:onboardingScreen.feature2.header'),
+    header: t('screens:onboarding.feature2.header'),
     image: require('@/assets/images/onboarding-2.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature2.subtitle'),
+    subtitle: t('screens:onboarding.feature2.subtitle'),
   },
   {
-    header: t('screens:onboardingScreen.feature3.header'),
+    header: t('screens:onboarding.feature3.header'),
     image: require('@/assets/images/onboarding-3.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature3.subtitle'),
+    subtitle: t('screens:onboarding.feature3.subtitle'),
   },
   {
-    header: t('screens:onboardingScreen.feature4.header'),
+    header: t('screens:onboarding.feature4.header'),
     image: require('@/assets/images/onboarding-4.png') as ImageSourcePropType,
-    subtitle: t('screens:onboardingScreen.feature4.subtitle'),
+    subtitle: t('screens:onboarding.feature4.subtitle'),
   },
 ]
 
@@ -64,12 +65,12 @@ const PROGRESS_BY_STEP: Record<TStep, number> = {
 }
 
 const renderItem: CarouselRenderItem<(typeof DATA)[0]> = ({ item }) => (
-  <View className="h-full w-full">
-    <Image contentFit="cover" source={item.image} className="h-full w-full" />
+  <View className="size-full">
+    <Image contentFit="contain" contentPosition="top" source={item.image} className="size-full" />
 
-    <View className="absolute bottom-4 px-4">
-      <Text className="font-sans-bold text-base text-neon">{item.header}</Text>
-      <Text className="font-sans-bold text-base text-white">{item.subtitle}</Text>
+    <View className="absolute bottom-10 w-full flex-col items-center gap-3 px-4">
+      <Text className="text-center font-sans-medium text-2xl text-white">{item.header}</Text>
+      <Text className="text-center font-sans-regular text-lg text-gray-100">{item.subtitle}</Text>
     </View>
   </View>
 )
@@ -80,7 +81,6 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
   const { createWallet } = useCreateWallet()
   const { createAccount } = useCreateAccount()
   const { width } = useWindowDimensions()
-  const { top, bottom } = useSafeAreaInsets()
   const dispatch = useAppDispatch()
 
   const activeCarouselPage = useSharedValue<number>(0)
@@ -89,8 +89,8 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
 
   const handleSelectBlockchains = () => {
     navigation.navigate('BlockchainSelectionModal', {
-      title: t('screens:onboardingScreen.selectBlockchainsModalTitle'),
-      description: t('screens:onboardingScreen.selectBlockchainsModalDescription'),
+      title: t('screens:onboarding.selectBlockchainsModalTitle'),
+      description: t('screens:onboarding.selectBlockchainsModalDescription'),
       isMulti: true,
       onSelect: async selectedBlockchains => {
         if (accounts.length > 0) {
@@ -98,9 +98,10 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
           return
         }
 
+        navigation.goBack()
         setStep('wallet')
 
-        let wallet: IWalletState | undefined = wallets[0]
+        let wallet: TWallet | undefined = wallets[0]
         let mnemonic = ''
 
         if (!wallet) {
@@ -132,58 +133,59 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
     })
   }
 
+  const handleImportWallet = () => {
+    navigation.navigate('OnboardingImportModal', {
+      onConfirm: () => {
+        setStep('finalizing')
+      },
+    })
+  }
+
   return (
-    <TwScreenLayout
-      withoutBackButton
-      withoutHeader
-      withoutBars
-      className="bg-black"
-      contentContainerClassName="px-0 pb-0"
-      containerProps={{ className: 'bg-gray-900' }}
-      style={{ paddingTop: top + 15 }}
-    >
-      <View className="px-4">
-        <Text className="font-sans-bold text-xs uppercase text-neon">{t('screens:onboardingScreen.initialSetup')}</Text>
-        <Text className="font-sans-bold text-3xl text-white">{t('screens:onboardingScreen.welcomeNW')}</Text>
-        <Text className="w-4/5 font-sans-regular text-sm text-white">
-          {t('screens:onboardingScreen.overviewDescription')}
-        </Text>
-      </View>
+    <ScreenLayout.Root>
+      <ScreenLayout.ScrollContent contentContainerClassName="px-0 pb-0">
+        <Carousel
+          data={DATA}
+          width={width}
+          autoPlay
+          autoPlayInterval={3000}
+          containerStyle={{ flex: 1 }}
+          mode="parallax"
+          onProgressChange={activeCarouselPage}
+          modeConfig={{
+            parallaxScrollingScale: 1,
+            parallaxScrollingOffset: 0,
+          }}
+          renderItem={renderItem}
+        />
 
-      <Carousel
-        data={DATA}
-        width={width}
-        autoPlay
-        autoPlayInterval={2000}
-        containerStyle={{ flex: 1 }}
-        mode="parallax"
-        onProgressChange={activeCarouselPage}
-        modeConfig={{
-          parallaxScrollingScale: 1,
-          parallaxScrollingOffset: 0,
-        }}
-        renderItem={renderItem}
-      />
+        <OnboardingScreenPagination activePage={activeCarouselPage} totalPages={DATA.length} />
 
-      <OnboardingScreenPagination activePage={activeCarouselPage} totalPages={DATA.length} />
-
-      <View className="items-center gap-2 bg-gray-900 px-6 py-4" style={{ paddingBottom: Math.max(20, bottom) }}>
-        {!step ? (
-          <TwButton
-            variant="contained"
-            label={t('screens:onboardingScreen.selectBlockchainsButtonLabel')}
-            onPress={handleSelectBlockchains}
-          />
-        ) : (
-          <Fragment>
-            <OnboardingScreenProgress progress={PROGRESS_BY_STEP[step]} />
-
-            <Text className="text-center font-sans-medium text-base text-white">
-              {t(`screens:onboardingScreen.messagesByActions.${step}`)}
-            </Text>
-          </Fragment>
-        )}
-      </View>
-    </TwScreenLayout>
+        <View className="pb-safe-or-8 min-h-40 items-center gap-2 px-6 py-4">
+          {!step ? (
+            <View className="w-full flex-col gap-y-4">
+              <TwButton
+                variant="card"
+                label={t('screens:onboarding.importWalletButtonLabel')}
+                onPress={handleImportWallet}
+              />
+              <TwButton
+                variant="contained-light"
+                label={t('screens:onboarding.createWalletButtonLabel')}
+                onPress={handleSelectBlockchains}
+                rightElement={<MdOutlineAutoAwesome aria-hidden />}
+              />
+            </View>
+          ) : (
+            <View className="w-full flex-col items-center justify-evenly">
+              <OnboardingScreenProgress progress={PROGRESS_BY_STEP['finalizing']} />
+              <Text className="mt-10 text-center font-sans-medium text-base text-gray-100">
+                {t('screens:onboarding.messagesByActions.finalizing')}
+              </Text>
+            </View>
+          )}
+        </View>
+      </ScreenLayout.ScrollContent>
+    </ScreenLayout.Root>
   )
 }

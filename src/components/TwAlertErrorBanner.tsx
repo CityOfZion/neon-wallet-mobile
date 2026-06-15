@@ -4,6 +4,7 @@ import type { JSX, ReactNode } from 'react'
 import type { ViewProps } from 'react-native'
 import { Text, View } from 'react-native'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import TbAlertTriangle from '@/assets/images/tb-alert-triangle.svg'
@@ -16,7 +17,7 @@ type TProps = Omit<ViewProps, 'children'> & {
 }
 
 export const TwAlertErrorBanner = ({ message, className, messageClassName, iconClassName, icon, ...props }: TProps) => {
-  const fixedIcon = icon ?? <TbAlertTriangle />
+  const fixedIcon = icon || <TbAlertTriangle />
 
   return (
     <View
@@ -24,11 +25,11 @@ export const TwAlertErrorBanner = ({ message, className, messageClassName, iconC
       {...props}
     >
       {cloneElement(fixedIcon, {
-        className: StyleHelper.mergeStyles(fixedIcon.props.className, 'text-magenta h-6 w-6', iconClassName),
+        className: StyleHelper.mergeStyles(fixedIcon.props.className, 'text-magenta size-6', iconClassName),
         'aria-hidden': true,
       })}
 
-      {typeof message === 'string' ? (
+      {ElementHelper.isTextContentValid(message) ? (
         <Text className={StyleHelper.mergeStyles('flex-shrink font-sans-regular text-lg text-white', messageClassName)}>
           {message}
         </Text>

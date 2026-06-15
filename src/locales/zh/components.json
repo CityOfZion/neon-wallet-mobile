@@ -8,6 +8,27 @@
     "notFoundLabel": "未找到账户或已存在，请检查输入稍后再试。",
     "selectedOfTotal": "已选择{{selectedCount}}个，共{{totalCount}}个地址"
   },
+  "accountTransactionsTransactionCard": {
+    "blockToolTipLabel": "区块：{{ block }}",
+    "bridgeNeo3NeoXButtonLabel": "跨链桥",
+    "feeTooltipLabel": "网络费：{{ networkFee }} | 系统费：{{ systemFee }}",
+    "invocationsToolTipLabel": "调用：{{ invocations }}",
+    "nftsTooltipLabel": "NFTs：{{ nfts }}",
+    "notificationToolTipLabel": "通知：{{ notifications }}",
+    "pendingLabel": "处理中…",
+    "seeOnExplorerButtonLabel": "在浏览器中查看",
+    "swapButtonLabel": "兑换",
+    "totalAmountTooltipLabel": "总计：{{ totalAmount }}",
+    "txIdLabel": "交易 ID："
+  },
+  "accountTransactionsTransactionDefaultEvent": {
+    "fromLabel": "从",
+    "toLabel": "到",
+    "type": {
+      "nft": "NFT",
+      "token": "代币"
+    }
+  },
   "actionInput": {
     "maxButtonLabel": "最大"
   },
@@ -19,14 +40,22 @@
   "blockchainList": {
     "xExisting": "已有{{amount}}个"
   },
-  "nfcModal": {
+  "modalLayout": {
+    "labels": {
+      "closeButton": "关闭弹窗"
+    }
+  },
+  "nfc": {
     "description": "请轻触NFC标签",
     "title": "准备扫描"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "关闭二维码扫描器",
     "permissionOffMessage": "扫描二维码需要相机权限。请在设备设置中授予权限。",
     "permissionOffTitle": "需要摄像头访问权限"
+  },
+  "screenLayout": {
+    "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
     "customMode": "自定义网络模式",
@@ -95,11 +124,6 @@
       "clearButton": "清除输入",
       "hideButton": "隐藏输入",
       "showButton": "显示输入"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "关闭弹窗"
     }
   }
 }

@@ -1,3 +1,4 @@
+import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
 import { match } from 'ts-pattern'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
@@ -11,7 +12,7 @@ import { selectWalletById } from '@/hooks/useWalletSelector'
 
 import type { TAccountHelperPredicateParams } from '@/types/helpers'
 import type { TMoreStackScreenProps } from '@/types/stacks'
-import type { TNotificationAction } from '@/types/store'
+import type { TAccount, TNotificationAction } from '@/types/store'
 
 type TFunctionParams<T> = {
   navigation: TMoreStackScreenProps<'NotificationsScreen'>['navigation']
@@ -24,18 +25,18 @@ type TFunctionByNotificationActionType = {
 
 const { t } = I18nextHelper.get()
 
-const getAccountAndWallet = (predicate: TAccountHelperPredicateParams) => {
+const getAccountAndWallet = (params: TAccountHelperPredicateParams) => {
   const state = ReduxHelper.store.getState()
   const accounts = selectAccounts(state)
-  const account = accounts.find(AccountHelper.predicate(predicate))
+  const account = accounts.find(AccountHelper.predicate(params))
 
   if (!account) {
-    throw new AppError(t('screens:notificationsScreen.actions.error.accountNotFound'))
+    throw new AppError(t('screens:notifications.actions.error.accountNotFound'))
   }
 
   const wallet = selectWalletById(account.idWallet)(state)
   if (!wallet) {
-    throw new AppError(t('screens:notificationsScreen.actions.error.walletNotFound'))
+    throw new AppError(t('screens:notifications.actions.error.walletNotFound'))
   }
 
   return { account, wallet }
@@ -44,10 +45,13 @@ const getAccountAndWallet = (predicate: TAccountHelperPredicateParams) => {
 export const functionByNotificationActionType: TFunctionByNotificationActionType = {
   navigate: async ({ navigation, notificationAction }) => {
     match(notificationAction.payload)
-      .with({ to: 'account-transaction' }, payload => {
+      .with({ to: 'account-transaction' }, async payload => {
         const { account } = getAccountAndWallet(payload)
 
         navigation.goBack()
+
+        await UtilsHelper.sleep(500)
+
         navigation.navigate('TabStack', {
           screen: 'WalletsStack',
           params: {
@@ -86,16 +90,19 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
           },
         })
       })
-      .with({ to: 'vote-neo3' }, payload => {
+      .with({ to: 'neo3-vote' }, async payload => {
         const { account } = getAccountAndWallet(payload)
 
         navigation.goBack()
+
+        await UtilsHelper.sleep(500)
+
         navigation.navigate('TabStack', {
           screen: 'WalletsStack',
           params: {
-            screen: 'VoteNeo3Screen',
+            screen: 'Neo3VoteScreen',
             params: {
-              defaultNeo3Account: account,
+              defaultNeo3Account: account as TAccount<TBSNeo3Name>,
             },
           },
         })

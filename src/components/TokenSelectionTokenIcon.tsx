@@ -25,9 +25,9 @@ export const TokenSelectionTokenIcon = ({ token }: TProps) => {
   })
 
   return (
-    <View className="h-6 max-h-6 min-h-6 w-6 min-w-6 max-w-6 overflow-hidden rounded-full bg-asphalt p-0.5">
+    <View className="h-6 overflow-hidden rounded-full bg-asphalt p-0.5 min-size-6 max-size-6">
       <Image
-        className="h-full w-full"
+        className="size-full rounded-full"
         source={imageSource}
         contentFit="contain"
         placeholder={errorSource}

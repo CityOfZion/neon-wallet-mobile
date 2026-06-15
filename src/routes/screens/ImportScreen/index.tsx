@@ -10,7 +10,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useImportAction } from '@/hooks/useImportAction'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbCheck from '@/assets/images/tb-check.svg'
 import TbX from '@/assets/images/tb-x.svg'
@@ -20,26 +20,38 @@ import type { TMoreStackScreenProps } from '@/types/stacks'
 export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'ImportScreen'>) => {
   const data = route.params?.data
 
-  const { t } = useTranslation('screens', { keyPrefix: 'importScreen' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('screens', { keyPrefix: 'import' })
+  const { t: tCommon } = useTranslation('common')
+
+  const handleNavigateToWalletsScreen = () => {
+    navigation.replace('TabStack', { screen: 'WalletsStack', params: { screen: 'WalletsScreen' } })
+  }
 
   const handleSubmitAddress = async (address: string) => {
-    navigation.navigate('ImportAddressSelectionScreen', { address })
+    navigation.navigate('ImportAddressSelectionModal', {
+      address,
+      onSuccess: handleNavigateToWalletsScreen,
+    })
   }
 
   const handleSubmitEncryptedKey = async (encryptedKey: string) => {
-    navigation.navigate('ImportBlockchainSelectionScreen', { encryptedKey })
+    navigation.navigate('ImportEncryptedKeySelectionModal', {
+      encryptedKey,
+      onSuccess: handleNavigateToWalletsScreen,
+    })
   }
 
   const handleSubmitKey = async (key: string) => {
-    navigation.navigate('ImportKeySelectionScreen', {
+    navigation.navigate('ImportKeySelectionModal', {
       key,
+      onSuccess: handleNavigateToWalletsScreen,
     })
   }
 
   const handleSubmitMnemonic = async (mnemonic: string) => {
-    navigation.navigate('ImportMnemonicSelectionScreen', {
+    navigation.navigate('ImportMnemonicSelectionModal', {
       mnemonic,
+      onSuccess: handleNavigateToWalletsScreen,
     })
   }
 
@@ -69,61 +81,70 @@ export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'Impor
   }, [])
 
   return (
-    <TwScreenLayout title={t('title')} contentContainerClassName="justify-between">
-      <Text className="m-10 text-center font-sans-regular text-lg text-white">{t('enterAnAddress')}</Text>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
 
-      {isMnemonic && (
-        <View className="mb-5 flex-row items-center justify-center gap-2.5">
-          {actionState.errors.text ? (
-            <TbX aria-hidden className="h-5 w-5 text-magenta" />
-          ) : (
-            <TbCheck aria-hidden className="h-5 w-5 text-neon" />
-          )}
+      <ScreenLayout.KeyboardAvoidingContent>
+        <Text className="m-10 text-center font-sans-regular text-lg text-white">{t('enterAnAddress')}</Text>
 
-          <Text
-            className={StyleHelper.mergeStyles('font-sans-regular text-base text-neon', {
-              'text-magenta': actionState.errors.text,
-            })}
-          >
-            {t(!actionState.errors.text ? 'mnemonicComplete' : 'mnemonicIncorrect')}
-          </Text>
-        </View>
-      )}
+        {isMnemonic && (
+          <View className="mb-5 flex-row items-center justify-center gap-2.5">
+            {actionState.errors.text ? (
+              <TbX aria-hidden className="size-5 text-magenta" />
+            ) : (
+              <TbCheck aria-hidden className="size-5 text-neon" />
+            )}
 
-      <TwInput
-        placeholder={t('placeholder')}
-        value={actionData.text}
-        onChangeText={handleChange}
-        autoFocus={isMnemonic}
-        className={StyleHelper.mergeStyles({
-          'h-36 max-h-36 align-top': isMnemonic,
-        })}
-        actionsContainerProps={{
-          className: StyleHelper.mergeStyles({
-            'mt-2 items-start': isMnemonic,
-          }),
-        }}
-        inputContainerProps={{
-          className: StyleHelper.mergeStyles('bg-gray-900 items-start', {
-            'border-magenta': !!actionState.errors.text,
-          }),
-        }}
-        multiline={isMnemonic}
-        pastable
-        scannable
-        autoCapitalize="none"
-        submitBehavior="blurAndSubmit"
-        autoComplete="off"
-        autoCorrect={false}
-      />
+            <Text
+              className={StyleHelper.mergeStyles('font-sans-regular text-base text-neon', {
+                'text-magenta': !!actionState.errors.text,
+              })}
+            >
+              {t(!actionState.errors.text ? 'mnemonicComplete' : 'mnemonicIncorrect')}
+            </Text>
+          </View>
+        )}
 
-      <TwButton
-        className="mb-3 mt-auto"
-        variant="contained-light"
-        label={commonT('general.next')}
-        disabled={!actionState.isValid}
-        onPress={handleAct(handleSubmit)}
-      />
-    </TwScreenLayout>
+        <TwInput
+          placeholder={t('placeholder')}
+          value={actionData.text}
+          onChangeText={handleChange}
+          autoFocus={isMnemonic}
+          className={StyleHelper.mergeStyles({
+            'h-36 max-h-36 align-top': isMnemonic,
+          })}
+          actionsContainerProps={{
+            className: StyleHelper.mergeStyles({
+              'mt-2 items-start': isMnemonic,
+            }),
+          }}
+          inputContainerProps={{
+            className: StyleHelper.mergeStyles('bg-gray-900 items-start', {
+              'border-magenta': !!actionState.errors.text,
+            }),
+          }}
+          multiline={isMnemonic}
+          pastable
+          scannable
+          autoCapitalize="none"
+          submitBehavior="blurAndSubmit"
+          autoComplete="off"
+          autoCorrect={false}
+        />
+
+        <ScreenLayout.KeyboardAvoidingArea>
+          <TwButton
+            variant="contained-light"
+            label={tCommon('general.next')}
+            className="mb-2"
+            disabled={!actionState.isValid}
+            onPress={handleAct(handleSubmit)}
+          />
+        </ScreenLayout.KeyboardAvoidingArea>
+      </ScreenLayout.KeyboardAvoidingContent>
+    </ScreenLayout.Root>
   )
 }

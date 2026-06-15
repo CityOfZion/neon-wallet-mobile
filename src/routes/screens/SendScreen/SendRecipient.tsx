@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
-import type { TBSToken } from '@cityofzion/blockchain-service'
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, type TBSToken } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -25,7 +24,7 @@ import TbStepInto from '@/assets/images/tb-step-into.svg'
 import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
 
 import type { TTokenBalance, TUseBalanceResult } from '@/types/query'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export type TSendRecipient = {
   id: string
@@ -38,7 +37,7 @@ export type TSendRecipient = {
 
 type TProps = {
   order: number
-  selectedAccount?: IAccountState
+  selectedAccount?: TAccount
   recipient: TSendRecipient
   onUpdateRecipient: (recipient: Partial<TSendRecipient>) => void
   onRemoveRecipient: () => void
@@ -61,7 +60,7 @@ export const SendRecipient = ({
   isDisabledMaxAmount,
   onMaxAmount,
 }: TProps) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'sendScreen.form.recipient' })
+  const { t } = useTranslation('screens', { keyPrefix: 'send.form.recipient' })
   const debounce = useDebounceFunction()
   const { currency } = useCurrencySelector()
   const navigation = useNavigation()
@@ -79,7 +78,7 @@ export const SendRecipient = ({
 
     debounce(() => {
       onUpdateRecipient({
-        amount: BSBigNumberHelper.format(value, { decimals: recipient.token?.token?.decimals }),
+        amount: new BSBigHumanAmount(value, recipient.token?.token?.decimals).toFormatted(),
         isAmountLoading: false,
       })
     })
@@ -142,7 +141,7 @@ export const SendRecipient = ({
         <ActionTokenButton
           label={t('selectButtonLabel')}
           isLoading={balance?.isLoading}
-          contentProps={{ className: 'px-3' }}
+          contentProps={{ className: 'px-3 gap-x-2' }}
           token={recipient.token?.token}
           disabled={isDisabled}
           onPress={() =>
@@ -151,7 +150,7 @@ export const SendRecipient = ({
               onSelect: handleSelectToken,
               selectedToken: recipient.token?.token,
               title: t('tokenToReceiveModalTitle'),
-              tokens: balance?.data?.tokensBalances.map(tokenBalance => tokenBalance.token) ?? [],
+              tokens: balance?.data?.tokensBalances.map(tokenBalance => tokenBalance.token) || [],
             })
           }
         />
@@ -169,7 +168,7 @@ export const SendRecipient = ({
           label={t('selectButtonLabel')}
           address={recipient.address}
           disabled={isDisabled}
-          contentProps={{ className: 'px-3' }}
+          contentProps={{ className: 'px-3 gap-x-2' }}
           isLoading={isValidatingAddressOrDomainAddress}
           onPress={() =>
             navigation.navigate('AddressSelectionModal', {
@@ -191,12 +190,12 @@ export const SendRecipient = ({
       >
         <ActionInput
           placeholder="0"
-          value={recipient.amount ?? ''}
+          value={recipient.amount || ''}
           keyboardType="decimal-pad"
           onChangeText={handleChangeAmount}
           editable={!isAmountDisabled}
           containerClassName="justify-end"
-          className="text-md w-24"
+          className="w-24 text-base"
           maxButtonProps={{
             isLoading: isLoadingMaxAmount,
             disabled: isAmountDisabled,
@@ -219,9 +218,9 @@ export const SendRecipient = ({
           <Text className="font-sans-regular text-sm text-gray-100">
             {CurrencyHelper.format(
               recipient.amount && recipient.token
-                ? BSBigNumberHelper.fromNumber(recipient.amount)
+                ? new BSBigHumanAmount(recipient.amount, recipient.token.token.decimals)
                     .multipliedBy(recipient.token.exchangeConvertedPrice)
-                    .toFixed()
+                    .toNumber()
                 : 0,
               { currency, maximumFractionDigits: 6 }
             )}

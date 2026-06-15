@@ -22,8 +22,7 @@ import { LinkHelper } from '@/helpers/LinkHelper'
 import { useContactsSelector } from '@/hooks/useContactSelector'
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { SwapDetailsTokenItem } from '@/routes/modals/SwapDetailsModal/SwapDetailsTokenItem'
 
@@ -80,7 +79,7 @@ const SmallContent = ({ title, children }: TSmallContentProps) => (
 )
 
 export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'SwapDetailsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'swapDetails' })
   const dispatch = useAppDispatch()
   const { contacts } = useContactsSelector()
   const timeoutRef = useRef<NodeJS.Timeout>(undefined)
@@ -160,258 +159,262 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
   }, [])
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      contentContainerClassName="items-center pt-2"
-      rightElement={<TwModalLayoutCloseIconButton />}
-    >
-      {isBadStatus ? (
-        <View className="items-center gap-2 px-4">
-          <PiXCircle className="h-28 w-28 text-pink" aria-hidden />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent contentContainerClassName="items-center pt-2">
+        {isBadStatus ? (
+          <View className="items-center gap-2 px-4">
+            <PiXCircle className="size-28 text-pink" aria-hidden />
 
-          <Text className="text-center font-sans-regular text-gray-100">
-            {t('errors.initialPart')} {txFrom ? t('errors.swap') : t('errors.transfer')}
-          </Text>
+            <Text className="text-center font-sans-regular text-gray-100">
+              {t('errors.initialPart')} {txFrom ? t('errors.swap') : t('errors.transfer')}
+            </Text>
 
-          {status === 'refunded' && <Text className="font-sans-medium text-lg text-white">{t('errors.refunded')}</Text>}
-        </View>
-      ) : (
-        <PiSealCheck className="h-28 w-28 text-blue" aria-hidden />
-      )}
-
-      <View className="mt-8 w-full gap-2 rounded bg-asphalt p-2 py-3">
-        <View className="flex-row items-center gap-1">
-          <TbReceipt className="h-5 w-5 text-blue" aria-hidden />
-          <Text className="font-sans-regular text-lg text-white">{t('details')}</Text>
-        </View>
-
-        <TwSeparator />
-
-        {isProcessingStatus && (
-          <Text className="my-1 text-center font-sans-bold uppercase text-orange">{t('processingInfo')}</Text>
+            {status === 'refunded' && (
+              <Text className="font-sans-medium text-lg text-white">{t('errors.refunded')}</Text>
+            )}
+          </View>
+        ) : (
+          <PiSealCheck className="size-28 text-blue" aria-hidden />
         )}
 
-        <HeaderTitle title={t('titles.status')} />
+        <View className="mt-8 w-full gap-2 rounded bg-asphalt p-2 py-3">
+          <View className="flex-row items-center gap-1">
+            <TbReceipt className="size-5 text-blue" aria-hidden />
+            <Text className="font-sans-regular text-lg text-white">{t('details')}</Text>
+          </View>
 
-        <TwStepper
-          className="my-4 px-4"
-          theme="neon"
-          currentState={isBadStatus ? 'error' : 'success'}
-          currentStep={isBadStatus ? MIDDLE_STEP : stepsByStatus[status]}
-          steps={t('steps', { returnObjects: true })}
-        />
+          <TwSeparator />
 
-        <TwAccordion.Root defaultValue>
-          <TwAccordion.Trigger
-            label={t('titles.routing')}
-            className="bg-gray-100 px-2 py-1"
-            iconClassName="text-asphalt"
+          {isProcessingStatus && (
+            <Text className="my-1 text-center font-sans-bold uppercase text-orange">{t('processingInfo')}</Text>
+          )}
+
+          <HeaderTitle title={t('titles.status')} />
+
+          <TwStepper
+            className="my-4 px-4"
+            theme="neon"
+            currentState={isBadStatus ? 'error' : 'success'}
+            currentStep={isBadStatus ? MIDDLE_STEP : stepsByStatus[status]}
+            steps={t('steps', { returnObjects: true })}
           />
 
-          <TwAccordion.Content>
-            <View className="my-1 gap-2">
-              <SmallContent title={t('transactionFrom')}>
-                <View className="flex-row items-center gap-2">
-                  {txFrom ? (
-                    <Fragment>
-                      {tokenFrom.blockchain && (
-                        <TwBlockchainIcon blockchain={tokenFrom.blockchain} type="gray" className="h-3 w-3" />
-                      )}
-                      {tokenFrom.txTemplateUrl ? (
-                        <SwapDetailsModalLinkButton
-                          label={txFrom}
-                          onPress={LinkHelper.open.bind(null, tokenFrom.txTemplateUrl.replace('{txId}', txFrom))}
-                        />
-                      ) : (
-                        <Text
-                          className="max-w-[80%] font-sans-regular text-lg text-white"
-                          numberOfLines={1}
-                          ellipsizeMode="middle"
-                        >
-                          {txFrom}
-                        </Text>
-                      )}
-                      <TwIconButton
-                        onPress={() => ClipboardHelper.write(txFrom)}
-                        icon={<TbCopy aria-hidden className="text-neon" />}
-                        className="p-0"
-                      />
-                    </Fragment>
-                  ) : (
-                    <Text className="font-sans-regular text-white">{t('unknownTransactionFrom')}</Text>
-                  )}
-                </View>
-              </SmallContent>
-
-              <TwSeparator />
-
-              <SmallContent title={t('transactionTo')}>
-                {match({ txTo, isProcessingStatus, isBadStatus })
-                  .with({ txTo: P.string.minLength(1) }, ({ txTo }) => (
-                    <View className="flex-row items-center gap-2">
-                      <TwBlockchainIcon blockchain={blockchain} type="gray" className="h-3 w-3" />
-                      {tokenTo.txTemplateUrl ? (
-                        <SwapDetailsModalLinkButton
-                          label={txTo}
-                          onPress={LinkHelper.open.bind(null, tokenTo.txTemplateUrl.replace('{txId}', txTo))}
-                        />
-                      ) : (
-                        <Text
-                          className="max-w-[80%] font-sans-regular text-lg text-white"
-                          numberOfLines={1}
-                          ellipsizeMode="middle"
-                        >
-                          {txTo}
-                        </Text>
-                      )}
-                      <TwIconButton
-                        onPress={() => ClipboardHelper.write(txFrom)}
-                        icon={<TbCopy aria-hidden className="text-neon" />}
-                        className="p-0"
-                      />
-                    </View>
-                  ))
-                  .with({ isProcessingStatus: true }, () => (
-                    <View className="flex-row items-center gap-2">
-                      <Text className="font-sans-medium text-orange">{t('pending')}</Text>
-
-                      <FaRotateRight aria-hidden className="h-4 w-4 text-orange" />
-                    </View>
-                  ))
-                  .with({ isBadStatus: true }, () => (
-                    <View className="flex-row items-center gap-2">
-                      <Text className="font-sans-medium text-pink">{t('failed')}</Text>
-
-                      <TbAlertTriangleFilled aria-hidden className="h-4 w-4 text-pink" />
-                    </View>
-                  ))
-                  .otherwise(() => (
-                    <Text className="font-sans-regular text-white">{t('unknownTransactionTo')}</Text>
-                  ))}
-              </SmallContent>
-
-              {fee && (
-                <Fragment>
-                  <TwSeparator />
-
-                  <SmallContent title={t('transactionFee')}>
-                    <SwapDetailsTokenItem
-                      symbol={service.feeToken.symbol}
-                      blockchain={blockchain}
-                      amount={fee}
-                      decimals={service.feeToken.decimals}
-                    />
-                  </SmallContent>
-                </Fragment>
-              )}
-            </View>
-          </TwAccordion.Content>
-        </TwAccordion.Root>
-      </View>
-
-      {!isBadStatus && (
-        <View className="mt-2 w-full gap-2 rounded bg-asphalt p-2 py-3">
-          <HeaderTitle title={t('titles.from')} />
-
-          <SmallContent title={t('token')}>
-            <SwapDetailsTokenItem
-              symbol={tokenFrom.symbol}
-              blockchain={tokenFrom.blockchain}
-              amount={swapRecord.amountFrom}
-              decimals={tokenFrom.decimals}
+          <TwAccordion.Root defaultValue>
+            <TwAccordion.Trigger
+              label={t('titles.routing')}
+              className="bg-gray-100 px-2 py-1"
+              iconClassName="text-asphalt"
             />
-          </SmallContent>
 
-          <TwSeparator />
+            <TwAccordion.Content>
+              <View className="my-1 gap-2">
+                <SmallContent title={t('transactionFrom')}>
+                  <View className="flex-row items-center gap-2">
+                    {txFrom ? (
+                      <Fragment>
+                        {tokenFrom.blockchain && (
+                          <TwBlockchainIcon blockchain={tokenFrom.blockchain} className="size-4 text-gray-300" />
+                        )}
+                        {tokenFrom.txTemplateUrl ? (
+                          <SwapDetailsModalLinkButton
+                            label={txFrom}
+                            onPress={LinkHelper.open.bind(null, tokenFrom.txTemplateUrl.replace('{txId}', txFrom))}
+                          />
+                        ) : (
+                          <Text
+                            className="max-w-[80%] font-sans-regular text-lg text-white"
+                            numberOfLines={1}
+                            ellipsizeMode="middle"
+                          >
+                            {txFrom}
+                          </Text>
+                        )}
+                        <TwIconButton
+                          onPress={() => ClipboardHelper.write(txFrom)}
+                          icon={<TbCopy aria-hidden className="text-neon" />}
+                          className="p-0"
+                        />
+                      </Fragment>
+                    ) : (
+                      <Text className="font-sans-regular text-white">{t('unknownTransactionFrom')}</Text>
+                    )}
+                  </View>
+                </SmallContent>
 
-          <SmallContent title={t('sendingAddress')}>
-            {tokenFrom.addressTemplateUrl ? (
-              <SwapDetailsModalLinkButton
-                label={swapRecord.account.address}
-                onPress={LinkHelper.open.bind(
-                  null,
-                  tokenFrom.addressTemplateUrl.replace('{address}', swapRecord.account.address)
+                <TwSeparator />
+
+                <SmallContent title={t('transactionTo')}>
+                  {match({ txTo, isProcessingStatus, isBadStatus })
+                    .with({ txTo: P.string.minLength(1) }, ({ txTo }) => (
+                      <View className="flex-row items-center gap-2">
+                        <TwBlockchainIcon blockchain={blockchain} className="size-4 text-gray-300" />
+                        {tokenTo.txTemplateUrl ? (
+                          <SwapDetailsModalLinkButton
+                            label={txTo}
+                            onPress={LinkHelper.open.bind(null, tokenTo.txTemplateUrl.replace('{txId}', txTo))}
+                          />
+                        ) : (
+                          <Text
+                            className="max-w-[80%] font-sans-regular text-lg text-white"
+                            numberOfLines={1}
+                            ellipsizeMode="middle"
+                          >
+                            {txTo}
+                          </Text>
+                        )}
+                        <TwIconButton
+                          onPress={() => ClipboardHelper.write(txFrom)}
+                          icon={<TbCopy aria-hidden className="text-neon" />}
+                          className="p-0"
+                        />
+                      </View>
+                    ))
+                    .with({ isProcessingStatus: true }, () => (
+                      <View className="flex-row items-center gap-2">
+                        <Text className="font-sans-medium text-orange">{t('pending')}</Text>
+
+                        <FaRotateRight aria-hidden className="size-4 text-orange" />
+                      </View>
+                    ))
+                    .with({ isBadStatus: true }, () => (
+                      <View className="flex-row items-center gap-2">
+                        <Text className="font-sans-medium text-pink">{t('failed')}</Text>
+
+                        <TbAlertTriangleFilled aria-hidden className="size-4 text-pink" />
+                      </View>
+                    ))
+                    .otherwise(() => (
+                      <Text className="font-sans-regular text-white">{t('unknownTransactionTo')}</Text>
+                    ))}
+                </SmallContent>
+
+                {fee && (
+                  <Fragment>
+                    <TwSeparator />
+
+                    <SmallContent title={t('transactionFee')}>
+                      <SwapDetailsTokenItem
+                        symbol={service.feeToken.symbol}
+                        blockchain={blockchain}
+                        amount={fee}
+                        decimals={service.feeToken.decimals}
+                      />
+                    </SmallContent>
+                  </Fragment>
                 )}
-              />
-            ) : (
-              <Text
-                className="max-w-[80%] font-sans-regular text-lg text-white"
-                numberOfLines={1}
-                ellipsizeMode="middle"
-              >
-                {swapRecord.account.address}
-              </Text>
-            )}
-          </SmallContent>
-
-          <HeaderTitle title={t('titles.to')} />
-
-          <SmallContent title={t('token')}>
-            <SwapDetailsTokenItem
-              symbol={tokenTo.symbol}
-              blockchain={tokenTo.blockchain}
-              amount={swapRecord.amountTo}
-              decimals={tokenTo.decimals}
-            />
-          </SmallContent>
-
-          <TwSeparator />
-
-          <SmallContent title={t('receivingAddress')}>
-            {tokenTo.addressTemplateUrl ? (
-              <SwapDetailsModalLinkButton
-                label={addressTo}
-                onPress={LinkHelper.open.bind(null, tokenTo.addressTemplateUrl.replace('{address}', addressTo))}
-              />
-            ) : (
-              <Text
-                className="max-w-[80%] font-sans-regular text-lg text-white"
-                numberOfLines={1}
-                ellipsizeMode="middle"
-              >
-                {addressTo}
-              </Text>
-            )}
-          </SmallContent>
-
-          {!contactAddress && tokenTo.blockchain && (
-            <View className="p-2">
-              <TouchableOpacity onPress={handleGoToCreateContact} activeOpacity={0.6}>
-                <View className="flex-row items-center gap-2">
-                  <TbUsers aria-hidden className="h-4 w-4 text-neon" />
-                  <Text className="font-sans-medium text-neon">{t('saveContact')}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {extraIdTo && (
-            <Fragment>
-              <TwSeparator />
-
-              <SmallContent title={t('extraIdToReceive')}>
-                <Text className="font-sans-regular text-white">{extraIdTo}</Text>
-              </SmallContent>
-            </Fragment>
-          )}
+              </View>
+            </TwAccordion.Content>
+          </TwAccordion.Root>
         </View>
-      )}
 
-      <TwButton
-        label={t('log')}
-        variant="text"
-        className="mt-4"
-        leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
-        onPress={handleGoToSwapLog}
-      />
+        {!isBadStatus && (
+          <View className="mt-2 w-full gap-2 rounded bg-asphalt p-2 py-3">
+            <HeaderTitle title={t('titles.from')} />
 
-      <TwButton
-        label={t('help')}
-        variant="contained-light"
-        className="mt-4"
-        leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
-        onPress={() => LinkHelper.open(ConstantsHelper.cozDiscordUrl)}
-      />
-    </TwModalLayout>
+            <SmallContent title={t('token')}>
+              <SwapDetailsTokenItem
+                symbol={tokenFrom.symbol}
+                blockchain={tokenFrom.blockchain}
+                amount={swapRecord.amountFrom}
+                decimals={tokenFrom.decimals}
+              />
+            </SmallContent>
+
+            <TwSeparator />
+
+            <SmallContent title={t('sendingAddress')}>
+              {tokenFrom.addressTemplateUrl ? (
+                <SwapDetailsModalLinkButton
+                  label={swapRecord.account.address}
+                  onPress={LinkHelper.open.bind(
+                    null,
+                    tokenFrom.addressTemplateUrl.replace('{address}', swapRecord.account.address)
+                  )}
+                />
+              ) : (
+                <Text
+                  className="max-w-[80%] font-sans-regular text-lg text-white"
+                  numberOfLines={1}
+                  ellipsizeMode="middle"
+                >
+                  {swapRecord.account.address}
+                </Text>
+              )}
+            </SmallContent>
+
+            <HeaderTitle title={t('titles.to')} />
+
+            <SmallContent title={t('token')}>
+              <SwapDetailsTokenItem
+                symbol={tokenTo.symbol}
+                blockchain={tokenTo.blockchain}
+                amount={swapRecord.amountTo}
+                decimals={tokenTo.decimals}
+              />
+            </SmallContent>
+
+            <TwSeparator />
+
+            <SmallContent title={t('receivingAddress')}>
+              {tokenTo.addressTemplateUrl ? (
+                <SwapDetailsModalLinkButton
+                  label={addressTo}
+                  onPress={LinkHelper.open.bind(null, tokenTo.addressTemplateUrl.replace('{address}', addressTo))}
+                />
+              ) : (
+                <Text
+                  className="max-w-[80%] font-sans-regular text-lg text-white"
+                  numberOfLines={1}
+                  ellipsizeMode="middle"
+                >
+                  {addressTo}
+                </Text>
+              )}
+            </SmallContent>
+
+            {!contactAddress && tokenTo.blockchain && (
+              <View className="p-2">
+                <TouchableOpacity onPress={handleGoToCreateContact} activeOpacity={0.6}>
+                  <View className="flex-row items-center gap-2">
+                    <TbUsers aria-hidden className="size-4 text-neon" />
+                    <Text className="font-sans-medium text-neon">{t('saveContact')}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {extraIdTo && (
+              <Fragment>
+                <TwSeparator />
+
+                <SmallContent title={t('extraIdToReceive')}>
+                  <Text className="font-sans-regular text-white">{extraIdTo}</Text>
+                </SmallContent>
+              </Fragment>
+            )}
+          </View>
+        )}
+
+        <TwButton
+          label={t('log')}
+          variant="text"
+          className="mt-4"
+          leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
+          onPress={handleGoToSwapLog}
+        />
+
+        <TwButton
+          label={t('help')}
+          variant="contained-light"
+          className="mt-4"
+          leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
+          onPress={() => LinkHelper.open(ConstantsHelper.cozDiscordUrl)}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

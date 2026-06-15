@@ -2,48 +2,43 @@
   "blockchainServices": {
     "arbitrum": {
       "accountName": "Conta Arbitrum",
-      "id": "Arbitrum",
       "label": "Arbitrum"
     },
     "base": {
       "accountName": "Conta Base",
-      "id": "Base",
       "label": "Base"
     },
-    "bnb": {
-      "accountName": "Conta BNB",
-      "id": "BNB",
-      "label": "BNB"
+    "bitcoin": {
+      "accountName": "Conta Bitcoin",
+      "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "Conta Ethereum",
-      "id": "Ethereum",
       "label": "Ethereum"
     },
     "neo3": {
-      "accountName": "Conta NEO",
-      "id": "Neo N3",
-      "label": "Neo (N3)"
+      "accountName": "Conta Neo 3",
+      "label": "Neo 3"
     },
     "neoLegacy": {
       "accountName": "Conta Neo Legacy",
-      "id": "Neo Legacy",
       "label": "Neo Legacy"
     },
     "neox": {
-      "accountName": "Conta NeoX",
-      "id": "NeoX",
-      "label": "NeoX"
+      "accountName": "Conta Neo X",
+      "label": "Neo X"
     },
     "polygon": {
       "accountName": "Conta Polygon",
-      "id": "Polygon",
       "label": "Polygon"
     },
     "solana": {
       "accountName": "Conta Solana",
-      "id": "Solana",
       "label": "Solana"
+    },
+    "stellar": {
+      "accountName": "Conta Stellar",
+      "label": "Stellar"
     }
   },
   "deeplink": {
@@ -75,13 +70,17 @@
     "delete": "Deletar",
     "disconnect": "Desconectar",
     "done": "Pronto",
+    "download": "Baixar",
     "edit": "Editar",
+    "emptyData": "--",
     "errorOpenLink": "Houve um problema ao abrir este link",
     "next": "Próximo",
     "no": "Não",
+    "reset": "Redefinir",
     "retry": "Tentar novamente",
     "save": "Salvar",
     "saveAndContinue": "Salvar & continuar",
+    "savedSuccessfully": "Salvo com sucesso",
     "skip": "Pular",
     "yes": "Sim"
   },
@@ -94,7 +93,7 @@
       "disconnectFirst": "Por favor, desconecte primeiro a carteira de hardware que está conectada no momento.",
       "hardwareWalletIsNotConnectOrUnlocked": "A carteira de hardware não está conectada ou está bloqueada. Verifique seu dispositivo e tente novamente.",
       "hardwareWalletNotFound": "Nenhuma carteira de hardware conectada",
-      "missingBip44Path": "O caminho BIP44 está ausente para a conta da carteira de hardware."
+      "missingBipPath": "O caminho BIP está ausente para a conta da carteira de hardware."
     }
   },
   "overTheAir": {

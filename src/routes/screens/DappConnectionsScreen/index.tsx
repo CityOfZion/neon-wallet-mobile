@@ -16,7 +16,7 @@ import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { useIsConnectedSelector } from '@/hooks/useUtilitySelector'
 import { useWalletConnectSessions } from '@/hooks/useWalletConnectSessions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbPlus from '@/assets/images/tb-plus.svg'
 
@@ -30,11 +30,11 @@ export const DappConnectionsScreen = ({
   navigation,
   route,
 }: TDappConnectionsStackScreenProps<'DappConnectionsScreen'>) => {
-  const { t } = useTranslation('screens', { keyPrefix: 'dappConnectionsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'dappConnections' })
   const { isNotConnected } = useIsConnectedSelector()
   const sessionsQuery = useWalletConnectSessions()
 
-  const sessions = sessionsQuery.data ?? []
+  const sessions = sessionsQuery.data || []
 
   const handlePressAdd = () => {
     navigation.navigate('DappConnectionModal')
@@ -62,46 +62,47 @@ export const DappConnectionsScreen = ({
   }, [navigation, route.params?.uri])
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      withoutScroll
-      withoutBackButton
-      rightElement={
-        <TwIconButton onPress={handlePressAdd} disabled={isNotConnected} aria-hidden icon={<TbPlus aria-hidden />} />
-      }
-    >
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        className="w-full"
-        contentContainerClassName="flex-1 mb-6"
-        data={sessions}
-        renderItem={renderItem}
-        keyExtractor={item => item.topic}
-        ItemSeparatorComponent={TwSeparator}
-        ListEmptyComponent={
-          <FlatListEmpty label={t('noDappsConnected')} className="w-full">
-            <TwButton
-              className="border-dashed"
-              colorSchema="white"
-              leftElement={<TbPlus aria-hidden />}
-              label={t('connectDappLabel')}
-              variant="outline"
-              disabled={isNotConnected}
-              onPress={handlePressAdd}
-            />
-          </FlatListEmpty>
-        }
-      />
-
-      {sessions.length > 0 && (
-        <TwButton
-          variant="outline"
-          leftElement={<TbPlus aria-hidden />}
-          label={t('connectNewDappLabel')}
-          disabled={isNotConnected}
-          onPress={handlePressAdd}
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        <ScreenLayout.ButtonContent position="right">
+          <TwIconButton onPress={handlePressAdd} disabled={isNotConnected} aria-hidden icon={<TbPlus aria-hidden />} />
+        </ScreenLayout.ButtonContent>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          className="w-full"
+          contentContainerClassName="flex-1 mb-6"
+          data={sessions}
+          renderItem={renderItem}
+          keyExtractor={item => item.topic}
+          ItemSeparatorComponent={TwSeparator}
+          ListEmptyComponent={
+            <FlatListEmpty label={t('noDappsConnected')} className="w-full">
+              <TwButton
+                className="border-dashed"
+                colorSchema="white"
+                leftElement={<TbPlus aria-hidden />}
+                label={t('connectDappLabel')}
+                variant="outline"
+                disabled={isNotConnected}
+                onPress={handlePressAdd}
+              />
+            </FlatListEmpty>
+          }
         />
-      )}
-    </TwScreenLayout>
+
+        {sessions.length > 0 && (
+          <TwButton
+            variant="outline"
+            leftElement={<TbPlus aria-hidden />}
+            label={t('connectNewDappLabel')}
+            disabled={isNotConnected}
+            onPress={handlePressAdd}
+          />
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

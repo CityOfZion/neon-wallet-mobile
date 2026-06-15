@@ -48,7 +48,7 @@ export const Loader = ({ className, containerClassName, paused, ...props }: TPro
   return (
     <View className={StyleHelper.mergeStyles('items-center justify-center', containerClassName)} aria-hidden>
       <Animated.View style={{ transform: [{ rotate: spin }] }}>
-        <TbRefresh className={StyleHelper.mergeStyles('h-6 w-6 stroke-[1.5px] text-gray-300', className)} {...props} />
+        <TbRefresh className={StyleHelper.mergeStyles('size-6 stroke-[1.5px] text-gray-300', className)} {...props} />
       </Animated.View>
     </View>
   )

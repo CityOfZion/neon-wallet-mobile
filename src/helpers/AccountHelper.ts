@@ -1,6 +1,6 @@
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccountHelperPredicateParams } from '@/types/helpers'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export class AccountHelper {
   static predicate({ address, blockchain }: TAccountHelperPredicateParams) {
@@ -11,7 +11,11 @@ export class AccountHelper {
     return (account: TAccountHelperPredicateParams) => address !== account.address || blockchain !== account.blockchain
   }
 
-  static getNextOrderOrMissing(accounts: IAccountState[], blockchain: TBlockchainServiceKey, walletId: string) {
+  static buildAccountKey({ address, blockchain }: TAccountHelperPredicateParams) {
+    return `${address}-${blockchain}`
+  }
+
+  static getNextOrderOrMissing(accounts: TAccount[], blockchain: TBlockchainServiceKey, walletId: string) {
     const orders = accounts
       .filter(account => account.idWallet === walletId && account.blockchain === blockchain)
       .map(({ order }) => order)
@@ -23,9 +27,5 @@ export class AccountHelper {
     for (let index = 0; index <= maxOrder; index++) if (!orders.includes(index)) return index
 
     return maxOrder + 1
-  }
-
-  static buildAccountKey({ address, blockchain }: TAccountHelperPredicateParams) {
-    return `${address}-${blockchain}`
   }
 }

@@ -35,6 +35,10 @@ export const RootStack = () => {
         }}
       >
         <RootNavigator.Screen
+          name="OnboardingImportModal"
+          getComponent={() => require('@/routes/modals/OnboardingImportModal').OnboardingImportModal}
+        />
+        <RootNavigator.Screen
           name="OnboardingBackupMnemonicModal"
           getComponent={() => require('@/routes/modals/OnboardingBackupMnemonicModal').OnboardingBackupMnemonicModal}
         />
@@ -81,8 +85,8 @@ export const RootStack = () => {
         />
 
         <RootNavigator.Screen
-          name="NodeSelectionModal"
-          getComponent={() => require('@/routes/modals/NodeSelectionModal').NodeSelectionModal}
+          name="NetworkUrlSelectionModal"
+          getComponent={() => require('@/routes/modals/NetworkUrlSelectionModal').NetworkUrlSelectionModal}
         />
         <RootNavigator.Screen
           name="EditAccountModal"
@@ -253,6 +257,18 @@ export const RootStack = () => {
           getComponent={() => require('@/routes/modals/AccountAssetTokenActionsModal').AccountAssetTokenActionsModal}
         />
         <RootNavigator.Screen
+          name="AccountTransactionsContextModal"
+          getComponent={() =>
+            require('@/routes/modals/AccountTransactionsContextModal').AccountTransactionsContextModal
+          }
+        />
+        <RootNavigator.Screen
+          name="AccountTransactionsUtxoDetailsModal"
+          getComponent={() =>
+            require('@/routes/modals/AccountTransactionsUtxoDetailsModal').AccountTransactionsUtxoDetailsModal
+          }
+        />
+        <RootNavigator.Screen
           name="AccountAssetActionsModal"
           getComponent={() => require('@/routes/modals/AccountAssetActionsModal').AccountAssetActionsModal}
         />
@@ -265,20 +281,20 @@ export const RootStack = () => {
           getComponent={() => require('@/routes/modals/DateSelectionModal').DateSelectionModal}
         />
         <RootNavigator.Screen
-          name="VoteNeo3HowItWorksModal"
-          getComponent={() => require('@/routes/modals/VoteNeo3HowItWorksModal').VoteNeo3HowItWorksModal}
+          name="Neo3VoteHowItWorksModal"
+          getComponent={() => require('@/routes/modals/Neo3VoteHowItWorksModal').Neo3VoteHowItWorksModal}
         />
         <RootNavigator.Screen
-          name="VoteNeo3SupportUsModal"
-          getComponent={() => require('@/routes/modals/VoteNeo3SupportUsModal').VoteNeo3SupportUsModal}
+          name="Neo3VoteSupportUsModal"
+          getComponent={() => require('@/routes/modals/Neo3VoteSupportUsModal').Neo3VoteSupportUsModal}
         />
         <RootNavigator.Screen
-          name="VoteNeo3ConfirmationModal"
-          getComponent={() => require('@/routes/modals/VoteNeo3ConfirmationModal').VoteNeo3ConfirmationModal}
+          name="Neo3VoteConfirmationModal"
+          getComponent={() => require('@/routes/modals/Neo3VoteConfirmationModal').Neo3VoteConfirmationModal}
         />
         <RootNavigator.Screen
-          name="VoteNeo3CandidateDetailsModal"
-          getComponent={() => require('@/routes/modals/VoteNeo3CandidateDetailsModal').VoteNeo3CandidateDetailsModal}
+          name="Neo3VoteCandidateDetailsModal"
+          getComponent={() => require('@/routes/modals/Neo3VoteCandidateDetailsModal').Neo3VoteCandidateDetailsModal}
         />
 
         <RootNavigator.Screen
@@ -296,22 +312,55 @@ export const RootStack = () => {
         />
 
         <RootNavigator.Screen
-          name="BridgeNeo3NeoXAboutModal"
-          getComponent={() => require('@/routes/modals/BridgeNeo3NeoXAboutModal').BridgeNeo3NeoXAboutModal}
+          name="ImportAddressSelectionModal"
+          getComponent={() => require('@/routes/modals/ImportAddressSelectionModal').ImportAddressSelectionModal}
+        />
+
+        <RootNavigator.Screen
+          name="ImportEncryptedKeySelectionModal"
+          getComponent={() =>
+            require('@/routes/modals/ImportEncryptedKeySelectionModal').ImportEncryptedKeySelectionModal
+          }
+        />
+
+        <RootNavigator.Screen
+          name="ImportKeySelectionModal"
+          getComponent={() => require('@/routes/modals/ImportKeySelectionModal').ImportKeySelectionModal}
+        />
+
+        <RootNavigator.Screen
+          name="ImportMnemonicSelectionModal"
+          getComponent={() => require('@/routes/modals/ImportMnemonicSelectionModal').ImportMnemonicSelectionModal}
+        />
+
+        <RootNavigator.Screen
+          name="Neo3NeoXBridgeAboutModal"
+          getComponent={() => require('@/routes/modals/Neo3NeoXBridgeAboutModal').Neo3NeoXBridgeAboutModal}
         />
         <RootNavigator.Screen
-          name="BridgeNeo3NeoXConfirmationModal"
+          name="Neo3NeoXBridgeConfirmationModal"
           getComponent={() =>
-            require('@/routes/modals/BridgeNeo3NeoXConfirmationModal').BridgeNeo3NeoXConfirmationModal
+            require('@/routes/modals/Neo3NeoXBridgeConfirmationModal').Neo3NeoXBridgeConfirmationModal
           }
         />
         <RootNavigator.Screen
-          name="BridgeNeo3NeoXDetailsModal"
-          getComponent={() => require('@/routes/modals/BridgeNeo3NeoXDetailsModal').BridgeNeo3NeoXDetailsModal}
+          name="Neo3NeoXBridgeDetailsModal"
+          getComponent={() => require('@/routes/modals/Neo3NeoXBridgeDetailsModal').Neo3NeoXBridgeDetailsModal}
         />
         <RootNavigator.Screen
           name="SurveyModal"
           getComponent={() => require('@/routes/modals/SurveyModal').SurveyModal}
+        />
+
+        <RootNavigator.Screen
+          name="StellarPersistTrustlineModal"
+          getComponent={() => require('@/routes/modals/StellarPersistTrustlineModal').StellarPersistTrustlineModal}
+        />
+        <RootNavigator.Screen
+          name="StellarTrustilneTokenSelectionModal"
+          getComponent={() =>
+            require('@/routes/modals/StellarTrustilneTokenSelectionModal').StellarTrustilneTokenSelectionModal
+          }
         />
       </RootNavigator.Group>
     </RootNavigator.Navigator>

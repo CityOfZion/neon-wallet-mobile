@@ -9,22 +9,22 @@ import type { TWalletCardRef } from './WalletCard'
 import { getWalletCardDimensions, WalletCard } from './WalletCard'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { IWalletState } from '@/types/store'
+import type { TWallet } from '@/types/store'
 
-interface TProps {
-  onPress?: (wallet: IWalletState, ref: TWalletCardRef) => void
-  onSelect?: (wallet: IWalletState) => void
+type TProps = {
+  onPress?: (wallet: TWallet, ref: TWalletCardRef) => void
+  onSelect?: (wallet: TWallet) => void
   onScrollBegin?: TCarouselProps['onScrollStart']
   onScrollEnd?: (index: number) => void
-  selectedWallet?: IWalletState
-  wallets: IWalletState[]
+  selectedWallet?: TWallet
+  wallets: TWallet[]
   blockchains?: TBlockchainServiceKey[]
 }
 
-type TItem = IWalletState & {
+type TItem = TWallet & {
   isSelected: () => boolean
   blockchains?: TBlockchainServiceKey[]
-  onPress: (wallet: IWalletState, ref: TWalletCardRef) => void
+  onPress: (wallet: TWallet, ref: TWalletCardRef) => void
 }
 
 const walletCardDimensions = getWalletCardDimensions()
@@ -51,8 +51,8 @@ export const WalletCarousel = ({
   wallets,
 }: TProps) => {
   const isSnapping = useRef(false)
+  const selectedWalletRef = useRef<TWallet>(undefined)
 
-  const selectedWalletRef = useRef<IWalletState>(undefined)
   selectedWalletRef.current = selectedWallet
 
   const data = useMemo<TItem[]>(() => {

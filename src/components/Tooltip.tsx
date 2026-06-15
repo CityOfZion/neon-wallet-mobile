@@ -1,16 +1,17 @@
 import { cloneElement, createContext, useContext, useEffect, useId, useRef, useState } from 'react'
 
-import type { Dispatch, JSX, ReactNode, SetStateAction } from 'react'
+import type { Dispatch, JSX, ReactNode, RefObject, SetStateAction } from 'react'
 import type { GestureResponderEvent, LayoutChangeEvent, ViewProps, ViewStyle } from 'react-native'
 import { Modal, Pressable, StatusBar, Text, useWindowDimensions, View } from 'react-native'
 import Svg, { Path } from 'react-native-svg'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 type TRootContextValue = {
   visible: boolean
   setVisible: Dispatch<SetStateAction<boolean>>
-  triggerRef: React.RefObject<View | null>
+  triggerRef: RefObject<View | null>
   nativeId: string
 } & Omit<TRootProps, 'children'>
 
@@ -142,7 +143,7 @@ const ContentPress = ({ children, className, ...props }: TContentProps) => {
   return (
     <Modal visible={visible} onRequestClose={() => setVisible(false)} transparent animationType="fade">
       {visible && (
-        <Pressable className="relative h-full w-full bg-black/80" onPress={() => setVisible(false)}>
+        <Pressable className="relative size-full bg-black/80" onPress={() => setVisible(false)}>
           <View
             onLayout={handleLayout}
             className="absolute"
@@ -155,10 +156,10 @@ const ContentPress = ({ children, className, ...props }: TContentProps) => {
               className={StyleHelper.mergeStyles('flex-row rounded-lg bg-gray-800 px-2 py-1', className)}
               {...props}
             >
-              {typeof children === 'object' ? (
-                children
-              ) : (
+              {ElementHelper.isTextContentValid(children) ? (
                 <Text className="font-sans-regular text-sm text-white">{children}</Text>
+              ) : (
+                children
               )}
             </View>
 
@@ -236,10 +237,10 @@ const ContentFocus = ({ children, className, ...props }: TContentProps) => {
         )}
         {...props}
       >
-        {typeof children === 'object' ? (
-          children
-        ) : (
+        {ElementHelper.isTextContentValid(children) ? (
           <Text className="font-sans-regular text-sm text-white">{children}</Text>
+        ) : (
+          children
         )}
       </View>
 

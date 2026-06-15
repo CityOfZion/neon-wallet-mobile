@@ -26,8 +26,8 @@ export type TNfcModalThis = {
 export let activatedNfcModal: TNfcModalThis | undefined
 
 const NfcModal = () => {
-  const { t } = useTranslation('components', { keyPrefix: 'nfcModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('components', { keyPrefix: 'nfc' })
+  const { t: tCommon } = useTranslation('common')
 
   const [visible, setVisible] = useState(false)
   const [status, setStatus] = useState<'success' | 'idle'>('idle')
@@ -74,8 +74,8 @@ const NfcModal = () => {
   if (!visible) return null
 
   return (
-    <Animated.View className="absolute h-full w-full" entering={FadeIn} exiting={FadeOut}>
-      <BlurView className="absolute h-full w-full" intensity={90} tint="dark" />
+    <Animated.View className="absolute size-full" entering={FadeIn} exiting={FadeOut}>
+      <BlurView className="absolute size-full" intensity={90} tint="dark" />
 
       <View className="flex-1 items-center justify-end p-3">
         <Animated.View
@@ -84,17 +84,18 @@ const NfcModal = () => {
           exiting={SlideOutDown}
         >
           <Text className="text-center font-sans-bold text-3xl text-gray-700 dark:text-white">{t('title')}</Text>
+
           <Text className="mt-1 text-center font-sans-regular text-lg text-gray-300 dark:text-white">
-            {showOptions.current?.message ?? t('description')}
+            {showOptions.current?.message || t('description')}
           </Text>
 
-          <View className="relative my-12 h-28 w-28 items-center justify-center overflow-hidden rounded-full border-8 border-blue">
-            {status === 'success' ? <NfcModalAnimatedCheck /> : <NfcModalAnimatedPhone />}
+          <View className="relative my-12 size-28 items-center justify-center overflow-hidden rounded-full border-8 border-blue">
+            {status === 'success' ? <NfcModalAnimatedCheck aria-hidden /> : <NfcModalAnimatedPhone aria-hidden />}
           </View>
 
           <TwButton
             onPress={handleCancel}
-            label={commonT('general.cancel')}
+            label={tCommon('general.cancel')}
             variant="card"
             labelProps={{ className: 'dark:text-white text-asphalt' }}
             className="w-full bg-gray-300/30"

@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useMount } from '@/hooks/useMount'
-import { useLazyPingNodes } from '@/hooks/useNodes'
+import { useLazyPingNetworks } from '@/hooks/usePingNetworks'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelector'
 
@@ -12,30 +12,28 @@ import { settingsReducerActions } from '@/store/reducers/settings'
 
 export const NetworkManagerSetup = () => {
   const dispatch = useAppDispatch()
-  const { getPingNodes } = useLazyPingNodes()
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
+  const { getPingNetworks } = useLazyPingNetworks()
 
   useMount(() => {
     const callbackId = requestIdleCallback(
       async () => {
         const services = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName)
-
         const updatedNetworks = cloneDeep(selectedNetworkByBlockchain)
 
         const promises = services.map(async service => {
           const currentNetwork = updatedNetworks[service.name]
 
           try {
-            await service.pingNode(currentNetwork.url)
+            await service.pingNetwork(currentNetwork.url)
           } catch {
-            const nodes = await getPingNodes(service.name)
+            const [newNetwork] = await getPingNetworks(service.name)
 
-            const newNode = nodes[0]
-            if (!newNode) return
+            if (!newNetwork) return
 
             updatedNetworks[service.name] = {
               ...currentNetwork,
-              url: newNode.url,
+              url: newNetwork.url,
             }
           }
         })

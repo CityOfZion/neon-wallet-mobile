@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 
-import type { ContractInvocationMulti } from '@cityofzion/bs-neo3'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -8,6 +7,7 @@ import { Details } from '@/components/Details'
 import { TwButton } from '@/components/TwButton'
 import { TwDappHeader } from '@/components/TwDappHeader'
 
+import type { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 
 import TbArrowsSort from '@/assets/images/tb-arrows-sort.svg'
@@ -20,11 +20,14 @@ import { DappPermissionInvokeNeo3ContentSigner } from './DappPermissionInvokeNeo
 export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => {
   const { session, onAccept, onReject, isAccepting, isRejecting, request } = props
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
+  const { t: tCommon } = useTranslation('common')
 
-  const params = request.params.request.params as ContractInvocationMulti
-
+  const params = request.params.request.params as Awaited<
+    ReturnType<
+      typeof BlockchainServiceHelper.bsAggregator.blockchainServicesByName.neo3.walletConnectService.handlers.invokeFunction.validate
+    >
+  >
   useEffect(() => {
     if (params.extraNetworkFee || params.extraSystemFee || params.systemFeeOverride || params.networkFeeOverride) {
       ToastHelper.info({ message: t('feeOverridesMessage'), id: 'dapp-permission-fee-overrides' })
@@ -72,7 +75,7 @@ export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => 
       <View className="mt-auto gap-4 pt-8">
         <TwButton
           variant="contained-light"
-          label={commonT('general.accept')}
+          label={tCommon('general.accept')}
           onPress={() => onAccept()}
           isLoading={isAccepting}
           disabled={isRejecting}
@@ -80,7 +83,7 @@ export const DappPermissionInvokeNeo3Content = (props: TDappPermissionProps) => 
 
         <TwButton
           variant="outline"
-          label={commonT('general.decline')}
+          label={tCommon('general.decline')}
           onPress={() => onReject()}
           isLoading={isRejecting}
           disabled={isAccepting}

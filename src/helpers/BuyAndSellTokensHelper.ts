@@ -30,7 +30,7 @@ export class BuyAndSellTokensHelper {
       lang: this.#lang,
       themeMode: this.#theme,
       hideBrand: String(this.#hideBrand),
-      wallet: account?.address ?? '',
+      wallet: account?.address || '',
       reloadId: id,
     })
 

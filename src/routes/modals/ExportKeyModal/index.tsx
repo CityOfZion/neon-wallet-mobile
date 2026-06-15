@@ -16,8 +16,7 @@ import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useMount } from '@/hooks/useMount'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
@@ -26,8 +25,8 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const ExportKeyModal = ({ navigation, route }: TRootStackScreenProps<'ExportKeyModal'>) => {
   const { account } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'exportKeyModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'exportKey' })
+  const { t: tCommon } = useTranslation('common')
 
   const [key, setKey] = useState<string>()
 
@@ -56,29 +55,35 @@ export const ExportKeyModal = ({ navigation, route }: TRootStackScreenProps<'Exp
   )
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <AccountSubTitle account={account} />
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <AccountSubTitle account={account} />
 
-      {isMounting || !key ? (
-        <ScreenLoader />
-      ) : (
-        <Fragment>
-          <View className="my-11 w-full px-9">
-            <NeonQRCode value={key} />
-          </View>
+        {isMounting || !key ? (
+          <ScreenLoader />
+        ) : (
+          <Fragment>
+            <View className="my-11 w-full px-9">
+              <NeonQRCode value={key} />
+            </View>
 
-          <Text className="font-sans-semibold text-sm uppercase text-gray-300">{t('details')}</Text>
-          <Text className="mt-2 font-sans-regular text-base text-white">{key}</Text>
+            <Text className="font-sans-semibold text-sm uppercase text-gray-300">{t('details')}</Text>
+            <Text className="mt-2 font-sans-regular text-base text-white">{key}</Text>
 
-          <TwButton
-            leftElement={<TbCopy aria-hidden />}
-            className="mt-auto"
-            variant="contained-light"
-            label={commonT('general.copyToClipboard')}
-            onPress={handleCopy}
-          />
-        </Fragment>
-      )}
-    </TwModalLayout>
+            <TwButton
+              leftElement={<TbCopy aria-hidden />}
+              className="mt-auto"
+              variant="contained-light"
+              label={tCommon('general.copyToClipboard')}
+              onPress={handleCopy}
+            />
+          </Fragment>
+        )}
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

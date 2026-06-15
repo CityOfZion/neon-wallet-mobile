@@ -11,8 +11,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 import { BuyAndSellTokensHelper } from '@/helpers/BuyAndSellTokensHelper'
 import { LinkHelper } from '@/helpers/LinkHelper'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
 import SumsubLogoIcon from '@/assets/images/sumsub-logo.svg'
@@ -24,7 +23,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const BuyAndSellTokensAboutDataModal = ({
   navigation,
 }: TRootStackScreenProps<'BuyAndSellTokensAboutDataModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAboutDataModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAboutData' })
 
   const handleBack = () => {
     navigation.goBack()
@@ -35,64 +34,67 @@ export const BuyAndSellTokensAboutDataModal = ({
   }
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      titleClassName="text-white text-xl"
-      leftElement={
-        <TwIconButton
-          aria-label={t('labels.back')}
-          icon={<TbArrowLeft className="text-white" aria-hidden />}
-          onPress={handleBack}
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.ButtonContent position="left">
+          <TwIconButton
+            aria-label={t('labels.back')}
+            icon={<TbArrowLeft className="text-white" aria-hidden />}
+            onPress={handleBack}
+          />
+        </ModalLayout.ButtonContent>
+
+        <ModalLayout.Title className="text-xl text-white">{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={handleClose} />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Text className="mt-2 font-sans-regular text-white">{t('sumsub.description')}</Text>
+
+        <View className="mx-auto my-4 flex max-h-12 w-[80%] items-center justify-center rounded-full bg-gray-300/15 p-2">
+          <SumsubLogoIcon aria-hidden className="h-full" />
+        </View>
+
+        <TwButton
+          label={t('sumsub.link')}
+          variant="text-slim"
+          className="mx-auto flex-shrink-0 flex-grow-0"
+          contentProps={{ className: 'w-fit flex-shrink-0 flex-grow-0 gap-x-2' }}
+          labelProps={{ className: 'text-sm font-sans-medium w-fit flex-shrink-0 flex-grow-0' }}
+          rightElement={<MdOpenInNew aria-hidden className="size-5 text-neon" />}
+          onPress={LinkHelper.open.bind(null, BuyAndSellTokensHelper.sumsubTermsAndConditionsUrl)}
         />
-      }
-      rightElement={<TwModalLayoutCloseIconButton onPress={handleClose} />}
-    >
-      <Text className="mt-2 font-sans-regular text-white">{t('sumsub.description')}</Text>
 
-      <View className="mx-auto my-4 flex max-h-12 w-[80%] items-center justify-center rounded-full bg-gray-300/15 p-2">
-        <SumsubLogoIcon aria-hidden className="h-full" />
-      </View>
+        <TwSeparator containerClassName="my-5" />
 
-      <TwButton
-        label={t('sumsub.link')}
-        variant="text-slim"
-        className="mx-auto h-fit w-fit flex-shrink-0 flex-grow-0"
-        contentProps={{ className: 'w-fit flex-shrink-0 flex-grow-0 gap-x-2' }}
-        labelProps={{ className: 'text-sm font-sans-medium w-fit flex-shrink-0 flex-grow-0' }}
-        rightElement={<MdOpenInNew aria-hidden className="h-5 w-5 text-neon" />}
-        onPress={LinkHelper.open.bind(null, BuyAndSellTokensHelper.sumsubTermsAndConditionsUrl)}
-      />
+        <Text className="font-sans-regular text-white">{t('unlimit.description')}</Text>
 
-      <TwSeparator containerClassName="my-5" />
+        <View className="mx-auto my-4 flex max-h-12 w-[80%] items-center justify-center rounded-full bg-gray-300/15 p-2">
+          <UnlimitLogoIcon aria-hidden className="h-full" />
+        </View>
 
-      <Text className="font-sans-regular text-white">{t('unlimit.description')}</Text>
+        <TwButton
+          label={t('unlimit.link')}
+          variant="text-slim"
+          className="mx-auto flex-shrink-0 flex-grow-0"
+          contentProps={{ className: 'w-fit flex-shrink-0 flex-grow-0 gap-x-2' }}
+          labelProps={{ className: 'text-sm font-sans-medium w-fit flex-shrink-0 flex-grow-0' }}
+          rightElement={<MdOpenInNew aria-hidden className="size-5 text-neon" />}
+          onPress={LinkHelper.open.bind(null, BuyAndSellTokensHelper.unlimitUseTermsUrl)}
+        />
 
-      <View className="mx-auto my-4 flex max-h-12 w-[80%] items-center justify-center rounded-full bg-gray-300/15 p-2">
-        <UnlimitLogoIcon aria-hidden className="h-full" />
-      </View>
+        <TwSeparator containerClassName="my-5" />
 
-      <TwButton
-        label={t('unlimit.link')}
-        variant="text-slim"
-        className="mx-auto h-fit w-fit flex-shrink-0 flex-grow-0"
-        contentProps={{ className: 'w-fit flex-shrink-0 flex-grow-0 gap-x-2' }}
-        labelProps={{ className: 'text-sm font-sans-medium w-fit flex-shrink-0 flex-grow-0' }}
-        rightElement={<MdOpenInNew aria-hidden className="h-5 w-5 text-neon" />}
-        onPress={LinkHelper.open.bind(null, BuyAndSellTokensHelper.unlimitUseTermsUrl)}
-      />
+        <Text className="mb-6 font-sans-regular text-white">{t('description')}</Text>
 
-      <TwSeparator containerClassName="my-5" />
-
-      <Text className="mb-6 font-sans-regular text-white">{t('description')}</Text>
-
-      <TwBanner
-        type="warning"
-        iconClassName="stroke-pink w-5 h-5"
-        className="w-full bg-pink-700"
-        iconContainerClassName="py-0 px-3 bg-pink-700"
-      >
-        <Text className="flex-shrink py-3 pr-3 font-sans-regular text-white">{t('info')}</Text>
-      </TwBanner>
-    </TwModalLayout>
+        <TwBanner
+          type="warning"
+          iconClassName="stroke-pink size-5"
+          className="w-full bg-pink-700"
+          iconContainerClassName="py-0 px-3 bg-pink-700"
+        >
+          <Text className="flex-shrink py-3 pr-3 font-sans-regular text-white">{t('info')}</Text>
+        </TwBanner>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import isArray from 'lodash/isArray'
+import isObject from 'lodash/isObject'
 import mapValues from 'lodash/mapValues'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -23,12 +24,15 @@ import { DappPermissionGenericContentFee } from './DappPermissionGenericContentF
 export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
   const { session, onAccept, onReject, isAccepting, isRejecting, request, sessionDetails } = props
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
+  const { t: tCommon } = useTranslation('common')
 
   const parsedParams = useMemo(() => {
     const params = request.params.request.params
-    return mapValues(isArray(params) && params.length === 1 ? params[0] : params, UtilsHelper.parseJsonSafely)
+    return mapValues(
+      isArray(params) && params.length === 1 && isObject(params[0]) ? params[0] : params,
+      UtilsHelper.parseJsonSafely
+    )
   }, [request.params.request.params])
 
   const isCalculableMethod = sessionDetails.service.walletConnectService.calculableMethods.includes(
@@ -63,7 +67,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
             <Details.Header
               rightElement={
                 <TwIconButton
-                  aria-label={commonT('general.copy')}
+                  aria-label={tCommon('general.copy')}
                   icon={<TbCopy aria-hidden className="text-neon" />}
                   size="sm"
                   onPress={() => ClipboardHelper.write(content)}
@@ -78,7 +82,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
             <Details.HeaderSeparator />
 
             <Details.Item contentClassName="bg-gray-700/60 px-5 py-2.5 rounded whitespace-pre-wrap break-words">
-              {typeof value === 'string' ? value : JSON.stringify(value, null, 2)}
+              {content}
             </Details.Item>
           </Details.Root>
         )
@@ -89,7 +93,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
       <View className="mt-auto gap-4 pt-8">
         <TwButton
           variant="contained-light"
-          label={commonT('general.accept')}
+          label={tCommon('general.accept')}
           onPress={() => onAccept()}
           isLoading={isAccepting}
           disabled={isRejecting}
@@ -97,7 +101,7 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
 
         <TwButton
           variant="outline"
-          label={commonT('general.decline')}
+          label={tCommon('general.decline')}
           onPress={() => onReject()}
           isLoading={isRejecting}
           disabled={isAccepting}

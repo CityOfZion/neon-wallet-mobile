@@ -47,7 +47,7 @@ const AccountCardComponent = ({
 }: TProps) => {
   const navigation = useNavigation()
   const { t } = useTranslation('components', { keyPrefix: 'accountCard' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
   const balance = useBalance(account)
   const { currency } = useCurrencySelector()
 
@@ -68,7 +68,7 @@ const AccountCardComponent = ({
           P.when(value => value.type === 'nft' && !!value.imgUrl),
           () => (
             <Image
-              className="absolute h-full w-full"
+              className="absolute size-full"
               source={{
                 uri: (account.skin as TNftSkin).imgUrl,
                 height: ACCOUNT_CARD_WIDTH,
@@ -82,7 +82,7 @@ const AccountCardComponent = ({
           P.when(value => value.type === 'local' && !!SkinHelper.localSkins.get(value.id)),
           () => (
             <Image
-              className="absolute h-full w-full"
+              className="absolute size-full"
               source={{ uri: SkinHelper.localSkins.get(account.skin.id)!.imageUrl }}
               contentFit="cover"
               cachePolicy="memory-disk"
@@ -92,15 +92,15 @@ const AccountCardComponent = ({
         )
         .otherwise(() => (
           <LinearGradient
-            className="absolute h-full w-full"
+            className="absolute size-full"
             start={{ x: 0, y: 0 }}
             colors={['rgba(0, 0, 0, 0.5)', 'transparent']}
           />
         ))}
 
-      <View className="h-full w-full px-3.5 py-6">
+      <View className="size-full px-3.5 py-6">
         <View className="flex-row items-center gap-5">
-          <TwBlockchainIcon className="h-6 w-6" blockchain={account.blockchain} type="white" />
+          <TwBlockchainIcon className="size-6 text-white" blockchain={account.blockchain} />
 
           <Text
             className={StyleHelper.mergeStyles('flex-shrink flex-grow font-sans-semibold text-2xl text-white', {
@@ -108,7 +108,7 @@ const AccountCardComponent = ({
             })}
             numberOfLines={1}
           >
-            {account.name ?? t('accountPlaceholder')}
+            {account.name || t('accountPlaceholder')}
           </Text>
 
           {isCompacted || isStack ? (
@@ -132,7 +132,7 @@ const AccountCardComponent = ({
               {!hideQRCode && (
                 <TwIconButton
                   className="p-0"
-                  icon={<TbQrcode aria-hidden className="h-7 w-7 text-white" />}
+                  icon={<TbQrcode aria-hidden className="size-7 text-white" />}
                   onPress={handlePressQRCode}
                 />
               )}
@@ -141,7 +141,9 @@ const AccountCardComponent = ({
         </View>
 
         <View className="flex-row justify-between pl-11">
-          <Text className="font-sans-bold text-sm uppercase text-white/60">{commonT(`${account.blockchain}.id`)}</Text>
+          <Text className="font-sans-bold text-sm uppercase text-white/60">
+            {tCommonBlockchainServices(`${account.blockchain}.label`)}
+          </Text>
 
           {(isCompacted || isStack) && !hideBalance && (
             <Text className="font-sans-bold text-sm uppercase text-white/60">{t('balance')}</Text>
@@ -175,7 +177,7 @@ const AccountCardComponent = ({
               'mt-auto': isCompacted,
             })}
           >
-            {account.type === 'watch' && <TbBinocularsFilled className="h-8 w-8 text-white" />}
+            {account.type === 'watch' && <TbBinocularsFilled className="size-8 text-white" />}
 
             <View className="flex-shrink flex-grow gap-0.5">
               {!isCompacted && !isStack && (

@@ -2,48 +2,43 @@
   "blockchainServices": {
     "arbitrum": {
       "accountName": "Arbitrum 帳戶",
-      "id": "Arbitrum",
       "label": "Arbitrum"
     },
     "base": {
       "accountName": "Base 帳戶",
-      "id": "Base",
       "label": "Base"
     },
-    "bnb": {
-      "accountName": "BNB 帳戶",
-      "id": "BNB",
-      "label": "BNB"
+    "bitcoin": {
+      "accountName": "比特幣帳戶",
+      "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "以太坊帳戶",
-      "id": "Ethereum",
       "label": "以太坊"
     },
     "neo3": {
-      "accountName": "NEO 帳戶",
-      "id": "Neo N3",
-      "label": "Neo（N3）"
+      "accountName": "Neo 3 帳戶",
+      "label": "Neo 3"
     },
     "neoLegacy": {
       "accountName": "Neo 傳統帳戶",
-      "id": "Neo Legacy",
       "label": "Neo 傳統版"
     },
     "neox": {
-      "accountName": "NeoX 帳戶",
-      "id": "NeoX",
-      "label": "NeoX"
+      "accountName": "Neo X 帳戶",
+      "label": "Neo X"
     },
     "polygon": {
       "accountName": "Polygon 帳戶",
-      "id": "Polygon",
       "label": "Polygon"
     },
     "solana": {
       "accountName": "Solana 帳戶",
-      "id": "索拉納",
       "label": "索拉納"
+    },
+    "stellar": {
+      "accountName": "Stellar 帳戶",
+      "label": "Stellar"
     }
   },
   "deeplink": {
@@ -75,13 +70,17 @@
     "delete": "刪除",
     "disconnect": "中斷連線",
     "done": "完成",
+    "download": "下載",
     "edit": "編輯",
+    "emptyData": "--",
     "errorOpenLink": "開啟此連結時發生問題",
     "next": "下一步",
     "no": "否",
+    "reset": "重設",
     "retry": "重試",
     "save": "儲存",
     "saveAndContinue": "儲存並繼續",
+    "savedSuccessfully": "儲存成功",
     "skip": "跳過",
     "yes": "是"
   },
@@ -94,7 +93,7 @@
       "disconnectFirst": "請先斷開目前連接的硬體錢包。",
       "hardwareWalletIsNotConnectOrUnlocked": "硬體錢包未連接或已鎖定，請驗證您的裝置並重試。",
       "hardwareWalletNotFound": "未連接任何硬體錢包",
-      "missingBip44Path": "硬體錢包帳戶缺少 BIP44 路徑"
+      "missingBipPath": "硬體錢包帳戶缺少 BIP 路徑"
     }
   },
   "overTheAir": {

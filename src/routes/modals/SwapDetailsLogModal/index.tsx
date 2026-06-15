@@ -10,8 +10,7 @@ import { TwButton } from '@/components/TwButton'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
@@ -20,7 +19,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 const swapService = new SimpleSwapService()
 
 export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetailsLogModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsLogModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsLog' })
 
   const {
     swapRecord: { swapId, ...swapRecord },
@@ -37,42 +36,48 @@ export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetail
         if (response.log) finalLog = response.log
       }
 
-      return JSON.stringify(JSON.parse(finalLog ?? ''), null, 1)
+      return finalLog ? JSON.stringify(JSON.parse(finalLog), null, 1) : ''
     },
   })
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      <Skeleton.Root loading={isLoading} className="w-full flex-1">
-        <Skeleton.Group>
-          <Skeleton.Item />
-        </Skeleton.Group>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ViewContent>
+        <Skeleton.Root loading={isLoading} className="w-full flex-1">
+          <Skeleton.Group>
+            <Skeleton.Item />
+          </Skeleton.Group>
 
-        <Skeleton.Content className="w-full flex-1 rounded-lg bg-gray-900/75 p-4">
-          {log ? (
-            <ScrollView
-              className="w-full flex-1"
-              alwaysBounceVertical={false}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              disableScrollViewPanResponder
-            >
-              <Text className="font-sans-regular text-sm text-white">{log}</Text>
-            </ScrollView>
-          ) : (
-            <Text className="text-center font-sans-medium text-lg text-gray-300">{t('thereIsNoLog')}</Text>
-          )}
-        </Skeleton.Content>
-      </Skeleton.Root>
+          <Skeleton.Content className="w-full flex-1 rounded-lg bg-gray-900/75 p-4">
+            {log ? (
+              <ScrollView
+                className="w-full flex-1"
+                alwaysBounceVertical={false}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                disableScrollViewPanResponder
+              >
+                <Text className="font-sans-regular text-sm text-white">{log}</Text>
+              </ScrollView>
+            ) : (
+              <Text className="text-center font-sans-medium text-lg text-gray-300">{t('thereIsNoLog')}</Text>
+            )}
+          </Skeleton.Content>
+        </Skeleton.Root>
 
-      <TwButton
-        variant="contained-light"
-        className="mt-6"
-        label={t('copySwapLog')}
-        rightElement={<TbCopy aria-hidden />}
-        disabled={!log}
-        onPress={() => ClipboardHelper.write(log ?? '')}
-      />
-    </TwModalLayout>
+        <TwButton
+          variant="contained-light"
+          className="mt-6"
+          label={t('copySwapLog')}
+          rightElement={<TbCopy aria-hidden />}
+          disabled={!log}
+          onPress={() => ClipboardHelper.write(log!)}
+        />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

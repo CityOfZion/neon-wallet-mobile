@@ -9,7 +9,7 @@ import { TokenHelper } from '@/helpers/TokenHelper'
 
 import { useAppDispatch } from '@/hooks/useRedux'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbEye from '@/assets/images/tb-eye.svg'
 import TbEyeOff from '@/assets/images/tb-eye-off.svg'
@@ -21,8 +21,8 @@ export const AccountAssetTokenActionsModal = ({
   navigation,
   route,
 }: TRootStackScreenProps<'AccountAssetTokenActionsModal'>) => {
-  const { t: commonT } = useTranslation('common')
-  const { t } = useTranslation('modals', { keyPrefix: 'accountAssetTokenActionsModal' })
+  const { t: tCommon } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'accountAssetTokenActions' })
 
   const dispatch = useAppDispatch()
 
@@ -48,17 +48,21 @@ export const AccountAssetTokenActionsModal = ({
   }
 
   return (
-    <TwModalLayout full={false} withoutHeader>
-      <TwMenuButton
-        label={isActive ? t('hideButtonLabel') : t('showButtonLabel')}
-        leftElement={
-          isActive ? <TbEyeOff aria-hidden className="text-neon" /> : <TbEye aria-hidden className="text-neon" />
-        }
-        onPress={handlePress}
-        disabled={isNativeToken}
-      />
+    <ModalLayout.Root full={false}>
+      <ModalLayout.Header />
 
-      <TwButton variant="text" label={commonT('general.cancel')} className="mt-7" onPress={navigation.goBack} />
-    </TwModalLayout>
+      <ModalLayout.ScrollContent>
+        <TwMenuButton
+          label={isActive ? t('hideButtonLabel') : t('showButtonLabel')}
+          leftElement={
+            isActive ? <TbEyeOff aria-hidden className="text-neon" /> : <TbEye aria-hidden className="text-neon" />
+          }
+          onPress={handlePress}
+          disabled={isNativeToken}
+        />
+
+        <TwButton variant="text" label={tCommon('general.cancel')} className="mt-7" onPress={navigation.goBack} />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

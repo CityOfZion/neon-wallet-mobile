@@ -14,8 +14,7 @@ import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { useActions } from '@/hooks/useActions'
 import { useNeonCreateBackup } from '@/hooks/useNeonBackup'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbDeviceFloppy from '@/assets/images/tb-device-floppy.svg'
 
@@ -29,7 +28,7 @@ type TActionData = {
 }
 
 export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateBackupModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'createBackupModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'createBackup' })
   const { handleCreateBackup } = useNeonCreateBackup()
 
   const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionData>(
@@ -48,9 +47,7 @@ export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateB
     navigation.navigate('SuccessModal', {
       title: t('title'),
       content: <CreateBackupModalSuccessContent password={actionData.password} />,
-      buttonProps: {
-        label: t('successModal.submitButtonLabel'),
-      },
+      buttonLabel: t('success.submitButtonLabel'),
     })
   }
 
@@ -74,12 +71,13 @@ export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateB
   }, [actionData.confirmPassword, actionData.password, setError, clearErrors, t])
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      rightElement={<TwModalLayoutCloseIconButton />}
-      contentContainerClassName="justify-between"
-    >
-      <View>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+
+      <ModalLayout.KeyboardAvoidingContent>
         <Text className="font-sans-regular text-lg text-white">{t('description')}</Text>
 
         <TwSeparator className="my-7" />
@@ -109,29 +107,29 @@ export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateB
         {actionState.errors.confirmPassword && (
           <TwAlertErrorBanner className="mt-2.5" message={actionState.errors.confirmPassword} />
         )}
-      </View>
 
-      <View className="mt-7 gap-7">
-        <TwBanner type="warningOrange">
-          <Text className="flex-shrink px-5 py-3.5 font-sans-regular text-lg text-white">
-            <Trans t={t} i18nKey="keepSafeAlertMessage">
-              start
-              <Text className="text-orange">middle</Text>
-            </Trans>
-          </Text>
-        </TwBanner>
+        <View className="mt-auto pt-7">
+          <TwBanner type="warningOrange">
+            <Text className="flex-shrink px-5 py-3.5 font-sans-regular text-lg text-white">
+              <Trans t={t} i18nKey="keepSafeAlertMessage">
+                start
+                <Text className="text-orange">middle</Text>
+              </Trans>
+            </Text>
+          </TwBanner>
+        </View>
 
-        <TwSeparator />
-
-        <TwButton
-          label={t('submitButtonLabel')}
-          variant="contained-light"
-          rightElement={<TbDeviceFloppy aria-hidden />}
-          onPress={handleAct(handleSubmit)}
-          isLoading={actionState.isActing}
-          disabled={!actionState.isValid}
-        />
-      </View>
-    </TwModalLayout>
+        <ModalLayout.KeyboardAvoidingArea className="pt-7">
+          <TwButton
+            label={t('submitButtonLabel')}
+            variant="contained-light"
+            rightElement={<TbDeviceFloppy aria-hidden />}
+            onPress={handleAct(handleSubmit)}
+            isLoading={actionState.isActing}
+            disabled={!actionState.isValid}
+          />
+        </ModalLayout.KeyboardAvoidingArea>
+      </ModalLayout.KeyboardAvoidingContent>
+    </ModalLayout.Root>
   )
 }

@@ -29,14 +29,14 @@ type TItem = {
 }
 
 const renderItem: ListRenderItem<TItem> = ({ item }) => {
-  return <TwMenuButton label={item.device.name ?? ''} onPress={item.onPress} isLoading={item.isLoading} />
+  return <TwMenuButton label={item.device.name || ''} onPress={item.onPress} isLoading={item.isLoading} />
 }
 
 export const ConnectHardwareBluetoothModalList = ({
   navigation,
 }: TRootStackScreenProps<'ConnectHardwareBluetoothModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetoothModal.list' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'connectHardwareBluetooth.list' })
+  const { t: tCommon } = useTranslation('common')
   const { createHardwareWallet } = useCreateHardwareWallet()
 
   const [devices, setDevices] = useState<BleDevice[]>([])
@@ -51,7 +51,7 @@ export const ConnectHardwareBluetoothModalList = ({
       ToastHelper.success({ message: t('success') })
 
       navigation.pop(2)
-      await UtilsHelper.sleep(500)
+      await UtilsHelper.sleep(1000)
       navigation.navigate('TabStack', {
         screen: 'WalletsStack',
         params: {
@@ -64,7 +64,7 @@ export const ConnectHardwareBluetoothModalList = ({
     } catch (error) {
       LoggerHelper.error(error, { where: 'ConnectHardwareBluetoothModalList', operation: 'connect' })
       ToastHelper.error({
-        message: AppError.wrap(error, commonT('hardwareWallet.errors.hardwareWalletNotFound')).message,
+        message: AppError.wrap(error, tCommon('hardwareWallet.errors.hardwareWalletNotFound')).message,
       })
       setSelectedDevice(undefined)
     }
@@ -89,14 +89,14 @@ export const ConnectHardwareBluetoothModalList = ({
     <View className="flex-grow items-center">
       <Text className="text-center font-sans-medium text-2xl text-white">{t('title')}</Text>
 
-      <TbBluetooth aria-hidden className="my-9 h-28 w-28 stroke-1 text-blue" />
+      <TbBluetooth aria-hidden className="my-9 size-28 stroke-1 text-blue" />
 
       <FlatList
         className="flex-shrink flex-grow"
         data={items}
         renderItem={renderItem}
         ItemSeparatorComponent={TwSeparator}
-        ListFooterComponent={<Loader className="h-10 w-10" />}
+        ListFooterComponent={<Loader className="size-10" />}
         showsVerticalScrollIndicator={false}
       />
 

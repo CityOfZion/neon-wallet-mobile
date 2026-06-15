@@ -1,61 +1,88 @@
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 
 import { hasFullTransactions } from '@cityofzion/blockchain-service'
+import * as dateFns from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import type { SectionListData, SectionListRenderItem } from 'react-native'
-import { SectionList, Text } from 'react-native'
+import { SectionList, Text, View } from 'react-native'
 
 import { AccountSubTitle } from '@/components/AccountSubTitle'
 import { FlatListEmpty } from '@/components/FlatListEmpty'
 import { RefreshControl } from '@/components/RefreshControl'
 import { Skeleton } from '@/components/Skeleton'
+import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
+import { TwIconButton } from '@/components/TwIconButton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
+import { useActions } from '@/hooks/useActions'
 import { useTransactionsQuery } from '@/hooks/useTransactionsQuery'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
-import { TwScreenLayoutButton } from '@/layouts/TwScreenLayout/TwScreenLayoutButtons'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
-import { AccountTransactionsScreenTransactionItem } from './AccountTransactionsScreenTransactionItem'
+import MdMoreHoriz from '@/assets/images/md-more-horiz.svg'
 
+import { AccountTransactionsScreenTransactionDefault } from './AccountTransactionsScreenTransactionDefault'
+import { AccountTransactionsScreenTransactionUtxo } from './AccountTransactionsScreenTransactionUtxo'
+
+import type { TUseTransactionsGroupedTransactionsByDate, TUseTransactionsTransaction } from '@/types/hooks'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
-import type { TUseTransactionsGroupedTransactionsByDate, TUseTransactionsTransaction } from '@/types/store'
+
+type TActionsData = {
+  dateFrom?: Date
+  dateTo?: Date
+}
 
 const renderSectionHeader = ({
   section,
 }: {
   section: SectionListData<TUseTransactionsTransaction, TUseTransactionsGroupedTransactionsByDate>
-}) => <Text className="mb-3 ml-1 mt-6 font-sans-medium text-2xl text-white">{section.formattedDate}</Text>
+}) => <Text className="mb-3 ml-1 mt-6 font-sans-medium text-xl text-white">{section.formattedDate}</Text>
 
 const renderItem: SectionListRenderItem<TUseTransactionsTransaction, TUseTransactionsGroupedTransactionsByDate> = ({
   item,
   index,
 }) => (
-  <AccountTransactionsScreenTransactionItem
-    className={StyleHelper.mergeStyles({
-      'mt-2.5': index !== 0,
-    })}
-    key={item.txId}
-    transaction={item}
-  />
+  <View key={item.txId} className={StyleHelper.mergeStyles({ 'mt-2': index !== 0 })}>
+    {item.view === 'utxo' ? (
+      <AccountTransactionsScreenTransactionUtxo transaction={item} />
+    ) : (
+      <AccountTransactionsScreenTransactionDefault transaction={item} />
+    )}
+  </View>
 )
 
-const AccountTransactionsScreen = (props: TWalletsStackScreenProps<'AccountTransactionsScreen'>) => {
-  const { account } = props.route.params
-  const { t } = useTranslation('screens', { keyPrefix: 'accountTransactionsScreen' })
-  const { isFetchingNextPage, fetchNextPage, isLoading, aggregatedData, isRefetching, refetch } =
-    useTransactionsQuery(account)
+const AccountTransactionsScreen = ({ navigation, route }: TWalletsStackScreenProps<'AccountTransactionsScreen'>) => {
+  const { account } = route.params
+  const { t } = useTranslation('screens', { keyPrefix: 'accountTransactions' })
+  const { t: tBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+
+  const blockchain = account.blockchain
+  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
+  const hasServiceFullTransactions = hasFullTransactions(service)
+  const dateNow = new Date()
+
+  const {
+    actionData: { dateFrom, dateTo },
+    setData,
+  } = useActions<TActionsData>({
+    dateFrom: hasServiceFullTransactions ? dateFns.startOfMonth(dateNow) : undefined,
+    dateTo: hasServiceFullTransactions ? dateNow : undefined,
+  })
+
+  const { isFetchingNextPage, fetchNextPage, isLoading, aggregatedData, isRefetching, refetch } = useTransactionsQuery({
+    account,
+    dateFrom,
+    dateTo,
+  })
 
   const onEndReachedCalledDuringMomentum = useRef(true)
-
-  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
-  const shouldShowExportButton = hasFullTransactions(service)
 
   const handleEndReached = () => {
     if (!onEndReachedCalledDuringMomentum.current && !isFetchingNextPage && !isLoading && !isRefetching) {
       fetchNextPage()
+
       onEndReachedCalledDuringMomentum.current = true
     }
   }
@@ -64,51 +91,76 @@ const AccountTransactionsScreen = (props: TWalletsStackScreenProps<'AccountTrans
     onEndReachedCalledDuringMomentum.current = false
   }
 
-  const handleExportPress = () => {
-    props.navigation.navigate('ExportFullTransactionsModal', {
+  const handleDatesChange = (dateFrom: Date, dateTo: Date) => {
+    setData({ dateFrom, dateTo })
+  }
+
+  const handleContextPress = () => {
+    if (!hasServiceFullTransactions) return
+
+    navigation.navigate('AccountTransactionsContextModal', {
       account,
+      dateFrom: dateFrom!,
+      dateTo: dateTo!,
+      onDatesChange: handleDatesChange,
     })
   }
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      withoutScroll
-      rightElement={
-        shouldShowExportButton ? (
-          <TwScreenLayoutButton label={t('exportButtonLabel')} onPress={handleExportPress} />
-        ) : undefined
-      }
-      contentContainerClassName="pb-0"
-    >
-      <AccountSubTitle account={account} />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        {hasServiceFullTransactions && (
+          <ScreenLayout.ButtonContent position="right">
+            <TwIconButton
+              aria-label={t('contextButtonLabel')}
+              icon={<MdMoreHoriz aria-hidden className="text-white" />}
+              onPress={handleContextPress}
+            />
+          </ScreenLayout.ButtonContent>
+        )}
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent className="pb-0">
+        <View className="mb-2 flex w-full flex-row items-center justify-between px-1">
+          <View className="flex flex-row items-center gap-x-2">
+            <TwBlockchainIcon blockchain={blockchain} className="size-4" />
 
-      <SectionList
-        stickySectionHeadersEnabled={false}
-        className="mt-2 w-full"
-        contentContainerClassName="pb-4.5 flex-grow"
-        sections={aggregatedData}
-        ListFooterComponent={
-          isLoading || isFetchingNextPage ? (
-            <Skeleton.Root className="mt-2.5">
-              <Skeleton.Group>
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-52 w-full" />
-                ))}
-              </Skeleton.Group>
-            </Skeleton.Root>
-          ) : undefined
-        }
-        ListEmptyComponent={!isLoading ? <FlatListEmpty label={t('emptyList')} /> : undefined}
-        onEndReached={handleEndReached}
-        onMomentumScrollBegin={handleMomentumScrollBegin}
-        renderSectionHeader={renderSectionHeader}
-        showsVerticalScrollIndicator={false}
-        onEndReachedThreshold={0.5}
-        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-        renderItem={renderItem}
-      />
-    </TwScreenLayout>
+            <Text className="font-sans-regular text-base uppercase text-white">
+              {tBlockchainServices(`${blockchain}.label`)}
+            </Text>
+          </View>
+
+          <AccountSubTitle account={account} />
+        </View>
+
+        <SectionList
+          stickySectionHeadersEnabled={false}
+          className="w-full"
+          contentContainerClassName="pb-8 flex-grow"
+          sections={aggregatedData}
+          ListFooterComponent={
+            isLoading || isFetchingNextPage ? (
+              <Skeleton.Root className="mt-2">
+                <Skeleton.Group>
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <Skeleton.Item key={`transactions-skeleton-${index}`} className="h-44 w-full bg-gray-900" />
+                  ))}
+                </Skeleton.Group>
+              </Skeleton.Root>
+            ) : undefined
+          }
+          ListEmptyComponent={!isLoading ? <FlatListEmpty label={t('emptyList')} className="py-8" /> : undefined}
+          onEndReached={handleEndReached}
+          onMomentumScrollBegin={handleMomentumScrollBegin}
+          renderSectionHeader={renderSectionHeader}
+          showsVerticalScrollIndicator={false}
+          onEndReachedThreshold={0.5}
+          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+          renderItem={renderItem}
+        />
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }
 

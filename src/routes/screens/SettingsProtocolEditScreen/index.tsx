@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 
 import { hasWalletConnect } from '@cityofzion/blockchain-service'
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import type { ListRenderItem } from 'react-native'
 import { FlatList } from 'react-native'
 
@@ -15,7 +14,7 @@ import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { useCustomNetworksSelector, useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbCheck from '@/assets/images/tb-check.svg'
 import TbCube3dSphere from '@/assets/images/tb-cube-3d-sphere.svg'
@@ -43,9 +42,9 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
     <TwMenuButton
       label={item.network.name}
       labelProps={{ className: 'capitalize' }}
-      subtitle={item.isDefault ? t('screens:settingsProtocolEditScreen.default') : undefined}
+      subtitle={item.isDefault ? t('screens:settingsProtocolEdit.default') : undefined}
       subtitleClassName="flex-grow"
-      rightElement={isSelected ? <TbCheck aria-hidden className="h-6 w-6 text-neon" /> : undefined}
+      rightElement={isSelected ? <TbCheck aria-hidden className="size-6 text-neon" /> : undefined}
       onPress={item.onPress}
     />
   )
@@ -62,7 +61,6 @@ export const SettingsProtocolEditScreen = ({
   const { customNetworks } = useCustomNetworksSelector(blockchain)
 
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
-
   const isSelectedNetworkCustom = selectedNetwork.type === 'custom'
 
   const handlePress = async (network: TNetwork) => {
@@ -77,14 +75,15 @@ export const SettingsProtocolEditScreen = ({
     if (!hasWalletConnect(service)) return
 
     const sessions = WalletKitHelper.kit.getActiveSessions()
-    const accountSessions = BSWalletKitHelper.filterSessions(Object.values(sessions), {
+    const accountSessions = WalletKitHelper.filterSessions(Object.values(sessions), {
       chains: [service.walletConnectService.chain],
     })
+
     await Promise.allSettled(
       accountSessions.map(session =>
         WalletKitHelper.kit.disconnectSession({
           topic: session.topic,
-          reason: BSWalletKitHelper.getError('USER_DISCONNECTED'),
+          reason: WalletKitHelper.getError('USER_DISCONNECTED'),
         })
       )
     )
@@ -103,10 +102,8 @@ export const SettingsProtocolEditScreen = ({
     })
   }
 
-  const handleSelectNode = async () => {
-    navigation.navigate('NodeSelectionModal', {
-      blockchain,
-    })
+  const handleSelectNetworkUrl = async () => {
+    navigation.navigate('NetworkUrlSelectionModal', { blockchain })
   }
 
   const data = service.availableNetworks
@@ -117,40 +114,48 @@ export const SettingsProtocolEditScreen = ({
         network,
         selectedNetwork,
         onPress: handlePress.bind(null, network),
-        isDefault: network.id === service.defaultNetwork.id,
+        isDefault:
+          network.id === service.defaultNetwork.id ||
+          (service.availableNetworks.length <= 1 && !service.isCustomNetworkSupported),
       }
     })
-    .sort(item => (service.defaultNetwork.id === item.network.id ? -1 : 1))
+    .sort(item => (item.isDefault ? -1 : 1))
 
   return (
-    <TwScreenLayout title={t(`common:blockchainServices.${blockchain}.label`)} withoutScroll>
-      <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t(`common:blockchainServices.${blockchain}.label`)}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
 
-      <TwSeparator />
+        <TwSeparator />
 
-      <TwMenuButton
-        label={t('screens:settingsProtocolEditScreen.selectNodeButtonLabel')}
-        description={selectedNetwork.url}
-        leftElement={<TbCube3dSphere aria-hidden />}
-        onPress={handleSelectNode}
-        disabled={service.rpcNetworkUrls.length <= 0}
-      />
+        <TwMenuButton
+          label={t('screens:settingsProtocolEdit.selectNetworkUrlButtonLabel')}
+          description={selectedNetwork.url}
+          disabled={service.networkUrls.length <= 1}
+          leftElement={<TbCube3dSphere aria-hidden />}
+          onPress={handleSelectNetworkUrl}
+        />
 
-      {service.isCustomNetworkSupported && (
-        <Fragment>
-          <TwSeparator />
+        {service.isCustomNetworkSupported && (
+          <Fragment>
+            <TwSeparator />
 
-          <TwMenuButton
-            label={
-              isSelectedNetworkCustom
-                ? t('screens:settingsProtocolEditScreen.editCustomNetworkButtonLabel')
-                : t('screens:settingsProtocolEditScreen.addCustomNetworkButtonLabel')
-            }
-            leftElement={isSelectedNetworkCustom ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
-            onPress={isSelectedNetworkCustom ? handleEditCustomNetwork : handleAddCustomNetwork}
-          />
-        </Fragment>
-      )}
-    </TwScreenLayout>
+            <TwMenuButton
+              label={
+                isSelectedNetworkCustom
+                  ? t('screens:settingsProtocolEdit.editCustomNetworkButtonLabel')
+                  : t('screens:settingsProtocolEdit.addCustomNetworkButtonLabel')
+              }
+              leftElement={isSelectedNetworkCustom ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
+              onPress={isSelectedNetworkCustom ? handleEditCustomNetwork : handleAddCustomNetwork}
+            />
+          </Fragment>
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

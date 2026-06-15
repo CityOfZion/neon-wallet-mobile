@@ -21,16 +21,16 @@ import {
   SkinSelectorItem,
 } from './SkinSelectorItem'
 
-import type { IAccountState, TLocalSkin, TNftSkin, TSkin } from '@/types/store'
+import type { TAccount, TLocalSkin, TNftSkin, TSkin } from '@/types/store'
 
 type TProps = {
-  account: IAccountState
+  account: TAccount
   selectedSkin: TSkin
   onPress?: (skin: TSkin) => void
 }
 
 export const PremiumSkinSelector = ({ selectedSkin, onPress, account }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'editAccountModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'editAccount' })
   const { unlockedSkinIds } = useUnlockedSkinIdsSelector()
   const { data, isLoading } = useItemNeo3NftSkins(account)
 
@@ -54,7 +54,7 @@ export const PremiumSkinSelector = ({ selectedSkin, onPress, account }: TProps) 
           ))}
         </Skeleton.Group>
 
-        <Skeleton.Content className="flex flex-row flex-wrap" style={{ gap: SKIN_CONTAINER_GAP }}>
+        <Skeleton.Content className="flex flex-row flex-wrap justify-start" style={{ gap: SKIN_CONTAINER_GAP }}>
           {skins.length === 0 ? (
             <Text className="w-full text-center font-sans-regular text-sm text-gray-300">{t('noPremiumThemes')}</Text>
           ) : (
@@ -76,9 +76,9 @@ export const PremiumSkinSelector = ({ selectedSkin, onPress, account }: TProps) 
                 >
                   <ImageFallback
                     contentFit="cover"
-                    source={source}
-                    defaultSource={require('@/assets/images/diamond-green.png')}
                     className="size-full"
+                    source={source}
+                    placeholder={require('@/assets/images/diamond-green.png')}
                   />
                 </SkinSelectorItem>
               )

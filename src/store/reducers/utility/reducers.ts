@@ -6,10 +6,11 @@ import { AppError } from '@/helpers/ErrorHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { TokenHelper } from '@/helpers/TokenHelper'
 
-import type { IUtilityReducer } from './index'
+import type { TUtilityReducer } from './index'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { TSwapRecord, TUseTransactionsTransaction } from '@/types/store'
+import type { TUseTransactionsTransaction } from '@/types/hooks'
+import type { TSwapRecord } from '@/types/store'
 
 type THiddenTokenParams = {
   hash: string
@@ -18,53 +19,54 @@ type THiddenTokenParams = {
 
 const { t } = I18nextHelper.get()
 
-const setIsConnected: CaseReducer<IUtilityReducer, PayloadAction<boolean>> = (state, action) => {
-  state.inMemoryData.isConnected = action.payload
+const setIsConnected: CaseReducer<TUtilityReducer, PayloadAction<boolean>> = (state, action) => {
+  state.memoryData.isConnected = action.payload
 }
 
-const addPendingTransaction: CaseReducer<IUtilityReducer, PayloadAction<TUseTransactionsTransaction>> = (
+const addPendingTransaction: CaseReducer<TUtilityReducer, PayloadAction<TUseTransactionsTransaction>> = (
   state,
   action
 ) => {
-  state.inMemoryData.pendingTransactions = [...state.inMemoryData.pendingTransactions, action.payload]
+  state.memoryData.pendingTransactions = [...state.memoryData.pendingTransactions, action.payload]
 }
 
-const removePendingTransaction: CaseReducer<IUtilityReducer, PayloadAction<string>> = (state, action) => {
-  state.inMemoryData.pendingTransactions = state.inMemoryData.pendingTransactions.filter(
+const removePendingTransaction: CaseReducer<TUtilityReducer, PayloadAction<string>> = (state, action) => {
+  state.memoryData.pendingTransactions = state.memoryData.pendingTransactions.filter(
     transaction => transaction.txId !== action.payload
   )
 }
 
-const saveSwapRecord: CaseReducer<IUtilityReducer, PayloadAction<TSwapRecord>> = (state, action) => {
+const saveSwapRecord: CaseReducer<TUtilityReducer, PayloadAction<TSwapRecord>> = (state, action) => {
   const swapRecord = cloneDeep(action.payload)
 
   // We don't want to save this long information in the storage
   swapRecord.log = undefined
 
   const index = state.data.swapRecords.findIndex(
-    it => it.swapId === swapRecord.swapId && it.swapProvider === swapRecord.swapProvider
+    ({ swapId, swapProvider }) => swapId === swapRecord.swapId && swapProvider === swapRecord.swapProvider
   )
 
   if (index === -1) {
     state.data.swapRecords = [...state.data.swapRecords, swapRecord]
+
     return
   }
 
   state.data.swapRecords[index] = swapRecord
 }
 
-const setUnlockedSkinIds: CaseReducer<IUtilityReducer, PayloadAction<string[]>> = (state, action) => {
+const setUnlockedSkinIds: CaseReducer<TUtilityReducer, PayloadAction<string[]>> = (state, action) => {
   state.data.unlockedSkinIds = action.payload
 }
 
-const toggleHiddenToken: CaseReducer<IUtilityReducer, PayloadAction<THiddenTokenParams>> = (state, action) => {
+const toggleHiddenToken: CaseReducer<TUtilityReducer, PayloadAction<THiddenTokenParams>> = (state, action) => {
   const { hash, blockchain } = action.payload
 
   if (TokenHelper.isNativeToken(hash, blockchain)) throw new AppError(t('errors.unexpected'))
 
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
   const normalizedHash = service.tokenService.normalizeHash(hash)
-  const hiddenTokens = cloneDeep(state.data.hiddenTokensByBlockchain[blockchain] ?? [])
+  const hiddenTokens = cloneDeep(state.data.hiddenTokensByBlockchain[blockchain] || [])
   const index = hiddenTokens.findIndex(tokenHash => service.tokenService.predicateByHash(normalizedHash, tokenHash))
 
   if (index < 0) {
@@ -81,7 +83,7 @@ const toggleHiddenToken: CaseReducer<IUtilityReducer, PayloadAction<THiddenToken
 
 // Last Indexes By Wallet Reducers
 const saveLastIndexByWallet: CaseReducer<
-  IUtilityReducer,
+  TUtilityReducer,
   PayloadAction<{
     index: number
     firstAccountAddress: string
@@ -89,6 +91,7 @@ const saveLastIndexByWallet: CaseReducer<
   }>
 > = (state, action) => {
   const { firstAccountAddress, index, blockchain } = action.payload
+
   state.data.lastIndexesByWallet[blockchain] = {
     ...state.data.lastIndexesByWallet[blockchain],
     [firstAccountAddress]: index,

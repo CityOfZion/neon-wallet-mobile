@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -16,24 +16,28 @@ type TProps = {
 }
 
 export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 }: TProps) => {
-  const { t: commonT } = useTranslation('common')
+  const { t: tCommon } = useTranslation('common')
+
+  const formattedAmount = new BSBigHumanAmount(amount, decimals).toFormatted()
 
   return (
     <View className="flex-row items-center justify-between gap-2">
       <View className="flex-row items-center gap-2">
-        {blockchain && <TwBlockchainIcon blockchain={blockchain} type="gray" className="h-4 w-4" />}
+        {blockchain && <TwBlockchainIcon blockchain={blockchain} className="size-4 text-gray-300" />}
 
         <Text className="font-sans-regular text-lg uppercase text-white">
           {symbol}
           {blockchain && (
             <Text className="font-sans-regular uppercase text-gray-100">
-              {` | ${commonT(`blockchainServices.${blockchain}.id`)}`}
+              {` | ${tCommon(`blockchainServices.${blockchain}.label`)}`}
             </Text>
           )}
         </Text>
       </View>
 
-      <Text className="font-sans-regular text-lg text-white">{BSBigNumberHelper.format(amount, { decimals })}</Text>
+      <Text className="flex-shrink font-sans-regular text-lg text-white" numberOfLines={1} ellipsizeMode="tail">
+        {formattedAmount}
+      </Text>
     </View>
   )
 }

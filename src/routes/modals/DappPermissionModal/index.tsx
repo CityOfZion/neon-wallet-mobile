@@ -17,8 +17,7 @@ import { useModalErase } from '@/hooks/useModalErase'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { DappPermissionErrorContent } from './DappPermissionErrorContent'
 import { DappPermissionGenericContent } from './DappPermissionGenericContent'
@@ -27,13 +26,13 @@ import { DappPermissionSuccessContent } from './DappPermissionSuccessContent'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export type TDappPermissionProps = {
   request: PendingRequestTypes.Struct
   session: SessionTypes.Struct
-  sessionDetails: TWalletKitHelperSessionDetails<TBlockchainServiceKey>
-  sessionAccount: IAccountState
+  sessionDetails: TWalletKitHelperSessionDetails
+  sessionAccount: TAccount
   onAccept: () => void
   onReject: (reason?: ErrorResponse, toastMessage?: string) => void
   isAccepting: boolean
@@ -52,7 +51,7 @@ const CUSTOM_CONTENT_BY_REQUEST: Partial<
 export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps<'DappPermissionModal'>) => {
   const { session, request, onAccept, onReject, sessionAccount, sessionDetails } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
   const { handleErase } = useModalErase()
   const { authenticate } = useAuthentication()
 
@@ -69,10 +68,7 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
       navigation.replace('SuccessModal', {
         title: t('successContent.title'),
         content: <DappPermissionSuccessContent response={response} />,
-        buttonProps: {
-          label: t('successContent.doneButtonLabel'),
-          onPress: handleErase,
-        },
+        buttonLabel: t('successContent.doneButtonLabel'),
       })
     } catch (error: any) {
       LoggerHelper.error(error, { where: 'DappPermissionModal', operation: 'startAccept' })
@@ -95,10 +91,7 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
           title: t('successContent.title'),
           // Don't translate the response, because this property isn't translated, it comes from RPC
           content: <DappPermissionSuccessContent response="Transaction cached" />,
-          buttonProps: {
-            label: t('successContent.doneButtonLabel'),
-            onPress: handleErase,
-          },
+          buttonLabel: t('successContent.doneButtonLabel'),
         })
 
         return
@@ -107,17 +100,14 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
       navigation.replace('ErrorModal', {
         title: t('errorContent.title'),
         content: <DappPermissionErrorContent error={error} />,
-        buttonProps: {
-          label: t('errorContent.doneButtonLabel'),
-          onPress: handleErase,
-        },
+        buttonLabel: t('errorContent.doneButtonLabel'),
       })
     }
   })
   const [isRejecting, startReject] = usePressOnce(async (reason?: ErrorResponse, toastMessage?: string) => {
     await onReject(reason)
     handleErase()
-    ToastHelper.error({ message: toastMessage ?? t('errors.cancelled'), id: 'dapp-permission-cancel' })
+    ToastHelper.error({ message: toastMessage || t('errors.cancelled'), id: 'dapp-permission-cancel' })
   })
 
   useEffect(() => {
@@ -135,24 +125,26 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [request.id, t])
 
-  const Content = CUSTOM_CONTENT_BY_REQUEST[blockchain]?.[request.params.request.method] ?? DappPermissionGenericContent
+  const Content = CUSTOM_CONTENT_BY_REQUEST[blockchain]?.[request.params.request.method] || DappPermissionGenericContent
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      rightElement={<TwModalLayoutCloseIconButton onPress={() => startReject()} />}
-      onRequestClose={() => startReject()}
-    >
-      <Content
-        request={request}
-        session={session}
-        sessionDetails={sessionDetails}
-        sessionAccount={sessionAccount}
-        onAccept={startAccept}
-        onReject={startReject}
-        isAccepting={isAccepting}
-        isRejecting={isRejecting}
-      />
-    </TwModalLayout>
+    <ModalLayout.Root onRequestClose={() => startReject()}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={() => startReject()} />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Content
+          request={request}
+          session={session}
+          sessionDetails={sessionDetails}
+          sessionAccount={sessionAccount}
+          onAccept={startAccept}
+          onReject={startReject}
+          isAccepting={isAccepting}
+          isRejecting={isRejecting}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

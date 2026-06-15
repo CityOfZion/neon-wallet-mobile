@@ -10,7 +10,7 @@ import { StringHelper } from '@/helpers/StringHelper'
 
 import { useActions } from '@/hooks/useActions'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
@@ -21,8 +21,8 @@ type TActionsData = {
 export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenProps<'CreateWalletStep4Screen'>) => {
   const { mnemonic, hasBackup } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep4Screen' })
-  const { t: commonT } = useTranslation('common', { keyPrefix: 'general' })
+  const { t } = useTranslation('screens', { keyPrefix: 'createWalletStep4' })
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const { actionData, actionState, setData, setError, handleAct } = useActions<TActionsData>({ name: '' })
 
   const handleChangeName = (name: string) => {
@@ -45,32 +45,39 @@ export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenP
   }
 
   return (
-    <TwScreenLayout title={t('title')}>
-      <View className="w-full flex-shrink flex-row items-center justify-between gap-2">
-        <Text className="flex-shrink font-sans-semibold text-base text-white">{t('label_1')}</Text>
-        <Text className="font-sans-bold text-base text-white">{t('threeOfThree')}</Text>
-      </View>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
 
-      <Text className="mt-1 font-sans-regular text-base text-white">{t('body_1')}</Text>
+      <ScreenLayout.KeyboardAvoidingContent>
+        <View className="w-full flex-shrink flex-row items-center justify-between gap-2">
+          <Text className="flex-shrink font-sans-semibold text-base text-white">{t('label')}</Text>
+          <Text className="font-sans-bold text-base text-white">{t('threeOfThree')}</Text>
+        </View>
 
-      <TwInput
-        placeholder={t('label_walletName')}
-        containerProps={{ className: 'mt-6' }}
-        inputContainerProps={{ className: 'bg-gray-900' }}
-        value={actionData.name}
-        error={actionState.errors.name}
-        onChangeText={handleChangeName}
-      />
+        <Text className="mt-1 font-sans-regular text-base text-white">{t('body1')}</Text>
 
-      <View className="mt-auto py-3">
-        <TwButton
-          variant="contained-light"
-          label={commonT('continue')}
-          disabled={actionState.isActing || !actionState.isValid}
-          isLoading={actionState.isActing}
-          onPress={handleAct(handleSubmit)}
+        <TwInput
+          placeholder={t('labelWalletName')}
+          containerProps={{ className: 'mt-6' }}
+          inputContainerProps={{ className: 'bg-gray-900' }}
+          value={actionData.name}
+          error={actionState.errors.name}
+          onChangeText={handleChangeName}
         />
-      </View>
-    </TwScreenLayout>
+
+        <ScreenLayout.KeyboardAvoidingArea>
+          <TwButton
+            variant="contained-light"
+            label={tCommonGeneral('continue')}
+            disabled={actionState.isActing || !actionState.isValid}
+            isLoading={actionState.isActing}
+            onPress={handleAct(handleSubmit)}
+          />
+        </ScreenLayout.KeyboardAvoidingArea>
+      </ScreenLayout.KeyboardAvoidingContent>
+    </ScreenLayout.Root>
   )
 }

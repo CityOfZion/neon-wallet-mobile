@@ -12,7 +12,7 @@ const walletCardDimensions = getWalletCardDimensions()
 
 export const WalletsScreenEmptyList = () => {
   const navigation = useNavigation()
-  const { t } = useTranslation('screens', { keyPrefix: 'walletsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'wallets' })
 
   const handlePress = () => {
     navigation.navigate('TabStack', {

@@ -2,48 +2,43 @@
   "blockchainServices": {
     "arbitrum": {
       "accountName": "Arbitrum Konto",
-      "id": "Arbitrum",
       "label": "Arbitrum"
     },
     "base": {
       "accountName": "Base Konto",
-      "id": "Base",
       "label": "Base"
     },
-    "bnb": {
-      "accountName": "BNB Konto",
-      "id": "BNB",
-      "label": "BNB"
+    "bitcoin": {
+      "accountName": "Bitcoin Konto",
+      "label": "Bitcoin"
     },
     "ethereum": {
       "accountName": "Ethereum Konto",
-      "id": "Ethereum",
       "label": "Ethereum"
     },
     "neo3": {
-      "accountName": "NEO Konto",
-      "id": "Neo N3",
-      "label": "Neo (N3)"
+      "accountName": "Neo 3 Konto",
+      "label": "Neo 3"
     },
     "neoLegacy": {
       "accountName": "Neo Legacy Konto",
-      "id": "Neo Legacy",
       "label": "Neo Legacy"
     },
     "neox": {
-      "accountName": "NeoX Konto",
-      "id": "NeoX",
-      "label": "NeoX"
+      "accountName": "Neo X Konto",
+      "label": "Neo X"
     },
     "polygon": {
       "accountName": "Polygon Konto",
-      "id": "Polygon",
       "label": "Polygon"
     },
     "solana": {
-      "accountName": "Solana-Konto",
-      "id": "Solana",
+      "accountName": "Solana Konto",
       "label": "Solana"
+    },
+    "stellar": {
+      "accountName": "Stellar Konto",
+      "label": "Stellar"
     }
   },
   "deeplink": {
@@ -75,13 +70,17 @@
     "delete": "Löschen",
     "disconnect": "Trennen",
     "done": "Fertig",
+    "download": "Herunterladen",
     "edit": "Bearbeiten",
+    "emptyData": "--",
     "errorOpenLink": "Beim Öffnen dieses Links ist ein Problem aufgetreten",
     "next": "Weiter",
     "no": "Nein",
+    "reset": "Zurücksetzen",
     "retry": "Erneut versuchen",
     "save": "Speichern",
     "saveAndContinue": "Speichern & weiter",
+    "savedSuccessfully": "Erfolgreich gespeichert",
     "skip": "Überspringen",
     "yes": "Ja"
   },
@@ -94,7 +93,7 @@
       "disconnectFirst": "Bitte trennen Sie zuerst die aktuell angeschlossene Hardware-Wallet.",
       "hardwareWalletIsNotConnectOrUnlocked": "Ihre Hardware-Wallet ist nicht verbunden oder gesperrt. Überprüfen Sie Ihr Gerät und versuchen Sie es erneut.",
       "hardwareWalletNotFound": "Es ist kein Hardware Wallet verbunden",
-      "missingBip44Path": "Der BIP44-Pfad fehlt für das Hardware-Wallet-Konto."
+      "missingBipPath": "Der BIP-Pfad fehlt für das Hardware-Wallet-Konto."
     }
   },
   "overTheAir": {

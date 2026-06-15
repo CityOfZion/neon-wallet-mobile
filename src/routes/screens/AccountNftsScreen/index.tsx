@@ -16,7 +16,7 @@ import { LinkHelper } from '@/helpers/LinkHelper'
 
 import { useNftsQuery } from '@/hooks/useNftsQuery'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import DoraIcon from '@/assets/images/dora-icon.svg'
 
@@ -50,9 +50,11 @@ const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
           </Text>
         </View>
 
-        <Text className="font-sans-bold text-lg capitalize text-white" numberOfLines={1}>
-          {item.name}
-        </Text>
+        {item.name && (
+          <Text className="font-sans-bold text-lg capitalize text-white" numberOfLines={1}>
+            {item.name}
+          </Text>
+        )}
       </View>
 
       {item.explorerUri && <DoraIcon aria-hidden className="size-6 text-neon" />}
@@ -62,7 +64,7 @@ const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
 
 export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsScreen'>) => {
   const { account } = props.route.params
-  const { t } = useTranslation('screens', { keyPrefix: 'accountNftsScreen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'accountNfts' })
   const { aggregatedData, hasNextPage, isLoading, isFetchingNextPage, fetchNextPage, refetch, isRefetching } =
     useNftsQuery(account)
 
@@ -99,39 +101,45 @@ export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsS
   }
 
   return (
-    <TwScreenLayout withoutScroll title={t('title')}>
-      <AccountSubTitle account={account} />
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <AccountSubTitle account={account} className="mb-2" />
 
-      {isLoading ? (
-        <ScreenLoader />
-      ) : (
-        <FlatList
-          className="w-full"
-          contentContainerClassName="mt-4 w-full gap-2"
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-          data={aggregatedData}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          ListFooterComponent={
-            isLoading || isFetchingNextPage ? (
-              <Skeleton.Root>
-                <Skeleton.Group>
-                  {Array.from({ length: 2 }).map((_, index) => (
-                    <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-16 w-full rounded-lg" />
-                  ))}
-                </Skeleton.Group>
-              </Skeleton.Root>
-            ) : undefined
-          }
-          ListEmptyComponent={<FlatListEmpty label={t('emptyList')} />}
-          keyExtractor={(_, index) => `nft-item-${index}`}
-          onMomentumScrollBegin={handleMomentumScrollBegin}
-          onLayout={handleLayout}
-          onContentSizeChange={handleContentSizeChange}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.5}
-        />
-      )}
-    </TwScreenLayout>
+        {isLoading ? (
+          <ScreenLoader />
+        ) : (
+          <FlatList
+            className="w-full"
+            contentContainerClassName="mt-4 w-full gap-2"
+            refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+            data={aggregatedData}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={
+              isLoading || isFetchingNextPage ? (
+                <Skeleton.Root className="mb-8">
+                  <Skeleton.Group>
+                    {Array.from({ length: 2 }).map((_, index) => (
+                      <Skeleton.Item key={`transaction-skeleton-${index}`} className="h-16 w-full rounded-lg" />
+                    ))}
+                  </Skeleton.Group>
+                </Skeleton.Root>
+              ) : undefined
+            }
+            ListEmptyComponent={<FlatListEmpty label={t('emptyList')} />}
+            keyExtractor={(_, index) => `nft-item-${index}`}
+            onMomentumScrollBegin={handleMomentumScrollBegin}
+            onLayout={handleLayout}
+            onContentSizeChange={handleContentSizeChange}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0.5}
+          />
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

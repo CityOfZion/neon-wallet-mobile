@@ -13,14 +13,14 @@ import { useOwnAccountsSelector } from '@/hooks/useAccountSelector'
 import { useLazyBalance } from '@/hooks/useBalances'
 import { useLazyOwnershipOfItemNeo3NftSkin } from '@/hooks/useItemNeo3NftSkins'
 import { useMount } from '@/hooks/useMount'
+import { useLazyNeo3VoteGetVoteDetailsByAddress } from '@/hooks/useNeo3Vote'
 import { useUnreadNotificationsSelector } from '@/hooks/useNotificationSelector'
 import { useAppDispatch } from '@/hooks/useRedux'
-import { useLazyVoteNeo3GetVoteDetailsByAddress } from '@/hooks/useVoteNeo3'
 
 import { notificationReducerActions } from '@/store/reducers/notification'
 import { utilityReducerActions } from '@/store/reducers/utility'
 import type { TBalance } from '@/types/query'
-import type { IAccountState, TNotification } from '@/types/store'
+import type { TAccount, TNotification } from '@/types/store'
 
 const useFraudulentTokensNotificationProcess = () => {
   const dispatch = useAppDispatch()
@@ -44,7 +44,7 @@ const useFraudulentTokensNotificationProcess = () => {
     }
   }
 
-  const process = (account: IAccountState, balance: TBalance | undefined) => {
+  const process = (account: TAccount, balance: TBalance | undefined) => {
     try {
       if (!balance) return
 
@@ -98,7 +98,7 @@ const useFraudulentTokensNotificationProcess = () => {
 
 const useVotingNeo3NotificationProcess = () => {
   const dispatch = useAppDispatch()
-  const { getVoteDetails } = useLazyVoteNeo3GetVoteDetailsByAddress()
+  const { getVoteDetails } = useLazyNeo3VoteGetVoteDetailsByAddress()
 
   const votingNotificationsSetRef = useRef<Set<string>>(new Set())
 
@@ -110,7 +110,7 @@ const useVotingNeo3NotificationProcess = () => {
     try {
       const payload = notification.action?.payload
 
-      if (payload?.to !== 'vote-neo3' || payload.blockchain !== 'neo3' || !payload.address) return
+      if (payload?.to !== 'neo3-vote' || payload.blockchain !== 'neo3' || !payload.address) return
 
       votingNotificationsSetRef.current.add(generateNotificationKey(payload.blockchain, payload.address))
     } catch (error) {
@@ -118,7 +118,7 @@ const useVotingNeo3NotificationProcess = () => {
     }
   }
 
-  const process = async (account: IAccountState) => {
+  const process = async (account: TAccount) => {
     try {
       if (account.blockchain !== 'neo3') return
 
@@ -137,7 +137,7 @@ const useVotingNeo3NotificationProcess = () => {
           action: {
             type: 'navigate',
             payload: {
-              to: 'vote-neo3',
+              to: 'neo3-vote',
               address: voteDetails.address,
               blockchain: 'neo3',
             },
@@ -165,9 +165,9 @@ const useUnlockLocalSkinsProcess = () => {
   const { editAccount } = useEditAccount()
 
   const unlockLocalSkinsSetRef = useRef<Set<string>>(new Set())
-  const accountWithLocalSkinsRef = useRef<IAccountState[]>([])
+  const accountWithLocalSkinsRef = useRef<TAccount[]>([])
 
-  const process = async (account: IAccountState) => {
+  const process = async (account: TAccount) => {
     try {
       if (account.skin.type === 'local') {
         accountWithLocalSkinsRef.current.push(account)
@@ -217,7 +217,7 @@ const useCheckItemNeo3NftSkinOwnership = () => {
   const { getOwnership } = useLazyOwnershipOfItemNeo3NftSkin()
   const { editAccount } = useEditAccount()
 
-  const process = async (account: IAccountState) => {
+  const process = async (account: TAccount) => {
     try {
       if (account.skin.type !== 'nft') return
 

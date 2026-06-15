@@ -1,25 +1,25 @@
 import * as SecureStore from 'expo-secure-store'
 
-import type { IAccountState, IWalletState } from '@/types/store'
+import type { TAccount, TWallet } from '@/types/store'
 
 export class SecureStoreHelper {
-  static async saveMnemonic(wallet: IWalletState, securityPhrase: string) {
+  static async saveMnemonic(wallet: TWallet, securityPhrase: string) {
     await SecureStore.setItemAsync(wallet.id, securityPhrase)
   }
 
-  static async getMnemonic(wallet: IWalletState) {
+  static async getMnemonic(wallet: TWallet) {
     return await SecureStore.getItemAsync(wallet.id)
   }
 
-  static async deleteMnemonic(wallet: IWalletState) {
+  static async deleteMnemonic(wallet: TWallet) {
     await SecureStore.deleteItemAsync(wallet.id)
   }
 
-  static async saveKey(account: IAccountState, key: string) {
+  static async saveKey(account: TAccount, key: string) {
     await SecureStore.setItemAsync(account.id, key)
   }
 
-  static async getKey(account: IAccountState) {
+  static async getKey(account: TAccount) {
     // We need to check if the key is saved by address first for backward compatibility
     const keyByAddress = await SecureStore.getItemAsync(account.address)
     if (keyByAddress) {
@@ -29,7 +29,7 @@ export class SecureStoreHelper {
     return await SecureStore.getItemAsync(account.id)
   }
 
-  static async deleteKey(account: IAccountState) {
+  static async deleteKey(account: TAccount) {
     // We need to check if the key is saved by address first for backward compatibility
     const keyByAddress = await SecureStore.getItemAsync(account.address)
     if (keyByAddress) {

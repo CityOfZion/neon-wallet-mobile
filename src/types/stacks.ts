@@ -8,11 +8,11 @@ import type {
   TAccountQRCodeModalParams,
   TAccountSelectionModalParams,
   TAccountStackListSelectionModalParams,
+  TAccountTransactionsContextModalParams,
+  TAccountTransactionsUtxoDetailsModalParams,
   TAddressSelectionModalParams,
   TBackupAlertModalParams,
   TBlockchainSelectionModalParams,
-  TBridgeNeo3NeoXConfirmationModalParams,
-  TBridgeNeo3NeoXDetailsModalParams,
   TBuyAndSellTokensAccountsModalParams,
   TCreateAccountBlockchainSelectionModalParams,
   TCreatePasswordModalParams,
@@ -29,9 +29,19 @@ import type {
   TExportFullTransactionsModalParams,
   TExportKeyModalParams,
   THideFraudulentTokenModalParams,
-  TNodeSelectionModalParams,
+  TImportAddressSelectionModalParams,
+  TImportEncryptedKeySelectionModalParams,
+  TImportKeySelectionModalParams,
+  TImportMnemonicSelectionModalParams,
+  TNeo3NeoXBridgeConfirmationModalParams,
+  TNeo3NeoXBridgeDetailsModalParams,
+  TNeo3VoteCandidateDetailsModalParams,
+  TNeo3VoteConfirmationModalParams,
+  TNeo3VoteSupportUsModalParams,
+  TNetworkUrlSelectionModalParams,
   TNotificationContextModalParams,
   TOnboardingBackupMnemonicModalParams,
+  TOnboardingImportModalParams,
   TPasswordModalParams,
   TPersistContactAddressModalParams,
   TPersistContactModalParams,
@@ -42,13 +52,12 @@ import type {
   TSellTokensDepositSuccessModalParams,
   TSendConfirmModalParams,
   TSendTipUncheckedConfirmationModalParams,
+  TStellarPersistTrustlineModalParams,
+  TStellarTrustilneTokenSelectionModalParams,
   TSuccessModalParams,
   TSwapDetailsLogModalParams,
   TSwapDetailsModalParams,
   TTokenSelectionModalParams,
-  TVoteNeo3CandidateDetailsModalParams,
-  TVoteNeo3ConfirmationModalParams,
-  TVoteNeo3SupportUsModalParams,
   TWalletContextModalParams,
   TWalletSelectionModalParams,
 } from './modals'
@@ -59,7 +68,6 @@ import type {
   TAccountScreenParams,
   TAccountSettingsScreenParams,
   TAccountTransactionsScreenParams,
-  TBridgeNeo3NeoXScreenParams,
   TBuyAndSellTokensScreenParams,
   TContactScreenParams,
   TCreateWalletStep3ScreenParams,
@@ -67,13 +75,11 @@ import type {
   TCreateWalletStep5ScreenParams,
   TCreateWalletStep6ScreenParams,
   TDappConnectionsScreenParams,
-  TImportAddressSelectionScreenParams,
-  TImportBlockchainSelectionScreenParams,
-  TImportKeySelectionScreenParams,
-  TImportMnemonicSelectionScreenParams,
-  TImportPassphraseScreenParams,
   TImportScreen,
   TMoreScreenParams,
+  TNeo3NeoXBridgeScreenParams,
+  TNeo3VoteScreenParams,
+  TOnboardingCompletedScreenParams,
   TReceiveScreenParams,
   TSendScreenParams,
   TSettingsProtocolEditScreen,
@@ -81,8 +87,8 @@ import type {
   TSettingsWalletBackupStep1ScreenParams,
   TSettingsWalletBackupStep2ScreenParams,
   TSettingsWalletBackupStep3ScreenParams,
+  TStellarTrustlineScreenParams,
   TSwapScreenParams,
-  TVoteNeo3ScreenParams,
   TWalletScreenParams,
   TWalletSettingsScreenParams,
   TWalletsScreenParams,
@@ -101,9 +107,10 @@ export type TWalletsStackParamList = {
   SendScreen: TSendScreenParams | undefined
   SwapScreen: TSwapScreenParams | undefined
   BuyAndSellTokensScreen: TBuyAndSellTokensScreenParams | undefined
-  VoteNeo3Screen: TVoteNeo3ScreenParams
-  BridgeNeo3NeoXScreen: TBridgeNeo3NeoXScreenParams
+  Neo3VoteScreen: TNeo3VoteScreenParams
+  Neo3NeoXBridgeScreen: TNeo3NeoXBridgeScreenParams
   ReceiveScreen: TReceiveScreenParams | undefined
+  StellarTrustlineScreen: TStellarTrustlineScreenParams
 }
 
 export type TWalletsStackScreenProps<T extends keyof TWalletsStackParamList> = CompositeScreenProps<
@@ -138,11 +145,6 @@ export type TMoreStackParamList = {
   CreateWalletStep5Screen: TCreateWalletStep5ScreenParams
   CreateWalletStep6Screen: TCreateWalletStep6ScreenParams
   ImportScreen: TImportScreen | undefined
-  ImportBlockchainSelectionScreen: TImportBlockchainSelectionScreenParams
-  ImportMnemonicSelectionScreen: TImportMnemonicSelectionScreenParams
-  ImportKeySelectionScreen: TImportKeySelectionScreenParams
-  ImportAddressSelectionScreen: TImportAddressSelectionScreenParams
-  ImportPassphraseScreen: TImportPassphraseScreenParams
   SettingsScreen?: TSettingsScreenParams
   SettingsSecurityBackupScreen: undefined
   SettingsProtocolEditScreen: TSettingsProtocolEditScreen
@@ -178,7 +180,8 @@ export type TTabStackScreenProps<T extends keyof TTabStackParamList> = Composite
 export type TRootStackParamList = {
   TabStack: NavigatorScreenParams<TTabStackParamList>
   OnboardingScreen: undefined
-  OnboardingCompletedScreen: undefined
+  OnboardingCompletedScreen: TOnboardingCompletedScreenParams | undefined
+  OnboardingImportModal: TOnboardingImportModalParams
 
   OnboardingBackupMnemonicModal: TOnboardingBackupMnemonicModalParams
   QRCodeAddressContextModal: TQRCodeAddressContextModalParams
@@ -191,7 +194,7 @@ export type TRootStackParamList = {
   AddressSelectionModal: TAddressSelectionModalParams
   WalletSelectionModal: TWalletSelectionModalParams
   TokenSelectionModal: TTokenSelectionModalParams
-  NodeSelectionModal: TNodeSelectionModalParams
+  NetworkUrlSelectionModal: TNetworkUrlSelectionModalParams
 
   EditAccountModal: TEditAccountModalParams
   AccountQRCodeModal: TAccountQRCodeModalParams
@@ -243,6 +246,9 @@ export type TRootStackParamList = {
 
   NotificationContextModal: TNotificationContextModalParams
 
+  AccountTransactionsContextModal: TAccountTransactionsContextModalParams
+  AccountTransactionsUtxoDetailsModal: TAccountTransactionsUtxoDetailsModalParams
+
   AccountAssetTokenActionsModal: TAccountAssetTokenActionsModalParams
   AccountAssetActionsModal: TAccountAssetActionsModalParams
 
@@ -250,20 +256,28 @@ export type TRootStackParamList = {
 
   DateSelectionModal: TDateSelectionModalParams
 
-  VoteNeo3HowItWorksModal: undefined
-  VoteNeo3SupportUsModal: TVoteNeo3SupportUsModalParams
-  VoteNeo3ConfirmationModal: TVoteNeo3ConfirmationModalParams
-  VoteNeo3CandidateDetailsModal: TVoteNeo3CandidateDetailsModalParams
+  Neo3VoteHowItWorksModal: undefined
+  Neo3VoteSupportUsModal: TNeo3VoteSupportUsModalParams
+  Neo3VoteConfirmationModal: TNeo3VoteConfirmationModalParams
+  Neo3VoteCandidateDetailsModal: TNeo3VoteCandidateDetailsModalParams
 
   RemoveNfiModal: TRemoveNfiModalParams
 
   HideFraudulentTokenModal: THideFraudulentTokenModalParams
 
-  BridgeNeo3NeoXAboutModal: undefined
-  BridgeNeo3NeoXConfirmationModal: TBridgeNeo3NeoXConfirmationModalParams
-  BridgeNeo3NeoXDetailsModal: TBridgeNeo3NeoXDetailsModalParams
+  ImportAddressSelectionModal: TImportAddressSelectionModalParams
+  ImportEncryptedKeySelectionModal: TImportEncryptedKeySelectionModalParams
+  ImportKeySelectionModal: TImportKeySelectionModalParams
+  ImportMnemonicSelectionModal: TImportMnemonicSelectionModalParams
+
+  Neo3NeoXBridgeAboutModal: undefined
+  Neo3NeoXBridgeConfirmationModal: TNeo3NeoXBridgeConfirmationModalParams
+  Neo3NeoXBridgeDetailsModal: TNeo3NeoXBridgeDetailsModalParams
 
   SurveyModal: undefined
+
+  StellarPersistTrustlineModal: TStellarPersistTrustlineModalParams
+  StellarTrustilneTokenSelectionModal: TStellarTrustilneTokenSelectionModalParams
 }
 
 export type TRootStackScreenProps<T extends keyof TRootStackParamList> = NativeStackScreenProps<TRootStackParamList, T>

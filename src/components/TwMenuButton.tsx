@@ -1,7 +1,8 @@
-import React, { cloneElement, Fragment } from 'react'
+import React, { cloneElement } from 'react'
 
 import { Text, View } from 'react-native'
 
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
@@ -53,7 +54,7 @@ export const TwMenuButton = ({
       label={
         <View className="flex-1">
           <View className="flex-row justify-between gap-2">
-            {typeof label === 'string' ? (
+            {ElementHelper.isTextContentValid(label) ? (
               <Text
                 {...labelProps}
                 numberOfLines={1}
@@ -68,18 +69,12 @@ export const TwMenuButton = ({
               label
             )}
 
-            {subtitle && (
-              <Fragment>
-                {typeof subtitle === 'string' ? (
-                  <Text
-                    className={StyleHelper.mergeStyles('font-sans-regular text-lg text-gray-400', subtitleClassName)}
-                  >
-                    {subtitle}
-                  </Text>
-                ) : (
-                  subtitle
-                )}
-              </Fragment>
+            {ElementHelper.isTextContentValid(subtitle) ? (
+              <Text className={StyleHelper.mergeStyles('font-sans-regular text-lg text-gray-400', subtitleClassName)}>
+                {subtitle}
+              </Text>
+            ) : (
+              subtitle
             )}
           </View>
 
@@ -96,7 +91,7 @@ export const TwMenuButton = ({
       leftElement={
         leftElement ? (
           <View
-            className={StyleHelper.mergeStyles('h-6 w-6 items-center justify-center', leftElementContainerClassName)}
+            className={StyleHelper.mergeStyles('size-6 items-center justify-center', leftElementContainerClassName)}
           >
             {cloneElement(leftElement, {
               ...leftElement.props,

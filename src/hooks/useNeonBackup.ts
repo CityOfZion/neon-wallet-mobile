@@ -79,11 +79,11 @@ export const useNeonCreateBackup = () => {
         name: account.name,
         order: account.order,
         type: account.type,
-        key: key ?? undefined,
+        key: key || undefined,
         skin: account.skin,
       }
 
-      const walletAccounts = backupAccountsByWalletId.get(backupAccount.idWallet) ?? []
+      const walletAccounts = backupAccountsByWalletId.get(backupAccount.idWallet) || []
       backupAccountsByWalletId.set(backupAccount.idWallet, [...walletAccounts, backupAccount])
     })
 
@@ -94,14 +94,14 @@ export const useNeonCreateBackup = () => {
 
       await editWallet({ wallet, data: { backupStatus: 'successful' } })
 
-      const walletAccounts = backupAccountsByWalletId.get(wallet.id) ?? []
+      const walletAccounts = backupAccountsByWalletId.get(wallet.id) || []
 
       backupFile.wallets.push({
         id: wallet.id,
         name: wallet.name,
         // It is always standard because we are following the NWD format
         type: 'standard',
-        mnemonic: mnemonic ?? undefined,
+        mnemonic: mnemonic || undefined,
         accounts: walletAccounts,
       })
     })
@@ -126,7 +126,7 @@ export const useNeonCreateBackup = () => {
     }
 
     await writeFile(
-      `Neon-Backup-${DateHelper.getNowUnix()}.${NeonBackupHelper.fileExtension}`,
+      `NEON-backup-${DateHelper.getNowUnix()}.${NeonBackupHelper.fileExtension}`,
       JSON.stringify(backupFile),
       'application/json'
     )
@@ -218,7 +218,7 @@ export const useNeonImportBackup = () => {
       })
 
       for (const backupWallet of data.wallets) {
-        const accountsToImport: TUseImportAccountsParams['accounts'] = []
+        const accountsToImport: TUseImportAccountsParams['accountsToImport'] = []
 
         backupWallet.accounts.forEach(backupAccount => {
           const fixedAccount = NeonBackupHelper.fixAccountProperties(backupAccount)
@@ -233,7 +233,7 @@ export const useNeonImportBackup = () => {
         const fixedWallet = NeonBackupHelper.fixWalletProperties(backupWallet)
         const newWallet = await createWallet({ ...fixedWallet, mnemonic: backupWallet.mnemonic })
 
-        await importAccounts({ wallet: newWallet, accounts: accountsToImport })
+        await importAccounts({ wallet: newWallet, accountsToImport })
       }
     } catch (error) {
       throw new AppError(t('errors.importData'), error)

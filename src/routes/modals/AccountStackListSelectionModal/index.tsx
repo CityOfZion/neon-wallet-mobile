@@ -6,11 +6,10 @@ import { AccountCardStackList } from '@/components/AccountCardStackList'
 
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 export const AccountStackListSelectionModal = ({
   navigation,
@@ -29,7 +28,7 @@ export const AccountStackListSelectionModal = ({
   const { accountsByWalletId } = useAccountsByWalletIdSelector(wallet.id)
 
   const filteredAccounts = useMemo(() => {
-    const filtered: IAccountState[] = []
+    const filtered: TAccount[] = []
 
     accountsByWalletId.forEach(account => {
       if (!accountTypes.includes(account.type)) return
@@ -41,25 +40,25 @@ export const AccountStackListSelectionModal = ({
     return filtered
   }, [accountTypes, accountsByWalletId, blockchains])
 
-  const handlePress = (account: IAccountState) => {
+  const handlePress = (account: TAccount) => {
     onSelect(account)
   }
 
   return (
-    <TwModalLayout
-      title={title}
-      rightElement={<TwModalLayoutCloseIconButton onPress={onRequestClose ?? navigation.goBack} />}
-      withoutScroll
-      contentContainerClassName="pb-0 px-0 items-center"
-      onRequestClose={onRequestClose}
-    >
-      <Text className="mb-8 px-9 text-center font-sans-regular text-lg text-white">{description}</Text>
+    <ModalLayout.Root onRequestClose={onRequestClose}>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{title}</ModalLayout.Title>
+        <ModalLayout.CloseButton onPress={onRequestClose || navigation.goBack} />
+      </ModalLayout.Header>
+      <ModalLayout.ViewContent className="items-center px-0 pb-0">
+        <Text className="mb-8 px-9 text-center font-sans-regular text-lg text-white">{description}</Text>
 
-      <AccountCardStackList
-        accounts={filteredAccounts}
-        onPress={handlePress}
-        contentContainerStyle={{ paddingBottom: 124 }}
-      />
-    </TwModalLayout>
+        <AccountCardStackList
+          accounts={filteredAccounts}
+          onPress={handlePress}
+          contentContainerStyle={{ paddingBottom: 124 }}
+        />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }

@@ -19,22 +19,22 @@ export const usePasswordAuthentication = () => {
   const linkPassword = async () => {
     return new Promise<void>(async (resolve, reject) => {
       navigation.navigate('CreatePasswordModal', {
-        title: t('createPasswordModal.title'),
-        description: t('createPasswordModal.description'),
-        formDescription: t('createPasswordModal.formDescription'),
+        title: t('createPassword.title'),
+        description: t('createPassword.description'),
+        formDescription: t('createPassword.formDescription'),
         passwordInputProps: {
-          label: t('createPasswordModal.passwordInputLabel'),
-          placeholder: t('createPasswordModal.passwordInputPlaceholder'),
+          label: t('createPassword.passwordInputLabel'),
+          placeholder: t('createPassword.passwordInputPlaceholder'),
         },
         confirmPasswordInputProps: {
-          label: t('createPasswordModal.confirmPasswordInputLabel'),
-          placeholder: t('createPasswordModal.confirmPasswordInputPlaceholder'),
+          label: t('createPassword.confirmPasswordInputLabel'),
+          placeholder: t('createPassword.confirmPasswordInputPlaceholder'),
         },
         bannerProps: {
           type: 'warningOrange',
           text: (
             <Text className="flex-shrink px-5 py-3.5 font-sans-regular text-lg text-white">
-              <Trans t={t} i18nKey="createPasswordModal.keepSafeAlertMessage">
+              <Trans t={t} i18nKey="createPassword.keepSafeAlertMessage">
                 start
                 <Text className="text-orange">middle</Text>
               </Trans>
@@ -42,7 +42,7 @@ export const usePasswordAuthentication = () => {
           ),
         },
         buttonProps: {
-          label: t('createPasswordModal.submitButtonLabel'),
+          label: t('createPassword.submitButtonLabel'),
           leftElement: <TbDialpad aria-hidden />,
         },
         onRequestClose() {
@@ -77,19 +77,19 @@ export const usePasswordAuthentication = () => {
       }
 
       navigation.navigate('PasswordModal', {
-        title: t('passwordModal.title'),
-        description: t('passwordModal.description'),
+        title: t('password.title'),
+        description: t('password.description'),
         inputProps: {
-          label: t('passwordModal.inputLabel'),
-          placeholder: t('passwordModal.inputPlaceholder'),
+          label: t('password.inputLabel'),
+          placeholder: t('password.inputPlaceholder'),
         },
         bannerProps: {
           type: 'warningOrange',
-          text: t('passwordModal.alert'),
+          text: t('password.alert'),
         },
         buttonProps: {
           leftElement: <TbDialpad aria-hidden />,
-          label: t('passwordModal.submitButtonLabel'),
+          label: t('password.submitButtonLabel'),
         },
         onRequestClose() {
           reject()

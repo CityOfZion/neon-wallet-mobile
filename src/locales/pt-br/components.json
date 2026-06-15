@@ -8,6 +8,27 @@
     "notFoundLabel": "Nenhuma conta encontrada ou conta(s) já existente.",
     "selectedOfTotal": "{{selectedCount}} selecionada(s) de {{totalCount}} endereço(s)"
   },
+  "accountTransactionsTransactionCard": {
+    "blockToolTipLabel": "Bloco: {{ block }}",
+    "bridgeNeo3NeoXButtonLabel": "Bridge",
+    "feeTooltipLabel": "Taxa de rede: {{ networkFee }} | Taxa do sistema: {{ systemFee }}",
+    "invocationsToolTipLabel": "Invocações: {{ invocations }}",
+    "nftsTooltipLabel": "NFTs: {{ nfts }}",
+    "notificationToolTipLabel": "Notificações: {{ notifications }}",
+    "pendingLabel": "Pendente…",
+    "seeOnExplorerButtonLabel": "Veja no explorador",
+    "swapButtonLabel": "Swap",
+    "totalAmountTooltipLabel": "Total: {{ totalAmount }}",
+    "txIdLabel": "ID da Tx:"
+  },
+  "accountTransactionsTransactionDefaultEvent": {
+    "fromLabel": "De",
+    "toLabel": "Para",
+    "type": {
+      "nft": "NFT",
+      "token": "Token"
+    }
+  },
   "actionInput": {
     "maxButtonLabel": "Máx"
   },
@@ -19,14 +40,22 @@
   "blockchainList": {
     "xExisting": "{{amount}} existente(s)"
   },
-  "nfcModal": {
+  "modalLayout": {
+    "labels": {
+      "closeButton": "Fechar modal"
+    }
+  },
+  "nfc": {
     "description": "Por favor, toque nas tags NFC",
     "title": "Pronto para Escanear"
   },
-  "qrCodeScanModal": {
+  "qrCodeScan": {
     "closeButtonLabel": "Fechar leitor de código QR",
     "permissionOffMessage": "É necessário conceder permissão à câmera para ler códigos QR. Por favor, conceda essa permissão nas configurações do seu dispositivo.",
     "permissionOffTitle": "Acesso à câmera necessário"
+  },
+  "screenLayout": {
+    "backButtonLabel": "Voltar"
   },
   "screenLayoutBars": {
     "customMode": "Modo Rede Customizada",
@@ -95,11 +124,6 @@
       "clearButton": "Limpar entrada",
       "hideButton": "Ocultar entrada",
       "showButton": "Mostrar entrada"
-    }
-  },
-  "twModalLayoutCloseIconButton": {
-    "labels": {
-      "closeButton": "Fechar modal"
     }
   }
 }

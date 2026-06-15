@@ -26,7 +26,7 @@ type TProps = {
 } & TDappPermissionProps
 
 export const DappPermissionInvokeNeo3ContentInvocation = ({ invocation, sessionDetails, session }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal.customContents.invokeNeo3' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission.customContents.invokeNeo3' })
   const navigation = useNavigation()
 
   const contractQuery = useContractQuery({ blockchain: sessionDetails.blockchain, hash: invocation.scriptHash })
@@ -39,7 +39,11 @@ export const DappPermissionInvokeNeo3ContentInvocation = ({ invocation, sessionD
       : null
 
   const handleOpenContractHashUrl = () => {
-    LinkHelper.open(service.explorerService.buildContractUrl(invocation.scriptHash) ?? '')
+    const contractUrl = service.explorerService.buildContractUrl(invocation.scriptHash)
+
+    if (!contractUrl) return
+
+    LinkHelper.open(contractUrl)
   }
 
   const handleViewContractDetails = () => {
@@ -48,7 +52,7 @@ export const DappPermissionInvokeNeo3ContentInvocation = ({ invocation, sessionD
       hash: invocation.scriptHash,
       operation: invocation.operation,
       blockchain: sessionDetails.blockchain,
-      values: invocation.args?.map(arg => arg.value) ?? [],
+      values: invocation.args?.map(arg => arg.value) || [],
     })
   }
 
@@ -59,7 +63,7 @@ export const DappPermissionInvokeNeo3ContentInvocation = ({ invocation, sessionD
           leftElement={<TbArrowsSort className="rotate-90" aria-hidden />}
           labelClassName="capitalize"
           rightElement={match(contractQuery)
-            .with({ isLoading: true }, () => <Loader className="h-4 w-4" containerClassName="w-fit" />)
+            .with({ isLoading: true }, () => <Loader className="size-4" containerClassName="w-fit" />)
             .with({ data: P.nullish }, () => <Fragment />)
             .otherwise(({ data }) => (
               <View className="flex flex-row items-center gap-2">

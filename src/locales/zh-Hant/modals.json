@@ -1,5 +1,5 @@
 {
-  "aboutExtraIdToReceiveModal": {
+  "aboutExtraIdToReceive": {
     "title": "關於目的標籤",
     "what": {
       "description": "目的標籤或備註是一個獨特的識別碼，有助於確保加密貨幣存款正確記入收款人。當您向使用共用錢包地址的服務或交易所發送資金時，通常需要填寫。",
@@ -14,25 +14,44 @@
       "title": "為什麼我需要它？"
     }
   },
-  "accountAssetActionsModal": {
+  "accountAssetActions": {
     "receiveButtonLabel": "接收代幣",
     "sendButtonLabel": "發送代幣"
   },
-  "accountAssetTokenActionsModal": {
+  "accountAssetTokenActions": {
     "hideButtonLabel": "隱藏此代幣",
     "showButtonLabel": "顯示此代幣"
   },
-  "accountQRCodeModal": {
+  "accountQRCode": {
     "address": "地址",
     "title": "帳戶二維碼"
   },
-  "accountSelectionModal": {
+  "accountSelection": {
     "accountsAccordionLabel": "帳戶",
     "description": "請先選擇錢包，再選擇帳戶",
     "title": "選擇帳戶",
     "walletsAccordionLabel": "錢包"
   },
-  "addressSelectionModal": {
+  "accountTransactionsContext": {
+    "dateSelection": {
+      "description": "您需要選擇日期以篩選交易記錄。",
+      "title": "選擇日期"
+    },
+    "exportButtonLabel": "匯出",
+    "filtersButtonLabel": "篩選"
+  },
+  "accountTransactionsUtxoDetails": {
+    "fromLabel": "從",
+    "inputTitle": "{{ value }} 個輸入",
+    "inputsLabel": "輸入",
+    "inputsTitle": "{{ value }} 個輸入",
+    "outputTitle": "{{ value }} 個輸出",
+    "outputsLabel": "輸出",
+    "outputsTitle": "{{ value }} 個輸出",
+    "title": "交易詳情",
+    "toLabel": "至"
+  },
+  "addressSelection": {
     "accountsTabLabel": "我的帳戶",
     "addressTabLabel": "輸入地址",
     "buttonLabel": "使用此地址",
@@ -43,57 +62,17 @@
     "inputPlaceholder": "輸入地址…",
     "title": "選擇地址"
   },
-  "backupAlertModal": {
+  "backupAlert": {
     "buttonLabel": "立即備份",
     "description1": "備份您的錢包是管理資產時一個預防且重要的步驟。",
     "description2": "擁有備份可以防止您在遺失手機或無法存取此應用程式時失去資金。",
     "description3": "要備份，只需關閉此面板，點擊右上角的三個點，然後選擇備份錢包。系統將引導您完成快速備份流程。",
     "title": "錢包備份"
   },
-  "blockchainSelectionModal": {
-    "title": "選擇鏈"
+  "blockchainSelection": {
+    "title": "選擇區塊鏈"
   },
-  "bridgeNeo3NeoXAboutModal": {
-    "description": "輕鬆在網絡之間橋接您的加密資產，無需離開您的錢包。",
-    "explanation": "區塊鏈彼此獨立，無法相互交互 - 這就是橋接發揮作用的地方。原理上類似於到不同國家旅行時兌換貨幣，橋接允許您在各種區塊鏈之間轉移資產。",
-    "neonAdvantage": "在 NEON 中直接即時橋接代幣既方便又能幫您節省時間並支付更低的費用。",
-    "title": "關於橋接代幣",
-    "warningLabel": "COZ 不是此橋接流程的維護者 - Neo Global Development 是維護者。"
-  },
-  "bridgeNeo3NeoXConfirmationModal": {
-    "bridgeFromLabel": "跨鏈來源",
-    "bridgeToLabel": "跨鏈目標",
-    "description": "請查看以下詳細資訊並確認您要繼續。",
-    "details": "交易詳情",
-    "receivingAddressLabel": "接收地址",
-    "sendingAddressLabel": "發送地址",
-    "submitButtonLabel": "確認",
-    "title": "確認您的橋接",
-    "tokenLabel": "代幣",
-    "totalFeeLabel": "總費用",
-    "wantBridgeLabel": "您要跨鏈"
-  },
-  "bridgeNeo3NeoXDetailsModal": {
-    "bridgeFromLabel": "橋接來源",
-    "bridgeToLabel": "橋接目標",
-    "details": "詳情",
-    "errorsByCode": {
-      "FAILED_TO_GET_NONCE": "獲取該交易的隨機數失敗",
-      "FAILED_TO_GET_TRANSACTION_BY_NONCE": "通過隨機數獲取交易失敗",
-      "INVALID_TRANSACTION": "交易未被網路成功確認",
-      "NONCE_NOT_FOUND": "未找到交易的隨機數",
-      "TXID_NOT_FOUND": "未找到交易ID",
-      "UNEXPECTED_ERROR": "發生意外錯誤。如果問題持續存在，請聯絡客服。"
-    },
-    "helpButtonLabel": "需要幫助？與我們聊天",
-    "receivingAddressLabel": "接收地址",
-    "sendingAddressLabel": "發送地址",
-    "statusLabel": "狀態",
-    "steps": ["發送", "完成"],
-    "title": "您的橋接詳情",
-    "tokenLabel": "代幣"
-  },
-  "buyAndSellTokensAboutDataModal": {
+  "buyAndSellTokensAboutData": {
     "description": "我們的上下匯合作夥伴僅保留您的資料 ID 參考，並使用您提供的電子郵件通知您的買賣進度。",
     "info": "COZ 不會儲存您的任何資料",
     "labels": {
@@ -109,7 +88,7 @@
       "link": "關於 Unlimit 的服務"
     }
   },
-  "buyAndSellTokensAccountsModal": {
+  "buyAndSellTokensAccounts": {
     "description": "複製您希望接收購買代幣的帳戶地址：",
     "labels": {
       "copyAddress": "複製帳戶地址",
@@ -120,7 +99,7 @@
     },
     "title": "您的帳戶"
   },
-  "buyAndSellTokensInfoModal": {
+  "buyAndSellTokensInfo": {
     "aboutData": "<1>此流程使用嵌入式小工具。</1> 購買和出售代幣時，可能會因 KYC 需求而要求部分個人資料。<2>較大額的交易需要更多的 KYC 資料。</2>",
     "buttons": {
       "aboutData": "關於您的資料",
@@ -140,12 +119,12 @@
     },
     "title": "購買與出售代幣"
   },
-  "changelogModal": {
+  "changelog": {
     "cozTeam": "- COZ 團隊",
     "thankYouText": "感謝您選擇 Neon Wallet Mobile。歡迎通過我們的公開渠道聯繫我們，讓我們一起持續改進！",
     "title": "更新日誌"
   },
-  "connectHardwareBluetoothModal": {
+  "connectHardwareBluetooth": {
     "bluetoothDisabled": {
       "description": "配對裝置需要藍牙。請在您的裝置設定中啟用藍牙",
       "title": "藍牙已關閉"
@@ -164,13 +143,13 @@
     },
     "title": "連接硬體"
   },
-  "connectHardwareTypeSelectionModal": {
+  "connectHardwareTypeSelection": {
     "bluetoothLabel": "透過藍牙",
     "description": "您想如何連接？",
     "title": "連接硬體",
     "usbLabel": "透過 USB"
   },
-  "connectHardwareUsbModal": {
+  "connectHardwareUsb": {
     "description1": "正在尋找您的錢包",
     "description2": "正在掃描已連接的裝置…",
     "description3": "請確保您的硬體錢包已解鎖、連接至支援的應用程式並已連接至此裝置",
@@ -180,14 +159,14 @@
     "success": "硬體錢包已連接",
     "title": "連接硬體"
   },
-  "createAccountBlockchainSelectionModal": {
+  "createAccountBlockchainSelection": {
     "description": "請選擇您要新增帳戶的區塊鏈",
     "errors": {
       "walletCannotDerivate": "此錢包無法建立帳戶"
     },
     "title": "新增帳戶"
   },
-  "createBackupModal": {
+  "createBackup": {
     "confirmPasswordLabel": "確認備份密碼",
     "confirmPasswordPlaceholder": "再次輸入您的密碼…",
     "description": "將備份檔案儲存到您的手機，讓您在失去存取權或裝置損壞時可以還原錢包。",
@@ -199,28 +178,22 @@
     "passwordLabel": "建立備份密碼",
     "passwordPlaceholder": "輸入您的密碼…",
     "submitButtonLabel": "立即備份",
-    "successModal": {
+    "success": {
       "description": "備份建立成功！",
       "savePasswordButtonLabel": "儲存密碼 QR 碼",
       "submitButtonLabel": "返回設定"
     },
     "title": "備份 NEON"
   },
-  "createPasswordModal": {
+  "createPassword": {
     "errors": {
       "passwordsDoNotMatch": "密碼不相符"
     }
   },
-  "currencySelectionModal": {
+  "currencySelection": {
     "title": "貨幣"
   },
-  "dappConnectionDetailsModal": {
-    "accountPanelTitle": "已連接帳戶",
-    "expiresAtPanelTitle": "到期時間",
-    "title": "dApp 連線詳情",
-    "walletPanelTitle": "已連接錢包"
-  },
-  "dappConnectionModal": {
+  "dappConnection": {
     "accountSelection": {
       "description": "請選擇您要連接的帳戶",
       "title": "帳戶選擇"
@@ -240,20 +213,20 @@
       "title": "錢包選擇"
     }
   },
-  "dappConnectionRequestModal": {
+  "dappConnectionDetails": {
+    "accountPanelTitle": "已連接帳戶",
+    "expiresAtPanelTitle": "到期時間",
+    "title": "dApp 連線詳情",
+    "walletPanelTitle": "已連接錢包"
+  },
+  "dappConnectionRequest": {
     "messages": {
       "connected": "{{dappName}} 已連接。"
     },
     "subtitle": "<0>{{dAppName}}</0> 想要連接到您的錢包",
     "title": "連接 dApp"
   },
-  "dappPermissionContractDetailsModal": {
-    "externalButtonLabel": "在瀏覽器中查看",
-    "hashDetailsHeaderLabel": "雜湊",
-    "parametersDetailsLabel": "請求參數",
-    "title": "合約詳情"
-  },
-  "dappPermissionModal": {
+  "dappPermission": {
     "customContents": {
       "invokeNeo3": {
         "amountDetailsItemLabel": "金額",
@@ -286,7 +259,13 @@
     },
     "title": "允許 dApp 請求"
   },
-  "dappPermissionSignatureScopeModal": {
+  "dappPermissionContractDetails": {
+    "externalButtonLabel": "在瀏覽器中查看",
+    "hashDetailsHeaderLabel": "雜湊",
+    "parametersDetailsLabel": "請求參數",
+    "title": "合約詳情"
+  },
+  "dappPermissionSignatureScope": {
     "allowListDetailsHeaderLabel": "允許清單",
     "explanationDetailsHeaderLabel": "說明",
     "scopeDetailsHeaderLabel": "範圍",
@@ -301,14 +280,12 @@
     },
     "title": "簽名範圍"
   },
-  "dateSelectionModal": {
-    "description": "選擇期間",
+  "dateSelection": {
     "endDateAccordionLabel": "結束日期",
-    "maxMonthLabel": "(最多 {{months}} 個月)",
-    "startDateAccordionLabel": "開始日期",
-    "title": "選擇日期"
+    "maxMonthLabel": "(最多 12 個月)",
+    "startDateAccordionLabel": "開始日期"
   },
-  "editAccountModal": {
+  "editAccount": {
     "accountInput": {
       "placeholder": "輸入帳戶名稱",
       "title": "帳戶名稱"
@@ -321,13 +298,13 @@
     "selectPremiumThemesTitle": "高級主題",
     "title": "自訂帳戶"
   },
-  "editWalletModal": {
+  "editWallet": {
     "invalidName": "名稱必須至少 1 個字且少於 20 個字",
     "nameLabel": "錢包名稱",
     "namePlaceholder": "輸入錢包名稱",
     "title": "自訂錢包"
   },
-  "exportFullTransactionsModal": {
+  "exportFullTransactions": {
     "accountLabel": "要匯出的帳戶…",
     "accountSelectionModalTitle": "要匯出的帳戶",
     "dateSelectionModalDescription": "選擇要匯出的期間",
@@ -336,7 +313,7 @@
     "errorMessage": "匯出 CSV 時發生錯誤，請再試一次。",
     "exportButtonLabel": "匯出 CSV",
     "formLabel": "匯出詳情",
-    "successModal": {
+    "success": {
       "description": "您的交易已匯出！",
       "detailsExportedAccountLabel": "匯出帳戶",
       "detailsSubtitle": "CSV 檔案",
@@ -353,12 +330,12 @@
     "timePeriodValue": "從 {{from}} 到 {{to}}",
     "title": "匯出"
   },
-  "exportKeyModal": {
+  "exportKey": {
     "details": "金鑰詳細資料",
     "title": "匯出金鑰",
     "unexpectedError": "取得金鑰時發生非預期錯誤"
   },
-  "hideFraudulentTokenModal": {
+  "hideFraudulentToken": {
     "amountLabel": "數量：",
     "blockchainLabel": "區塊鏈：",
     "details": "詳情：",
@@ -370,58 +347,197 @@
     "tokenHashLabel": "哈希值：",
     "tokenNameLabel": "名稱："
   },
-  "importBackupModal": {
+  "importBackup": {
     "description1": "如果您失去對錢包的存取權，可以從本地備份檔案匯入。只需找到您的本地備份檔案並輸入您建立備份時所用的密碼，即可恢復存取權。",
     "description2": "首先，請找到您的備份檔案：",
     "locateButtonLabel": "尋找備份",
-    "passwordModal": {
+    "password": {
       "buttonLabel": "匯入備份",
       "description": "為了匯入您的備份檔案，請輸入您建立備份時所用的密碼：",
       "inputLabel": "Neon 備份密碼"
     },
-    "successFile": "已識別備份！",
-    "successModal": {
+    "success": {
       "description": "備份匯入成功！",
       "submitButtonLabel": "返回設定"
     },
+    "successFile": "已識別備份！",
     "title": "匯入 NEON 備份"
   },
-  "languageSelectionModal": {
+  "importEncryptedKeySelection": {
+    "accountAlreadyExists": "帳戶已存在",
+    "decryptError": "密碼錯誤",
+    "description": "選擇您要匯入的加密金鑰所對應的區塊鏈",
+    "importEncryptedConfirmPasswordLabel": "若要繼續，請輸入用於加密金鑰的密碼：",
+    "importEncryptedKeyInputPlaceholder": "輸入密碼",
+    "title": "匯入錢包"
+  },
+  "importMnemonicSelection": {
+    "buttonLabel": "匯入",
+    "foundAccountsMnemonicLabel": "我們找到以下可匯入的帳戶：",
+    "title": "匯入"
+  },
+  "languageSelection": {
     "title": "語言"
   },
-  "nodeSelectionModal": {
+  "neo3NeoXBridgeAbout": {
+    "description": "輕鬆在網絡之間橋接您的加密資產，無需離開您的錢包。",
+    "explanation": "區塊鏈彼此獨立，無法相互交互 - 這就是橋接發揮作用的地方。原理上類似於到不同國家旅行時兌換貨幣，橋接允許您在各種區塊鏈之間轉移資產。",
+    "neonAdvantage": "在 NEON 中直接即時橋接代幣既方便又能幫您節省時間並支付更低的費用。",
+    "title": "關於橋接代幣",
+    "warningLabel": "COZ 不是此橋接流程的維護者 - Neo Global Development 是維護者。"
+  },
+  "neo3NeoXBridgeConfirmation": {
+    "bridgeFromLabel": "跨鏈來源",
+    "bridgeToLabel": "跨鏈目標",
+    "description": "請查看以下詳細資訊並確認您要繼續。",
+    "details": "交易詳情",
+    "receivingAddressLabel": "接收地址",
+    "sendingAddressLabel": "發送地址",
+    "submitButtonLabel": "確認",
+    "title": "確認您的橋接",
+    "tokenLabel": "代幣",
+    "totalFeeLabel": "總費用",
+    "wantBridgeLabel": "您要跨鏈"
+  },
+  "neo3NeoXBridgeDetails": {
+    "bridgeFromLabel": "橋接來源",
+    "bridgeToLabel": "橋接目標",
+    "details": "詳情",
+    "errorsByCode": {
+      "FAILED_TO_GET_NONCE": "獲取該交易的隨機數失敗",
+      "FAILED_TO_GET_TRANSACTION_BY_NONCE": "通過隨機數獲取交易失敗",
+      "INVALID_TRANSACTION": "交易未被網路成功確認",
+      "NONCE_NOT_FOUND": "未找到交易的隨機數",
+      "TXID_NOT_FOUND": "未找到交易ID",
+      "UNEXPECTED_ERROR": "發生意外錯誤。如果問題持續存在，請聯絡客服。"
+    },
+    "helpButtonLabel": "需要幫助？與我們聊天",
+    "receivingAddressLabel": "接收地址",
+    "sendingAddressLabel": "發送地址",
+    "statusLabel": "狀態",
+    "steps": ["發送", "完成"],
+    "title": "您的橋接詳情",
+    "tokenLabel": "代幣"
+  },
+  "neo3VoteCandidateDetails": {
+    "accountCanNotBeWatchTitle": "請使用非監視模式的 Neo 3 帳戶",
+    "castVoteButtonLabel": "投票給此候選人",
+    "descriptionLabel": "描述",
+    "insufficientGasDescription": "請轉入 GAS 或更換帳戶以繼續操作。",
+    "insufficientGasTitle": "您的 GAS 餘額不足以支付投票費用。",
+    "nameLabel": "候選人",
+    "positionLabel": "目前職位",
+    "pubKeyLabel": "公鑰",
+    "selectNeo3AccountTitle": "請選擇一個 Neo 3 帳戶以繼續",
+    "thereIsNoNeoTitle": "此 Neo 3 帳戶中沒有 NEO",
+    "title": "關於此候選人",
+    "voteAlreadyCastButtonLabel": "您已經投票給此候選人！",
+    "votesLabel": "總票數"
+  },
+  "neo3VoteConfirmation": {
+    "castVoteButtonLabel": "提交投票",
+    "detailsFeeLabel": "總費用",
+    "holderDescription": "作為代幣持有者，您可以影響重要的協議決策，確保網絡的發展符合社群利益。",
+    "messages": {
+      "voteError": "投票過程中發生錯誤，請重試"
+    },
+    "notifications": {
+      "voteFailureNotification": {
+        "previewBody": "我們無法確認您的投票是否成功",
+        "title": "投票失敗"
+      },
+      "voteSuccessNotification": {
+        "previewBody": "您的投票已成功完成",
+        "title": "投票完成"
+      }
+    },
+    "successContent": {
+      "successDescription": "您的投票已送出！",
+      "successDetailsTitle": "您的投票資訊",
+      "viewTransactionButtonLabel": "查看交易"
+    },
+    "summary": {
+      "detailsAccountAddressLabel": "地址",
+      "detailsAccountNameLabel": "帳戶名稱",
+      "detailsCandidateLabel": "候選人",
+      "detailsPubKeyLabel": "公鑰",
+      "detailsVotesLabel": "票數"
+    },
+    "systemDescription": "詳細的提案研究與明智的投票行為至關重要。系統使用可靠的驗證機制與清晰流程，使個人能有意義地為 NEO 生態的成長與發展做出貢獻。",
+    "title": "審查並確認您的投票",
+    "voteDetailsTitle": "投票詳情",
+    "voteErrorMessages": {
+      "canNotPayGasFeeLabel": "您無法支付 GAS 費用",
+      "noNeoLabel": "您在此 Neo 3 帳戶中沒有足夠的 NEO 進行投票",
+      "watchAccountLabel": "您的 Neo 3 帳戶處於監視模式"
+    }
+  },
+  "neo3VoteHowItWorks": {
+    "alertLabel": "如果您出售 NEO，您的票數將會減少相應數量，GAS 獎勵也會按比例減少。",
+    "explanationLabel": "您持有的 NEO 數量等同於您可以用來為候選人投票的票數。",
+    "noteDescription": "如果您不投票，將會錯失這項福利。",
+    "noteTitle": "注意：",
+    "title": "它是如何運作的？",
+    "whyVoteDescription": "透過投票，您積極參與 NEO 生態系統，並有資格作為持有者獲得 GAS 獎勵。",
+    "whyVoteTitle": "為什麼要投票？"
+  },
+  "neo3VoteSupportUs": {
+    "aboutNeonWalletDescription": "作為 Neon Wallet 的用戶與代幣持有者，您可以影響重要的協議決策，確保網絡的發展方向符合您的利益。",
+    "cozLogoAlt": "COZ 標誌",
+    "cozTeamLabel": "COZ 團隊",
+    "dontShowAgainLabel": "不再顯示",
+    "hiLabel": "您好！",
+    "importantThingsLabel": "詳細的提案研究與明智的投票行為非常重要。",
+    "scanOurWebsite": "如果您還不了解我們，請花一點時間瀏覽 <1>我們的網站</1>。",
+    "skipButtonLabel": "跳過",
+    "thankYouLabel": "感謝您！",
+    "title": "想支持我們嗎？",
+    "voteForCozButtonLabel": "投票給 COZ",
+    "youCanSupportUsLabel": "如果您喜歡使用 Neon 或我們的其他產品，您可以通過投票來支持我們的發展。"
+  },
+  "networkUrlSelection": {
     "antiMevLabel": "反MEV",
     "blockHeightLabel": "區塊高度：",
-    "description": "如果您遇到效能問題，請嘗試在下方選擇自訂節點",
+    "description": "如果您遇到效能問題，請嘗試在下方選擇自訂網路",
     "latencyLabel": "{{latency}}毫秒",
-    "nodesListLabel": "節點",
+    "listLabel": "網路 URL 清單",
     "refreshButtonLabel": "重新整理",
-    "selectAutomaticallyCheckboxLabel": "自動選擇",
-    "title": "節點選擇"
+    "selectAutomaticallyCheckboxLabel": "Auto",
+    "title": "網路 URL 選擇"
   },
-  "notificationContextModal": {
+  "notificationContext": {
     "markAsReadButtonLabel": "標記為已讀",
     "markAsUnreadButtonLabel": "標記為未讀"
   },
-  "onboardingBackupMnemonicModal": {
+  "onboardingBackupMnemonic": {
     "backupAndContinueButtonLabel": "備份並繼續",
-    "description": "請備份您的助記詞。如果您失去訪問權限或卸載應用程序，這對於恢復您的錢包很重要。",
-    "title": "備份助記詞",
-    "warningLabel": "任何擁有此短語的人都可以訪問您的錢包，因此請妥善保管。"
+    "description": "助記詞對於在您失去存取權限或解除安裝應用程式後復原錢包<1>至關重要</1>！",
+    "subtitle": "備份您的助記詞！",
+    "title": "您的助記詞短語",
+    "warningLabel": "任何擁有您助記詞短語的人都可以存取您的錢包…請妥善保管！"
   },
-  "persistContactAddressModal": {
-    "addressLabel": "地址或別名",
-    "addressPlaceholder": "輸入地址或別名",
-    "chainLabel": "鏈",
-    "chainPlaceholder": "選擇鏈",
-    "invalidMessage": "無效的地址或別名",
-    "successMessage": "有效的地址或別名",
-    "title": {
-      "create": "新增地址",
-      "edit": "編輯地址"
-    }
+  "onboardingImport": {
+    "backupImportDescription": "或者，您也可以從Neon備份檔案復原錢包",
+    "importBackupConfirmPassword": {
+      "backupPasswordLabel": "備份密碼",
+      "backupPasswordPlaceholder": "輸入備份密碼…",
+      "description": "為了匯入您的備份檔案，請提供您建立備份時使用的密碼",
+      "importBackupButtonLabel": "匯入備份",
+      "importBackupTitle": "匯入Neon備份"
+    },
+    "importDescription": "輸入地址、加密金鑰、私鑰或助記詞：",
+    "importDetailsLabel": "匯入詳情",
+    "importDetailsPlaceholder": "輸入詳情…",
+    "locateButtonLabel": "定位備份",
+    "messages": {
+      "mnemonicComplete": "助記詞完成",
+      "mnemonicIncorrect": "助記詞不正確",
+      "successFile": "備份已找到！"
+    },
+    "scanButtonLabel": "掃描QR碼",
+    "title": "匯入錢包"
   },
-  "persistContactModal": {
+  "persistContact": {
     "addAddress": "新增地址",
     "addAnotherAddress": "新增另一個地址",
     "addressLabel": "地址",
@@ -437,7 +553,19 @@
       "edit": "編輯聯絡人"
     }
   },
-  "persistNetworkModal": {
+  "persistContactAddress": {
+    "addressLabel": "地址或別名",
+    "addressPlaceholder": "輸入地址或別名",
+    "chainLabel": "鏈",
+    "chainPlaceholder": "選擇鏈",
+    "invalidMessage": "無效的地址或別名",
+    "successMessage": "有效的地址或別名",
+    "title": {
+      "create": "新增地址",
+      "edit": "編輯地址"
+    }
+  },
+  "persistNetwork": {
     "connected": "連線良好",
     "createTitle": "自訂網路",
     "delete": "刪除網路",
@@ -445,7 +573,7 @@
     "inputLabels": {
       "name": "網路名稱",
       "nameDescription": "（最多 20 個字）",
-      "url": "新的 RPC URL"
+      "url": "新的 URL"
     },
     "inputPlaceholder": {
       "name": "輸入網路名稱",
@@ -455,21 +583,24 @@
     "invalidUrl": "無效的 URL",
     "notConnected": "未連線"
   },
-  "qrCodeAddressContextModal": {
+  "qrCodeAddressContext": {
     "contactButtonLabel": "新增聯絡人",
     "sendButtonLabel": "發送",
     "watchButtonLabel": "新增監控"
   },
-  "quickToolsModal": {
-    "bridgeNeo3NeoX": {
-      "title": "橋接代幣 (Neo 3 和 Neo X)"
-    },
+  "quickTools": {
     "buyAndSellTokens": {
       "title": "買賣代幣"
     },
     "hardware": {
       "connectTitle": "連接硬體錢包",
       "disconnectTitle": "斷開硬體錢包"
+    },
+    "neo3NeoXBridge": {
+      "title": "橋接代幣 (Neo 3 和 Neo X)"
+    },
+    "neo3Vote": {
+      "title": "投票 Neo 3"
     },
     "qrCode": {
       "title": "掃描 QR 碼"
@@ -482,22 +613,19 @@
     },
     "swap": {
       "title": "兌換代幣"
-    },
-    "voteNeo3": {
-      "title": "投票 Neo 3"
     }
   },
-  "removeNfiModal": {
+  "removeNfi": {
     "description": "如果您想移除或更換您的 NFI，請選擇一個選項繼續：",
     "haveNfiLabelButton": "我<1>有</1>我的 NFI",
     "noNfiLabelButton": "我<1>沒有</1>我的 NFI",
     "title": "移除 NFI"
   },
-  "reorderWalletsModal": {
+  "reorderWallets": {
     "subtitle": "拖曳錢包到新位置以重新排序",
     "title": "重新排序錢包"
   },
-  "securitySelectionModal": {
+  "securitySelection": {
     "alert": "驗證為您的錢包提供額外一層安全保護，防止未經授權的使用。",
     "description": "驗證使用此錢包進行的交易，確保交易是由您這位合法帳戶持有人發起，而非詐騙者。",
     "deviceTypeButtonLabel": "裝置生物辨識",
@@ -506,7 +634,7 @@
     "removeNfiButtonLabel": "移除…",
     "title": "驗證"
   },
-  "sellTokensDepositModal": {
+  "sellTokensDeposit": {
     "accountSelection": {
       "title": "選擇帳戶"
     },
@@ -563,28 +691,16 @@
     },
     "title": "存款"
   },
-  "sellTokensDepositSuccessModal": {
-    "amount": {
-      "label": "金額"
-    },
-    "details": {
-      "label": "交易詳情"
-    },
-    "recipient": {
-      "copy": "複製收件人",
-      "label": "收件人"
-    },
+  "sellTokensDepositSuccess": {
+    "amountLabel": "金額",
+    "detailsLabel": "交易詳情",
+    "recipientLabel": "收件人",
     "subtitle": "您的代幣已成功發送！",
     "title": "存款",
-    "transaction": {
-      "label": "交易"
-    },
-    "transactionHash": {
-      "copy": "複製交易雜湊值",
-      "label": "交易雜湊值"
-    }
+    "transactionHashLabel": "交易雜湊值",
+    "transactionLabel": "交易"
   },
-  "sendConfirmModal": {
+  "sendConfirm": {
     "amountLabel": "金額",
     "confirmButtonLabel": "確認",
     "description": "請查看下面的詳情並確認您想要繼續",
@@ -604,14 +720,30 @@
     "transactionHashLabel": "交易哈希",
     "transactionLabel": "交易 {{ order }}"
   },
-  "sendTipUncheckedConfirmationModal": {
+  "sendTipUncheckedConfirmation": {
     "description": "COZ熱愛為我們的用戶社區開發產品。提示是向團隊表示您欣賞他們的工作並讓我們保持錢包不受外部影響的絕好方式。為什麼不給您的開發者投一枚硬幣呢？",
     "keepTip": "保留提示（推薦）",
     "removeTip": "移除提示",
     "subtitle": "提示的好處",
     "title": "提示"
   },
-  "surveyModal": {
+  "stellarPersistTrustline": {
+    "errors": {
+      "invalidLimit": "無效限額"
+    },
+    "limitLabel": "限額（可選）",
+    "limitPlaceholder": "輸入限額",
+    "title": "信任線",
+    "tokenLabel": "代幣",
+    "tokenPlaceholder": "選擇代幣"
+  },
+  "stellarTrustilneTokenSelection": {
+    "noTokensFound": "未找到代幣",
+    "placeholderMessage": "輸入以搜尋代幣",
+    "searchInputPlaceholder": "搜尋代幣",
+    "title": "信任線"
+  },
+  "survey": {
     "descriptionFeedbackSubmitted": "非常感謝您的反饋！",
     "detailsInputLabel": "我們可以改進什麼？",
     "detailsInputPlaceholder": "在此處添加更多詳細資訊…",
@@ -626,12 +758,7 @@
     "title": "您覺得體驗如何？",
     "titleFeedbackSubmitted": "謝謝！"
   },
-  "swapDetailsLogModal": {
-    "copySwapLog": "複製兌換日誌到剪貼簿",
-    "thereIsNoLog": "沒有兌換日誌",
-    "title": "兌換日誌"
-  },
-  "swapDetailsModal": {
+  "swapDetails": {
     "details": "詳情",
     "errors": {
       "initialPart": "哎呀！我們遇到了一個錯誤：",
@@ -663,102 +790,30 @@
     "unknownTransactionFrom": "未知的交易來源",
     "unknownTransactionTo": "未知的交易目標"
   },
-  "swapExplanationModal": {
+  "swapDetailsLog": {
+    "copySwapLog": "複製兌換日誌到剪貼簿",
+    "thereIsNoLog": "沒有兌換日誌",
+    "title": "兌換日誌"
+  },
+  "swapExplanation": {
     "description1": "跨鏈兌換代幣，無需使用交易所。",
     "description2": "在 NEON 直接且即時兌換代幣既方便又能節省時間與手續費。",
     "help": "需要協助？與我們聯絡",
     "title": "什麼是兌換？"
   },
-  "tokenSelectionModal": {
+  "tokenSelection": {
     "balanceLabel": "餘額",
     "emptyList": "沒有代幣",
     "inputPlaceholder": "搜尋代幣…",
     "title": "代幣",
     "tokenLabel": "代幣"
   },
-  "voteNeo3CandidateDetailsModal": {
-    "accountCanNotBeWatchTitle": "請使用非監視模式的 Neo 3 帳戶",
-    "castVoteButtonLabel": "投票給此候選人",
-    "descriptionLabel": "描述",
-    "insufficientGasDescription": "請轉入 GAS 或更換帳戶以繼續操作。",
-    "insufficientGasTitle": "您的 GAS 餘額不足以支付投票費用。",
-    "nameLabel": "候選人",
-    "positionLabel": "目前職位",
-    "pubKeyLabel": "公鑰",
-    "selectNeo3AccountTitle": "請選擇一個 Neo 3 帳戶以繼續",
-    "thereIsNoNeoTitle": "此 Neo 3 帳戶中沒有 NEO",
-    "title": "關於此候選人",
-    "voteAlreadyCastButtonLabel": "您已經投票給此候選人！",
-    "votesLabel": "總票數"
-  },
-  "voteNeo3ConfirmationModal": {
-    "castVoteButtonLabel": "提交投票",
-    "detailsFeeLabel": "總費用",
-    "holderDescription": "作為代幣持有者，您可以影響重要的協議決策，確保網絡的發展符合社群利益。",
-    "messages": {
-      "invalidKey": "您的帳戶沒有私鑰",
-      "voteError": "投票過程中發生錯誤，請重試"
-    },
-    "notifications": {
-      "voteFailureNotification": {
-        "previewBody": "我們無法確認您的投票是否成功",
-        "title": "投票失敗"
-      },
-      "voteSuccessNotification": {
-        "previewBody": "您的投票已成功完成",
-        "title": "投票完成"
-      }
-    },
-    "successContent": {
-      "successDescription": "您的投票已送出！",
-      "successDetailsTitle": "您的投票資訊",
-      "viewTransactionButtonLabel": "查看交易"
-    },
-    "summary": {
-      "detailsAccountAddressLabel": "地址",
-      "detailsAccountNameLabel": "帳戶名稱",
-      "detailsCandidateLabel": "候選人",
-      "detailsPubKeyLabel": "公鑰",
-      "detailsVotesLabel": "票數"
-    },
-    "systemDescription": "詳細的提案研究與明智的投票行為至關重要。系統使用可靠的驗證機制與清晰流程，使個人能有意義地為 NEO 生態的成長與發展做出貢獻。",
-    "title": "審查並確認您的投票",
-    "voteDetailsTitle": "投票詳情",
-    "voteErrorMessages": {
-      "canNotPayGasFeeLabel": "您無法支付 GAS 費用",
-      "noNeoLabel": "您在此 Neo 3 帳戶中沒有足夠的 NEO 進行投票",
-      "watchAccountLabel": "您的 Neo 3 帳戶處於監視模式"
-    }
-  },
-  "voteNeo3HowItWorksModal": {
-    "alertLabel": "如果您出售 NEO，您的票數將會減少相應數量，GAS 獎勵也會按比例減少。",
-    "explanationLabel": "您持有的 NEO 數量等同於您可以用來為候選人投票的票數。",
-    "noteDescription": "如果您不投票，將會錯失這項福利。",
-    "noteTitle": "注意：",
-    "title": "它是如何運作的？",
-    "whyVoteDescription": "透過投票，您積極參與 NEO 生態系統，並有資格作為持有者獲得 GAS 獎勵。",
-    "whyVoteTitle": "為什麼要投票？"
-  },
-  "voteNeo3SupportUsModal": {
-    "aboutNeonWalletDescription": "作為 Neon Wallet 的用戶與代幣持有者，您可以影響重要的協議決策，確保網絡的發展方向符合您的利益。",
-    "cozLogoAlt": "COZ 標誌",
-    "cozTeamLabel": "COZ 團隊",
-    "dontShowAgainLabel": "不再顯示",
-    "hiLabel": "您好！",
-    "importantThingsLabel": "詳細的提案研究與明智的投票行為非常重要。",
-    "scanOurWebsite": "如果您還不了解我們，請花一點時間瀏覽 <1>我們的網站</1>。",
-    "skipButtonLabel": "跳過",
-    "thankYouLabel": "感謝您！",
-    "title": "想支持我們嗎？",
-    "voteForCozButtonLabel": "投票給 COZ",
-    "youCanSupportUsLabel": "如果您喜歡使用 Neon 或我們的其他產品，您可以通過投票來支持我們的發展。"
-  },
-  "walletContextModal": {
+  "walletContext": {
     "backup": "備份錢包",
     "create": "建立新錢包",
     "reorder": "重新排序錢包"
   },
-  "walletSelectionModal": {
+  "walletSelection": {
     "description": "請選擇一個錢包",
     "title": "錢包選擇"
   }

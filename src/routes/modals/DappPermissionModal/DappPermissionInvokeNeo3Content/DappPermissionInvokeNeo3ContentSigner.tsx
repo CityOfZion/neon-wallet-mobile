@@ -31,7 +31,7 @@ const resolveSigner = (scope: string | number) => {
 }
 
 export const DappPermissionInvokeNeo3ContentSigner = ({ signer, session }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'dappPermissionModal.customContents.invokeNeo3' })
+  const { t } = useTranslation('modals', { keyPrefix: 'dappPermission.customContents.invokeNeo3' })
   const navigation = useNavigation()
 
   const scope = resolveSigner(signer.scopes)
@@ -40,7 +40,7 @@ export const DappPermissionInvokeNeo3ContentSigner = ({ signer, session }: TProp
     navigation.navigate('DappPermissionSignatureScopeModal', {
       session,
       scope,
-      allowedList: signer.allowedContracts ?? signer.allowedGroups,
+      allowedList: signer.allowedContracts || signer.allowedGroups,
     })
   }
 
@@ -55,7 +55,6 @@ export const DappPermissionInvokeNeo3ContentSigner = ({ signer, session }: TProp
               <MdChevronRight className="size-6 text-gray-100" aria-hidden />
             </View>
           }
-          labelClassName="capitalize"
         >
           {t('signatureScopeDetailsHeaderLabel')}
         </Details.Header>

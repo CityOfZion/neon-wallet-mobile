@@ -1,3 +1,4 @@
+import type { TBSToken } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -14,48 +15,57 @@ import { Details } from './Details'
 import { TwBlockchainIcon } from './TwBlockchainIcon'
 import { TwButton } from './TwButton'
 
-import type { TUseTransactionsTransaction, TUseTransactionsTransactionEvent } from '@/types/store'
+import type { TBlockchainServiceKey } from '@/types/blockchain'
 
-type TProps = {
-  transactions: TUseTransactionsTransaction[]
-  fee?: string
+type TSendDetailsDataItem = {
+  address: string
+  amount: string
+  token?: TBSToken
 }
 
-type TSendEventDetailsProps = {
-  event: TUseTransactionsTransactionEvent
-  transaction: TUseTransactionsTransaction
+export type TSendDetailsData = {
+  txId?: string
+  items: TSendDetailsDataItem[]
+}
+
+type TSendDetailsItemProps = {
+  txId?: string
+  address: string
+  amount: string
+  token?: TBSToken
+  blockchain: TBlockchainServiceKey
   order: number
 }
 
-const SendEventDetails = ({ event, transaction, order }: TSendEventDetailsProps) => {
+type TProps = {
+  data: TSendDetailsData[]
+  blockchain: TBlockchainServiceKey
+  fee?: string
+}
+
+const SendDetailsItem = ({ txId, address, amount, token, blockchain, order }: TSendDetailsItemProps) => {
   const { t } = useTranslation('components', { keyPrefix: 'sendDetails' })
   const { contacts } = useContactsSelector()
   const navigation = useNavigation()
 
-  const contact = contacts.find(contact =>
-    contact.addresses.some(AccountHelper.predicate({ address: event.to!, blockchain: transaction.blockchain }))
-  )
+  const contact = contacts.find(contact => contact.addresses.some(AccountHelper.predicate({ address, blockchain })))
 
   return (
     <Details.Panel labelClassName="text-gray-100 text-sm" label={t('transferLabel', { order })}>
       <Details.Item label={t('recipientLabel')} contentClassName="flex-col items-start gap-3">
-        <Text className="font-sans-medium text-base text-white">{contact?.name || event.to}</Text>
+        <Text className="font-sans-medium text-base text-white">{contact?.name || address}</Text>
 
-        {transaction.txId && !contact && (
+        {txId && !contact && (
           <View>
             <TwButton
               label={t('saveContactButtonLabel')}
-              labelProps={{
-                className: 'text-sm',
-              }}
-              contentProps={{
-                className: 'gap-2',
-              }}
-              leftElement={<TbUsers aria-hidden className="size-5 text-neon" />}
+              labelProps={{ className: 'text-sm' }}
+              contentProps={{ className: 'gap-2' }}
               variant="text-slim"
+              leftElement={<TbUsers aria-hidden className="size-5 text-neon" />}
               onPress={() =>
                 navigation.navigate('PersistContactModal', {
-                  addresses: [{ blockchain: transaction.blockchain, address: event.to! }],
+                  addresses: [{ blockchain, address }],
                 })
               }
             />
@@ -65,21 +75,17 @@ const SendEventDetails = ({ event, transaction, order }: TSendEventDetailsProps)
 
       <Details.ItemSeparator />
 
-      {event.eventType === 'token' && (
-        <Details.Item label={t('amountLabel')} contentClassName="flex-row justify-start">
-          <Text className="font-sans-medium text-base text-white">{event.amount}</Text>
-          {!!event.token?.name && <Text className="font-sans-medium text-base text-gray-100">{event.token.name}</Text>}
-        </Details.Item>
-      )}
+      <Details.Item label={t('amountLabel')} contentClassName="flex-row justify-start">
+        <Text className="font-sans-medium text-base text-white">{amount}</Text>
+
+        {!!token?.symbol && <Text className="font-sans-medium text-base text-gray-100">{token.symbol}</Text>}
+      </Details.Item>
     </Details.Panel>
   )
 }
 
-export const SendDetails = ({ transactions, fee }: TProps) => {
+export const SendDetails = ({ data, blockchain, fee }: TProps) => {
   const { t } = useTranslation('components', { keyPrefix: 'sendDetails' })
-
-  // Assuming all transactions are from the same token and blockchain, as they come from the same send action
-  const blockchain = transactions[0].blockchain
 
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
@@ -91,23 +97,23 @@ export const SendDetails = ({ transactions, fee }: TProps) => {
         <Details.HeaderSeparator />
 
         <Details.Body>
-          {transactions.map((transaction, index) => (
-            <Details.Panel
-              key={`send-details-transaction-${index}`}
-              label={t('transactionLabel', { order: index + 1 })}
-            >
-              {transaction.txId && (
-                <Details.Item label={t('transactionHashLabel')} textToCopy={transaction.txId}>
-                  {transaction.txId}
+          {data.map(({ txId, items }, index) => (
+            <Details.Panel key={`send-details-data-${index}`} label={t('transactionLabel', { order: index + 1 })}>
+              {txId && (
+                <Details.Item label={t('transactionHashLabel')} textToCopy={txId}>
+                  {txId}
                 </Details.Item>
               )}
 
-              {transaction.events.map((event, eventIndex) => (
-                <SendEventDetails
-                  key={`send-details-event-${eventIndex}`}
-                  event={event}
-                  order={eventIndex + 1}
-                  transaction={transaction}
+              {items.map(({ address, amount, token }, itemIndex) => (
+                <SendDetailsItem
+                  key={`send-details-item-${itemIndex}`}
+                  txId={txId}
+                  address={address}
+                  amount={amount}
+                  token={token}
+                  blockchain={blockchain}
+                  order={itemIndex + 1}
                 />
               ))}
             </Details.Panel>
@@ -118,8 +124,9 @@ export const SendDetails = ({ transactions, fee }: TProps) => {
       <Details.Root>
         <Details.Item label={t('totalFeeLabel')} className="p-0">
           <View className="flex-row items-center">
-            <TwBlockchainIcon blockchain={blockchain} type="gray" className="mr-2 mt-0.5 size-3.5" />
-            <Text className="font-sans-regular text-base text-white">{service.feeToken.name}</Text>
+            <TwBlockchainIcon blockchain={blockchain} className="mr-2 mt-0.5 size-3.5 text-gray-300" />
+
+            <Text className="font-sans-regular text-base text-white">{service.feeToken.symbol}</Text>
           </View>
 
           <Text className="font-sans-medium text-base text-white">{fee}</Text>

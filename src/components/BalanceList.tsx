@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { BSBigNumberHelper } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import type { FlatListProps, ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
@@ -21,10 +21,10 @@ import { TwTokenIcon } from './TwTokenIcon'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TToken, TTokenBalance, TUseBalanceOptionShowType } from '@/types/query'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
 type Props = {
-  accounts: IAccountState[]
+  accounts: TAccount[]
   showType?: TUseBalanceOptionShowType
   onItemPress?: (token: TTokenBalance) => void
   onItemLongPress?: (token: TTokenBalance) => void
@@ -127,7 +127,7 @@ export const BalanceList = ({ onItemPress, onItemLongPress, accounts, className,
         blockchain: tokenBalance.blockchain,
         token: tokenBalance.token,
         amountNumber,
-        amount: BSBigNumberHelper.format(amountNumber, { decimals: tokenBalance.token.decimals }),
+        amount: new BSBigHumanAmount(amountNumber, tokenBalance.token.decimals).toFormatted(),
         exchangeAmount: exchangeAmountNumber,
         onPress: onItemPress,
         onLongPress: onItemLongPress,
@@ -155,7 +155,7 @@ export const BalanceList = ({ onItemPress, onItemLongPress, accounts, className,
         ) : undefined
       }
       ListFooterComponent={
-        <Skeleton.Root loading={balances.isLoading}>
+        <Skeleton.Root loading={balances.isLoading} className="mb-6">
           <Skeleton.Group>
             {Array.from({ length: 3 }).map((_, index) => (
               <Skeleton.Item key={`balance-skeleton-${index}`} className="h-12 w-full rounded-md" />

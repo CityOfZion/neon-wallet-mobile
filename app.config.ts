@@ -13,7 +13,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   primaryColor: '#4CFFB3',
   newArchEnabled: true,
-  jsEngine: 'hermes',
   platforms: ['ios', 'android'],
   scheme: ['neon', 'neon3', 'wc'],
   ios: {
@@ -106,7 +105,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           'Giving $(PRODUCT_NAME) access to bluetooth will allow you to connect to hardware wallets',
       },
     ],
-    './plugins/withUsb',
+    './plugins/with-usb',
     [
       'expo-notifications',
       {
@@ -122,5 +121,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         selectIdentifiers: ['D2760000850100', 'D2760000850101'],
       },
     ],
+    'expo-localization',
   ],
 })

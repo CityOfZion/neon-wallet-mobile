@@ -6,10 +6,8 @@ import type { GestureResponderEvent, TextProps, TouchableOpacityProps, ViewProps
 import { Text, TouchableOpacity, View } from 'react-native'
 import { match } from 'ts-pattern'
 
-import { AppError } from '@/helpers/ErrorHelper'
-import { LoggerHelper } from '@/helpers/LoggerHelper'
+import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
-import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { Loader } from './Loader'
 import { PressableScale } from './PressableScale'
@@ -128,7 +126,7 @@ export const ContainedLight = (props: TTwButtonProps) => {
   return (
     <BaseButton {...props}>
       <LinearGradient
-        className="absolute h-full w-full"
+        className="absolute size-full"
         colors={['#42535D', '#273139']}
         style={{ boxShadow: BOX_SHADOW }}
       />
@@ -176,12 +174,7 @@ const BaseButton = ({
     isPressing.current = true
 
     if (onPress) {
-      try {
-        await onPress(event)
-      } catch (error) {
-        LoggerHelper.error(error, { where: 'TwButton', operation: 'handlePress' })
-        ToastHelper.error({ message: AppError.wrap(error).message })
-      }
+      await onPress(event)
     }
 
     isPressing.current = false
@@ -225,7 +218,7 @@ const BaseButton = ({
               cloneElement(leftElement, {
                 ...leftElement.props,
                 className: StyleHelper.mergeStyles(
-                  'w-6 h-6',
+                  'size-6',
                   {
                     'text-neon': colorSchema === 'neon',
                     'text-pink': colorSchema === 'pink',
@@ -236,7 +229,7 @@ const BaseButton = ({
                 ),
               })}
 
-            {typeof label === 'string' ? (
+            {ElementHelper.isTextContentValid(label) ? (
               <Text
                 {...labelProps}
                 className={StyleHelper.mergeStyles(
@@ -262,7 +255,7 @@ const BaseButton = ({
               cloneElement(rightElement, {
                 ...rightElement.props,
                 className: StyleHelper.mergeStyles(
-                  'w-6 h-6',
+                  'size-6',
                   {
                     'text-neon': colorSchema === 'neon',
                     'text-pink': colorSchema === 'pink',

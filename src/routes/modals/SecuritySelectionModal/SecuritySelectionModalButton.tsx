@@ -26,7 +26,7 @@ export const SecuritySelectionModalButton = ({
   onRemove,
   currentSecurity,
 }: TProps) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'securitySelectionModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'securitySelection' })
   const isSelected = currentSecurity.type === securityType
 
   return (
@@ -48,7 +48,7 @@ export const SecuritySelectionModalButton = ({
         ) : undefined
       }
       leftElement={<VscCircleFilled aria-hidden className="h-2 w-2 text-gray-300" />}
-      rightElement={isSelected ? <TbCheck aria-hidden className="h-6 w-6 text-neon" /> : undefined}
+      rightElement={isSelected ? <TbCheck aria-hidden className="size-6 text-neon" /> : undefined}
     />
   )
 }

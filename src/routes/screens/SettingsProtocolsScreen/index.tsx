@@ -12,7 +12,7 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TMoreStackScreenProps } from '@/types/stacks'
@@ -26,7 +26,7 @@ type TItem = {
 
 const renderItem: ListRenderItem<TItem> = ({ item }) => (
   <TwMenuButton
-    leftElement={<TwBlockchainIcon blockchain={item.blockchain} className="h-6 w-6" />}
+    leftElement={<TwBlockchainIcon blockchain={item.blockchain} className="size-6 text-[none]" />}
     label={item.label}
     subtitle={item.subtitle}
     onPress={item.onPress}
@@ -35,23 +35,29 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => (
 
 export const SettingsProtocolsScreen = ({ navigation }: TMoreStackScreenProps<'SettingsProtocolsScreen'>) => {
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
-  const { t } = useTranslation('screens', { keyPrefix: 'settingsProtocolsScreen' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('screens', { keyPrefix: 'settingsProtocols' })
+  const { t: tCommon } = useTranslation('common')
 
-  const data = useMemo(() => {
+  const data = useMemo<TItem[]>(() => {
     return BlockchainServiceHelper.blockchainNames.map(blockchain => ({
       blockchain,
-      label: commonT(`blockchainServices.${blockchain}.label`),
+      label: tCommon(`blockchainServices.${blockchain}.label`),
       subtitle: selectedNetworkByBlockchain[blockchain].name,
       onPress: () => {
         navigation.navigate('SettingsProtocolEditScreen', { blockchain })
       },
     }))
-  }, [commonT, navigation, selectedNetworkByBlockchain])
+  }, [tCommon, navigation, selectedNetworkByBlockchain])
 
   return (
-    <TwScreenLayout title={t('title')} withoutScroll>
-      <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
-    </TwScreenLayout>
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={TwSeparator} />
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

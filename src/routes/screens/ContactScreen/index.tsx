@@ -11,8 +11,7 @@ import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 
 import { useContactByIdSelector } from '@/hooks/useContactSelector'
 
-import { TwScreenLayout } from '@/layouts/TwScreenLayout'
-import { TwScreenLayoutButton } from '@/layouts/TwScreenLayout/TwScreenLayoutButtons'
+import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
@@ -26,7 +25,7 @@ type TItem = TContactAddress & {
 const renderItem: ListRenderItem<TItem> = ({ item }) => {
   return (
     <TouchableOpacity className="flex-row items-center gap-3" onPress={() => ClipboardHelper.write(item.address)}>
-      <TwBlockchainIcon blockchain={item.blockchain} className="h-5 w-5" />
+      <TwBlockchainIcon blockchain={item.blockchain} className="size-5" />
 
       <View className="flex-1">
         <Text className="font-sans-regular text-sm text-gray-300">{item.blockchainLabel}</Text>
@@ -35,7 +34,7 @@ const renderItem: ListRenderItem<TItem> = ({ item }) => {
         </Text>
       </View>
 
-      <TbCopy aria-hidden className="h-6 w-6 text-neon" />
+      <TbCopy aria-hidden className="size-6 text-neon" />
     </TouchableOpacity>
   )
 }
@@ -45,8 +44,8 @@ const Separator = () => <TwSeparator containerClassName="my-2" />
 export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'ContactScreen'>) => {
   const { contact } = route.params
 
-  const { t } = useTranslation('screens', { keyPrefix: 'contactScreen' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('screens', { keyPrefix: 'contact' })
+  const { t: tCommon } = useTranslation('common')
 
   const { contactById } = useContactByIdSelector(contact.id)
 
@@ -58,41 +57,44 @@ export const ContactScreen = ({ navigation, route }: TMoreStackScreenProps<'Cont
 
   const addresses = contactById?.addresses.map<TItem>(item => ({
     ...item,
-    blockchainLabel: commonT(`blockchainServices.${item.blockchain}.id`),
+    blockchainLabel: tCommon(`blockchainServices.${item.blockchain}.label`),
   }))
 
   return (
-    <TwScreenLayout
-      title={t('title')}
-      rightElement={<TwScreenLayoutButton label={commonT('general.edit')} onPress={handlePressEdit} />}
-      withoutScroll
-    >
-      {contactById && (
-        <FlatList
-          style={{ width: '100%' }}
-          data={addresses}
-          ListHeaderComponentStyle={{ alignItems: 'center' }}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Fragment>
-              <View className="mt-12 h-32 w-32 items-center justify-center rounded-full bg-asphalt shadow-xl shadow-black">
-                <Text className="font-sans-semibold text-4xl uppercase text-gray-300">
-                  {contactById.name.charAt(0)}
+    <ScreenLayout.Root>
+      <ScreenLayout.Header>
+        <ScreenLayout.BackButton />
+        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        <ScreenLayout.Button position="right" label={tCommon('general.edit')} onPress={handlePressEdit} />
+      </ScreenLayout.Header>
+      <ScreenLayout.ViewContent>
+        {contactById && (
+          <FlatList
+            style={{ width: '100%' }}
+            data={addresses}
+            ListHeaderComponentStyle={{ alignItems: 'center' }}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              <Fragment>
+                <View className="mt-12 size-32 items-center justify-center rounded-full bg-asphalt shadow-xl shadow-black">
+                  <Text className="font-sans-semibold text-4xl uppercase text-gray-300">
+                    {contactById.name.charAt(0)}
+                  </Text>
+                </View>
+
+                <Text className="mb-6 mt-12 font-sans-regular text-xl text-white">{contactById.name}</Text>
+
+                <Text className="mb-4 w-full text-center font-sans-regular text-sm uppercase text-gray-300">
+                  {t('walletAddressLabel')}
                 </Text>
-              </View>
-
-              <Text className="mb-6 mt-12 font-sans-regular text-xl text-white">{contactById.name}</Text>
-
-              <Text className="mb-4 w-full text-center font-sans-regular text-sm uppercase text-gray-300">
-                {t('walletAddressLabel')}
-              </Text>
-            </Fragment>
-          }
-          renderItem={renderItem}
-          ItemSeparatorComponent={Separator}
-          keyExtractor={item => `${item.address}-${item.blockchain}`}
-        />
-      )}
-    </TwScreenLayout>
+              </Fragment>
+            }
+            renderItem={renderItem}
+            ItemSeparatorComponent={Separator}
+            keyExtractor={item => `${item.address}-${item.blockchain}`}
+          />
+        )}
+      </ScreenLayout.ViewContent>
+    </ScreenLayout.Root>
   )
 }

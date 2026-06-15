@@ -1,42 +1,23 @@
 {
-  "accountAssetsScreen": {
-    "balanceLabel": "Guthaben",
-    "lastUpdatedLabel": "Zuletzt aktualisiert",
-    "tabs": {
-      "activeLabel": "Aktiv",
-      "hiddenLabel": "Verborgen"
-    },
-    "title": "Tokens"
-  },
-  "accountConnectionsScreen": {
-    "connectDappLabel": "dApp verbinden",
-    "emptyList": "Keine dApps verbunden",
-    "labels": {
-      "addConnection": "Verbindung hinzufügen"
-    },
-    "title": "Verbindungen"
-  },
-  "accountNftsScreen": {
-    "emptyList": "Keine NFTs vorhanden",
-    "title": "NFTS"
-  },
-  "accountScreen": {
+  "account": {
     "blockHeightTitle": "{{ blockchain }} Block Höhe",
     "buttons": {
-      "bridgeNeo3NeoX": "Bridge",
       "buyAndSell": "Shop",
+      "neo3NeoXBridge": "Bridge",
+      "neo3Vote": "Neo 3 Voting",
       "receive": "Empfangen",
       "send": "Senden",
-      "swap": "Swap",
-      "voteNeo3": "Neo 3 Voting"
+      "stellarTrustline": "Trustline verwalten",
+      "swap": "Swap"
     },
     "claimAsset": "<1>Claim</1> {{ amount }} {{ symbol }}",
     "connections": "Verbindungen",
     "gasUnavailable": "GAS nicht verfügbar",
+    "moreButtonLabel": "Mehr",
     "nfts": "NFTs",
     "tokens": "Tokens",
     "transactions": "Transaktionen",
-    "warningClaimModal": {
+    "warningClaim": {
       "buttons": {
         "no": "Nein",
         "yes": "Ja"
@@ -50,7 +31,28 @@
       }
     }
   },
-  "accountSettingsScreen": {
+  "accountAssets": {
+    "balanceLabel": "Guthaben",
+    "lastUpdatedLabel": "Zuletzt aktualisiert",
+    "tabs": {
+      "activeLabel": "Aktiv",
+      "hiddenLabel": "Verborgen"
+    },
+    "title": "Tokens"
+  },
+  "accountConnections": {
+    "connectDappLabel": "dApp verbinden",
+    "emptyList": "Keine dApps verbunden",
+    "labels": {
+      "addConnection": "Verbindung hinzufügen"
+    },
+    "title": "Verbindungen"
+  },
+  "accountNfts": {
+    "emptyList": "Keine NFTs vorhanden",
+    "title": "NFTS"
+  },
+  "accountSettings": {
     "customize": "Konto anpassen",
     "deleteAlert": "Möchten Sie dieses Konto wirklich löschen?",
     "deleteButton": "Konto löschen",
@@ -63,29 +65,137 @@
     },
     "title": "Konto Einstellungen"
   },
-  "accountTransactionsScreen": {
-    "blockToolTipLabel": "Block: {{block}}",
-    "bridgeNeo3NeoXDetailsButtonLabel": "Bridge",
+  "accountTransactions": {
+    "contextButtonLabel": "Kontext",
+    "detailsButtonLabel": "Details öffnen",
     "emptyList": "Keine Transaktionen vorhanden",
-    "exportButtonLabel": "Exportieren",
-    "feeTooltipLabel": "Netzwerkgebühr: {{networkFee}} | Systemgebühr: {{systemFee}}",
-    "invocationsLabel": "Invocations",
-    "invocationsToolTipLabel": "Aufrufe: {{invocations}}",
-    "notificationToolTipLabel": "Benachrichtigungen: {{notifications}}",
-    "notificationsLabel": "Benachrichtigungen",
-    "processingLabel": "Verarbeitung…",
-    "receivedFromLabel": "Empfangen von",
-    "seeOnExplorerButtonLabel": "Auf Explorer ansehen",
-    "sentToLabel": "Gesendet an",
-    "swapDetailsButtonLabel": "Zu Swap Details",
+    "fromLabel": "Von",
+    "inputLabel": "{{ value }} Eingabe",
+    "inputsLabel": "{{ value }} Eingaben",
+    "outputLabel": "{{ value }} Ausgabe",
+    "outputsLabel": "{{ value }} Ausgaben",
     "title": "Transaktionen",
-    "txidLabel": "Tx ID:",
-    "type": {
-      "nft": "NFT",
-      "token": "Asset"
-    }
+    "toLabel": "Nach"
   },
-  "bridgeNeo3NeoXScreen": {
+  "buyAndSellTokens": {
+    "buttons": {
+      "accounts": "Kontos",
+      "deposit": "Einzahlung",
+      "info": "Feature Info"
+    },
+    "iframeContent": {
+      "buttons": {
+        "back": "Zurück",
+        "restart": "Neu starten"
+      },
+      "error": "Es gibt einen Fehler mit dem Inhalt, bitte versuchen Sie es erneut",
+      "restartAlert": {
+        "noButtonLabel": "Nein, Daten behalten",
+        "subtitleLabel": "Wenn Sie neu starten, verlieren Sie alle bereits ausgefüllten Daten und kehren zum Anfang des Prozesses zurück.",
+        "titleLabel": "Möchten Sie den Bildschirm neu starten?",
+        "yesButtonLabel": "Ja, neu starten"
+      }
+    },
+    "leaveAlert": {
+      "buttons": {
+        "cancel": "Abbrechen",
+        "continue": "Fortfahren"
+      },
+      "subtitle": "Wenn Sie diese Ansicht verlassen, wird das Formular zurückgesetzt und alle Ihre Daten werden aus dem Formular entfernt. Sind Sie sicher?",
+      "title": "Beenden und Formular zurücksetzen?"
+    },
+    "tabs": {
+      "buyTokens": "Tokens kaufen",
+      "sellTokens": "Tokens verkaufen"
+    },
+    "title": "Kaufen + Verkaufen"
+  },
+  "contact": {
+    "title": "Kontakt",
+    "walletAddressLabel": "Wallet Adressen"
+  },
+  "contacts": {
+    "addContactButtonLabel": "Kontakt hinzufügen",
+    "title": "Kontakte"
+  },
+  "createWalletStep1": {
+    "body1": "Diese geheimen Wörter erleichtern das Sichern und Wiederherstellen Ihres Kontos. Dies macht Ihr Wallet wirklich sicher",
+    "body2": "Es ist wirklich wichtig, dass Sie sich Ihre Phrase korrekt merken, also helfen wir Ihnen dabei. Wenn Sie es eilig haben, können Sie es später tun.",
+    "body3": "Geben Sie Ihrem Wallet einen einprägsamen Namen und los geht's!",
+    "createWallet": "Wallet erstellen",
+    "label1": "Sicherheitsphrase generieren",
+    "label2": "Sicherheitsphrase bestätigen",
+    "label3": "Geben Sie Ihrem Wallet einen Namen",
+    "title": "Wallet erstellen"
+  },
+  "createWalletStep2": {
+    "body1": "Unten finden Sie Ihre geheime Phrase",
+    "body2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
+    "body3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
+    "dialogBody": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
+    "dialogDismiss": "OK, verstanden",
+    "dialogTitle": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
+    "label": "Sicherheitsphrase generieren",
+    "oneOfThree": "1 von 3",
+    "title": "Wallet erstellen"
+  },
+  "createWalletStep3": {
+    "body1": "Bitte wählen Sie jede Phrase in der richtigen Reihenfolge aus, um sicherzustellen, dass Sie sie richtig haben.",
+    "dialog1Body": "Die Bestätigung, dass Sie Ihre Sicherheitsphrase korrekt gesichert haben, wird dringend empfohlen",
+    "dialog1Title": "Möchten Sie die Backup-Bestätigung wirklich überspringen?",
+    "dialog2Body": "Bitte versuchen Sie erneut, Ihr Backup zu bestätigen",
+    "dialog2Title": "Falsche Wortreihenfolge",
+    "label": "Sicherheitsphrase bestätigen",
+    "title": "Wallet erstellen",
+    "twoOfThree": "2 von 3"
+  },
+  "createWalletStep4": {
+    "body1": "Geben Sie Ihrem Wallet einen einprägsamen Namen, vielleicht könnte er damit zusammenhängen, wofür Sie das Wallet verwenden möchten, wie \"Trading\" oder \"Investitionen\".",
+    "errors": {
+      "name": "Muss mindestens 1 und maximal 21 Zeichen haben"
+    },
+    "label": "Geben Sie Ihrem Wallet einen Namen",
+    "labelWalletName": "Wallet Name",
+    "threeOfThree": "3 von 3",
+    "title": "Wallet erstellen"
+  },
+  "createWalletStep5": {
+    "continueButtonLabel": "Jetzt erstellen",
+    "subtitle": "Wählen Sie die gewünschte Blockchain für Ihr neues Konto",
+    "title": "Wallet erstellen"
+  },
+  "createWalletStep6": {
+    "body1": "Denken Sie daran, Ihre geheime Phrase sicher aufzubewahren. Mehrere Backups zu haben ist immer eine gute Idee.",
+    "body2": "Wenn Sie die geheime Phrase eines Wallets finden müssen, können Sie sie auf der Einstellungsseite für dieses Wallet finden.",
+    "description": "Glückwunsch, Sie sind stolzer Besitzer eines brandneuen Wallets!",
+    "title": "Wallet erstellen",
+    "viewWallet": "Wallet ansehen"
+  },
+  "dappConnections": {
+    "connectDappLabel": "dApp verbinden",
+    "connectNewDappLabel": "Neue dApp verbinden",
+    "noDappsConnected": "Keine dApps verbunden",
+    "title": "Verbindungen"
+  },
+  "import": {
+    "enterAnAddress": "Geben Sie eine Adresse, verschlüsselten Key, Private Key oder Mnemonic Wörter ein",
+    "mnemonicComplete": "Mnemonic vollständig",
+    "mnemonicIncorrect": "Mnemonic falsch",
+    "placeholder": "Bitte Informationen eingeben",
+    "title": "Importieren"
+  },
+  "more": {
+    "chatWithUsButtonLabel": "Mit uns chatten",
+    "contactsButtonLabel": "Kontakte",
+    "createWalletButtonLabel": "Wallet erstellen",
+    "helpButtonLabel": "Hilfe",
+    "importButtonLabel": "Importieren",
+    "openSupportTicketButtonLabel": "Support-Ticket öffnen",
+    "privatePolicyButtonLabel": "Datenschutz",
+    "settingsButtonLabel": "Einstellungen",
+    "title": "Weitere Optionen"
+  },
+  "neo3NeoXBridge": {
     "aboutButtonLabel": "Über",
     "errorsByCode": {
       "ACCOUNT_NOT_COMPATIBLE_WITH_TOKEN": "Das ausgewählte Konto ist nicht mit dem ausgewählten Token kompatibel",
@@ -132,140 +242,45 @@
     "restartButtonLabel": "Neu starten",
     "title": "Tokens bridgen"
   },
-  "buyAndSellTokensScreen": {
-    "buttons": {
-      "accounts": "Kontos",
-      "deposit": "Einzahlung",
-      "info": "Feature Info"
+  "neo3Vote": {
+    "account": {
+      "changeLabel": "Ändern",
+      "noAccountSelectedLabel": "Kein Konto ausgewählt",
+      "selectLabel": "Auswählen",
+      "selectNeo3AccountTitle": "Neo 3 Konto auswählen"
     },
-    "iframeContent": {
-      "buttons": {
-        "back": "Zurück",
-        "restart": "Neu starten"
-      },
-      "error": "Es gibt einen Fehler mit dem Inhalt, bitte versuchen Sie es erneut",
-      "restartAlert": {
-        "noButtonLabel": "Nein, Daten behalten",
-        "subtitleLabel": "Wenn Sie neu starten, verlieren Sie alle bereits ausgefüllten Daten und kehren zum Anfang des Prozesses zurück.",
-        "titleLabel": "Möchten Sie den Bildschirm neu starten?",
-        "yesButtonLabel": "Ja, neu starten"
-      }
+    "availableVotes": {
+      "availableVotesLabel": "Verfügbare Stimmen",
+      "noAvailableVotesLabel": "Keine Stimmen"
     },
-    "leaveAlert": {
-      "buttons": {
-        "cancel": "Abbrechen",
-        "continue": "Fortfahren"
-      },
-      "subtitle": "Wenn Sie diese Ansicht verlassen, wird das Formular zurückgesetzt und alle Ihre Daten werden aus dem Formular entfernt. Sind Sie sicher?",
-      "title": "Beenden und Formular zurücksetzen?"
+    "howItWorksButtonLabel": "Wie es funktioniert",
+    "list": {
+      "nameColumnLabel": "Kandidat",
+      "positionColumnLabel": "Position",
+      "voteColumnLabel": "Stimme"
     },
-    "tabs": {
-      "buyTokens": "Tokens kaufen",
-      "sellTokens": "Tokens verkaufen"
+    "listItem": {
+      "castVoteButtonLabel": "Abstimmen",
+      "detailsButtonLabel": "Kandidaten Info",
+      "votedButtonLabel": "Gewählt"
     },
-    "title": "Kaufen + Verkaufen"
-  },
-  "contactScreen": {
-    "title": "Kontakt",
-    "walletAddressLabel": "Wallet Adressen"
-  },
-  "contactsScreen": {
-    "title": "Kontakte"
-  },
-  "createWalletStep1Screen": {
-    "body_1": "Diese geheimen Wörter erleichtern das Sichern und Wiederherstellen Ihres Kontos. Dies macht Ihr Wallet wirklich sicher",
-    "body_2": "Es ist wirklich wichtig, dass Sie sich Ihre Phrase korrekt merken, also helfen wir Ihnen dabei. Wenn Sie es eilig haben, können Sie es später tun.",
-    "body_3": "Geben Sie Ihrem Wallet einen einprägsamen Namen und los geht's!",
-    "createWallet": "Wallet erstellen",
-    "label_1": "Sicherheitsphrase generieren",
-    "label_2": "Sicherheitsphrase bestätigen",
-    "label_3": "Geben Sie Ihrem Wallet einen Namen",
-    "title": "Wallet erstellen"
-  },
-  "createWalletStep2Screen": {
-    "body_1": "Unten finden Sie Ihre geheime Phrase",
-    "body_2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
-    "body_3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
-    "dialog_body": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
-    "dialog_dismiss": "OK, verstanden",
-    "dialog_title": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
-    "label_1": "Sicherheitsphrase generieren",
-    "oneOfThree": "1 von 3",
-    "title": "Wallet erstellen"
-  },
-  "createWalletStep3Screen": {
-    "body_1": "Bitte wählen Sie jede Phrase in der richtigen Reihenfolge aus, um sicherzustellen, dass Sie sie richtig haben.",
-    "dialog_1_body": "Die Bestätigung, dass Sie Ihre Sicherheitsphrase korrekt gesichert haben, wird dringend empfohlen",
-    "dialog_1_title": "Möchten Sie die Backup-Bestätigung wirklich überspringen?",
-    "dialog_2_body": "Bitte versuchen Sie erneut, Ihr Backup zu bestätigen",
-    "dialog_2_title": "Falsche Wortreihenfolge",
-    "label_1": "Sicherheitsphrase bestätigen",
-    "title": "Wallet erstellen",
-    "twoOfThree": "2 von 3"
-  },
-  "createWalletStep4Screen": {
-    "body_1": "Geben Sie Ihrem Wallet einen einprägsamen Namen, vielleicht könnte er damit zusammenhängen, wofür Sie das Wallet verwenden möchten, wie \"Trading\" oder \"Investitionen\".",
-    "errors": {
-      "name": "Muss mindestens 1 und maximal 21 Zeichen haben"
+    "listNotFound": {
+      "text": "Es gibt keine Kandidaten, für die man abstimmen kann, oder es gab ein Problem beim Abrufen. Überprüfen Sie Ihr Neo 3 Network und versuchen Sie es bitte erneut.",
+      "title": "Keine Kandidaten anzuzeigen"
     },
-    "label_1": "Geben Sie Ihrem Wallet einen Namen",
-    "label_walletName": "Wallet Name",
-    "threeOfThree": "3 von 3",
-    "title": "Wallet erstellen"
+    "searchLabel": "Suchen",
+    "searchPlaceholder": "Nach Kandidaten suchen…",
+    "title": "Abstimmung",
+    "voteErrorMessages": {
+      "accountCanNotBeWatchLabel": "Ihr Neo 3 Konto befindet sich im Watch-Modus",
+      "noNeo3AccountsLabel": "Es gibt kein Neo 3 Konto, das kein Watch Konto ist",
+      "selectNeo3AccountLabel": "Neo 3 Konto auswählen",
+      "shouldHaveEnoughGasToPayFeeLabel": "Sie haben nicht genug GAS, um die Gebühr zu bezahlen",
+      "shouldUseMainnetLabel": "Sie sollten ein Mainnet Network verwenden, um abzustimmen",
+      "thereIsNoNeoLabel": "Ihr Neo 3 Konto sollte NEO haben"
+    }
   },
-  "createWalletStep5Screen": {
-    "continueButtonLabel": "Jetzt erstellen",
-    "subtitle": "Wählen Sie die gewünschte Blockchain für Ihr neues Konto",
-    "title": "Wallet erstellen"
-  },
-  "createWalletStep6Screen": {
-    "body_1": "Denken Sie daran, Ihre geheime Phrase sicher aufzubewahren. Mehrere Backups zu haben ist immer eine gute Idee.",
-    "body_2": "Wenn Sie die geheime Phrase eines Wallets finden müssen, können Sie sie auf der Einstellungsseite für dieses Wallet finden.",
-    "label_1": "Glückwunsch, Sie sind stolzer Besitzer eines brandneuen Wallets!",
-    "title": "Wallet erstellen",
-    "viewWallet": "Wallet ansehen"
-  },
-  "dappConnectionsScreen": {
-    "connectDappLabel": "dApp verbinden",
-    "connectNewDappLabel": "Neue dApp verbinden",
-    "noDappsConnected": "Keine dApps verbunden",
-    "title": "Verbindungen"
-  },
-  "importBlockchainSelectionScreen": {
-    "subtitle": "Wählen Sie die gewünschte Blockchain, um Ihren Key zu entschlüsseln",
-    "title": "Importieren"
-  },
-  "importMnemonicSelectionScreen": {
-    "buttonLabel": "Importieren",
-    "foundAccountsMnemonic": "Wir haben folgende(n) Account(s) zum Importieren gefunden:",
-    "title": "Importieren"
-  },
-  "importPassphraseScreen": {
-    "accountAlreadyExists": "Konto existiert bereits",
-    "decryptError": "Fehler beim Entschlüsseln des Keys",
-    "enterPassphrase": "Geben Sie eine Passphrase für Ihren verschlüsselten Key ein",
-    "inputPlaceholder": "Bitte Passphrase eingeben",
-    "title": "Importieren"
-  },
-  "importScreen": {
-    "enterAnAddress": "Geben Sie eine Adresse, verschlüsselten Key, Private Key oder Mnemonic Wörter ein",
-    "mnemonicComplete": "Mnemonic vollständig",
-    "mnemonicIncorrect": "Mnemonic falsch",
-    "placeholder": "Bitte Informationen eingeben",
-    "title": "Importieren"
-  },
-  "moreScreen": {
-    "chatWithUsButtonLabel": "Mit uns chatten",
-    "contactsButtonLabel": "Kontakte",
-    "createWalletButtonLabel": "Wallet erstellen",
-    "helpButtonLabel": "Hilfe",
-    "importButtonLabel": "Importieren",
-    "openSupportTicketButtonLabel": "Support-Ticket öffnen",
-    "privatePolicyButtonLabel": "Datenschutz",
-    "settingsButtonLabel": "Einstellungen",
-    "title": "Weitere Optionen"
-  },
-  "notificationsScreen": {
+  "notifications": {
     "actions": {
       "error": {
         "accountNotFound": "Wir konnten das Konto für diese Benachrichtigung nicht finden",
@@ -279,43 +294,43 @@
     "relatedAddressLabel": "Adresse:",
     "title": "Benachrichtigungen"
   },
-  "onboardingCompletedScreen": {
-    "buttonLabel": "Wallet ansehen",
-    "subtitle": "Ihr neues Wallet und Konto sind bereit.",
-    "title": "Einrichtung abgeschlossen!",
-    "titleAddressList": "Konto Adressen"
-  },
-  "onboardingScreen": {
+  "onboarding": {
     "cancelAllButtonLabel": "Alle abbrechen",
+    "createWalletButtonLabel": "Neues Wallet erstellen",
     "feature1": {
-      "header": "Organisieren Sie Ihre Assets ganz einfach",
-      "subtitle": "Erstellen Sie mehrere Kontos innerhalb eines Wallets, jeder mit seiner eindeutigen Adresse."
+      "header": "Das ursprüngliche Wallet für unterwegs",
+      "subtitle": "Alle besten Funktionen unseres Desktop-Wallets und noch mehr in Ihrer Handfläche"
     },
     "feature2": {
-      "header": "Die flexibelste Wallet App in Neo",
-      "subtitle": "Bringen Sie Ihre Private Keys ganz einfach zu Neon oder fügen Sie eine beliebige Adresse als Watch Konto hinzu, um deren öffentliche Transaktionen im Auge zu behalten."
+      "header": "Erstklassiges Benutzererlebnis",
+      "subtitle": "Neon Wallet wurde so gestaltet, dass die Verwaltung Ihrer Kryptowerte so intuitiv wie möglich ist"
     },
     "feature3": {
-      "header": "Mobile Dapp Verbindung",
-      "subtitle": "Interagieren Sie sicher mit mehreren Dapps direkt von Ihrem Gerät über das etablierte Wallet Connect Protokoll."
+      "header": "BIP39-Wallets",
+      "subtitle": "Der BIP39-Standard ermöglicht es Ihnen, mit einem einzigen Mnemonic unbegrenzte Unterkonten zu erstellen"
     },
     "feature4": {
-      "header": "Einführung NFT Unterstützung",
-      "subtitle": "Sehen Sie Ihre Sammlung und behalten Sie alle Ihre NFT-Transaktionen an einem Ort im Blick"
+      "header": "Gut gefüllte Update-Pipeline",
+      "subtitle": "Das Team arbeitet rund um die Uhr, um Ihnen die neuesten Funktionen zu bringen"
     },
-    "initialSetup": "Ersteinrichtung",
+    "importWalletButtonLabel": "Wallet importieren",
     "messagesByActions": {
       "account": "Ihre Kontos werden erstellt…",
       "finalizing": "Alles wird fertiggestellt…",
       "wallet": "Ihr Portemonnaie wird erstellt…"
     },
-    "overviewDescription": "Hier ist ein Überblick über die vielen Funktionen, die Sie in der App finden werden.",
-    "selectBlockchainsButtonLabel": "Erste Schritte",
     "selectBlockchainsModalDescription": "Wählen Sie die Blockchains aus, für die Sie Kontos erstellen möchten",
-    "selectBlockchainsModalTitle": "Blockchains auswählen",
-    "welcomeNW": "Willkommen bei Neon Wallet"
+    "selectBlockchainsModalTitle": "Blockchains auswählen"
   },
-  "receiveScreen": {
+  "onboardingCompleted": {
+    "backupMnemonicButtonLabel": "Machen Sie ein Backup Ihres neuen Wallets",
+    "subtitleImport": "Ihr importiertes Wallet und Ihre Konten sind bereit!",
+    "subtitleNew": "Ihr neues Wallet und Ihre Konten sind bereit!",
+    "titleImport": "Import abgeschlossen",
+    "titleNew": "Einrichtung abgeschlossen",
+    "viewWalletButtonLabel": "Wallet ansehen"
+  },
+  "receive": {
     "accountSelectPlaceholder": "Wählen…",
     "accountSelectionModalTitle": "Wählen Sie ein Empfangskonto aus.",
     "accountStepTitle": "Empfangskonto",
@@ -326,7 +341,7 @@
     "successfulDownloadMessage": "QR-Code in Ihrer Galerie gespeichert!",
     "title": "Token empfangen"
   },
-  "searchScreen": {
+  "search": {
     "emptyResultDescription": "Nichts gefunden!",
     "errors": {
       "execute": "Beim Ausführen der Aktion ist ein Fehler aufgetreten. Bitte kontaktieren Sie unseren Support.",
@@ -338,7 +353,7 @@
     "resultDescription": "Diese Themen könnten Sie interessieren:",
     "title": "Neon durchsuchen"
   },
-  "sendScreen": {
+  "send": {
     "failureNotification": {
       "previewBody": "Wir konnten den Abschluss Ihrer Überweisung nicht bestätigen",
       "title": "Transferfehler"
@@ -390,16 +405,7 @@
     },
     "title": "Tokens senden"
   },
-  "settingsProtocolEditScreen": {
-    "addCustomNetworkButtonLabel": "Custom Network hinzufügen",
-    "default": "(Standard)",
-    "editCustomNetworkButtonLabel": "Custom Network bearbeiten",
-    "selectNodeButtonLabel": "Node auswählen"
-  },
-  "settingsProtocolsScreen": {
-    "title": "Protokolle"
-  },
-  "settingsScreen": {
+  "settings": {
     "tabs": {
       "personalisation": {
         "currencyButtonLabel": "Währung",
@@ -422,20 +428,34 @@
     },
     "title": "Einstellungen"
   },
-  "settingsSecurityBackupScreen": {
+  "settingsProtocolEdit": {
+    "addCustomNetworkButtonLabel": "Custom Network hinzufügen",
+    "default": "(Standard)",
+    "editCustomNetworkButtonLabel": "Custom Network bearbeiten",
+    "selectNetworkUrlButtonLabel": "Netzwerk-URL auswählen"
+  },
+  "settingsProtocols": {
+    "title": "Protokolle"
+  },
+  "settingsSecurityBackup": {
     "title": "Sicherheit",
     "withAccountsToBackup": {
-      "description_1": "Eine Voraussetzung für die Sicherung Ihres Wallets durch Passwort- oder biometrische Authentifizierung ist, dass Sie zuerst Ihre Wallets sichern.",
-      "description_2": "Dies ist ein vorsorglicher Schritt, um zu verhindern, dass Sie Ihr Passwort verlieren oder sich anderweitig nicht authentifizieren können und den Zugriff auf Ihr gesamtes Guthaben verlieren.",
-      "description_3": "Bitte sichern Sie die folgenden Wallets",
-      "description_4": "Wenn Sie mehrere Wallets haben, werden Sie nach jedem Backup hierher zurückgebracht, um das nächste Wallet zu sichern."
+      "description1": "Eine Voraussetzung für die Sicherung Ihres Wallets durch Passwort- oder biometrische Authentifizierung ist, dass Sie zuerst Ihre Wallets sichern.",
+      "description2": "Dies ist ein vorsorglicher Schritt, um zu verhindern, dass Sie Ihr Passwort verlieren oder sich anderweitig nicht authentifizieren können und den Zugriff auf Ihr gesamtes Guthaben verlieren.",
+      "description3": "Bitte sichern Sie die folgenden Wallets",
+      "description4": "Wenn Sie mehrere Wallets haben, werden Sie nach jedem Backup hierher zurückgebracht, um das nächste Wallet zu sichern."
     },
     "withoutAccountsToBackup": {
       "button_label": "Weiter zur Sicherheit",
       "description": "Alle Wallets sind gesichert, bitte fahren Sie mit der Sicherheitseinrichtung fort"
     }
   },
-  "supportTicketScreen": {
+  "stellarTrustline": {
+    "addTrustlineButtonLabel": "Trustline hinzufügen",
+    "emptyList": "Keine Trustlines gefunden",
+    "title": "Stellar Trustline"
+  },
+  "supportTicket": {
     "descriptionLabel": "Beschreibung",
     "descriptionPlaceholder": "Beschreiben Sie Ihr Problem…",
     "emailLabel": "E-Mail",
@@ -453,7 +473,7 @@
     "successToast": "Wir haben Ihr Support-Ticket erhalten und melden uns in Kürze bei Ihnen.",
     "title": "Support-Ticket öffnen"
   },
-  "swapScreen": {
+  "swap": {
     "form": {
       "accountToUseModalTitle": "Quell-Konto auswählen",
       "accountToUseTitle": "Von hier senden",
@@ -480,7 +500,7 @@
       "extraIdToReceivePlaceholder": "Eingeben…",
       "feePlaceholder": "0.00",
       "minimumAmountTitle": "Minimum {{amount}}",
-      "openAboutExtraIdToReceiveModal": "Destination Tag/Memo Info öffnen",
+      "openAboutExtraIdToReceive": "Destination Tag/Memo Info öffnen",
       "selectPlaceholder": "Wählen",
       "source": "Konto Details",
       "tokenToReceiveModalTitle": "Token zum Empfangen auswählen",
@@ -493,74 +513,39 @@
     "title": "Tokens tauschen",
     "tooltips": {
       "experimentHigherAmounts": "Wechselkurse sind bei höheren Swap-Beträgen besser, probieren Sie es aus!"
-    }
+    },
+    "viewExplanationButtonLabel": "Erklärung anzeigen"
   },
-  "voteNeo3Screen": {
-    "account": {
-      "changeLabel": "Ändern",
-      "noAccountSelectedLabel": "Kein Konto ausgewählt",
-      "selectLabel": "Auswählen",
-      "selectNeo3AccountTitle": "Neo 3 Konto auswählen"
-    },
-    "availableVotes": {
-      "availableVotesLabel": "Verfügbare Stimmen",
-      "noAvailableVotesLabel": "Keine Stimmen"
-    },
-    "howItWorksButtonLabel": "Wie es funktioniert",
-    "list": {
-      "nameColumnLabel": "Kandidat",
-      "positionColumnLabel": "Position",
-      "voteColumnLabel": "Stimme"
-    },
-    "listItem": {
-      "castVoteButtonLabel": "Abstimmen",
-      "detailsButtonLabel": "Kandidaten Info",
-      "votedButtonLabel": "Gewählt"
-    },
-    "listNotFound": {
-      "text": "Es gibt keine Kandidaten, für die man abstimmen kann, oder es gab ein Problem beim Abrufen. Überprüfen Sie Ihr Neo 3 Network und versuchen Sie es bitte erneut.",
-      "title": "Keine Kandidaten anzuzeigen"
-    },
-    "searchLabel": "Suchen",
-    "searchPlaceholder": "Nach Kandidaten suchen…",
-    "title": "Abstimmung",
-    "voteErrorMessages": {
-      "accountCanNotBeWatchLabel": "Ihr Neo 3 Konto befindet sich im Watch-Modus",
-      "noNeo3AccountsLabel": "Es gibt kein Neo 3 Konto, das kein Watch Konto ist",
-      "selectNeo3AccountLabel": "Neo 3 Konto auswählen",
-      "shouldHaveEnoughGasToPayFeeLabel": "Sie haben nicht genug GAS, um die Gebühr zu bezahlen",
-      "shouldUseMainnetLabel": "Sie sollten ein Mainnet Network verwenden, um abzustimmen",
-      "thereIsNoNeoLabel": "Ihr Neo 3 Konto sollte NEO haben"
-    }
+  "wallet": {
+    "addNewAccountButtonLabel": "Neues Konto hinzufügen",
+    "moreButtonLabel": "Mehr"
   },
-  "walletBackupStep1Screen": {
-    "body_1": "Unten finden Sie Ihre geheime Phrase",
-    "body_2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
-    "body_3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
-    "dialog_body": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
-    "dialog_dismiss": "OK, verstanden",
-    "dialog_title": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
-    "label_1": "Sicherheitsphrase",
+  "walletBackupStep1": {
+    "body1": "Unten finden Sie Ihre geheime Phrase",
+    "body2": "Schreiben Sie diese Phrase auf ein Blatt Papier oder speichern Sie sie in einer sicheren digitalen Notiz. Sie können sie auch oben herunterladen, aber bewahren Sie sie sicher auf.",
+    "body3": "Jeder, der diese Phrase hat, kann Ihre hart verdienten Assets stehlen und Sie können sie nicht zurückbekommen!",
+    "copyButtonLabel": "Kopieren",
+    "description": "Sicherheitsphrase",
+    "dialogBody": "Um Ihre Sicherheitsphrase sicher zu halten, stellen Sie sicher, dass sie in einer verschlüsselten Notiz gespeichert ist.",
+    "dialogDismiss": "OK, verstanden",
+    "dialogTitle": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
     "oneOfThree": "1 von 3",
     "title": "Wallet sichern"
   },
-  "walletBackupStep2Screen": {
-    "body_1": "Um zu bestätigen, dass Sie Ihre Schlüsselwörter gesichert haben, wählen Sie bitte Ihre Wörter in der richtigen Reihenfolge aus der Liste unten aus.",
+  "walletBackupStep2": {
+    "body": "Um zu bestätigen, dass Sie Ihre Schlüsselwörter gesichert haben, wählen Sie bitte Ihre Wörter in der richtigen Reihenfolge aus der Liste unten aus.",
+    "description": "Backup bestätigen",
     "errors": {
       "incorrectWordOrder": "Falsche Wortreihenfolge. Bitte versuchen Sie es erneut, um Ihre Sicherungskopie zu bestätigen."
     },
-    "label_1": "Backup bestätigen",
     "title": "Wallet sichern",
     "twoOfThree": "2 von 3"
   },
-  "walletBackupStep3Screen": {
-    "label_1": "Glückwunsch, Sie haben Ihr Backup bestätigt",
+  "walletBackupStep3": {
+    "description": "Glückwunsch, Sie haben Ihr Backup bestätigt",
     "title": "Wallet sichern"
   },
-  "walletScreen": {
-    "addNewAccount": "Neues Konto hinzufügen"
-  },
-  "walletSettingsScreen": {
+  "walletSettings": {
     "backup": "Mnemonic sichern",
     "customize": "Wallet anpassen",
     "deleteAlert": "Möchten Sie dieses Wallet wirklich löschen?",
@@ -573,7 +558,7 @@
     },
     "title": "Wallet Einstellungen"
   },
-  "walletsScreen": {
+  "wallets": {
     "createFirstWallet": "Erstes Wallet erstellen",
     "incompleteBalanceWarningButton": "OK, verstanden",
     "incompleteBalanceWarningText": "Wir konnten nicht für alle Ihre Tokens Preisdaten abrufen, daher ist die Gesamtsumme möglicherweise nicht genau",

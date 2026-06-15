@@ -1,15 +1,14 @@
 import React from 'react'
 
 import { useTranslation } from 'react-i18next'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 import { BlockchainList } from '@/components/BlockchainList'
 import { TwButton } from '@/components/TwButton'
 
 import { useActions } from '@/hooks/useActions'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
@@ -18,11 +17,11 @@ type TActionData = {
   blockchains: TBlockchainServiceKey[]
 }
 
-export const BlockchainSelectionModal = ({ route, navigation }: TRootStackScreenProps<'BlockchainSelectionModal'>) => {
-  const { onSelect, isMulti = false, description, title } = route.params
+export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'BlockchainSelectionModal'>) => {
+  const { onSelect, isMulti = false, description, title, buttonProps } = route.params
 
-  const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelectionModal' })
-  const { t: commonT } = useTranslation('common')
+  const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelection' })
+  const { t: tCommon } = useTranslation('common')
   const { actionData, setData, handleAct } = useActions<TActionData>({
     blockchains: ['neo3'],
   })
@@ -32,23 +31,30 @@ export const BlockchainSelectionModal = ({ route, navigation }: TRootStackScreen
   }
 
   const handleSubmit = () => {
-    navigation.goBack()
     onSelect(actionData.blockchains)
   }
 
   return (
-    <TwModalLayout title={title || t('title')} rightElement={<TwModalLayoutCloseIconButton />} withoutScroll>
-      {description && <Text className="mb-6 text-center font-sans-medium text-lg text-white">{description}</Text>}
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{title || t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        {description && <Text className="mb-6 text-center font-sans-medium text-lg text-white">{description}</Text>}
 
-      <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
+        <BlockchainList onSelect={handleSelect} selectedBlockchains={actionData.blockchains} isMulti={isMulti} />
 
-      <TwButton
-        className="mt-auto"
-        variant="contained-light"
-        label={commonT('general.done')}
-        disabled={!actionData.blockchains.length}
-        onPress={handleAct(handleSubmit)}
-      />
-    </TwModalLayout>
+        <View className="mt-auto pb-4 pt-6">
+          <TwButton
+            variant="contained-light"
+            label={tCommon('general.continue')}
+            disabled={!actionData.blockchains.length}
+            onPress={handleAct(handleSubmit)}
+            {...buttonProps}
+          />
+        </View>
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

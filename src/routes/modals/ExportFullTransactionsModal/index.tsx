@@ -1,4 +1,5 @@
 import { hasFullTransactions } from '@cityofzion/blockchain-service'
+import * as dateFns from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
@@ -16,8 +17,7 @@ import { useActions } from '@/hooks/useActions'
 import { useFileSystem } from '@/hooks/useFileSystem'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import MdLooksOne from '@/assets/images/md-looks-one.svg'
 import MdLooksTwo from '@/assets/images/md-looks-two.svg'
@@ -25,28 +25,34 @@ import MdLooksTwo from '@/assets/images/md-looks-two.svg'
 import { ExportFullTransactionsSuccessModalContent } from './ExportFullTransactionsSuccessModalContent'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
-type TActionData = {
-  selectedAccount?: IAccountState
-  dateFrom?: Date
-  dateTo?: Date
+type TActionsData = {
+  selectedAccount?: TAccount
+  dateFrom: Date
+  dateTo: Date
 }
 
 export const ExportFullTransactionsModal = ({
   navigation,
   route,
 }: TRootStackScreenProps<'ExportFullTransactionsModal'>) => {
-  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactionsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactions' })
   const { language } = useLanguageSelector()
   const { writeFile } = useFileSystem()
+
+  const dateNow = new Date()
 
   const {
     actionData: { selectedAccount, dateFrom, dateTo },
     actionState,
     handleAct,
     setData,
-  } = useActions<TActionData>({ selectedAccount: route.params?.account })
+  } = useActions<TActionsData>({
+    selectedAccount: route.params?.account,
+    dateFrom: dateFns.sub(dateNow, { weeks: 1 }),
+    dateTo: dateNow,
+  })
 
   const formattedDateFrom = dateFrom ? DateHelper.formatLocalized(dateFrom, { format: 'LLL do', language }) : undefined
   const formattedDateTo = dateTo ? DateHelper.formatLocalized(dateTo, { format: 'LLL do', language }) : undefined
@@ -73,13 +79,13 @@ export const ExportFullTransactionsModal = ({
 
   const handleTimePeriodSelectionPress = () => {
     navigation.navigate('DateSelectionModal', {
-      onSelect: (dateFrom, dateTo) => {
-        setData({ dateFrom, dateTo })
-      },
       title: t('dateSelectionModalTitle'),
       description: t('dateSelectionModalDescription'),
       dateFrom,
       dateTo,
+      onSelect: (dateFrom, dateTo) => {
+        setData({ dateFrom, dateTo })
+      },
     })
   }
 
@@ -94,19 +100,14 @@ export const ExportFullTransactionsModal = ({
       })
 
       const format = 'yyyyMMdd'
-      const localizedFileDateFrom = DateHelper.formatLocalized(dateFrom, {
-        language,
-        format,
-      })
-      const localizedFileDateTo = DateHelper.formatLocalized(dateTo, {
-        language,
-        format,
-      })
-      const filename = `NWM-ACTV-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
+      const localizedFileDateFrom = DateHelper.formatLocalized(dateFrom, { language, format })
+      const localizedFileDateTo = DateHelper.formatLocalized(dateTo, { language, format })
+      const filename = `NEON-transactions-${selectedAccount.address}-${selectedAccount.blockchain}-${localizedFileDateFrom}-${localizedFileDateTo}`
+
       await writeFile(filename, result, 'text/csv')
 
       navigation.navigate('SuccessModal', {
-        title: t('successModal.title'),
+        title: t('success.title'),
         content: (
           <ExportFullTransactionsSuccessModalContent
             account={selectedAccount}
@@ -122,43 +123,49 @@ export const ExportFullTransactionsModal = ({
   }
 
   return (
-    <TwModalLayout title={t('title')} rightElement={<TwModalLayoutCloseIconButton />}>
-      <Text className="text-center font-sans-regular text-lg text-white">{t('description')}</Text>
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title>{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ScrollContent>
+        <Text className="text-center font-sans-regular text-lg text-white">{t('description')}</Text>
 
-      <TwSeparator className="mt-6" />
+        <TwSeparator className="mt-6" />
 
-      <Text className="mt-9 font-sans-regular text-sm uppercase text-gray-100">{t('formLabel')}</Text>
+        <Text className="mt-9 font-sans-regular text-sm uppercase text-gray-100">{t('formLabel')}</Text>
 
-      <StepMenuButton
-        active={!selectedAccount}
-        value={selectedAccount?.address}
-        leftElement={<MdLooksOne aria-hidden />}
-        label={t('accountLabel')}
-        onPress={handleAccountSelectionPress}
-      />
+        <StepMenuButton
+          active={!selectedAccount}
+          value={selectedAccount?.address}
+          leftElement={<MdLooksOne aria-hidden />}
+          label={t('accountLabel')}
+          onPress={handleAccountSelectionPress}
+        />
 
-      <TwSeparator />
+        <TwSeparator />
 
-      <StepMenuButton
-        value={
-          formattedDateFrom && formattedDateTo
-            ? t('timePeriodValue', { from: formattedDateFrom, to: formattedDateTo })
-            : undefined
-        }
-        active={!!selectedAccount}
-        leftElement={<MdLooksTwo aria-hidden />}
-        label={t('timePeriodLabel')}
-        onPress={handleTimePeriodSelectionPress}
-      />
+        <StepMenuButton
+          value={
+            formattedDateFrom && formattedDateTo
+              ? t('timePeriodValue', { from: formattedDateFrom, to: formattedDateTo })
+              : undefined
+          }
+          active={!!selectedAccount}
+          leftElement={<MdLooksTwo aria-hidden />}
+          label={t('timePeriodLabel')}
+          onPress={handleTimePeriodSelectionPress}
+        />
 
-      <TwButton
-        label={t('exportButtonLabel')}
-        variant="contained-light"
-        className="mt-auto"
-        disabled={isDisabled}
-        isLoading={actionState.isActing}
-        onPress={handleAct(handleExport)}
-      />
-    </TwModalLayout>
+        <TwButton
+          label={t('exportButtonLabel')}
+          variant="contained-light"
+          className="mt-auto"
+          disabled={isDisabled}
+          isLoading={actionState.isActing}
+          onPress={handleAct(handleExport)}
+        />
+      </ModalLayout.ScrollContent>
+    </ModalLayout.Root>
   )
 }

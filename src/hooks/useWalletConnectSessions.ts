@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
 import { hasWalletConnect } from '@cityofzion/blockchain-service'
-import { WalletKitHelper as BSWalletKitHelper } from '@cityofzion/bs-multichain'
 import { useIsFocused } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 
@@ -9,9 +8,9 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ReactQueryHelper } from '@/helpers/ReactQueryHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 
-import type { IAccountState } from '@/types/store'
+import type { TAccount } from '@/types/store'
 
-export const buildWalletConnectSessionKey = (account?: IAccountState) => {
+export const buildWalletConnectSessionKey = (account?: TAccount) => {
   const key = ['wallet-connect', 'sessions']
 
   if (account) {
@@ -21,20 +20,20 @@ export const buildWalletConnectSessionKey = (account?: IAccountState) => {
   return key
 }
 
-export const invalidateWalletConnectSessions = (account?: IAccountState) => {
+export const invalidateWalletConnectSessions = (account?: TAccount) => {
   return ReactQueryHelper.client.invalidateQueries({
     queryKey: buildWalletConnectSessionKey(account),
   })
 }
 
-const fetchSessions = async (account?: IAccountState) => {
+const fetchSessions = async (account?: TAccount) => {
   const sessions = Object.values(WalletKitHelper.kit.getActiveSessions())
 
   if (account) {
     const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
     if (!hasWalletConnect(service)) return []
 
-    return BSWalletKitHelper.filterSessions(sessions, {
+    return WalletKitHelper.filterSessions(sessions, {
       addresses: [account.address],
       chains: [service.walletConnectService.chain],
     })
@@ -43,7 +42,7 @@ const fetchSessions = async (account?: IAccountState) => {
   return sessions
 }
 
-export const useWalletConnectSessions = (account?: IAccountState) => {
+export const useWalletConnectSessions = (account?: TAccount) => {
   const isFocused = useIsFocused()
 
   const query = useQuery({
@@ -66,6 +65,7 @@ export const useWalletConnectSessions = (account?: IAccountState) => {
 
   useEffect(() => {
     query.refetch()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused])
 

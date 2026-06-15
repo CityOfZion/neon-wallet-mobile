@@ -7,21 +7,20 @@ import { FlatList, Text, View } from 'react-native'
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useWalletsSelector } from '@/hooks/useWalletSelector'
 
-import { TwModalLayout } from '@/layouts/TwModalLayout'
-import { TwModalLayoutCloseIconButton } from '@/layouts/TwModalLayout/TwModalLayoutButtons'
+import { ModalLayout } from '@/layouts/ModalLayout'
 
 import { WalletAccordionItem } from './WalletAccordionItem'
 
-import type { IAccountState, IWalletState } from '@/types/store'
+import type { TAccount, TWallet } from '@/types/store'
 
-type TItem = { accounts: IAccountState[]; wallet: IWalletState }
+type TItem = { accounts: TAccount[]; wallet: TWallet }
 
 const renderItem: ListRenderItem<TItem> = ({ item, index }) => (
   <WalletAccordionItem defaultOpened={index === 0} wallet={item.wallet} accounts={item.accounts} />
 )
 
 export const BuyAndSellTokensAccountsModal = () => {
-  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAccountsModal' })
+  const { t } = useTranslation('modals', { keyPrefix: 'buyAndSellTokensAccounts' })
   const { wallets } = useWalletsSelector()
   const { accounts } = useAccountsSelector()
 
@@ -37,27 +36,29 @@ export const BuyAndSellTokensAccountsModal = () => {
   )
 
   return (
-    <TwModalLayout
-      title={t('title')}
-      titleClassName="text-xl"
-      contentContainerClassName="pb-0 gap-y-2"
-      withoutScroll
-      rightElement={<TwModalLayoutCloseIconButton />}
-    >
-      {data.length !== 0 && <Text className="mx-3 mb-4 font-sans-regular text-lg text-white">{t('description')}</Text>}
+    <ModalLayout.Root>
+      <ModalLayout.Header>
+        <ModalLayout.Title className="text-xl">{t('title')}</ModalLayout.Title>
+        <ModalLayout.CloseButton />
+      </ModalLayout.Header>
+      <ModalLayout.ViewContent className="gap-y-2 pb-0">
+        {data.length !== 0 && (
+          <Text className="mx-3 mb-4 font-sans-regular text-lg text-white">{t('description')}</Text>
+        )}
 
-      <FlatList
-        data={data}
-        contentContainerClassName="pb-24 gap-y-2"
-        showsVerticalScrollIndicator={false}
-        keyExtractor={({ wallet }) => wallet.id}
-        renderItem={renderItem}
-        ListEmptyComponent={
-          <View className="mt-2 flex w-full items-center justify-center rounded-lg bg-asphalt/50 p-4">
-            <Text className="text-center font-sans-medium text-sm text-white">{t('labels.emptyList')}</Text>
-          </View>
-        }
-      />
-    </TwModalLayout>
+        <FlatList
+          data={data}
+          contentContainerClassName="pb-24 gap-y-2"
+          showsVerticalScrollIndicator={false}
+          keyExtractor={({ wallet }) => wallet.id}
+          renderItem={renderItem}
+          ListEmptyComponent={
+            <View className="mt-2 flex w-full items-center justify-center rounded-lg bg-asphalt/50 p-4">
+              <Text className="text-center font-sans-medium text-sm text-white">{t('labels.emptyList')}</Text>
+            </View>
+          }
+        />
+      </ModalLayout.ViewContent>
+    </ModalLayout.Root>
   )
 }
