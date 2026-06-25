@@ -103,11 +103,11 @@
     "view": ["ver", "visualizar", "observar", "verificar"]
   },
   "wallet": {
-    "encryptedName": "Carteira Criptografada",
-    "firstWalletName": "Minha Primeira Carteira",
-    "importedName": "Carteira Importada",
+    "encryptedName": "Carteira criptografada",
+    "firstWalletName": "Minha primeira carteira",
+    "importedName": "Carteira importada",
     "ledgerName": "Carteira Ledger",
-    "mnemonicWalletName": "Carteira Mnemônica",
+    "mnemonicWalletName": "Carteira mnemônica",
     "watchAccount": "Conta watch"
   },
   "walletConnect": {

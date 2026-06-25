@@ -103,7 +103,7 @@
     "aboutData": "<1>此流程使用嵌入式小部件。</1> 在买卖代币时，可能会因 KYC 需要请求部分个人信息。<2>大额交易需要更多 KYC 信息。</2>",
     "buttons": {
       "aboutData": "关于您的数据",
-      "help": "需要帮助？与我们聊天"
+      "help": "需要帮助？在线支持"
     },
     "buyTokens": {
       "alert": "请确保所选账户兼容您购买的代币网络！",
@@ -323,7 +323,7 @@
       "detailsTitle": "导出详情",
       "detailsTransactionTypesLabel": "交易类型",
       "detailsTransactionTypesValue": "所有交易",
-      "needHelpButtonLabel": "需要帮助？与我们聊天",
+      "needHelpButtonLabel": "需要帮助？在线支持",
       "title": "导出"
     },
     "timePeriodLabel": "时间段…",
@@ -411,7 +411,7 @@
       "TXID_NOT_FOUND": "未找到交易ID",
       "UNEXPECTED_ERROR": "发生意外错误。如果问题持续存在，请联系客服。"
     },
-    "helpButtonLabel": "需要帮助？与我们聊天",
+    "helpButtonLabel": "需要帮助？在线支持",
     "receivingAddressLabel": "接收地址",
     "sendingAddressLabel": "发送地址",
     "statusLabel": "状态",
@@ -703,7 +703,7 @@
     "successContent": {
       "description": "您的代币已成功发送！",
       "detailsLabel": "交易详情",
-      "helpButtonLabel": "需要帮助？与我们聊天",
+      "helpButtonLabel": "需要帮助？",
       "saveContactButtonLabel": "保存联系人",
       "title": "发送详情",
       "transactionHashLabel": "交易哈希",
@@ -762,7 +762,7 @@
     },
     "extraIdToReceive": "目标标签/备注",
     "failed": "失败",
-    "help": "需要帮助？与我们聊天",
+    "help": "需要帮助？在线支持",
     "log": "兑换日志",
     "pending": "处理中…",
     "processingInfo": "我们力争在 7 分钟内完成兑换",
@@ -792,7 +792,7 @@
   "swapExplanation": {
     "description1": "无需交易所即可跨链兑换代币。",
     "description2": "在 NEON 中直接且即时兑换代币既方便又能节省时间和手续费。",
-    "help": "需要帮助？与我们聊天",
+    "help": "需要帮助？在线支持",
     "title": "兑换是如何工作的？"
   },
   "tokenSelection": {

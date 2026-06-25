@@ -72,6 +72,7 @@ export const functionsByActionId: TFunctionsByActionId = {
       screen: 'MoreStack',
       params: { screen: 'MoreScreen' },
     })
+
     navigation.navigate('CreateBackupModal')
   },
   restoreBackup: async ({ navigation }) => {
@@ -79,6 +80,7 @@ export const functionsByActionId: TFunctionsByActionId = {
       screen: 'MoreStack',
       params: { screen: 'MoreScreen' },
     })
+
     navigation.navigate('ImportBackupModal')
   },
   import: async ({ navigation }) => {

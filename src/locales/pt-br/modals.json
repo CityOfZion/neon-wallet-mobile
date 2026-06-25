@@ -103,7 +103,7 @@
     "aboutData": "<1>Este processo usa um widget incorporado.</1> Ao comprar e vender tokens, alguns dados pessoais podem ser solicitados para fins de KYC. <2>Transações maiores requerem uma maior quantidade de dados de KYC.</2>",
     "buttons": {
       "aboutData": "Sobre seus dados",
-      "help": "Precisa de ajuda? Converse conosco"
+      "help": "Precisa de ajuda? Suporte ao vivo"
     },
     "buyTokens": {
       "alert": "Certifique-se de que a conta selecionada é compatível com a rede do token que você está comprando!",
@@ -323,7 +323,7 @@
       "detailsTitle": "Detalhes da exportação",
       "detailsTransactionTypesLabel": "Tipos de transação",
       "detailsTransactionTypesValue": "Todas as transações",
-      "needHelpButtonLabel": "Precisa de ajuda? Converse conosco",
+      "needHelpButtonLabel": "Precisa de ajuda? Suporte ao vivo",
       "title": "Exportar"
     },
     "timePeriodLabel": "Período…",
@@ -411,7 +411,7 @@
       "TXID_NOT_FOUND": "ID da transação não encontrado",
       "UNEXPECTED_ERROR": "Erro inesperado ocorreu. Por favor, contate o suporte se o problema persistir."
     },
-    "helpButtonLabel": "Precisa de ajuda? Converse conosco",
+    "helpButtonLabel": "Precisa de ajuda? Suporte ao vivo",
     "receivingAddressLabel": "Endereço de recebimento",
     "sendingAddressLabel": "Endereço de envio",
     "statusLabel": "Status",
@@ -590,7 +590,7 @@
   },
   "quickTools": {
     "buyAndSellTokens": {
-      "title": "Comprar + Vender tokens"
+      "title": "Comprar + vender tokens"
     },
     "hardware": {
       "connectTitle": "Conectar carteira de hardware",
@@ -703,7 +703,7 @@
     "successContent": {
       "description": "Seus tokens foram enviados com sucesso!",
       "detailsLabel": "Detalhes da transação",
-      "helpButtonLabel": "Precisa de ajuda? Converse conosco",
+      "helpButtonLabel": "Precisa de ajuda?",
       "saveContactButtonLabel": "Salvar contato",
       "title": "Detalhes do envio",
       "transactionHashLabel": "Hash da transação",
@@ -762,7 +762,7 @@
     },
     "extraIdToReceive": "Tag de destino/memo",
     "failed": "Falhou",
-    "help": "Precisa de ajuda? Converse conosco",
+    "help": "Precisa de ajuda? Suporte ao vivo",
     "log": "Log do swap",
     "pending": "Pendente…",
     "processingInfo": "Nosso objetivo é concluir swaps em menos de 7 minutos",
@@ -792,7 +792,7 @@
   "swapExplanation": {
     "description1": "Troque tokens por outros tokens, entre blockchains, sem usar uma exchange.",
     "description2": "Trocar tokens diretamente e imediatamente na NEON é conveniente e permite que você economize tempo e pague taxas mais baixas.",
-    "help": "Precisa de ajuda? Converse conosco",
+    "help": "Precisa de ajuda? Suporte ao vivo",
     "title": "Como o swap funciona?"
   },
   "tokenSelection": {

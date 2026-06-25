@@ -185,11 +185,12 @@
     "title": "匯入"
   },
   "more": {
-    "chatWithUsButtonLabel": "與我們聊天",
     "contactsButtonLabel": "聯絡人",
     "createWalletButtonLabel": "建立錢包",
+    "discordButtonLabel": "加入我們的 Discord",
     "helpButtonLabel": "幫助",
     "importButtonLabel": "匯入",
+    "liveSupportButtonLabel": "線上支援",
     "openSupportTicketButtonLabel": "開啟支援票",
     "privatePolicyButtonLabel": "隱私政策",
     "settingsButtonLabel": "設定",

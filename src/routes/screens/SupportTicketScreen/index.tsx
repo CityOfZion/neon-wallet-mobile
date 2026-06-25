@@ -65,6 +65,7 @@ export const SupportTicketScreen = ({ navigation }: TMoreStackScreenProps<'Suppo
       })
 
       navigation.navigate('MoreScreen')
+
       ToastHelper.success({ message: t('successToast') })
     } catch (error) {
       LoggerHelper.error(error, { where: 'SupportTicketScreen', operation: 'handleSubmit' })

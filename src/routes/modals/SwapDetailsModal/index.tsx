@@ -16,7 +16,7 @@ import { TwStepper } from '@/components/TwStepper'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
-import { ConstantsHelper } from '@/helpers/ConstantsHelper'
+import { CrispHelper } from '@/helpers/CrispHelper'
 import { LinkHelper } from '@/helpers/LinkHelper'
 
 import { useContactsSelector } from '@/hooks/useContactSelector'
@@ -32,6 +32,7 @@ import PiSealCheck from '@/assets/images/pi-seal-check.svg'
 import PiXCircle from '@/assets/images/pi-x-circle.svg'
 import TbCopy from '@/assets/images/tb-copy.svg'
 import TbAlertTriangleFilled from '@/assets/images/tb-filled-alert-triangle.svg'
+import TbMessage from '@/assets/images/tb-message.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 import TbUsers from '@/assets/images/tb-users.svg'
 
@@ -119,6 +120,10 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
     navigation.navigate('PersistContactModal', {
       addresses: [{ blockchain: tokenTo.blockchain, address: addressTo }],
     })
+  }
+
+  const handleLiveSupport = () => {
+    CrispHelper.show()
   }
 
   const handleGoToSwapLog = () => {
@@ -411,8 +416,8 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
           label={t('help')}
           variant="contained-light"
           className="mt-4"
-          leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
-          onPress={() => LinkHelper.open(ConstantsHelper.cozDiscordUrl)}
+          leftElement={<TbMessage aria-hidden className="text-neon" />}
+          onPress={handleLiveSupport}
         />
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>
