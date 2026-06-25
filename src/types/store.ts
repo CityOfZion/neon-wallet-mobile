@@ -128,6 +128,12 @@ export type TNotificationNavigateActionHideFraudulentTokenPayload = {
   tokenHash?: string
 }
 
+export type TNotificationNavigateActionBNeoShutdownPayload = {
+  to: 'bneo-shutdown'
+  address: string
+  blockchain: TBlockchainServiceKey
+}
+
 export type TNotificationNavigateAction = {
   type: 'navigate'
   payload:
@@ -150,6 +156,7 @@ export type TNotificationNavigateAction = {
     | {
         to: 'backup-wallet'
       }
+    | TNotificationNavigateActionBNeoShutdownPayload
 }
 
 export type TNotificationAction = TNotificationNavigateAction

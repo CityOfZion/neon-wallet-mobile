@@ -20,6 +20,10 @@ export class ConstantsHelper {
     ['neo3', new Set(['0x42e6b0379e39a428362e08cf9d7e40903cdb0fe7'])],
   ])
 
+  static readonly bNeoTokenHash = BSNeo3Constants.EXTRA_TOKENS_BY_NETWORK_ID.mainnet!.find(
+    token => token.symbol === 'bNEO'
+  )!.hash
+
   static readonly tipPercentageBn = new BSBigHumanAmount('0.01') // 1%
   static readonly tipConfigByBlockchain = new Map([
     [
