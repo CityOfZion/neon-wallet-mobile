@@ -56,7 +56,7 @@ const renderItem: SectionListRenderItem<TUseTransactionsTransaction, TUseTransac
 const AccountTransactionsScreen = ({ navigation, route }: TWalletsStackScreenProps<'AccountTransactionsScreen'>) => {
   const { account } = route.params
   const { t } = useTranslation('screens', { keyPrefix: 'accountTransactions' })
-  const { t: tBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
 
   const blockchain = account.blockchain
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
@@ -126,9 +126,7 @@ const AccountTransactionsScreen = ({ navigation, route }: TWalletsStackScreenPro
           <View className="flex flex-row items-center gap-x-2">
             <TwBlockchainIcon blockchain={blockchain} className="size-4" />
 
-            <Text className="font-sans-regular text-base uppercase text-white">
-              {tBlockchainServices(`${blockchain}.label`)}
-            </Text>
+            <Text className="font-sans-regular text-base uppercase text-white">{tCommonBlockchain(blockchain)}</Text>
           </View>
 
           <AccountSubTitle account={account} />

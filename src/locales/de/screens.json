@@ -290,6 +290,9 @@
     "actionsButtonLabel": "Aktionen",
     "emptyListBody": "Sie sind auf dem neuesten Stand!",
     "emptyListTitle": "Nichts zu sehen hier",
+    "providerLabels": {
+      "system": "System"
+    },
     "relatedAccountLabel": "Konto:",
     "relatedAddressLabel": "Adresse:",
     "title": "Benachrichtigungen"
@@ -410,7 +413,7 @@
       "personalisation": {
         "currencyButtonLabel": "Währung",
         "languageButtonLabel": "Sprache",
-        "networkConfigurationButtonLabel": "Network Konfiguration",
+        "networkConfigurationButtonLabel": "Netzwerkkonfiguration",
         "title": "Personalisierung"
       },
       "security": {

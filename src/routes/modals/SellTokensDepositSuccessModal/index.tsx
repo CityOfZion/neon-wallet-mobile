@@ -21,7 +21,7 @@ import type { TAccount } from '@/types/store'
 
 export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'SellTokensDepositSuccessModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'sellTokensDepositSuccess' })
-  const { t: tCommonBlockchainServices } = useTranslation('common', { keyPrefix: 'blockchainServices' })
+  const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
   const { accountsMapRef } = useAccountsMapSelector()
   const { transaction } = route.params
 
@@ -103,7 +103,7 @@ export const SellTokensDepositSuccessModal = ({ route }: TRootStackScreenProps<'
                 numberOfLines={1}
               >
                 {token?.symbol}
-                <Text className="font-sans-regular text-sm uppercase text-gray-100">{` | ${tCommonBlockchainServices(`${transaction.blockchain}.label`)}`}</Text>
+                <Text className="font-sans-regular text-sm uppercase text-gray-100">{` | ${tCommonBlockchain(transaction.blockchain)}`}</Text>
               </Text>
 
               <Text className="max-w-[50%] font-sans-regular text-sm text-white" numberOfLines={1}>

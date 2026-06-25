@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 
-import type { TTransferIntent } from '@cityofzion/blockchain-service'
+import type { BSBigNumber, TTransferIntent } from '@cityofzion/blockchain-service'
 import { BSBigHumanAmount, isCalculableFee } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
@@ -51,8 +51,8 @@ type TActionsData = {
   maxAmountRecipientId?: string
   isTipChecked: boolean
   isTipDisabled: boolean
-  tipAmountBn?: BigNumber
-  tipFiatPriceBn?: BigNumber
+  tipAmountBn?: BSBigNumber
+  tipFiatPriceBn?: BSBigNumber
   tipError?: string
 }
 
@@ -503,7 +503,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     )
 
     let tipFiatPriceBn = totalFiatPricesBn.multipliedBy(ConstantsHelper.tipPercentageBn)
-    let tipAmountBn = tipFiatPriceBn.div(tokenFiatPrice)
+    let tipAmountBn = new BSBigHumanAmount(tipFiatPriceBn.toFixed(), tipConfig.token.decimals).dividedBy(tokenFiatPrice)
 
     if (tipAmountBn.isLessThan(tipConfig.minBn)) {
       tipFiatPriceBn = tipConfig.minBn.multipliedBy(tokenFiatPrice)

@@ -20,7 +20,7 @@ export class ReactNavigationHelper {
     } = ReduxHelper.store.getState()
 
     return {
-      prefixes: ['neon://', 'neon3://', 'wc:', Linking.createURL('/')],
+      prefixes: ['neon://', 'neon3://', 'wc:', Linking.createURL('/', { scheme: 'neon' })],
       getStateFromPath: (path, options) => {
         if (isFirstTime) {
           ToastHelper.error({

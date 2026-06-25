@@ -60,7 +60,7 @@ export const useCreateHardwareWallet = () => {
 
         if (!existentWallet) {
           wallet = await createWallet({
-            name: tCommon('wallet.ledgerName', { blockchain: tCommon(`blockchainServices.${blockchain}.label`) }),
+            name: tCommon('wallet.ledgerName', { blockchain: tCommon(`blockchain.${blockchain}`) }),
             type: 'hardware',
             backupStatus: 'successful',
           })
@@ -68,7 +68,7 @@ export const useCreateHardwareWallet = () => {
           wallet = await editWallet({
             wallet: existentWallet,
             data: {
-              name: tCommon('wallet.ledgerName', { blockchain: tCommon(`blockchainServices.${blockchain}.label`) }),
+              name: tCommon('wallet.ledgerName', { blockchain: tCommon(`blockchain.${blockchain}`) }),
               type: 'hardware',
             },
           })

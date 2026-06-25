@@ -3,7 +3,6 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import QRCode from 'react-native-qrcode-svg'
-import tailwindConfig from 'tailwind.config'
 import resolveConfig from 'tailwindcss/resolveConfig'
 
 import { ActionAddressButton } from '@/components/ActionAddressButton'
@@ -22,6 +21,8 @@ import { ScreenLayout } from '@/layouts/ScreenLayout'
 import TbQrCode from '@/assets/images/tb-qrcode.svg'
 import TbStepInto from '@/assets/images/tb-step-into.svg'
 import VscCircleFilled from '@/assets/images/vsc-circle-filled.svg'
+
+import tailwindConfig from '../../../../tailwind.config'
 
 import type { TWalletsStackScreenProps } from '@/types/stacks'
 import type { TAccount } from '@/types/store'
