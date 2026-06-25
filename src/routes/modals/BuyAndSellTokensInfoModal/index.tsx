@@ -7,13 +7,12 @@ import { TwBanner } from '@/components/TwBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
-import { ConstantsHelper } from '@/helpers/ConstantsHelper'
-import { LinkHelper } from '@/helpers/LinkHelper'
+import { CrispHelper } from '@/helpers/CrispHelper'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
 import TbHelp from '@/assets/images/tb-help.svg'
+import TbMessage from '@/assets/images/tb-message.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -22,6 +21,10 @@ export const BuyAndSellTokensInfoModal = ({ navigation }: TRootStackScreenProps<
 
   const handleAboutData = () => {
     navigation.navigate('BuyAndSellTokensAboutDataModal')
+  }
+
+  const handleLiveSupport = () => {
+    CrispHelper.show()
   }
 
   return (
@@ -107,8 +110,8 @@ export const BuyAndSellTokensInfoModal = ({ navigation }: TRootStackScreenProps<
           label={t('buttons.help')}
           variant="contained-light"
           className="mb-12"
-          leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
-          onPress={LinkHelper.open.bind(null, ConstantsHelper.cozDiscordUrl)}
+          leftElement={<TbMessage aria-hidden className="text-neon" />}
+          onPress={handleLiveSupport}
         />
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>

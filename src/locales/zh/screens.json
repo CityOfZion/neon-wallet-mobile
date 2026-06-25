@@ -185,11 +185,12 @@
     "title": "导入"
   },
   "more": {
-    "chatWithUsButtonLabel": "联系我们",
     "contactsButtonLabel": "联系人",
     "createWalletButtonLabel": "创建钱包",
+    "discordButtonLabel": "加入我们的 Discord",
     "helpButtonLabel": "帮助",
     "importButtonLabel": "导入",
+    "liveSupportButtonLabel": "在线支持",
     "openSupportTicketButtonLabel": "打开支持票",
     "privatePolicyButtonLabel": "隐私政策",
     "settingsButtonLabel": "设置",

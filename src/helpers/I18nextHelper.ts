@@ -31,6 +31,7 @@ export class I18nextHelper {
 
   static get = () => {
     this.setup()
+
     return i18n
   }
 }

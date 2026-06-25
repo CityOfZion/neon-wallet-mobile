@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import * as Application from 'expo-application'
 import { useTranslation } from 'react-i18next'
+import type { ScrollView } from 'react-native'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 import { TwAccordionMenuButton } from '@/components/TwAccordionMenuButton'
@@ -9,7 +10,10 @@ import { TwMenuButton } from '@/components/TwMenuButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
+import { CrispHelper } from '@/helpers/CrispHelper'
 import { LinkHelper } from '@/helpers/LinkHelper'
+
+import { useMount } from '@/hooks/useMount'
 
 import { ScreenLayout } from '@/layouts/ScreenLayout'
 
@@ -25,9 +29,17 @@ import packageJson from '../../../../package.json'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
+const MenuButtonHelpBullet = () => (
+  <View className="size-6 items-center justify-center">
+    <MdCircle aria-hidden className="size-2 text-yellow" />
+  </View>
+)
+
 export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScreen'>) => {
-  const textToImport = route.params?.textToImport
   const [helpAccordionOpen, setHelpAccordionOpen] = useState(route.params?.isHelpAccordionOpen || false)
+  const scrollRef = useRef<ScrollView>(null)
+
+  const textToImport = route.params?.textToImport
 
   const { t } = useTranslation('screens', { keyPrefix: 'more' })
 
@@ -55,6 +67,10 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
     LinkHelper.open(ConstantsHelper.cozPrivacyPolicyLink)
   }
 
+  const handlePressLiveSupport = () => {
+    CrispHelper.show()
+  }
+
   const handlePressDiscord = () => {
     LinkHelper.open(ConstantsHelper.cozDiscordUrl)
   }
@@ -62,6 +78,16 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
   const handlePressOpenTicket = () => {
     navigation.navigate('SupportTicketScreen')
   }
+
+  useMount(() => {
+    if (helpAccordionOpen) {
+      scrollRef.current?.scrollToEnd({ animated: true })
+
+      return
+    }
+
+    scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true })
+  }, [helpAccordionOpen])
 
   useEffect(() => {
     if (!textToImport) return
@@ -77,7 +103,7 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
       <ScreenLayout.Header>
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
       </ScreenLayout.Header>
-      <ScreenLayout.ScrollContent contentContainerClassName="justify-between px-0">
+      <ScreenLayout.ScrollContent ref={scrollRef} contentContainerClassName="justify-between px-0">
         <View>
           <TwMenuButton
             label={t('contactsButtonLabel')}
@@ -96,8 +122,6 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
             leftElement={<WalletIcon aria-hidden className="text-neon" />}
             onPress={handlePressCreateWallet}
           />
-
-          <TwSeparator containerClassName="px-2.5" />
 
           <TwSeparator containerClassName="px-2.5" />
 
@@ -139,25 +163,24 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
             onOpenChange={setHelpAccordionOpen}
           >
             <TwMenuButton
-              label={t('chatWithUsButtonLabel')}
+              label={t('liveSupportButtonLabel')}
               className="px-3.5"
-              leftElement={
-                <View className="size-6 items-center justify-center">
-                  <MdCircle aria-hidden className="size-2 text-yellow" />
-                </View>
-              }
-              onPress={handlePressDiscord}
+              leftElement={<MenuButtonHelpBullet />}
+              onPress={handlePressLiveSupport}
             />
 
             <TwMenuButton
               label={t('openSupportTicketButtonLabel')}
               className="px-3.5"
-              leftElement={
-                <View className="size-6 items-center justify-center">
-                  <MdCircle aria-hidden className="size-2 text-yellow" />
-                </View>
-              }
+              leftElement={<MenuButtonHelpBullet />}
               onPress={handlePressOpenTicket}
+            />
+
+            <TwMenuButton
+              label={t('discordButtonLabel')}
+              className="px-3.5"
+              leftElement={<MenuButtonHelpBullet />}
+              onPress={handlePressDiscord}
             />
           </TwAccordionMenuButton>
         </View>

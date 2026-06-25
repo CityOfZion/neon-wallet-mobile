@@ -132,5 +132,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         useHermesV1: true,
       },
     ],
+    'crisp-sdk-react-native',
   ],
 })

@@ -2,7 +2,7 @@
   "account": {
     "blockHeightTitle": "{{ blockchain }} block height",
     "buttons": {
-      "buyAndSell": "Buy + Sell",
+      "buyAndSell": "Buy + sell",
       "neo3NeoXBridge": "Bridge",
       "neo3Vote": "Voting Neo 3",
       "receive": "Receive",
@@ -108,7 +108,7 @@
       "buyTokens": "Buy tokens",
       "sellTokens": "Sell tokens"
     },
-    "title": "Buy + Sell"
+    "title": "Buy + sell"
   },
   "contact": {
     "title": "Contact",
@@ -185,11 +185,12 @@
     "title": "Import"
   },
   "more": {
-    "chatWithUsButtonLabel": "Chat with us",
     "contactsButtonLabel": "Contacts",
     "createWalletButtonLabel": "Create wallet",
+    "discordButtonLabel": "Join our Discord",
     "helpButtonLabel": "Help",
     "importButtonLabel": "Import",
+    "liveSupportButtonLabel": "Live support",
     "openSupportTicketButtonLabel": "Open support ticket",
     "privatePolicyButtonLabel": "Privacy policy",
     "settingsButtonLabel": "Settings",
