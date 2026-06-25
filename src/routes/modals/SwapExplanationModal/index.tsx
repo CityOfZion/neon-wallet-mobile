@@ -5,19 +5,18 @@ import { Text, View } from 'react-native'
 
 import { TwButton } from '@/components/TwButton'
 
-import { ConstantsHelper } from '@/helpers/ConstantsHelper'
-import { LinkHelper } from '@/helpers/LinkHelper'
+import { CrispHelper } from '@/helpers/CrispHelper'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
+import TbMessage from '@/assets/images/tb-message.svg'
 import TbReplace from '@/assets/images/tb-replace.svg'
 
 export const SwapExplanationModal = () => {
   const { t } = useTranslation('modals', { keyPrefix: 'swapExplanation' })
 
-  const handleOpenDiscord = async () => {
-    await LinkHelper.open(ConstantsHelper.cozDiscordUrl)
+  const handleLiveSupport = () => {
+    CrispHelper.show()
   }
 
   return (
@@ -39,8 +38,8 @@ export const SwapExplanationModal = () => {
           label={t('help')}
           variant="contained-light"
           className="mt-8"
-          leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
-          onPress={handleOpenDiscord}
+          leftElement={<TbMessage aria-hidden className="text-neon" />}
+          onPress={handleLiveSupport}
         />
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>

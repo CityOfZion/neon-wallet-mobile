@@ -87,8 +87,12 @@ export const SendSuccessContent = ({ transactions, selectedAccount, fee, navigat
     })
   }
 
-  const handlePressHelp = () => {
-    navigation.navigate('TabStack', {
+  const handlePressHelp = async () => {
+    handleErase()
+
+    await UtilsHelper.sleep(500)
+
+    navigation.replace('TabStack', {
       screen: 'MoreStack',
       params: {
         screen: 'MoreScreen',

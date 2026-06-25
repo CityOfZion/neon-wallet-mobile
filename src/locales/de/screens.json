@@ -185,11 +185,12 @@
     "title": "Importieren"
   },
   "more": {
-    "chatWithUsButtonLabel": "Mit uns chatten",
     "contactsButtonLabel": "Kontakte",
     "createWalletButtonLabel": "Wallet erstellen",
+    "discordButtonLabel": "Unserem Discord beitreten",
     "helpButtonLabel": "Hilfe",
     "importButtonLabel": "Importieren",
+    "liveSupportButtonLabel": "Live-Support",
     "openSupportTicketButtonLabel": "Support-Ticket öffnen",
     "privatePolicyButtonLabel": "Datenschutz",
     "settingsButtonLabel": "Einstellungen",

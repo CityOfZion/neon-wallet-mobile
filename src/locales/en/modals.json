@@ -103,7 +103,7 @@
     "aboutData": "<1>This process uses an embedded widget.</1> When buying and selling tokens, some personal data might be requested for KYC purposes. <2>Larger transactions require a greater amount of KYC data.</2>",
     "buttons": {
       "aboutData": "About your data",
-      "help": "Need help? Chat with us"
+      "help": "Need help? Live support"
     },
     "buyTokens": {
       "alert": "Ensure that the selected account is compatible with your purchased token network!",
@@ -323,7 +323,7 @@
       "detailsTitle": "Export details",
       "detailsTransactionTypesLabel": "Transaction types",
       "detailsTransactionTypesValue": "All transactions",
-      "needHelpButtonLabel": "Need help? Chat with us",
+      "needHelpButtonLabel": "Need help? Live support",
       "title": "Export"
     },
     "timePeriodLabel": "Time period…",
@@ -411,7 +411,7 @@
       "TXID_NOT_FOUND": "Transaction ID not found",
       "UNEXPECTED_ERROR": "Unexpected error occurred. Please contact support if the issue persists."
     },
-    "helpButtonLabel": "Need help? Chat with us",
+    "helpButtonLabel": "Need help? Live support",
     "receivingAddressLabel": "Receiving address",
     "sendingAddressLabel": "Sending address",
     "statusLabel": "Status",
@@ -590,7 +590,7 @@
   },
   "quickTools": {
     "buyAndSellTokens": {
-      "title": "Buy + Sell tokens"
+      "title": "Buy + sell tokens"
     },
     "hardware": {
       "connectTitle": "Connect hardware wallet",
@@ -703,7 +703,7 @@
     "successContent": {
       "description": "Your tokens have been sent successfully!",
       "detailsLabel": "Transaction details",
-      "helpButtonLabel": "Need help? Chat with us",
+      "helpButtonLabel": "Need help?",
       "saveContactButtonLabel": "Save contact",
       "title": "Send details",
       "transactionHashLabel": "Transaction hash",
@@ -762,7 +762,7 @@
     },
     "extraIdToReceive": "Destination tag/memo",
     "failed": "Failed",
-    "help": "Need help? Chat with us",
+    "help": "Need help? Live support",
     "log": "Swap log",
     "pending": "Pending…",
     "processingInfo": "We aim to complete swaps in under 7 minutes",
@@ -792,7 +792,7 @@
   "swapExplanation": {
     "description1": "Exchange tokens for other token, across chains, without using an exchange.",
     "description2": "Directly and immediately exchanging tokens in NEON is convenient and allows you to save time and pay lower fees.",
-    "help": "Need help? Chat with us",
+    "help": "Need help? Live support",
     "title": "How do swap work?"
   },
   "tokenSelection": {

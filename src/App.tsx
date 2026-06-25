@@ -10,6 +10,8 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider as StoreProvider } from 'react-redux'
 
+import { CrispHelper } from '@/helpers/CrispHelper'
+
 import ScreenLoader from './components/ScreenLoader'
 import { BlockchainServiceHelper } from './helpers/BlockchainServiceHelper'
 import { EnvHelper } from './helpers/EnvHelper'
@@ -53,6 +55,7 @@ export const App = () => {
         BlockchainServiceHelper.setup(),
         NativeWindHelper.setup(),
         WalletKitHelper.setup(),
+        CrispHelper.setup(),
       ])
 
       ReduxHelper.setup()

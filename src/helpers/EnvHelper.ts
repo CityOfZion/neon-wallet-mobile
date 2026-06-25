@@ -13,6 +13,7 @@ const envSchema = z.object({
   EXPO_PUBLIC_CLICK_UP_LIST_ID: z.string().nonempty().optional(),
   EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID: z.string().nonempty().optional(),
   EXPO_PUBLIC_CLICK_UP_API_KEY: z.string().nonempty().optional(),
+  EXPO_PUBLIC_CRISP_WEBSITE_ID: z.string().nonempty(),
 })
 
 type EnvSchema = z.infer<typeof envSchema>
@@ -31,10 +32,13 @@ class EnvHelperClass {
       EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID: process.env.EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID,
       EXPO_PUBLIC_CLICK_UP_API_KEY: process.env.EXPO_PUBLIC_CLICK_UP_API_KEY,
       EXPO_PUBLIC_CLICK_UP_LIST_ID: process.env.EXPO_PUBLIC_CLICK_UP_LIST_ID,
+      EXPO_PUBLIC_CRISP_WEBSITE_ID: process.env.EXPO_PUBLIC_CRISP_WEBSITE_ID,
     }
 
     const result = await this.schema.parseAsync(envVars)
+
     Object.assign(this, result)
+
     return result as EnvSchema
   }
 }

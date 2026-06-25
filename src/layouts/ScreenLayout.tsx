@@ -1,4 +1,4 @@
-import { Children, Fragment, isValidElement, useEffect, useState } from 'react'
+import { Children, Fragment, isValidElement, type Ref, useEffect, useState } from 'react'
 
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
@@ -147,17 +147,17 @@ const Title = ({ className, children, accessibilityRole = 'header', ...props }: 
   )
 }
 
-const ScrollContent = ({ className, contentContainerClassName, ...props }: ScrollViewProps) => {
-  return (
-    <ScrollView
-      alwaysBounceVertical={false}
-      showsVerticalScrollIndicator={false}
-      className={StyleHelper.mergeStyles('flex-1', className)}
-      contentContainerClassName={StyleHelper.mergeStyles('pt-3.5 pb-4.5 px-3.5 flex-grow', contentContainerClassName)}
-      {...props}
-    />
-  )
-}
+type TScrollContentProps = ScrollViewProps & { ref?: Ref<ScrollView> }
+const ScrollContent = ({ className, contentContainerClassName, ref, ...props }: TScrollContentProps) => (
+  <ScrollView
+    ref={ref}
+    alwaysBounceVertical={false}
+    showsVerticalScrollIndicator={false}
+    className={StyleHelper.mergeStyles('flex-1', className)}
+    contentContainerClassName={StyleHelper.mergeStyles('pt-3.5 pb-4.5 px-3.5 flex-grow', contentContainerClassName)}
+    {...props}
+  />
+)
 
 const ViewContent = ({ className, ...props }: ViewProps) => {
   return (
