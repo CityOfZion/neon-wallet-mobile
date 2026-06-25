@@ -17,10 +17,8 @@ import { useHasHardwareAccountSelector } from '@/hooks/useAccountSelector'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import TbChartBarPopular from '@/assets/images/tb-chart-bar-popular.svg'
 import TbDeviceUsb from '@/assets/images/tb-device-usb.svg'
 import TbQrcode from '@/assets/images/tb-qrcode.svg'
-import TbReplace2 from '@/assets/images/tb-replace-2.svg'
 import TbShoppingBag from '@/assets/images/tb-shopping-bag.svg'
 import TbStepInto from '@/assets/images/tb-step-into.svg'
 import TbStepOut from '@/assets/images/tb-step-out.svg'
@@ -125,28 +123,6 @@ export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickTool
     )
   }
 
-  const handlePressNeo3NeoXBridge = () => {
-    navigation.navigate(
-      'TabStack',
-      {
-        screen: 'WalletsStack',
-        params: { screen: 'Neo3NeoXBridgeScreen', params: { account: undefined } },
-      },
-      { pop: true }
-    )
-  }
-
-  const handlePressNeo3Vote = () => {
-    navigation.navigate(
-      'TabStack',
-      {
-        screen: 'WalletsStack',
-        params: { screen: 'Neo3VoteScreen', params: { defaultNeo3Account: undefined } },
-      },
-      { pop: true }
-    )
-  }
-
   const handlePressDisconnectHardware = () => {
     HardwareWalletHelper.disconnect()
   }
@@ -197,22 +173,6 @@ export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickTool
             <TwMenuButton label={t('swap.title')} leftElement={<TbTransform aria-hidden />} onPress={handlePressSwap} />
           </Fragment>
         )}
-
-        <TwSeparator />
-
-        <TwMenuButton
-          label={t('neo3NeoXBridge.title')}
-          leftElement={<TbReplace2 aria-hidden />}
-          onPress={handlePressNeo3NeoXBridge}
-        />
-
-        <TwSeparator />
-
-        <TwMenuButton
-          label={t('neo3Vote.title')}
-          leftElement={<TbChartBarPopular aria-hidden />}
-          onPress={handlePressNeo3Vote}
-        />
 
         <TwSeparator />
 
