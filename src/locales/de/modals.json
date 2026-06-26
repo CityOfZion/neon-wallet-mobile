@@ -596,12 +596,6 @@
       "connectTitle": "Hardware Wallet verbinden",
       "disconnectTitle": "Hardware Wallet trennen"
     },
-    "neo3NeoXBridge": {
-      "title": "Tokens bridgen (Neo 3 und Neo X)"
-    },
-    "neo3Vote": {
-      "title": "Neo 3 Voting"
-    },
     "qrCode": {
       "title": "QR Code scannen"
     },

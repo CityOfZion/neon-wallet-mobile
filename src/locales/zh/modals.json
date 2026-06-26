@@ -596,12 +596,6 @@
       "connectTitle": "连接硬件钱包",
       "disconnectTitle": "断开硬件钱包"
     },
-    "neo3NeoXBridge": {
-      "title": "桥接代币 (Neo 3 和 Neo X)"
-    },
-    "neo3Vote": {
-      "title": "投票 Neo 3"
-    },
     "qrCode": {
       "title": "扫描二维码"
     },
