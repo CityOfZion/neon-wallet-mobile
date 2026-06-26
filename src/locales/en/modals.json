@@ -596,12 +596,6 @@
       "connectTitle": "Connect hardware wallet",
       "disconnectTitle": "Disconnect hardware wallet"
     },
-    "neo3NeoXBridge": {
-      "title": "Bridge tokens (Neo 3 and Neo X)"
-    },
-    "neo3Vote": {
-      "title": "Voting Neo 3"
-    },
     "qrCode": {
       "title": "Scan QR code"
     },
