@@ -596,12 +596,6 @@
       "connectTitle": "Conectar carteira de hardware",
       "disconnectTitle": "Desconectar carteira de hardware"
     },
-    "neo3NeoXBridge": {
-      "title": "Bridge de tokens (Neo 3 e Neo X)"
-    },
-    "neo3Vote": {
-      "title": "Votação Neo 3"
-    },
     "qrCode": {
       "title": "Escanear QR code"
     },
