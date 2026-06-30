@@ -103,12 +103,12 @@
     "view": ["see", "look at", "observe", "watch"]
   },
   "wallet": {
-    "encryptedName": "Encrypted Wallet",
-    "firstWalletName": "My First Wallet",
-    "importedName": "Imported Wallet",
-    "ledgerName": "Ledger Wallet",
-    "mnemonicWalletName": "Mnemonic Wallet",
-    "watchAccount": "Watch Account"
+    "encryptedName": "Encrypted wallet",
+    "firstWalletName": "My first wallet",
+    "importedName": "Imported wallet",
+    "ledgerName": "Ledger wallet",
+    "mnemonicWalletName": "Mnemonic wallet",
+    "watchAccount": "Watch account"
   },
   "walletConnect": {
     "errorsByCode": {

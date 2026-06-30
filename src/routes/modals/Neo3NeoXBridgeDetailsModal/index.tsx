@@ -12,16 +12,15 @@ import { TwButton } from '@/components/TwButton'
 import { TwStepper } from '@/components/TwStepper'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
-import { ConstantsHelper } from '@/helpers/ConstantsHelper'
-import { LinkHelper } from '@/helpers/LinkHelper'
+import { CrispHelper } from '@/helpers/CrispHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 
 import { useMount } from '@/hooks/useMount'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
 import PiSealCheck from '@/assets/images/pi-seal-check.svg'
+import TbMessage from '@/assets/images/tb-message.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
@@ -53,8 +52,8 @@ export const Neo3NeoXBridgeDetailsModal = ({
   const [status, setStatus] = useState<TStatus>('confirming')
   const [errorMessage, setErrorMessage] = useState<string>()
 
-  const handleOpenHelpLink = () => {
-    LinkHelper.open(ConstantsHelper.cozDiscordUrl)
+  const handleLiveSupport = () => {
+    CrispHelper.show()
   }
 
   useMount(() => {
@@ -157,8 +156,8 @@ export const Neo3NeoXBridgeDetailsModal = ({
           <TwButton
             label={t('helpButtonLabel')}
             variant="contained-light"
-            leftElement={<MdOpenInNew aria-hidden className="text-neon" />}
-            onPress={handleOpenHelpLink}
+            leftElement={<TbMessage aria-hidden className="text-neon" />}
+            onPress={handleLiveSupport}
           />
         </View>
       </ModalLayout.ScrollContent>

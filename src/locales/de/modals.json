@@ -103,7 +103,7 @@
     "aboutData": "<1>Dieser Prozess verwendet ein eingebettetes Widget.</1> Beim Kauf und Verkauf von Tokens können einige persönliche Daten für KYC-Zwecke angefordert werden. <2>Größere Transaktionen erfordern mehr KYC-Daten.</2>",
     "buttons": {
       "aboutData": "Über Ihre Daten",
-      "help": "Brauchen Sie Hilfe? Chatten Sie mit uns"
+      "help": "Brauchen Sie Hilfe? Live-Support"
     },
     "buyTokens": {
       "alert": "Stellen Sie sicher, dass das ausgewählte Konto mit Ihrem gekauften Token Network kompatibel ist!",
@@ -323,7 +323,7 @@
       "detailsTitle": "Export Details",
       "detailsTransactionTypesLabel": "Transaktionstypen",
       "detailsTransactionTypesValue": "Alle Transaktionen",
-      "needHelpButtonLabel": "Brauchen Sie Hilfe? Chatten Sie mit uns",
+      "needHelpButtonLabel": "Brauchen Sie Hilfe? Live-Support",
       "title": "Exportieren"
     },
     "timePeriodLabel": "Zeitraum…",
@@ -411,7 +411,7 @@
       "TXID_NOT_FOUND": "Transaktions-ID nicht gefunden",
       "UNEXPECTED_ERROR": "Unerwarteter Fehler aufgetreten. Bitte kontaktieren Sie den Support, falls das Problem weiterhin besteht."
     },
-    "helpButtonLabel": "Brauchen Sie Hilfe? Chatten Sie mit uns",
+    "helpButtonLabel": "Brauchen Sie Hilfe? Live-Support",
     "receivingAddressLabel": "Empfangsadresse",
     "sendingAddressLabel": "Sendeadresse",
     "statusLabel": "Status",
@@ -703,7 +703,7 @@
     "successContent": {
       "description": "Ihre Tokens wurden erfolgreich gesendet!",
       "detailsLabel": "Transaktionsdetails",
-      "helpButtonLabel": "Benötigen Sie Hilfe? Kontaktieren Sie uns",
+      "helpButtonLabel": "Brauchen Sie Hilfe?",
       "saveContactButtonLabel": "Kontakt speichern",
       "title": "Sendeverarbeitungsdetails",
       "transactionHashLabel": "Transaktions-Hash",
@@ -762,7 +762,7 @@
     },
     "extraIdToReceive": "Destination Tag/Memo",
     "failed": "Fehlgeschlagen",
-    "help": "Brauchen Sie Hilfe? Chatten Sie mit uns",
+    "help": "Brauchen Sie Hilfe? Live-Support",
     "log": "Swap Log",
     "pending": "Ausstehend…",
     "processingInfo": "Wir streben an, Swaps in unter 7 Minuten abzuschließen",
@@ -792,7 +792,7 @@
   "swapExplanation": {
     "description1": "Tauschen Sie Tokens gegen andere Tokens, über Chains hinweg, ohne Exchange.",
     "description2": "Der direkte und sofortige Tausch von Tokens in NEON ist bequem und ermöglicht es Ihnen, Zeit zu sparen und niedrigere Gebühren zu zahlen.",
-    "help": "Brauchen Sie Hilfe? Chatten Sie mit uns",
+    "help": "Brauchen Sie Hilfe? Live-Support",
     "title": "Wie funktioniert Swap?"
   },
   "tokenSelection": {

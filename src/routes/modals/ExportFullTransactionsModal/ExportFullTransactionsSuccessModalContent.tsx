@@ -6,10 +6,9 @@ import { Text, View } from 'react-native'
 import { TwButton } from '@/components/TwButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
-import { ConstantsHelper } from '@/helpers/ConstantsHelper'
-import { LinkHelper } from '@/helpers/LinkHelper'
+import { CrispHelper } from '@/helpers/CrispHelper'
 
-import MdLaunch from '@/assets/images/md-launch.svg'
+import TbMessage from '@/assets/images/tb-message.svg'
 import TbReceipt from '@/assets/images/tb-receipt.svg'
 
 import type { TAccount } from '@/types/store'
@@ -24,8 +23,8 @@ export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDa
   const { t } = useTranslation('modals', { keyPrefix: 'exportFullTransactions.success' })
   const { t: tCommon } = useTranslation('common')
 
-  const handlePressDiscord = () => {
-    LinkHelper.open(ConstantsHelper.cozDiscordUrl)
+  const handleLiveSupport = () => {
+    CrispHelper.show()
   }
 
   return (
@@ -87,10 +86,10 @@ export const ExportFullTransactionsSuccessModalContent = ({ account, formattedDa
 
       <View className="mt-auto w-full pt-8">
         <TwButton
-          variant="contained-light"
-          leftElement={<MdLaunch aria-hidden />}
           label={t('needHelpButtonLabel')}
-          onPress={handlePressDiscord}
+          variant="contained-light"
+          leftElement={<TbMessage aria-hidden />}
+          onPress={handleLiveSupport}
         />
       </View>
     </Fragment>
