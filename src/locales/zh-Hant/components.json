@@ -83,6 +83,10 @@
         "notificationDescription": "我們已識別出「{{ value }}」，它已被社群標記為詐騙代幣。我們建議隱藏它並避免任何形式的互動。",
         "notificationTitle": "「{{ value }}」是詐騙代幣！"
       },
+      "useNeoLegacyMigrationNotificationProcess": {
+        "description": "Neo Legacy 遷移將於 2026 年 7 月 8 日 08:00 UTC 關閉。請立即將您的 NEO 和 GAS 遷移至 Neo 3，以免失去對資金的存取權限。點擊此處了解更多。",
+        "title": "Neo Legacy 遷移即將關閉！"
+      },
       "useVotingNeo3NotificationProcess": {
         "notificationDescription": "只需點這裡，立即投票",
         "notificationTitle": "你正在錯過免費的 GAS！"
