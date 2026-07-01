@@ -177,8 +177,8 @@
     "react-native-ble-plx": "3.5.1",
     "@ethersproject/shims": "5.8.0",
     "@noble/hashes": "2.0.0",
-    "@cityofzion/neon-js": "5.8.1",
-    "@cityofzion/neon-core": "5.8.1",
+    "@cityofzion/neon-js@5": "5.9.0",
+    "@cityofzion/neon-core@5": "5.9.0",
     "scrypt-js": "3.0.1",
     "hermes-compiler": "250829098.0.4"
   },
