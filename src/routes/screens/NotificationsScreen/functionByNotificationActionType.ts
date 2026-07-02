@@ -2,8 +2,10 @@ import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
 import { match } from 'ts-pattern'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
+import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
+import { LinkHelper } from '@/helpers/LinkHelper'
 import { ReduxHelper } from '@/helpers/ReduxHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
@@ -131,6 +133,21 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
             params: { account, wallet },
           },
         })
+      })
+      .with({ to: 'neo-legacy-migration' }, ({ address, blockchain }) => {
+        const { account, wallet } = getAccountAndWallet({ address, blockchain })
+
+        LinkHelper.open(ConstantsHelper.ngdNeoLegacyMigrationPostUrl)
+
+        setTimeout(() => {
+          navigation.navigate('TabStack', {
+            screen: 'WalletsStack',
+            params: {
+              screen: 'AccountAssetsScreen',
+              params: { wallet, account },
+            },
+          })
+        }, 500)
       })
       .exhaustive()
   },
