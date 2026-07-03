@@ -9,13 +9,17 @@ import { TwInput } from '@/components/TwInput'
 import { TwSeparator } from '@/components/TwSeparator'
 
 import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
+import { AppError } from '@/helpers/ErrorHelper'
+import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { QrCodeScanModalHelper } from '@/helpers/QrCodeScanModalHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
+import { ToastHelper } from '@/helpers/ToastHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
-import type { TValidationSchemaHelperBackupFileSchema } from '@/helpers/ValidationSchemaHelper'
 
 import { useImportAction } from '@/hooks/useImportAction'
-import { useNeonImportBackup } from '@/hooks/useNeonBackup'
+import type { TUseImportFromFileResult } from '@/hooks/useImportFromFile'
+import { useImportFromFile } from '@/hooks/useImportFromFile'
+import { useNeonBackupFile } from '@/hooks/useNeonBackupFile'
 import { useAppDispatch } from '@/hooks/useRedux'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
@@ -34,22 +38,23 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
   const { t } = useTranslation('modals', { keyPrefix: 'onboardingImport' })
   const { t: tCommon } = useTranslation('common')
   const dispatch = useAppDispatch()
-  const { handleBrowserFile, handleTryDecryptData, handleImportBackupData } = useNeonImportBackup()
+  const { handleBrowse, isBrowsing } = useImportFromFile()
+  const { handleTryDecryptData, handleGenerateData, handleImportBackupData } = useNeonBackupFile()
 
-  const [backupFile, setBackupFile] = useState<TValidationSchemaHelperBackupFileSchema>()
+  const [importFile, setImportFile] = useState<TUseImportFromFileResult>()
 
-  const handleImportComplete = async () => {
+  const handleImportComplete = async (popCount = 2) => {
     route.params.onConfirm()
 
     dispatch(settingsReducerActions.setIsFirstTime(false))
 
     AnalyticsHelper.logEvent('wallet_imported')
 
-    navigation.pop(2)
+    navigation.pop(popCount)
 
     await UtilsHelper.sleep(1000)
 
-    navigation.replace('OnboardingCompletedScreen', { isImport: true })
+    navigation.reset({ index: 0, routes: [{ name: 'OnboardingCompletedScreen', params: { isImport: true } }] })
   }
 
   const handleSubmitAddress = async (address: string) => {
@@ -86,11 +91,20 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
 
   const isMnemonic = actionData.inputType === 'mnemonic'
   const isTextMode = !!actionData.text
-  const isSubmitDisabled = isTextMode ? !actionState.isValid : !backupFile
+  const isSubmitDisabled = isTextMode ? !actionState.isValid : !importFile
 
   const handleBrowseClick = async () => {
-    const file = await handleBrowserFile()
-    setBackupFile(file)
+    if (importFile) {
+      setImportFile(undefined)
+    }
+
+    try {
+      const result = await handleBrowse()
+      if (result) setImportFile(result)
+    } catch (error) {
+      LoggerHelper.error(error, { where: 'OnboardingImportModal', operation: 'handleBrowse' })
+      ToastHelper.error({ message: AppError.wrap(error).message })
+    }
   }
 
   const handleScanQrCode = () => {
@@ -102,7 +116,25 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
     })
   }
 
-  const handleConfirmBackup = async () => {
+  const handleConfirmFile = () => {
+    if (!importFile) return
+
+    if (importFile.type === 'nep6') {
+      navigation.navigate('Nep6BackupImportAccountSelectionModal', {
+        content: importFile.content,
+        onSuccess: () => handleImportComplete(3),
+      })
+      return
+    }
+
+    if (importFile.type === 'migrate') {
+      navigation.navigate('MigrateFromNeon2AccountSelectionModal', {
+        content: importFile.content,
+        onSuccess: () => handleImportComplete(3),
+      })
+      return
+    }
+
     navigation.navigate('PasswordModal', {
       title: t('importBackupConfirmPassword.importBackupTitle'),
       buttonProps: {
@@ -115,8 +147,10 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
       },
       description: t('importBackupConfirmPassword.description'),
       async onConfirm(password) {
-        const backupData = handleTryDecryptData(backupFile!, password)
-        await handleImportBackupData(backupData)
+        const decryptedData = handleTryDecryptData(importFile.backupFile, password)
+        const generatedData = handleGenerateData(decryptedData)
+
+        await handleImportBackupData(generatedData)
       },
       onSuccess() {
         handleImportComplete()
@@ -124,20 +158,20 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
     })
   }
 
-  const handleSubmitPress = isTextMode ? handleAct(data => handleSubmit(data, false)) : handleConfirmBackup
+  const handleSubmitPress = isTextMode ? handleAct(data => handleSubmit(data, false)) : handleConfirmFile
 
   useEffect(() => {
     if (actionData.text) {
-      setBackupFile(undefined)
+      setImportFile(undefined)
     }
   }, [actionData.text])
 
   useEffect(() => {
-    if (backupFile) {
+    if (importFile) {
       reset()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [backupFile])
+  }, [importFile])
 
   return (
     <ModalLayout.Root>
@@ -215,9 +249,10 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
             className="mt-3"
             leftElement={<TbEyeSearch aria-hidden />}
             onPress={handleBrowseClick}
+            isLoading={isBrowsing}
           />
 
-          {backupFile && <TwBanner type="success">{t('messages.successFile')}</TwBanner>}
+          {importFile && <TwBanner type="success">{t(`${importFile.type}FileDetected`)}</TwBanner>}
         </View>
 
         <ModalLayout.KeyboardAvoidingArea>

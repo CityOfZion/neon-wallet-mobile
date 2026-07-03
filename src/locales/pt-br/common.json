@@ -107,6 +107,9 @@
     "firstWalletName": "Minha primeira carteira",
     "importedName": "Carteira importada",
     "ledgerName": "Carteira Ledger",
+    "migratedAccountLabel": "Conta migrada",
+    "migratedContactName": "Contato migrado",
+    "migratedWalletName": "Carteira migrada",
     "mnemonicWalletName": "Carteira mnemônica",
     "watchAccount": "Conta watch"
   },

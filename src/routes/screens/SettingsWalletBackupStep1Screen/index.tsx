@@ -43,7 +43,7 @@ export const SettingsWalletBackupStep1Screen = ({
   }
 
   const handlePressDownload = async () => {
-    await writeFile(`NEON-mnemonic-${DateHelper.getNowUnix()}`, mnemonic, 'text/txt')
+    await writeFile(`neon-mnemonic-${DateHelper.getNowUnix()}`, mnemonic, 'text/txt')
 
     ToastHelper.success({ message: tCommonGeneral('savedSuccessfully') })
   }

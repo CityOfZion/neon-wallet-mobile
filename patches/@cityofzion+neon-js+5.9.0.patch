@@ -1,5 +1,5 @@
 diff --git a/node_modules/@cityofzion/neon-js/package.json b/node_modules/@cityofzion/neon-js/package.json
-index 84edad3..99d5808 100644
+index e3f1caf..ccc8589 100644
 --- a/node_modules/@cityofzion/neon-js/package.json
 +++ b/node_modules/@cityofzion/neon-js/package.json
 @@ -17,8 +17,7 @@

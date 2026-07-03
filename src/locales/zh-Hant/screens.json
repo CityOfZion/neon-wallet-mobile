@@ -418,8 +418,8 @@
         "title": "個人化"
       },
       "security": {
-        "backupButtonLabel": "備份 NEON",
-        "importBackupButtonLabel": "匯入 NEON 備份",
+        "backupButtonLabel": "備份 Neon",
+        "importBackupButtonLabel": "匯入備份",
         "title": "安全性",
         "verificationButtonLabel": "驗證",
         "verificationSubtitle": {

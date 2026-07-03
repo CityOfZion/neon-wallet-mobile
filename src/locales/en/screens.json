@@ -418,8 +418,8 @@
         "title": "Personalisation"
       },
       "security": {
-        "backupButtonLabel": "Backup NEON",
-        "importBackupButtonLabel": "Import NEON Backup",
+        "backupButtonLabel": "Backup Neon",
+        "importBackupButtonLabel": "Import backup",
         "title": "Security",
         "verificationButtonLabel": "Verification",
         "verificationSubtitle": {

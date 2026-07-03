@@ -33,11 +33,15 @@ import type {
   TImportEncryptedKeySelectionModalParams,
   TImportKeySelectionModalParams,
   TImportMnemonicSelectionModalParams,
+  TMigrateFromNeon2AccountSelectionModalParams,
+  TMigrateFromNeon2PasswordModalParams,
   TNeo3NeoXBridgeConfirmationModalParams,
   TNeo3NeoXBridgeDetailsModalParams,
   TNeo3VoteCandidateDetailsModalParams,
   TNeo3VoteConfirmationModalParams,
   TNeo3VoteSupportUsModalParams,
+  TNep6BackupImportAccountSelectionModalParams,
+  TNep6BackupImportPasswordModalParams,
   TNetworkUrlSelectionModalParams,
   TNotificationContextModalParams,
   TOnboardingBackupMnemonicModalParams,
@@ -227,6 +231,10 @@ export type TRootStackParamList = {
   AboutExtraIdToReceiveModal: undefined
 
   ImportBackupModal: undefined
+  Nep6BackupImportAccountSelectionModal: TNep6BackupImportAccountSelectionModalParams
+  Nep6BackupImportPasswordModal: TNep6BackupImportPasswordModalParams
+  MigrateFromNeon2AccountSelectionModal: TMigrateFromNeon2AccountSelectionModalParams
+  MigrateFromNeon2PasswordModal: TMigrateFromNeon2PasswordModalParams
   CreateBackupModal: undefined
   PasswordModal: TPasswordModalParams
   CreatePasswordModal: TCreatePasswordModalParams

@@ -103,7 +103,7 @@
     },
     "walletTasksManager": {
       "useBackupReminderNotificationProcess": {
-        "notificationDescription": "我們建議在\"更多 > 設定 > 安全性 > 備份 NEON\"中建立新的備份檔案以保護您的錢包。為了增強安全性，您還可以在\"錢包 > 三點 > 備份助記詞\"中手動匯出助記詞，並在\"錢包 > 帳戶 > 三點 > 匯出金鑰\"中匯出私密金鑰。",
+        "notificationDescription": "我們建議在\"更多 > 設定 > 安全性 > 備份 Neon\"中建立新的備份檔案以保護您的錢包。為了增強安全性，您還可以在\"錢包 > 三點 > 備份助記詞\"中手動匯出助記詞，並在\"錢包 > 帳戶 > 三點 > 匯出金鑰\"中匯出私密金鑰。",
         "notificationTitle": "建立新的備份檔案！"
       }
     }

@@ -27,7 +27,7 @@ export const CreateBackupModalSuccessContent = ({ password }: TProps) => {
   const handleSavePassword = async () => {
     if (!qrCodeText) return
 
-    await writeFile(`NEON-qr-code-${DateHelper.getNowUnix()}`, qrCodeText, 'image/png')
+    await writeFile(`neon-qr-code-${DateHelper.getNowUnix()}`, qrCodeText, 'image/png')
 
     ToastHelper.success({ message: tCommonGeneral('savedSuccessfully') })
   }

@@ -107,6 +107,9 @@
     "firstWalletName": "My first wallet",
     "importedName": "Imported wallet",
     "ledgerName": "Ledger wallet",
+    "migratedAccountLabel": "Migrated account",
+    "migratedContactName": "Migrated contact",
+    "migratedWalletName": "Migrated wallet",
     "mnemonicWalletName": "Mnemonic wallet",
     "watchAccount": "Watch account"
   },
