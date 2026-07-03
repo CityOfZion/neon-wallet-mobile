@@ -183,7 +183,7 @@
       "savePasswordButtonLabel": "保存密码二维码",
       "submitButtonLabel": "返回设置"
     },
-    "title": "备份 NEON"
+    "title": "备份 Neon"
   },
   "createPassword": {
     "errors": {
@@ -348,9 +348,12 @@
     "tokenNameLabel": "名称："
   },
   "importBackup": {
-    "description1": "如果您失去了钱包的访问权限，可以通过本地备份文件导入钱包。只需找到您的本地备份文件，并输入您创建备份文件时设置的密码，即可恢复访问。",
-    "description2": "首先，找到您的备份文件：",
-    "locateButtonLabel": "查找备份",
+    "backupFileDetected": "检测到 Neon 备份文件",
+    "description1": "您可以通过导入 Neon 备份、NEP-6 备份或 Neon 2 迁移文件来恢复您的钱包。",
+    "description2": "首先，请定位您的文件：",
+    "locateButtonLabel": "定位文件",
+    "migrateFileDetected": "检测到 Neon 2 迁移文件",
+    "nep6FileDetected": "检测到 NEP-6 备份文件",
     "password": {
       "buttonLabel": "导入备份",
       "description": "为了导入您的备份文件，请输入您创建备份时设置的密码：",
@@ -360,8 +363,7 @@
       "description": "备份导入成功！",
       "submitButtonLabel": "返回设置"
     },
-    "successFile": "已识别备份！",
-    "title": "导入 NEON 备份"
+    "title": "导入备份"
   },
   "importEncryptedKeySelection": {
     "accountAlreadyExists": "账户已存在",
@@ -379,10 +381,32 @@
   "languageSelection": {
     "title": "语言"
   },
+  "migrateFromNeon2AccountSelection": {
+    "noSelectableAccounts_one": "没有可导入的账户。以下账户已被导入：",
+    "noSelectableAccounts_other": "没有可导入的账户。以下账户已被导入：",
+    "selectLabel_one": "我们找到以下可导入的账户：",
+    "selectLabel_other": "我们找到以下可导入的账户：",
+    "title": "从 Neon 2 迁移"
+  },
+  "migrateFromNeon2Password": {
+    "buttonLabel": "迁移钱包",
+    "description_one": "请输入用于加密所选账户的密码。",
+    "description_other": "请输入用于加密所选账户的密码。",
+    "importError": "迁移账户时出错。",
+    "inputLabel": "密码",
+    "inputPlaceholder": "输入密码…",
+    "passwordError": "密码错误",
+    "samePasswordLabel": "对所有账户使用相同的密码",
+    "success": {
+      "buttonLabel": "查看钱包",
+      "description": "账户迁移成功！"
+    },
+    "title": "从 Neon 2 迁移"
+  },
   "neo3NeoXBridgeAbout": {
     "description": "轻松在网络之间桥接您的加密资产，无需离开您的钱包。",
     "explanation": "区块链彼此独立，无法相互交互 - 这就是桥接发挥作用的地方。原理上类似于到不同国家旅行时兑换货币，桥接允许您在各种区块链之间转移资产。",
-    "neonAdvantage": "在 NEON 中直接即时桥接代币既方便又能帮您节省时间并支付更低的费用。",
+    "neonAdvantage": "在 Neon 中直接即时桥接代币既方便又能帮您节省时间并支付更低的费用。",
     "title": "关于桥接代币",
     "warningLabel": "COZ 不是此桥接流程的维护者 - Neo Global Development 是维护者。"
   },
@@ -495,6 +519,28 @@
     "voteForCozButtonLabel": "为 COZ 投票",
     "youCanSupportUsLabel": "如果您喜欢使用 Neon 或我们其他的产品，您可以通过投票支持我们，推动我们的发展。"
   },
+  "nep6BackupImportAccountSelection": {
+    "noSelectableAccounts_one": "没有可导入的账户。以下账户已被导入：",
+    "noSelectableAccounts_other": "没有可导入的账户。以下账户已被导入：",
+    "selectLabel_one": "我们找到以下可导入的账户：",
+    "selectLabel_other": "我们找到以下可导入的账户：",
+    "title": "导入备份"
+  },
+  "nep6BackupImportPassword": {
+    "buttonLabel": "导入备份",
+    "description_one": "请输入用于加密所选账户的密码。",
+    "description_other": "请输入用于加密所选账户的密码。",
+    "importError": "导入账户时出错。",
+    "inputLabel": "密码",
+    "inputPlaceholder": "输入密码…",
+    "passwordError": "密码错误",
+    "samePasswordLabel": "对所有账户使用相同的密码",
+    "success": {
+      "buttonLabel": "查看钱包",
+      "description": "账户导入成功！"
+    },
+    "title": "导入备份"
+  },
   "networkUrlSelection": {
     "antiMevLabel": "反MEV",
     "blockHeightLabel": "区块高度：",
@@ -517,7 +563,8 @@
     "warningLabel": "任何拥有您助记词短语的人都可以访问您的钱包…请妥善保管！"
   },
   "onboardingImport": {
-    "backupImportDescription": "或者，您也可以从Neon备份文件恢复钱包",
+    "backupFileDetected": "检测到 Neon 备份文件",
+    "backupImportDescription": "或者，您也可以从 Neon 备份、NEP-6 备份或 Neon 2 迁移文件恢复钱包",
     "importBackupConfirmPassword": {
       "backupPasswordLabel": "备份密码",
       "backupPasswordPlaceholder": "输入备份密码…",
@@ -528,12 +575,13 @@
     "importDescription": "输入地址、加密密钥、私钥或助记词：",
     "importDetailsLabel": "导入详情",
     "importDetailsPlaceholder": "输入详情…",
-    "locateButtonLabel": "定位备份",
+    "locateButtonLabel": "定位文件",
     "messages": {
       "mnemonicComplete": "助记词完成",
-      "mnemonicIncorrect": "助记词不正确",
-      "successFile": "备份已找到！"
+      "mnemonicIncorrect": "助记词不正确"
     },
+    "migrateFileDetected": "检测到 Neon 2 迁移文件",
+    "nep6FileDetected": "检测到 NEP-6 备份文件",
     "scanButtonLabel": "扫描二维码",
     "title": "导入钱包"
   },
@@ -791,7 +839,7 @@
   },
   "swapExplanation": {
     "description1": "无需交易所即可跨链兑换代币。",
-    "description2": "在 NEON 中直接且即时兑换代币既方便又能节省时间和手续费。",
+    "description2": "在 Neon 中直接且即时兑换代币既方便又能节省时间和手续费。",
     "help": "需要帮助？在线支持",
     "title": "兑换是如何工作的？"
   },

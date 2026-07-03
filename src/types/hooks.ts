@@ -2,8 +2,19 @@ import type { TBSToken, TTransactionDefault, TTransactionUtxo } from '@cityofzio
 import type { TBSStellarName } from '@cityofzion/bs-stellar'
 import type { ImageURISource } from 'react-native'
 
+import type { TValidationSchemaHelperNeonBackupFileSchema } from '@/helpers/ValidationSchemaHelper'
+
 import type { TBlockchainServiceKey, TNetwork } from './blockchain'
-import type { TAccount, TAccountType, TSkin, TWallet, TWalletBackupStatus, TWalletType } from './store'
+import type {
+  TAccount,
+  TAccountType,
+  TContact,
+  TSkin,
+  TSwapRecord,
+  TWallet,
+  TWalletBackupStatus,
+  TWalletType,
+} from './store'
 
 export type TUseActionsData = Record<string, any>
 
@@ -68,6 +79,72 @@ export type TUseEditWalletParams = {
 }
 
 export type TUseImportActionInputType = 'key' | 'mnemonic' | 'encrypted' | 'address'
+
+//* Backup and migrate types *//
+
+export type TUseNep6ParsedContent = {
+  accounts: TUseImportNep6Account[]
+}
+
+export type TUseNeonMigrateParsedContent = {
+  accounts: TUseImportNep6Account[]
+  contacts: TUseNeonMigrateContacts[]
+}
+
+export type TUseImportNep6Account = {
+  address: string
+  label: string
+  key: string
+  blockchain: TBlockchainServiceKey
+}
+
+export type TUseNeonMigrateContacts = {
+  name: string
+  addresses: { address: string; blockchain: TBlockchainServiceKey }[]
+}
+
+export type TUseImportNep6DecryptedAccount = TUseImportNep6Account & {
+  decryptedKey: string
+}
+
+export type TUseNeonMigrateGeneratedData = {
+  walletToCreate: TUseCreateWalletParams
+  accountsToCreate: TUseImportAccountsParams['accountsToImport']
+  contactsToCreate: TContact[]
+}
+
+export type TUseNep6GeneratedData = {
+  walletToCreate: TUseCreateWalletParams
+  accountsToCreate: TUseImportAccountsParams['accountsToImport']
+}
+
+export type TUseNeonBackupWalletToCreate = {
+  walletToCreate: TWallet & { mnemonic?: string }
+  accountsToImport: TUseImportAccountsParams['accountsToImport']
+}
+
+export type TUseNeonBackupGeneratedData = {
+  walletsToCreate: TUseNeonBackupWalletToCreate[]
+  contactsToCreate: TContact[]
+  swapRecordsToCreate: TSwapRecord[]
+}
+
+export type TUseNeonMigrateData = {
+  content: TUseNeonMigrateParsedContent
+  type: 'migrate'
+}
+
+export type TUseNep6Data = {
+  content: TUseNep6ParsedContent
+  type: 'nep6'
+}
+
+export type TUseNeonBackupData = {
+  type: 'backup'
+  backupFile: TValidationSchemaHelperNeonBackupFileSchema
+}
+
+export type TUseImportFromFileData = TUseNeonMigrateData | TUseNep6Data | TUseNeonBackupData
 
 export type TUseImageErrorProps = {
   source?: ImageURISource

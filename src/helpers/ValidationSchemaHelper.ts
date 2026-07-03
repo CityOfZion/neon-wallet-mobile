@@ -8,9 +8,13 @@ export type TValidationSchemaHelperBackupAccountSchema = zod.infer<typeof backup
 
 export type TValidationSchemaHelperBackupWalletSchema = zod.infer<typeof backupWalletSchema>
 
-export type TValidationSchemaHelperBackupDataSchema = zod.infer<typeof backupDataSchema>
+export type TValidationSchemaHelperNeonBackupDataSchema = zod.infer<typeof neonBackupDataSchema>
 
-export type TValidationSchemaHelperBackupFileSchema = zod.infer<typeof backupFileSchema>
+export type TValidationSchemaHelperNeonBackupFileSchema = zod.infer<typeof neonBackupFileSchema>
+
+export type TValidationSchemaHelperNeonMigrateSchema = zod.infer<typeof neonMigrateSchema>
+
+export type TValidationSchemaHelperNep6BackupSchema = zod.infer<typeof nep6BackupSchema>
 
 const accountSchema = zod.object({
   id: zod.string(),
@@ -105,24 +109,52 @@ const backupWalletSchema = walletSchema
     accounts: zod.array(backupAccountSchema),
   })
 
-const backupDataSchema = zod.object({
+const neonBackupDataSchema = zod.object({
   wallets: zod.array(backupWalletSchema),
   contacts: zod.array(contactSchema),
   swapRecords: zod.array(swapSchema).optional(),
 })
 
-const backupFileSchema = zod.object({
+const neonBackupFileSchema = zod.object({
   version: zod.number(),
   data: zod.string(),
 })
 
+const neonMigrateAccountSchema = zod.object({
+  address: zod.string().nullish(),
+  label: zod.string().nullish(),
+  key: zod.string().nullish(),
+})
+
+const neonMigrateContactSchema = zod.object({
+  name: zod.string().nullish(),
+  addresses: zod.array(zod.string()).nullish(),
+})
+
+const neonMigrateSchema = zod.object({
+  accounts: zod.array(neonMigrateAccountSchema),
+  contacts: zod.array(neonMigrateContactSchema),
+})
+
+const nep6BackupAccountSchema = zod.object({
+  address: zod.string(),
+  label: zod.string().nullish(),
+  key: zod.string().nullish(),
+})
+
+const nep6BackupSchema = zod.object({
+  version: zod.string(),
+  scrypt: zod.looseObject({}),
+  accounts: zod.array(nep6BackupAccountSchema).nonempty(),
+})
+
 export class ValidationSchemaHelper {
-  static paseBackupFile(data: unknown): TValidationSchemaHelperBackupFileSchema {
-    return backupFileSchema.parse(data)
+  static parseBackupFile(data: unknown): TValidationSchemaHelperNeonBackupFileSchema {
+    return neonBackupFileSchema.parse(data)
   }
 
-  static parseBackupData(data: unknown): TValidationSchemaHelperBackupDataSchema {
-    return backupDataSchema.parse(data)
+  static parseBackupData(data: unknown): TValidationSchemaHelperNeonBackupDataSchema {
+    return neonBackupDataSchema.parse(data)
   }
 
   static parseAccount(data: unknown): TValidationSchemaHelperAccountSchema {
@@ -131,5 +163,13 @@ export class ValidationSchemaHelper {
 
   static parseWallet(data: unknown): TValidationSchemaHelperWalletSchema {
     return walletSchema.parse(data)
+  }
+
+  static parseNeonMigrate(data: unknown): TValidationSchemaHelperNeonMigrateSchema {
+    return neonMigrateSchema.parse(data)
+  }
+
+  static parseNep6Backup(data: unknown): TValidationSchemaHelperNep6BackupSchema {
+    return nep6BackupSchema.parse(data)
   }
 }

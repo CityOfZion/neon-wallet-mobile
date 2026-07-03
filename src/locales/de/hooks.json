@@ -14,6 +14,14 @@
       "mnemonicIncomplete": "Mnemonic unvollständig"
     }
   },
+  "useImportFromFile": {
+    "backupFileDetected": "Neon-Backup-Datei erkannt",
+    "errors": {
+      "invalidFile": "Die ausgewählte Datei ist keine gültige Neon-Backup-, NEP-6-Backup- oder Neon 2-Migrationsdatei."
+    },
+    "migrateFileDetected": "Neon 2-Migrationsdatei erkannt",
+    "nep6FileDetected": "NEP-6-Backup-Datei erkannt"
+  },
   "useItemNfiAuthentication": {
     "authenticateMessage": "Scannen Sie Ihr AKTUELLES NFI Objekt",
     "confirmLinkMessage": "Bitte bestätigen Sie Ihr NFI Objekt erneut",
@@ -44,13 +52,10 @@
     "twinNfiError": "Ihre ITEM Twin Informationen konnten nicht abgerufen werden. Bitte kontaktieren Sie den Support.",
     "wrongNfiPasscodeError": "Falscher NFI Passcode"
   },
-  "useNeonImportBackup": {
+  "useNeonBackupFile": {
     "errors": {
-      "deprecatedFile": "Sie haben eine veraltete Backup-Datei ausgewählt. Bitte erstellen Sie ein neues Backup in der neuesten NEON Version.",
-      "importData": "Beim Importieren der Daten ist ein Fehler aufgetreten (Möglicherweise wurde es teilweise importiert).",
-      "wrongFile": "Sie haben die falsche Datei ausgewählt. Bitte wählen Sie eine Datei mit der Erweiterung '{{extension}}'.",
-      "wrongPassword": "Das Passwort ist falsch. Bitte versuchen Sie es erneut.",
-      "wrongVersion": "Die Backup-Datei Version wird nicht unterstützt. Bitte erstellen Sie ein neues Backup in der neuesten NEON Version."
+      "importData": "Beim Importieren der Daten ist ein Fehler aufgetreten (möglicherweise wurde es teilweise importiert).",
+      "wrongPassword": "Das Passwort ist falsch. Bitte versuchen Sie es erneut."
     }
   },
   "usePasswordAuthentication": {
