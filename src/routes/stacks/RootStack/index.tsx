@@ -202,6 +202,26 @@ export const RootStack = () => {
           getComponent={() => require('@/routes/modals/ImportBackupModal').ImportBackupModal}
         />
         <RootNavigator.Screen
+          name="Nep6BackupImportAccountSelectionModal"
+          getComponent={() =>
+            require('@/routes/modals/Nep6BackupImportAccountSelectionModal').Nep6BackupImportAccountSelectionModal
+          }
+        />
+        <RootNavigator.Screen
+          name="Nep6BackupImportPasswordModal"
+          getComponent={() => require('@/routes/modals/Nep6BackupImportPasswordModal').Nep6BackupImportPasswordModal}
+        />
+        <RootNavigator.Screen
+          name="MigrateFromNeon2AccountSelectionModal"
+          getComponent={() =>
+            require('@/routes/modals/MigrateFromNeon2AccountSelectionModal').MigrateFromNeon2AccountSelectionModal
+          }
+        />
+        <RootNavigator.Screen
+          name="MigrateFromNeon2PasswordModal"
+          getComponent={() => require('@/routes/modals/MigrateFromNeon2PasswordModal').MigrateFromNeon2PasswordModal}
+        />
+        <RootNavigator.Screen
           name="CreateBackupModal"
           getComponent={() => require('@/routes/modals/CreateBackupModal').CreateBackupModal}
         />

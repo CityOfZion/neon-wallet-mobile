@@ -21,7 +21,12 @@ import type { TTwInputProps } from '@/components/TwInput'
 import type { TDepositActionsData } from '@/routes/screens/BuyAndSellTokensScreen'
 
 import type { TBlockchainServiceKey, TNetwork } from './blockchain'
-import type { TUseTransactionsTransaction } from './hooks'
+import type {
+  TUseImportNep6Account,
+  TUseNeonMigrateParsedContent,
+  TUseNep6ParsedContent,
+  TUseTransactionsTransaction,
+} from './hooks'
 import type { TTokenBalance, TUseBalanceOptionShowType } from './query'
 import type { TRootStackScreenProps } from './stacks'
 import type {
@@ -360,6 +365,27 @@ export type TImportKeySelectionModalParams = {
 export type TImportEncryptedKeySelectionModalParams = {
   encryptedKey: string
   onSuccess: () => void
+}
+
+export type TNep6BackupImportAccountSelectionModalParams = {
+  content: TUseNep6ParsedContent
+  onSuccess?: () => void
+}
+
+export type TMigrateFromNeon2AccountSelectionModalParams = {
+  content: TUseNeonMigrateParsedContent
+  onSuccess?: () => void
+}
+
+export type TNep6BackupImportPasswordModalParams = {
+  accounts: TUseImportNep6Account[]
+  onSuccess?: () => void
+}
+
+export type TMigrateFromNeon2PasswordModalParams = {
+  accounts: TUseImportNep6Account[]
+  content: TUseNeonMigrateParsedContent
+  onSuccess?: () => void
 }
 
 export type TNeo3NeoXBridgeDetailsModalParams = {

@@ -1,6 +1,8 @@
---- a/node_modules/@cityofzion/neon-core-legacy/package.json
-+++ b/node_modules/@cityofzion/neon-core-legacy/package.json
-@@ -17,8 +17,7 @@
+diff --git a/node_modules/@cityofzion/neon-core/package.json b/node_modules/@cityofzion/neon-core/package.json
+index 600c28f..2928251 100644
+--- a/node_modules/@cityofzion/neon-core/package.json
++++ b/node_modules/@cityofzion/neon-core/package.json
+@@ -20,8 +20,7 @@
    ],
    "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
    "license": "MIT",
