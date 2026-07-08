@@ -2,6 +2,7 @@ import React from 'react'
 
 import type { TNftResponse } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { Skeleton } from '@/components/Skeleton'
@@ -16,6 +17,7 @@ type TProps = {
 }
 
 export const AccountTransactionsTransactionItemNft = ({ blockchain, nft }: TProps) => {
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
   const { data, isLoading } = useNftQuery(blockchain, nft.hash, nft.collection?.hash)
 
   return (
@@ -41,7 +43,7 @@ export const AccountTransactionsTransactionItemNft = ({ blockchain, nft }: TProp
             )}
 
             <Text className="max-w-36 font-sans-regular text-xs text-gray-100" numberOfLines={1}>
-              #{nft.hash}
+              {nft.hash ? `#${nft.hash}` : tCommonGeneral('emptyData')}
             </Text>
           </View>
         </View>
