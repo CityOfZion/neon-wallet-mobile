@@ -12,6 +12,7 @@ import { RefreshControl } from '@/components/RefreshControl'
 import { ScreenLoader } from '@/components/ScreenLoader'
 import { Skeleton } from '@/components/Skeleton'
 
+import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { LinkHelper } from '@/helpers/LinkHelper'
 
 import { useNftsQuery } from '@/hooks/useNftsQuery'
@@ -24,43 +25,43 @@ import { AccountNftsScreenNftImage } from './AccountNftsScreenNftImage'
 
 import type { TWalletsStackScreenProps } from '@/types/stacks'
 
-const renderItem: ListRenderItem<TNftResponse> = ({ item }) => {
-  return (
-    <PressableScale
-      disabled={!item.explorerUri}
-      onPress={LinkHelper.open.bind(null, item.explorerUri!)}
-      className="flex-row items-center gap-4 rounded-lg bg-gray-800 p-3"
-    >
-      <AccountNftsScreenNftImage image={item.image} />
+const { t } = I18nextHelper.get()
 
-      <View className="flex-1">
-        <View className="flex-row items-center gap-1">
-          {item.collection?.image && (
-            <Image contentFit="cover" source={{ uri: item.collection.image }} className="size-4 rounded-full" />
-          )}
+const renderItem: ListRenderItem<TNftResponse> = ({ item }) => (
+  <PressableScale
+    disabled={!item.explorerUri}
+    className="flex-row items-center gap-4 rounded-lg bg-gray-800 p-3"
+    onPress={LinkHelper.open.bind(null, item.explorerUri!)}
+  >
+    <AccountNftsScreenNftImage image={item.image} />
 
-          {item.collection?.name && (
-            <Text numberOfLines={1} ellipsizeMode="tail" className="max-w-28 font-sans-medium text-xs text-gray-300">
-              {item.collection.name}
-            </Text>
-          )}
+    <View className="flex-1">
+      <View className="flex-row items-center gap-1">
+        {item.collection?.image && (
+          <Image contentFit="cover" source={{ uri: item.collection.image }} className="size-4 rounded-full" />
+        )}
 
-          <Text ellipsizeMode="middle" numberOfLines={1} className="max-w-16 font-sans-medium text-xs text-neon">
-            #{item.hash}
-          </Text>
-        </View>
-
-        {item.name && (
-          <Text className="font-sans-bold text-lg capitalize text-white" numberOfLines={1}>
-            {item.name}
+        {item.collection?.name && (
+          <Text numberOfLines={1} ellipsizeMode="tail" className="max-w-28 font-sans-medium text-xs text-gray-300">
+            {item.collection.name}
           </Text>
         )}
+
+        <Text ellipsizeMode="middle" numberOfLines={1} className="max-w-16 font-sans-medium text-xs text-neon">
+          {item.hash ? `#${item.hash}` : t('common:general.emptyData')}
+        </Text>
       </View>
 
-      {item.explorerUri && <DoraIcon aria-hidden className="size-6 text-neon" />}
-    </PressableScale>
-  )
-}
+      {item.name && (
+        <Text className="font-sans-bold text-lg capitalize text-white" numberOfLines={1}>
+          {item.name}
+        </Text>
+      )}
+    </View>
+
+    {item.explorerUri && <DoraIcon aria-hidden className="size-6 text-neon" />}
+  </PressableScale>
+)
 
 export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsScreen'>) => {
   const { account } = props.route.params
