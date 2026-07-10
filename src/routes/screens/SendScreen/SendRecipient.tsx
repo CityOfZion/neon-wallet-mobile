@@ -66,19 +66,23 @@ export const SendRecipient = ({
   const navigation = useNavigation()
 
   const isDisabled = !selectedAccount || isDisabledMaxAmount
-  const isAmountDisabled = isDisabled || !recipient.token || !recipient.address
+  const isReceiverAddressDisabled = isDisabled || !recipient.token
+  const isAmountDisabled = isReceiverAddressDisabled || !recipient.address
 
   const { validateAddressOrNS, validatedAddress, isValidatingAddressOrDomainAddress } = useNameService()
 
-  const handleChangeAmount = (value: string) => {
-    onUpdateRecipient({
-      amount: value,
-      isAmountLoading: true,
-    })
+  const handleChangeAmount = (amount: string) => {
+    amount = amount.trim()
+
+    const isAmountLoading = !!amount
+
+    onUpdateRecipient({ amount, isAmountLoading })
 
     debounce(() => {
+      if (!isAmountLoading) return
+
       onUpdateRecipient({
-        amount: new BSBigHumanAmount(value, recipient.token?.token?.decimals).toFormatted(),
+        amount: new BSBigHumanAmount(amount, recipient.token?.token?.decimals).toFormatted(),
         isAmountLoading: false,
       })
     })
@@ -167,7 +171,7 @@ export const SendRecipient = ({
         <ActionAddressButton
           label={t('selectButtonLabel')}
           address={recipient.address}
-          disabled={isDisabled}
+          disabled={isReceiverAddressDisabled}
           contentProps={{ className: 'px-3 gap-x-2' }}
           isLoading={isValidatingAddressOrDomainAddress}
           onPress={() =>
