@@ -107,6 +107,10 @@ export const RootStack = () => {
           }
         />
         <RootNavigator.Screen
+          name="SendTipCustomAmountModal"
+          getComponent={() => require('@/routes/modals/SendTipCustomAmountModal').SendTipCustomAmountModal}
+        />
+        <RootNavigator.Screen
           name="SendConfirmModal"
           getComponent={() => require('@/routes/modals/SendConfirmModal').SendConfirmModal}
         />

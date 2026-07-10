@@ -392,7 +392,7 @@
       "feeError": "计算费用错误",
       "insufficientFunds": "你的余额不足",
       "invalidKey": "账户密钥有错误",
-      "noAmountToTip": "不有足够的金额支付提议",
+      "noAmountToTip": "余额不足以支付小费",
       "noFiatPriceToTip": "找不到提议的法币价格",
       "noTokenToTip": "没有代币支付提议",
       "sendError": "交易发送失败",
@@ -404,8 +404,10 @@
       "title": "转账完成"
     },
     "tipCheckbox": {
-      "tipCheckboxLabel": "我想用 {{ amount }} {{ tokenSymbol }}（估计 {{ fiatAmount }}）的提议来支持 COZ",
-      "tipCheckboxOptionalLabel": "*可选"
+      "editButtonLabel": "编辑金额",
+      "tipCheckboxLabel": "我想通过 {{ percentage }}% 的小费支持 COZ，金额为 {{ amount }} {{ tokenSymbol }}（{{ fiatAmount }}）",
+      "tipCheckboxOptionalLabel": "*可选",
+      "tipCustomAmountCheckboxLabel": "我想通过小费支持 COZ，金额为 {{ amount }} {{ tokenSymbol }}（{{ fiatAmount }}）"
     },
     "title": "发送代币"
   },

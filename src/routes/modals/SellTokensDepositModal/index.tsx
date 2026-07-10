@@ -124,9 +124,15 @@ export const SellTokensDepositModal = ({
   }
 
   const handleChangeAmount = (amount: string) => {
-    setData({ amount, isAmountLoading: true })
+    amount = amount.trim()
+
+    const isAmountLoading = !!amount
+
+    setData({ amount, isAmountLoading })
 
     debounceAmount(() => {
+      if (!isAmountLoading) return
+
       setData({
         amount: new BSBigHumanAmount(amount, tokenBalance?.token?.decimals).toFormatted(),
         isAmountLoading: false,
@@ -208,8 +214,9 @@ export const SellTokensDepositModal = ({
 
   useEffect(() => {
     debounceAddress(() => {
-      if (!actionData.address || !actionData.account || service!.validateAddress(actionData.address)) {
+      if (!actionData.address || !actionData.account || !service || service.validateAddress(actionData.address)) {
         clearErrors('address')
+
         return
       }
 
@@ -425,6 +432,7 @@ export const SellTokensDepositModal = ({
               placeholder={t('form.amount.placeholder')}
               className="ml-auto mr-0 w-30 whitespace-nowrap rounded-md bg-gray-800"
               value={actionData.amount}
+              maxLength={18}
               disabled={isAmountDisabled}
               editable={!isAmountDisabled}
               error={!!amountError}
