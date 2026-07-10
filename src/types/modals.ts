@@ -1,4 +1,5 @@
 import type {
+  BSBigNumber,
   IBlockchainService,
   TBridgeToken,
   TBSBridgeName,
@@ -183,6 +184,13 @@ export type TDappPermissionSignatureScopeModalParams = {
 
 export type TSendTipUncheckedConfirmationModalParams = {
   onConfirmation: (value: boolean) => void
+}
+
+export type TSendTipCustomAmountModalParams = {
+  token: TBSToken
+  minBn: BSBigNumber
+  customAmountBn?: BSBigNumber
+  onSave: (customAmountBn?: BSBigNumber) => void
 }
 
 export type TSendConfirmModalParams = {

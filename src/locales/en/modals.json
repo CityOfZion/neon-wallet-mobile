@@ -762,6 +762,14 @@
     "transactionHashLabel": "Transaction hash",
     "transactionLabel": "Transaction {{ order }}"
   },
+  "sendTipCustomAmount": {
+    "amountInputLabel": "Tip amount",
+    "amountInputPlaceholder": "Enter the tip amount",
+    "description": "Set a custom tip amount or reset it to the default of {{ percentage }}% of the transaction.",
+    "minAmountError": "The tip amount must be at least {{ amount }} {{ tokenSymbol }}",
+    "resetButtonLabel": "Reset to {{ percentage }}%",
+    "title": "Edit tip amount"
+  },
   "sendTipUncheckedConfirmation": {
     "description": "COZ loves building products for our community of users. Tips are a great way to show the team that you appreciate their work and allow us to keep the wallet free of external influences. Why not toss a coin to your devs?",
     "keepTip": "Keep Tip (Recommended)",
