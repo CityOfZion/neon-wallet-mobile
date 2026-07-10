@@ -392,7 +392,7 @@
       "feeError": "Error calculating the fee",
       "insufficientFunds": "You don't have enough balance",
       "invalidKey": "There was an error with the account key",
-      "noAmountToTip": "Not enough amount to pay the tip",
+      "noAmountToTip": "Insufficient balance to pay the tip",
       "noFiatPriceToTip": "Fiat price not found to the tip",
       "noTokenToTip": "No token to pay the tip",
       "sendError": "Transaction failed to send",
@@ -404,8 +404,10 @@
       "title": "Transfer completed"
     },
     "tipCheckbox": {
-      "tipCheckboxLabel": "I want to support COZ with a tip of {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})",
-      "tipCheckboxOptionalLabel": "*Optional"
+      "editButtonLabel": "Edit amount",
+      "tipCheckboxLabel": "I want to support COZ with a {{ percentage }}% tip of {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})",
+      "tipCheckboxOptionalLabel": "*Optional",
+      "tipCustomAmountCheckboxLabel": "I want to support COZ with a tip of {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})"
     },
     "title": "Send tokens"
   },

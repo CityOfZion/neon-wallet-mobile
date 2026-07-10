@@ -392,7 +392,7 @@
       "feeError": "計算手續費錯誤",
       "insufficientFunds": "您的餘額不足",
       "invalidKey": "賬戶密鑰有錯誤",
-      "noAmountToTip": "沒有足夠的金額支付小費",
+      "noAmountToTip": "餘額不足以支付小費",
       "noFiatPriceToTip": "找不到小費的法幣價格",
       "noTokenToTip": "沒有代幣支付小費",
       "sendError": "交易發送失敗",
@@ -404,8 +404,10 @@
       "title": "轉帳完成"
     },
     "tipCheckbox": {
-      "tipCheckboxLabel": "我想用 {{ amount }} {{ tokenSymbol }}（估計 {{ fiatAmount }}）的小費來支持 COZ",
-      "tipCheckboxOptionalLabel": "*可選"
+      "editButtonLabel": "編輯金額",
+      "tipCheckboxLabel": "我想透過 {{ percentage }}% 的小費支持 COZ，金額為 {{ amount }} {{ tokenSymbol }}（{{ fiatAmount }}）",
+      "tipCheckboxOptionalLabel": "*可選",
+      "tipCustomAmountCheckboxLabel": "我想透過小費支持 COZ，金額為 {{ amount }} {{ tokenSymbol }}（{{ fiatAmount }}）"
     },
     "title": "發送代幣"
   },

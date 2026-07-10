@@ -392,7 +392,7 @@
       "feeError": "Erro ao calcular a taxa",
       "insufficientFunds": "Você não tem saldo suficiente",
       "invalidKey": "Houve um erro com a chave da conta",
-      "noAmountToTip": "Não há saldo suficiente para pagar a gorjeta",
+      "noAmountToTip": "Saldo insuficiente para pagar a gorjeta",
       "noFiatPriceToTip": "Preço fiat não encontrado para a gorjeta",
       "noTokenToTip": "Sem token para pagar a gorjeta",
       "sendError": "Falha ao enviar a transação",
@@ -404,8 +404,10 @@
       "title": "Transferência concluída"
     },
     "tipCheckbox": {
-      "tipCheckboxLabel": "Desejo apoiar a COZ com uma gorjeta de {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})",
-      "tipCheckboxOptionalLabel": "*Opcional"
+      "editButtonLabel": "Editar valor",
+      "tipCheckboxLabel": "Quero apoiar a COZ com uma gorjeta de {{ percentage }}% de {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})",
+      "tipCheckboxOptionalLabel": "*Opcional",
+      "tipCustomAmountCheckboxLabel": "Quero apoiar a COZ com uma gorjeta de {{ amount }} {{ tokenSymbol }} ({{ fiatAmount }})"
     },
     "title": "Enviar tokens"
   },
