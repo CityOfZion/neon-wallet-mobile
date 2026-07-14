@@ -183,7 +183,7 @@
       "savePasswordButtonLabel": "Salvar QR Code da Senha",
       "submitButtonLabel": "Voltar para Configurações"
     },
-    "title": "Backup NEON"
+    "title": "Backup Neon"
   },
   "createPassword": {
     "errors": {
@@ -348,9 +348,12 @@
     "tokenNameLabel": "Nome:"
   },
   "importBackup": {
-    "description1": "No caso de perder acesso à sua carteira, você pode importá-la de um arquivo de backup local. Simplesmente localize seu arquivo de backup local e digite a senha que usou ao criar o arquivo de backup e seu acesso será restaurado.",
-    "description2": "Para começar, localize seu arquivo de backup:",
-    "locateButtonLabel": "Localizar backup",
+    "backupFileDetected": "Arquivo de backup Neon detectado",
+    "description1": "Você pode restaurar suas carteiras importando um arquivo de backup Neon, backup NEP-6 ou de migração da Neon 2.",
+    "description2": "Para começar, localize seu arquivo:",
+    "locateButtonLabel": "Localizar arquivo",
+    "migrateFileDetected": "Arquivo de migração da Neon 2 detectado",
+    "nep6FileDetected": "Arquivo de backup NEP-6 detectado",
     "password": {
       "buttonLabel": "Importar backup",
       "description": "Para importar seu arquivo de backup, por favor, forneça a senha que você usou para criar o backup:",
@@ -360,8 +363,7 @@
       "description": "Backup importado com sucesso!",
       "submitButtonLabel": "Voltar para Configurações"
     },
-    "successFile": "Backup identificado!",
-    "title": "Importar Backup NEON"
+    "title": "Importar backup"
   },
   "importEncryptedKeySelection": {
     "accountAlreadyExists": "Esta conta já existe",
@@ -379,10 +381,32 @@
   "languageSelection": {
     "title": "Idioma"
   },
+  "migrateFromNeon2AccountSelection": {
+    "noSelectableAccounts_one": "Nenhuma conta disponível para importar. A conta abaixo já foi importada:",
+    "noSelectableAccounts_other": "Nenhuma conta disponível para importar. As contas abaixo já foram importadas:",
+    "selectLabel_one": "Encontramos a seguinte conta para importar:",
+    "selectLabel_other": "Encontramos as seguintes contas para importar:",
+    "title": "Migrar da Neon 2"
+  },
+  "migrateFromNeon2Password": {
+    "buttonLabel": "Migrar carteiras",
+    "description_one": "Insira a senha usada para criptografar a conta selecionada.",
+    "description_other": "Insira as senhas usadas para criptografar as contas selecionadas.",
+    "importError": "Houve um erro ao migrar as contas.",
+    "inputLabel": "Senha",
+    "inputPlaceholder": "Digite a senha…",
+    "passwordError": "Senha incorreta",
+    "samePasswordLabel": "Usar a mesma senha para todas as contas",
+    "success": {
+      "buttonLabel": "Ver carteiras",
+      "description": "Contas migradas com sucesso!"
+    },
+    "title": "Migrar da Neon 2"
+  },
   "neo3NeoXBridgeAbout": {
     "description": "Faça bridge facilmente de seus ativos cripto entre redes, sem nunca sair da sua carteira.",
     "explanation": "Blockchains são independentes uma da outra e não podem interagir - é aí que os bridges entram. É semelhante em princípio a trocar dinheiro ao viajar para diferentes países, um bridge permite que você transfira ativos em várias blockchains.",
-    "neonAdvantage": "Fazer bridge de tokens diretamente e imediatamente na NEON é conveniente e permite que você economize tempo e pague taxas mais baixas.",
+    "neonAdvantage": "Fazer bridge de tokens diretamente e imediatamente na Neon é conveniente e permite que você economize tempo e pague taxas mais baixas.",
     "title": "Sobre bridge de tokens",
     "warningLabel": "A COZ não é mantenedora deste processo de bridge - Neo Global Development é a mantenedora."
   },
@@ -495,6 +519,28 @@
     "voteForCozButtonLabel": "Dar seu voto para a COZ",
     "youCanSupportUsLabel": "Se gosta de usar a Neon ou qualquer um de nossos outros produtos, você pode querer nos apoiar com seu voto para ajudar a impulsionar nosso desenvolvimento."
   },
+  "nep6BackupImportAccountSelection": {
+    "noSelectableAccounts_one": "Nenhuma conta disponível para importar. A conta abaixo já foi importada:",
+    "noSelectableAccounts_other": "Nenhuma conta disponível para importar. As contas abaixo já foram importadas:",
+    "selectLabel_one": "Encontramos a seguinte conta para importar:",
+    "selectLabel_other": "Encontramos as seguintes contas para importar:",
+    "title": "Importar backup"
+  },
+  "nep6BackupImportPassword": {
+    "buttonLabel": "Importar backup",
+    "description_one": "Insira a senha usada para criptografar a conta selecionada.",
+    "description_other": "Insira as senhas usadas para criptografar as contas selecionadas.",
+    "importError": "Houve um erro ao importar as contas.",
+    "inputLabel": "Senha",
+    "inputPlaceholder": "Digite a senha…",
+    "passwordError": "Senha incorreta",
+    "samePasswordLabel": "Usar a mesma senha para todas as contas",
+    "success": {
+      "buttonLabel": "Ver carteiras",
+      "description": "Contas importadas com sucesso!"
+    },
+    "title": "Importar backup"
+  },
   "networkUrlSelection": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Altura do bloco:",
@@ -517,7 +563,8 @@
     "warningLabel": "Qualquer pessoa com sua frase mnemônica pode acessar sua carteira… mantenha-a segura!"
   },
   "onboardingImport": {
-    "backupImportDescription": "Você também pode restaurar uma carteira a partir de um arquivo de backup Neon",
+    "backupFileDetected": "Arquivo de backup Neon detectado",
+    "backupImportDescription": "Você também pode restaurar uma carteira a partir de um arquivo de backup Neon, backup NEP-6 ou de migração da Neon 2",
     "importBackupConfirmPassword": {
       "backupPasswordLabel": "Senha de backup",
       "backupPasswordPlaceholder": "Digite a senha de backup…",
@@ -528,12 +575,13 @@
     "importDescription": "Digite um endereço, chave criptografada, chave privada ou mnemônico: ",
     "importDetailsLabel": "Detalhes de importação",
     "importDetailsPlaceholder": "Digite os detalhes…",
-    "locateButtonLabel": "Localizar backup",
+    "locateButtonLabel": "Localizar arquivo",
     "messages": {
       "mnemonicComplete": "Mnemônico completo",
-      "mnemonicIncorrect": "Mnemônico incorreto",
-      "successFile": "Backup localizado!"
+      "mnemonicIncorrect": "Mnemônico incorreto"
     },
+    "migrateFileDetected": "Arquivo de migração da Neon 2 detectado",
+    "nep6FileDetected": "Arquivo de backup NEP-6 detectado",
     "scanButtonLabel": "Escanear QR code",
     "title": "Importar carteira"
   },
@@ -791,7 +839,7 @@
   },
   "swapExplanation": {
     "description1": "Troque tokens por outros tokens, entre blockchains, sem usar uma exchange.",
-    "description2": "Trocar tokens diretamente e imediatamente na NEON é conveniente e permite que você economize tempo e pague taxas mais baixas.",
+    "description2": "Trocar tokens diretamente e imediatamente na Neon é conveniente e permite que você economize tempo e pague taxas mais baixas.",
     "help": "Precisa de ajuda? Suporte ao vivo",
     "title": "Como o swap funciona?"
   },

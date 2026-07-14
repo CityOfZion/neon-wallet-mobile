@@ -1,0 +1,13 @@
+diff --git a/node_modules/@cityofzion/bs-neo-legacy/node_modules/@cityofzion/neon-api/package.json b/node_modules/@cityofzion/bs-neo-legacy/node_modules/@cityofzion/neon-api/package.json
+index 4ccf675..ccb32fe 100644
+--- a/node_modules/@cityofzion/bs-neo-legacy/node_modules/@cityofzion/neon-api/package.json
++++ b/node_modules/@cityofzion/bs-neo-legacy/node_modules/@cityofzion/neon-api/package.json
+@@ -17,7 +17,7 @@
+   ],
+   "author": "Yak Jun Xiang <snowypowers@gmail.com> (https://github.com/snowypowers)",
+   "license": "MIT",
+-  "main": "dist/index.js",
++  "main": "lib/index.js",
+   "module": "lib/index.js",
+   "types": "lib/index.d.ts",
+   "scripts": {

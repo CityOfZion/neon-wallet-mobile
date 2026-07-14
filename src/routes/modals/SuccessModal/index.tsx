@@ -44,7 +44,7 @@ export const SuccessModal = ({ route }: TRootStackScreenProps<'SuccessModal'>) =
           <View className="w-full gap-7">
             <TwSeparator />
 
-            <TwButton label={buttonLabel} className="w-full" variant="contained-light" onPress={handleClose} />
+            <TwButton label={buttonLabel} className="mb-4 w-full" variant="contained-light" onPress={handleClose} />
           </View>
         )}
       </ModalLayout.ScrollContent>

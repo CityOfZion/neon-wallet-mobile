@@ -103,7 +103,7 @@
     },
     "walletTasksManager": {
       "useBackupReminderNotificationProcess": {
-        "notificationDescription": "Wir empfehlen, eine neue Backup-Datei unter \"Mehr > Einstellungen > Sicherheit > NEON Backup\" zu erstellen, um Ihre Wallets zu schützen. Für zusätzliche Sicherheit können Sie Ihre Mnemonics auch manuell unter \"Wallet > 3 Punkte > Mnemonic sichern\" und Private Keys unter \"Wallet > Konto > 3 Punkte > Key exportieren\" exportieren.",
+        "notificationDescription": "Wir empfehlen, eine neue Backup-Datei unter \"Mehr > Einstellungen > Sicherheit > Neon Backup\" zu erstellen, um Ihre Wallets zu schützen. Für zusätzliche Sicherheit können Sie Ihre Mnemonics auch manuell unter \"Wallet > 3 Punkte > Mnemonic sichern\" und Private Keys unter \"Wallet > Konto > 3 Punkte > Key exportieren\" exportieren.",
         "notificationTitle": "Erstellen Sie eine neue Backup-Datei!"
       }
     }

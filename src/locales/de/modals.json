@@ -183,7 +183,7 @@
       "savePasswordButtonLabel": "Passwort QR Code speichern",
       "submitButtonLabel": "Zurück zu Einstellungen"
     },
-    "title": "NEON sichern"
+    "title": "Neon sichern"
   },
   "createPassword": {
     "errors": {
@@ -348,9 +348,12 @@
     "tokenNameLabel": "Name:"
   },
   "importBackup": {
-    "description1": "Falls Sie den Zugriff auf Ihr Wallet verlieren, können Sie es aus einer lokalen Backup-Datei importieren. Suchen Sie einfach Ihre lokale Backup-Datei, geben Sie das Passwort ein, das Sie beim Erstellen der Backup-Datei verwendet haben, und Ihr Zugriff wird wiederhergestellt.",
-    "description2": "Suchen Sie zunächst Ihre Backup-Datei:",
-    "locateButtonLabel": "Backup suchen",
+    "backupFileDetected": "Neon-Backup-Datei erkannt",
+    "description1": "Sie können Ihre Wallets wiederherstellen, indem Sie eine Neon-Backup-, NEP-6-Backup- oder Neon 2-Migrationsdatei importieren.",
+    "description2": "Suchen Sie zunächst Ihre Datei:",
+    "locateButtonLabel": "Datei suchen",
+    "migrateFileDetected": "Neon 2-Migrationsdatei erkannt",
+    "nep6FileDetected": "NEP-6-Backup-Datei erkannt",
     "password": {
       "buttonLabel": "Backup importieren",
       "description": "Um Ihre Backup-Datei zu importieren, geben Sie bitte das Passwort ein, das Sie zum Erstellen des Backups verwendet haben:",
@@ -360,8 +363,7 @@
       "description": "Backup erfolgreich importiert!",
       "submitButtonLabel": "Zurück zu Einstellungen"
     },
-    "successFile": "Backup identifiziert!",
-    "title": "NEON Backup importieren"
+    "title": "Backup importieren"
   },
   "importEncryptedKeySelection": {
     "accountAlreadyExists": "Konto existiert bereits",
@@ -379,10 +381,32 @@
   "languageSelection": {
     "title": "Sprache"
   },
+  "migrateFromNeon2AccountSelection": {
+    "noSelectableAccounts_one": "Keine Konten zum Importieren verfügbar. Das folgende Konto wurde bereits importiert:",
+    "noSelectableAccounts_other": "Keine Konten zum Importieren verfügbar. Die folgenden Konten wurden bereits importiert:",
+    "selectLabel_one": "Wir haben das folgende Konto zum Importieren gefunden:",
+    "selectLabel_other": "Wir haben die folgenden Konten zum Importieren gefunden:",
+    "title": "Von Neon 2 migrieren"
+  },
+  "migrateFromNeon2Password": {
+    "buttonLabel": "Wallets migrieren",
+    "description_one": "Geben Sie das Passwort ein, das zur Verschlüsselung des ausgewählten Kontos verwendet wurde.",
+    "description_other": "Geben Sie die Passwörter ein, die zur Verschlüsselung der ausgewählten Konten verwendet wurden.",
+    "importError": "Beim Migrieren der Konten ist ein Fehler aufgetreten.",
+    "inputLabel": "Passwort",
+    "inputPlaceholder": "Passwort eingeben…",
+    "passwordError": "Falsches Passwort",
+    "samePasswordLabel": "Dasselbe Passwort für alle Konten verwenden",
+    "success": {
+      "buttonLabel": "Wallets anzeigen",
+      "description": "Konten erfolgreich migriert!"
+    },
+    "title": "Von Neon 2 migrieren"
+  },
   "neo3NeoXBridgeAbout": {
     "description": "Bridgen Sie Ihre Crypto Assets einfach zwischen Networks, ohne Ihr Wallet zu verlassen.",
     "explanation": "Blockchains sind voneinander unabhängig und können nicht miteinander interagieren - hier kommen Bridges ins Spiel. Es ist im Prinzip ähnlich wie Geld zu wechseln, wenn man in verschiedene Länder reist. Eine Bridge ermöglicht es Ihnen, Assets über verschiedene Blockchains zu übertragen.",
-    "neonAdvantage": "Das direkte und sofortige Bridgen von Tokens in NEON ist bequem und ermöglicht es Ihnen, Zeit zu sparen und niedrigere Gebühren zu zahlen.",
+    "neonAdvantage": "Das direkte und sofortige Bridgen von Tokens in Neon ist bequem und ermöglicht es Ihnen, Zeit zu sparen und niedrigere Gebühren zu zahlen.",
     "title": "Über Token Bridging",
     "warningLabel": "COZ ist nicht Maintainer dieses Bridging-Prozesses - Neo Global Development ist der Maintainer."
   },
@@ -495,6 +519,28 @@
     "voteForCozButtonLabel": "Für COZ abstimmen",
     "youCanSupportUsLabel": "Wenn Ihnen Neon oder unsere anderen Produkte gefallen, möchten Sie uns vielleicht mit Ihrer Stimme unterstützen, um unsere Entwicklung voranzutreiben."
   },
+  "nep6BackupImportAccountSelection": {
+    "noSelectableAccounts_one": "Keine Konten zum Importieren verfügbar. Das folgende Konto wurde bereits importiert:",
+    "noSelectableAccounts_other": "Keine Konten zum Importieren verfügbar. Die folgenden Konten wurden bereits importiert:",
+    "selectLabel_one": "Wir haben das folgende Konto zum Importieren gefunden:",
+    "selectLabel_other": "Wir haben die folgenden Konten zum Importieren gefunden:",
+    "title": "Backup importieren"
+  },
+  "nep6BackupImportPassword": {
+    "buttonLabel": "Backup importieren",
+    "description_one": "Geben Sie das Passwort ein, das zur Verschlüsselung des ausgewählten Kontos verwendet wurde.",
+    "description_other": "Geben Sie die Passwörter ein, die zur Verschlüsselung der ausgewählten Konten verwendet wurden.",
+    "importError": "Beim Importieren der Konten ist ein Fehler aufgetreten.",
+    "inputLabel": "Passwort",
+    "inputPlaceholder": "Passwort eingeben…",
+    "passwordError": "Falsches Passwort",
+    "samePasswordLabel": "Dasselbe Passwort für alle Konten verwenden",
+    "success": {
+      "buttonLabel": "Wallets anzeigen",
+      "description": "Konten erfolgreich importiert!"
+    },
+    "title": "Backup importieren"
+  },
   "networkUrlSelection": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Block Höhe:",
@@ -517,7 +563,8 @@
     "warningLabel": "Jeder, der deine mnemonische Phrase kennt, kann auf deine Wallet zugreifen… halte sie sicher!"
   },
   "onboardingImport": {
-    "backupImportDescription": "Alternativ können Sie ein Wallet aus einer Neon-Sicherungsdatei wiederherstellen",
+    "backupFileDetected": "Neon-Backup-Datei erkannt",
+    "backupImportDescription": "Alternativ können Sie ein Wallet aus einer Neon-Backup-, NEP-6-Backup- oder Neon 2-Migrationsdatei wiederherstellen",
     "importBackupConfirmPassword": {
       "backupPasswordLabel": "Sicherungskennwort",
       "backupPasswordPlaceholder": "Sicherungskennwort eingeben…",
@@ -528,12 +575,13 @@
     "importDescription": "Adresse, verschlüsselten Schlüssel, privaten Schlüssel oder Mnemonik eingeben: ",
     "importDetailsLabel": "Importdetails",
     "importDetailsPlaceholder": "Details eingeben…",
-    "locateButtonLabel": "Sicherung suchen",
+    "locateButtonLabel": "Datei suchen",
     "messages": {
       "mnemonicComplete": "Mnemonisches Wort vollständig",
-      "mnemonicIncorrect": "Mnemonisches Wort falsch",
-      "successFile": "Sicherung gefunden!"
+      "mnemonicIncorrect": "Mnemonisches Wort falsch"
     },
+    "migrateFileDetected": "Neon 2-Migrationsdatei erkannt",
+    "nep6FileDetected": "NEP-6-Backup-Datei erkannt",
     "scanButtonLabel": "QR-Code scannen",
     "title": "Wallet importieren"
   },
@@ -791,7 +839,7 @@
   },
   "swapExplanation": {
     "description1": "Tauschen Sie Tokens gegen andere Tokens, über Chains hinweg, ohne Exchange.",
-    "description2": "Der direkte und sofortige Tausch von Tokens in NEON ist bequem und ermöglicht es Ihnen, Zeit zu sparen und niedrigere Gebühren zu zahlen.",
+    "description2": "Der direkte und sofortige Tausch von Tokens in Neon ist bequem und ermöglicht es Ihnen, Zeit zu sparen und niedrigere Gebühren zu zahlen.",
     "help": "Brauchen Sie Hilfe? Live-Support",
     "title": "Wie funktioniert Swap?"
   },

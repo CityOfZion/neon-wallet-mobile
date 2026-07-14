@@ -12,7 +12,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 
 import { useActions } from '@/hooks/useActions'
-import { useNeonCreateBackup } from '@/hooks/useNeonBackup'
+import { useNeonCreateBackup } from '@/hooks/useNeonBackupFile'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 

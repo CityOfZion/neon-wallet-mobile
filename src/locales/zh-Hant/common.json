@@ -107,6 +107,9 @@
     "firstWalletName": "我的第一個錢包",
     "importedName": "已匯入錢包",
     "ledgerName": "Ledger 錢包",
+    "migratedAccountLabel": "已遷移帳戶",
+    "migratedContactName": "已遷移聯絡人",
+    "migratedWalletName": "已遷移錢包",
     "mnemonicWalletName": "助記詞錢包",
     "watchAccount": "只讀帳戶"
   },

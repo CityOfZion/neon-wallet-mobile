@@ -9,8 +9,8 @@ import { NeonBackupHelper } from '@/helpers/NeonBackupHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import type {
   TValidationSchemaHelperBackupAccountSchema,
-  TValidationSchemaHelperBackupDataSchema,
-  TValidationSchemaHelperBackupFileSchema,
+  TValidationSchemaHelperNeonBackupDataSchema,
+  TValidationSchemaHelperNeonBackupFileSchema,
 } from '@/helpers/ValidationSchemaHelper'
 import { ValidationSchemaHelper } from '@/helpers/ValidationSchemaHelper'
 
@@ -25,7 +25,7 @@ import { useWalletsSelector } from './useWalletSelector'
 
 import { contactReducerActions } from '@/store/reducers/contact'
 import { utilityReducerActions } from '@/store/reducers/utility'
-import type { TUseImportAccountsParams } from '@/types/hooks'
+import type { TUseImportAccountsParams, TUseNeonBackupGeneratedData, TUseNeonBackupWalletToCreate } from '@/types/hooks'
 import type { TContactAddress } from '@/types/store'
 
 export const useNeonCreateBackup = () => {
@@ -38,7 +38,7 @@ export const useNeonCreateBackup = () => {
   const { writeFile } = useFileSystem()
 
   const handleCreateBackupFormat = async () => {
-    const backupFile: TValidationSchemaHelperBackupDataSchema = {
+    const backupFile: TValidationSchemaHelperNeonBackupDataSchema = {
       wallets: [],
       contacts: [],
       swapRecords: [],
@@ -120,13 +120,13 @@ export const useNeonCreateBackup = () => {
     const encrypted =
       Buffer.from(iv).toString('hex') + cipher.update(backupFileDataString, 'utf8', 'hex') + cipher.final('hex')
 
-    const backupFile: TValidationSchemaHelperBackupFileSchema = {
+    const backupFile: TValidationSchemaHelperNeonBackupFileSchema = {
       version: NeonBackupHelper.version,
       data: encrypted,
     }
 
     await writeFile(
-      `NEON-backup-${DateHelper.getNowUnix()}.${NeonBackupHelper.fileExtension}`,
+      `neon-backup-${DateHelper.getNowUnix()}.${NeonBackupHelper.fileExtension}`,
       JSON.stringify(backupFile),
       'application/json'
     )
@@ -137,34 +137,32 @@ export const useNeonCreateBackup = () => {
   }
 }
 
-export const useNeonImportBackup = () => {
-  const { t } = useTranslation('hooks', { keyPrefix: 'useNeonImportBackup' })
+export const useNeonBackupFile = () => {
+  const { t } = useTranslation('hooks', { keyPrefix: 'useNeonBackupFile' })
   const dispatch = useAppDispatch()
   const { createWallet } = useCreateWallet()
   const { doesAccountExist } = useDoesAccountExist()
   const { importAccounts } = useImportAccounts()
-  const { readFile } = useFileSystem()
 
-  const handleBrowserFile = async () => {
-    const file = await readFile('application/json')
-    if (!file) return
-
-    const isBackupFile = file.name.endsWith(`.${NeonBackupHelper.fileExtension}.json`)
-    if (!isBackupFile) throw new AppError(t('errors.wrongFile', { extension: NeonBackupHelper.fileExtension }))
+  const validateAndParseFile = (
+    fileName: string,
+    content: string
+  ): TValidationSchemaHelperNeonBackupFileSchema | undefined => {
+    if (!fileName.endsWith(`.${NeonBackupHelper.fileExtension}.json`)) return undefined
 
     try {
-      const backupFile = JSON.parse(file.content)
-      const validatedFile = ValidationSchemaHelper.paseBackupFile(backupFile)
+      const backupFile = JSON.parse(content)
+      const validatedFile = ValidationSchemaHelper.parseBackupFile(backupFile)
 
-      if (validatedFile.version !== NeonBackupHelper.version) throw new AppError(t('errors.wrongVersion'))
+      if (validatedFile.version !== NeonBackupHelper.version) return undefined
 
       return validatedFile
-    } catch (error) {
-      throw new AppError(t('errors.deprecatedFile'), error)
+    } catch {
+      return undefined
     }
   }
 
-  const handleTryDecryptData = (file: TValidationSchemaHelperBackupFileSchema, password: string) => {
+  const handleTryDecryptData = (file: TValidationSchemaHelperNeonBackupFileSchema, password: string) => {
     try {
       const iv = Buffer.from(file.data.slice(0, 32), 'hex')
       const key = crypto.pbkdf2Sync(password, 'salt', 100000, 24, 'sha256')
@@ -178,71 +176,96 @@ export const useNeonImportBackup = () => {
     }
   }
 
-  const handleImportBackupData = async (data: TValidationSchemaHelperBackupDataSchema) => {
+  const handleGenerateData = (data: TValidationSchemaHelperNeonBackupDataSchema): TUseNeonBackupGeneratedData => {
+    const swapRecordsToCreate: TUseNeonBackupGeneratedData['swapRecordsToCreate'] = []
+    const contactsToCreate: TUseNeonBackupGeneratedData['contactsToCreate'] = []
+    const walletsToCreate: TUseNeonBackupWalletToCreate[] = []
+
+    data.swapRecords?.forEach(swap => {
+      const account = NeonBackupHelper.fixAccountProperties(swap.account)
+      if (!account) return
+
+      swapRecordsToCreate.push({
+        addressTo: swap.addressTo,
+        extraIdTo: swap.extraIdTo,
+        amountFrom: swap.amountFrom,
+        amountTo: swap.amountTo,
+        fee: swap.fee,
+        swapId: swap.swapId,
+        swapProvider: swap.swapProvider,
+        tokenFrom: swap.tokenFrom,
+        tokenTo: swap.tokenTo,
+        txFrom: swap.txFrom,
+        swapStatus: swap.swapStatus,
+        txTo: swap.txTo,
+        account,
+      })
+    })
+
+    data.contacts.forEach(contact => {
+      const addresses: TContactAddress[] = []
+      contact.addresses.forEach(address => {
+        if (!BlockchainServiceHelper.doesBlockchainSupported(address.blockchain)) return
+        addresses.push({ address: address.address, blockchain: address.blockchain })
+      })
+
+      contactsToCreate.push({
+        id: contact.id,
+        name: contact.name,
+        addresses,
+      })
+    })
+
+    data.wallets.forEach(backupWallet => {
+      const accountsToImport: TUseImportAccountsParams['accountsToImport'] = []
+
+      backupWallet.accounts.forEach(backupAccount => {
+        const fixedAccount = NeonBackupHelper.fixAccountProperties(backupAccount)
+
+        if (!fixedAccount || doesAccountExist(fixedAccount)) return
+
+        accountsToImport.push({ ...fixedAccount, key: backupAccount.key })
+      })
+
+      if (accountsToImport.length === 0) return
+
+      const fixedWallet = NeonBackupHelper.fixWalletProperties(backupWallet)
+
+      walletsToCreate.push({
+        walletToCreate: { ...fixedWallet, mnemonic: backupWallet.mnemonic },
+        accountsToImport,
+      })
+    })
+
+    return { walletsToCreate, contactsToCreate, swapRecordsToCreate }
+  }
+
+  const handleImportBackupData = async (generatedData: TUseNeonBackupGeneratedData) => {
     try {
-      data.swapRecords?.forEach(swap => {
-        const account = NeonBackupHelper.fixAccountProperties(swap.account)
-        if (!account) return
-        dispatch(
-          utilityReducerActions.saveSwapRecord({
-            addressTo: swap.addressTo,
-            extraIdTo: swap.extraIdTo,
-            amountFrom: swap.amountFrom,
-            amountTo: swap.amountTo,
-            fee: swap.fee,
-            swapId: swap.swapId,
-            swapProvider: swap.swapProvider,
-            tokenFrom: swap.tokenFrom,
-            tokenTo: swap.tokenTo,
-            txFrom: swap.txFrom,
-            swapStatus: swap.swapStatus,
-            txTo: swap.txTo,
-            account,
-          })
-        )
+      generatedData.swapRecordsToCreate.forEach(swap => {
+        dispatch(utilityReducerActions.saveSwapRecord(swap))
       })
 
-      data.contacts.forEach(contact => {
-        const addresses: TContactAddress[] = []
-        contact.addresses.forEach(address => {
-          if (!BlockchainServiceHelper.doesBlockchainSupported(address.blockchain)) return
-          addresses.push({ address: address.address, blockchain: address.blockchain })
-        })
-        dispatch(
-          contactReducerActions.saveContact({
-            id: contact.id,
-            name: contact.name,
-            addresses,
-          })
-        )
+      generatedData.contactsToCreate.forEach(contact => {
+        dispatch(contactReducerActions.saveContact(contact))
       })
 
-      for (const backupWallet of data.wallets) {
-        const accountsToImport: TUseImportAccountsParams['accountsToImport'] = []
-
-        backupWallet.accounts.forEach(backupAccount => {
-          const fixedAccount = NeonBackupHelper.fixAccountProperties(backupAccount)
-
-          if (!fixedAccount || doesAccountExist(fixedAccount)) return
-
-          accountsToImport.push({ ...fixedAccount, key: backupAccount.key })
-        })
-
-        if (accountsToImport.length === 0) continue
-
-        const fixedWallet = NeonBackupHelper.fixWalletProperties(backupWallet)
-        const newWallet = await createWallet({ ...fixedWallet, mnemonic: backupWallet.mnemonic })
+      const promises = generatedData.walletsToCreate.map(async ({ walletToCreate, accountsToImport }) => {
+        const newWallet = await createWallet(walletToCreate)
 
         await importAccounts({ wallet: newWallet, accountsToImport })
-      }
+      })
+
+      await Promise.allSettled(promises)
     } catch (error) {
-      throw new AppError(t('errors.importData'), error)
+      throw AppError.wrap(error, t('errors.importData'))
     }
   }
 
   return {
-    handleBrowserFile,
+    validateAndParseFile,
     handleTryDecryptData,
+    handleGenerateData,
     handleImportBackupData,
   }
 }
