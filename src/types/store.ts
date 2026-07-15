@@ -134,12 +134,6 @@ export type TNotificationNavigateActionBNeoShutdownPayload = {
   blockchain: TBlockchainServiceKey
 }
 
-export type TNotificationNavigateActionNeoLegacyMigrationPayload = {
-  to: 'neo-legacy-migration'
-  address: string
-  blockchain: TBlockchainServiceKey
-}
-
 export type TNotificationNavigateAction = {
   type: 'navigate'
   payload:
@@ -163,7 +157,6 @@ export type TNotificationNavigateAction = {
         to: 'backup-wallet'
       }
     | TNotificationNavigateActionBNeoShutdownPayload
-    | TNotificationNavigateActionNeoLegacyMigrationPayload
 }
 
 export type TNotificationAction = TNotificationNavigateAction
