@@ -762,6 +762,14 @@
     "transactionHashLabel": "Hash da transação",
     "transactionLabel": "Transação {{ order }}"
   },
+  "sendTipCustomAmount": {
+    "amountInputLabel": "Valor da gorjeta",
+    "amountInputPlaceholder": "Insira o valor da gorjeta",
+    "description": "Defina um valor de gorjeta personalizado ou volte ao padrão de {{ percentage }}% da transação.",
+    "minAmountError": "O valor da gorjeta deve ser de pelo menos {{ amount }} {{ tokenSymbol }}",
+    "resetButtonLabel": "Redefinir para {{ percentage }}%",
+    "title": "Editar valor da gorjeta"
+  },
   "sendTipUncheckedConfirmation": {
     "description": "A COZ adora criar produtos para nossa comunidade de usuários. Gorjetas são uma ótima forma de mostrar ao time que você aprecia o nosso trabalho e nos permite manter a carteira livre de influências externas. Por que não dar uma moeda aos seus devs?",
     "keepTip": "Manter Gorjeta (Recomendado)",

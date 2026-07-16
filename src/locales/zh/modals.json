@@ -762,6 +762,14 @@
     "transactionHashLabel": "交易哈希",
     "transactionLabel": "交易 {{ order }}"
   },
+  "sendTipCustomAmount": {
+    "amountInputLabel": "小费金额",
+    "amountInputPlaceholder": "输入小费金额",
+    "description": "设置自定义小费金额，或将其重置为默认的交易金额的 {{ percentage }}%。",
+    "minAmountError": "小费金额必须至少为 {{ amount }} {{ tokenSymbol }}",
+    "resetButtonLabel": "重置为 {{ percentage }}%",
+    "title": "编辑小费金额"
+  },
   "sendTipUncheckedConfirmation": {
     "description": "COZ热爱为我们的用户社区开发产品。提示是向团队表示您欣赏他们的工作并让我们保持钱包不受外部影响的绝好方式。为什么不给您的开发者投一枚硬币呢？",
     "keepTip": "保留提示（推荐）",
