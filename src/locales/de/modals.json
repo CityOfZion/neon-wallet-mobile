@@ -762,6 +762,14 @@
     "transactionHashLabel": "Transaktions-Hash",
     "transactionLabel": "Transaktion {{ order }}"
   },
+  "sendTipCustomAmount": {
+    "amountInputLabel": "Trinkgeldbetrag",
+    "amountInputPlaceholder": "Trinkgeldbetrag eingeben",
+    "description": "Legen Sie einen individuellen Trinkgeldbetrag fest oder setzen Sie ihn auf den Standard von {{ percentage }} % der Transaktion zurück.",
+    "minAmountError": "Der Trinkgeldbetrag muss mindestens {{ amount }} {{ tokenSymbol }} betragen",
+    "resetButtonLabel": "Auf {{ percentage }} % zurücksetzen",
+    "title": "Trinkgeldbetrag bearbeiten"
+  },
   "sendTipUncheckedConfirmation": {
     "description": "COZ liebt es, Produkte für unsere Community von Benutzern zu entwickeln. Trinkgelder sind eine großartige Möglichkeit, dem Team zu zeigen, dass Sie ihre Arbeit schätzen, und ermöglichen es uns, die Brieftasche frei von externen Einflüssen zu halten. Warum nicht eine Münze an Ihre Entwickler werfen?",
     "keepTip": "Trinkgeld behalten (empfohlen)",

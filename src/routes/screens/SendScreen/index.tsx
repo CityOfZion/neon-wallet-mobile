@@ -52,6 +52,7 @@ type TActionsData = {
   isTipChecked: boolean
   isTipDisabled: boolean
   tipAmountBn?: BSBigNumber
+  tipCustomAmountBn?: BSBigNumber
   tipFiatPriceBn?: BSBigNumber
   tipError?: string
 }
@@ -66,7 +67,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
   const currentRecipientAddress = useRef(undefined)
   const isDisabledMaxAmountRef = useRef(false)
 
-  const { actionData, actionState, setData, setError, clearErrors, handleAct, reset, setDataWrapper } =
+  const { actionData, actionState, setData, setDataWrapper, setError, clearErrors, handleAct, reset } =
     useActions<TActionsData>({
       selectedAccount: route.params?.account || undefined,
       recipients: [],
@@ -109,7 +110,8 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     !!actionState.errors.recipients ||
     !service ||
     isCalculatingForm ||
-    isFeeInvalid
+    isFeeInvalid ||
+    (actionData.isTipChecked && !!actionData.tipError)
 
   const getSendFields = async () => {
     const { selectedAccount } = actionData
@@ -131,9 +133,9 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
     const serviceAccount = await BlockchainServiceHelper.getServiceAccount(selectedAccount!)
 
-    const { isTipChecked, isTipDisabled, tipAmountBn, tipFiatPriceBn } = actionData
+    const { isTipChecked, isTipDisabled, tipAmountBn, tipFiatPriceBn, tipError } = actionData
 
-    if (isTipChecked && !isTipDisabled && tipAmountBn && tipFiatPriceBn && tipConfig) {
+    if (isTipChecked && !isTipDisabled && !tipError && tipAmountBn && tipFiatPriceBn && tipConfig) {
       intents.push({
         amount: tipAmountBn.toFixed(),
         receiverAddress: tipConfig.address,
@@ -150,7 +152,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
   }
 
   const handleSetRecipients = (setRecipients: (prevRecipients: TSendRecipient[]) => TSendRecipient[]) => {
-    setData({ isTipChecked: false })
+    handleIsTipCheckedChange(false)
 
     let recipients: TSendRecipient[] = []
 
@@ -218,6 +220,10 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     handleUpdateRecipient(id, {
       amount: new BSBigHumanAmount(amount, decimals).toFormatted(),
     })
+  }
+
+  const handleIsTipCheckedChange = (isTipChecked: boolean) => {
+    setData({ isTipChecked, tipError: undefined })
   }
 
   const initializeOrRestartService = () => {
@@ -423,7 +429,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     handleCalculateFee()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balanceQuery.data, actionData.recipients, actionData.isTipChecked])
+  }, [balanceQuery.data, actionData.recipients, actionData.isTipChecked, actionData.tipAmountBn?.toFixed()])
 
   useEffect(() => {
     if (!service || !isMainnetNetwork || !tipConfig) {
@@ -431,6 +437,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
         isTipChecked: false,
         isTipDisabled: true,
         tipAmountBn: undefined,
+        tipCustomAmountBn: undefined,
         tipFiatPriceBn: undefined,
         tipError: undefined,
       })
@@ -502,8 +509,16 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       exchangeQuery.data
     )
 
-    let tipFiatPriceBn = totalFiatPricesBn.multipliedBy(ConstantsHelper.tipPercentageBn)
-    let tipAmountBn = new BSBigHumanAmount(tipFiatPriceBn.toFixed(), tipConfig.token.decimals).dividedBy(tokenFiatPrice)
+    let tipFiatPriceBn: BSBigNumber
+    let tipAmountBn: BSBigNumber
+
+    if (actionData.tipCustomAmountBn) {
+      tipAmountBn = actionData.tipCustomAmountBn
+      tipFiatPriceBn = tipAmountBn.multipliedBy(tokenFiatPrice)
+    } else {
+      tipFiatPriceBn = totalFiatPricesBn.multipliedBy(ConstantsHelper.tipPercentageBn)
+      tipAmountBn = new BSBigHumanAmount(tipFiatPriceBn.toFixed(), tipConfig.token.decimals).dividedBy(tokenFiatPrice)
+    }
 
     if (tipAmountBn.isLessThan(tipConfig.minBn)) {
       tipFiatPriceBn = tipConfig.minBn.multipliedBy(tokenFiatPrice)
@@ -514,11 +529,10 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
     if (totalAmountsBn.isGreaterThan(tipTokenBalance.amount)) {
       setData({
-        isTipChecked: false,
         isTipDisabled,
         tipAmountBn,
         tipFiatPriceBn,
-        tipError: t('messages.noAmountToTip'),
+        tipError: actionData.isTipChecked ? t('messages.noAmountToTip') : undefined,
       })
 
       return
@@ -529,7 +543,9 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     actionData.fee,
+    actionData.isTipChecked,
     actionData.recipients,
+    actionData.tipCustomAmountBn,
     actionState.errors.recipients,
     actionState.isActing,
     actionState.isValid,
@@ -633,12 +649,16 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
         {!!tipConfig && actionData.tipAmountBn && actionData.tipFiatPriceBn && (
           <SendTipCheckbox
             amountBn={actionData.tipAmountBn}
-            tokenSymbol={tipConfig.token}
+            minBn={tipConfig.minBn}
+            customAmountBn={actionData.tipCustomAmountBn}
+            token={tipConfig.token}
             isChecked={actionData.isTipChecked}
-            onCheckChange={setDataWrapper('isTipChecked')}
+            onCheckChange={handleIsTipCheckedChange}
+            onCustomAmountChange={setDataWrapper('tipCustomAmountBn')}
             isDisabled={actionData.isTipDisabled}
             isLoading={exchangeQuery.isLoading}
             fiatPriceBn={actionData.tipFiatPriceBn}
+            error={actionData.tipError}
             className="mb-8"
           />
         )}
