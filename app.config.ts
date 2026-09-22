@@ -90,7 +90,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         iCloudContainerEnvironment: 'Production',
       },
     ],
-    'expo-font',
     [
       'expo-splash-screen',
       {
