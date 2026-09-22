@@ -1,19 +1,11 @@
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit'
-import { cloneDeep } from 'lodash'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import type { TSettingsReducer } from './index'
 
 import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
-import type {
-  TCurrency,
-  TCustomNetworks,
-  TLanguage,
-  TSecurity,
-  TSelectedNetworks,
-  TSurveyInfoStatus,
-} from '@/types/store'
+import type { TCurrency, TLanguage, TSecurity, TSelectedNetworks, TSurveyInfoStatus } from '@/types/store'
 
 const setSecurity: CaseReducer<TSettingsReducer, PayloadAction<TSecurity>> = (state, action) => {
   state.data.security = action.payload
@@ -41,11 +33,8 @@ const setSelectNetwork = <T extends TBlockchainServiceKey>(
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {
   const { blockchain, network } = action.payload
-  const cloneSelectedNetworkByBlockchain = cloneDeep(state.data.selectedNetworkByBlockchain)
 
-  cloneSelectedNetworkByBlockchain[blockchain] = network as any
-
-  state.data.selectedNetworkByBlockchain = cloneSelectedNetworkByBlockchain
+  state.data.selectedNetworkByBlockchain[blockchain] = network as any
 }
 
 const setSelectedNetworkByBlockchain = (state: TSettingsReducer, action: PayloadAction<TSelectedNetworks>) => {
@@ -57,12 +46,10 @@ const setSelectedNetworkUrl: CaseReducer<
   PayloadAction<{ blockchain: TBlockchainServiceKey; url: string; isAutomatic?: boolean }>
 > = (state, action) => {
   const { blockchain, url, isAutomatic } = action.payload
-  const cloneSelectedNetworkByBlockchain = cloneDeep(state.data.selectedNetworkByBlockchain)
+  const selectedNetwork = state.data.selectedNetworkByBlockchain[blockchain]
 
-  cloneSelectedNetworkByBlockchain[blockchain].url = url
-  cloneSelectedNetworkByBlockchain[blockchain].isAutomatic = isAutomatic
-
-  state.data.selectedNetworkByBlockchain = cloneSelectedNetworkByBlockchain
+  selectedNetwork.url = url
+  selectedNetwork.isAutomatic = isAutomatic
 }
 
 const saveCustomNetwork = <T extends TBlockchainServiceKey>(
@@ -70,24 +57,20 @@ const saveCustomNetwork = <T extends TBlockchainServiceKey>(
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {
   const { blockchain, network } = action.payload
-  const cloneCustomNetworks = cloneDeep(state.data.customNetworksByBlockchain)
-  const foundIndex = cloneCustomNetworks[blockchain].findIndex(({ id }) => id === network.id)
+  const customNetworks = state.data.customNetworksByBlockchain[blockchain]
+  const foundIndex = customNetworks.findIndex(({ id }) => id === network.id)
 
   if (foundIndex < 0) {
-    cloneCustomNetworks[blockchain].push(network)
-  } else {
-    const cloneSelectedNetworks = cloneDeep(state.data.selectedNetworkByBlockchain)
+    customNetworks.push(network)
 
-    cloneCustomNetworks[blockchain][foundIndex] = network
-
-    if (cloneSelectedNetworks[blockchain].id === network.id) {
-      cloneSelectedNetworks[blockchain] = network as TSelectedNetworks[T]
-
-      state.data.selectedNetworkByBlockchain = cloneSelectedNetworks
-    }
+    return
   }
 
-  state.data.customNetworksByBlockchain = cloneCustomNetworks
+  customNetworks[foundIndex] = network
+
+  if (state.data.selectedNetworkByBlockchain[blockchain].id === network.id) {
+    state.data.selectedNetworkByBlockchain[blockchain] = network as TSelectedNetworks[T]
+  }
 }
 
 const deleteCustomNetwork = <T extends TBlockchainServiceKey>(
@@ -95,20 +78,17 @@ const deleteCustomNetwork = <T extends TBlockchainServiceKey>(
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {
   const { network, blockchain } = action.payload
-  const cloneCustomNetworks = cloneDeep(state.data.customNetworksByBlockchain)
-  const cloneSelectedNetwork = cloneDeep(state.data.selectedNetworkByBlockchain)
-  const filteredNetworks = cloneCustomNetworks[blockchain].filter(currentNetwork => currentNetwork.id !== network.id)
+  const customNetworks = state.data.customNetworksByBlockchain[blockchain]
+  const foundIndex = customNetworks.findIndex(currentNetwork => currentNetwork.id === network.id)
 
-  cloneCustomNetworks[blockchain] = filteredNetworks as TCustomNetworks[T]
+  if (foundIndex >= 0) {
+    customNetworks.splice(foundIndex, 1)
+  }
 
-  state.data.customNetworksByBlockchain = cloneCustomNetworks
-
-  if (cloneSelectedNetwork[blockchain].id === network.id) {
+  if (state.data.selectedNetworkByBlockchain[blockchain].id === network.id) {
     const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
-    cloneSelectedNetwork[blockchain] = service.defaultNetwork
-
-    state.data.selectedNetworkByBlockchain = cloneSelectedNetwork
+    state.data.selectedNetworkByBlockchain[blockchain] = service.defaultNetwork as TSelectedNetworks[T]
   }
 }
 

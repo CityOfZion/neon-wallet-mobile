@@ -47,7 +47,7 @@ export function getUtilityReducer() {
     timeout: 0,
     blacklist: ['memoryData'],
     migrate: createMigrate(utilityMigrations),
-    version: 3,
+    version: 4,
     getStoredState: async (config: any) => {
       const storedState = await config.storage.getItem(`persist:${config.key}`)
 
