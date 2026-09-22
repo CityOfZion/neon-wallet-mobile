@@ -1,6 +1,7 @@
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
+import type { THiddenTokenByBlockchain } from '@/types/store'
 
 export function getUtilityMigrations() {
   return {
@@ -50,6 +51,20 @@ export function getUtilityMigrations() {
       delete state.data.migrationsNeo3
 
       return state
+    },
+    4: (state: any) => {
+      const hiddenTokensByBlockchain = state.data.hiddenTokensByBlockchain as THiddenTokenByBlockchain
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          hiddenTokensByBlockchain: {
+            ...hiddenTokensByBlockchain,
+            neo3: [...(hiddenTokensByBlockchain.neo3 || []), '0xb249c1c038545a9e9d223f54accd85e457e4909e'],
+          },
+        },
+      }
     },
   }
 }
