@@ -8,7 +8,7 @@ export class ConstantsHelper {
   static readonly neonIconsUrl = 'https://raw.githubusercontent.com/CityOfZion/neon-icons/main'
   static readonly cozWebsiteUrl = 'https://coz.io'
   static readonly cozDiscordUrl = 'https://discord.gg/M7jGtEpjH4'
-  static readonly cozPrivacyPolicyLink = 'https://www.coz.io/privacy-policy'
+  static readonly cozPrivacyPolicyLink = `${this.cozWebsiteUrl}/privacy-policy`
 
   static readonly footerHeight = 66
 
