@@ -4,7 +4,6 @@ import cloneDeep from 'lodash/cloneDeep'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
-import { TokenHelper } from '@/helpers/TokenHelper'
 
 import type { TUtilityReducer } from './index'
 
@@ -61,10 +60,10 @@ const setUnlockedSkinIds: CaseReducer<TUtilityReducer, PayloadAction<string[]>> 
 
 const toggleHiddenToken: CaseReducer<TUtilityReducer, PayloadAction<THiddenTokenParams>> = (state, action) => {
   const { hash, blockchain } = action.payload
-
-  if (TokenHelper.isNativeToken(hash, blockchain)) throw new AppError(t('errors.unexpected'))
-
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
+
+  if (service.tokenService.isNativeToken(hash)) throw new AppError(t('errors.unexpected'))
+
   const normalizedHash = service.tokenService.normalizeHash(hash)
   const hiddenTokens = (state.data.hiddenTokensByBlockchain[blockchain] ??= [])
   const index = hiddenTokens.findIndex(tokenHash => service.tokenService.predicateByHash(normalizedHash, tokenHash))

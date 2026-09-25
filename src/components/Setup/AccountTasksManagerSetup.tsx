@@ -7,6 +7,7 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { SkinHelper } from '@/helpers/SkinHelper'
+import { TokenHelper } from '@/helpers/TokenHelper'
 
 import { useEditAccount } from '@/hooks/useAccountActions'
 import { useOwnAccountsSelector } from '@/hooks/useAccountSelector'
@@ -48,15 +49,21 @@ const useFraudulentTokensNotificationProcess = () => {
     try {
       if (!balance) return
 
-      const fraudulentHashes = ConstantsHelper.fraudulentTokenHashesByBlockchain.get(account.blockchain)
+      const { blockchain } = account
+      const fraudulentHashes = ConstantsHelper.fraudulentTokenHashesByBlockchain.get(blockchain)
+
       if (!fraudulentHashes) return
 
-      const fraudulentTokensOwned = new Set(intersection([...fraudulentHashes], [...balance.tokensBalancesMap.keys()]))
+      const fraudulentTokensOwned = new Set(
+        intersection(
+          [...fraudulentHashes].map(hash => TokenHelper.getKey(hash, blockchain)),
+          [...balance.tokensBalancesMap.keys()]
+        )
+      )
 
-      for (const fraudulentHash of fraudulentTokensOwned) {
-        const tokenBalance = balance.tokensBalancesMap.get(fraudulentHash)!
-
-        const notificationKey = generateNotificationKey(account.blockchain, account.address, tokenBalance.token.hash)
+      for (const key of fraudulentTokensOwned) {
+        const tokenBalance = balance.tokensBalancesMap.get(key)!
+        const notificationKey = generateNotificationKey(blockchain, account.address, tokenBalance.token.hash)
 
         if (fraudulentNotificationsSetRef.current.has(notificationKey)) continue
 
@@ -117,9 +124,11 @@ const useBNeoShutdownNotificationProcess = () => {
 
   const process = (account: TAccount, balance: TBalance | undefined) => {
     try {
-      if (!balance || account.blockchain !== 'neo3' || new Date() >= dateLimit) return
+      const { blockchain } = account
 
-      const tokenBalance = balance.tokensBalancesMap.get(ConstantsHelper.bNeoTokenHash)
+      if (!balance || blockchain !== 'neo3' || new Date() >= dateLimit) return
+
+      const tokenBalance = balance.tokensBalancesMap.get(TokenHelper.getKey(ConstantsHelper.bNeoTokenHash, blockchain))
       if (!tokenBalance || tokenBalance.amountNumber === 0) return
 
       if (notificationsSetByAddressRef.current.has(account.address)) return
