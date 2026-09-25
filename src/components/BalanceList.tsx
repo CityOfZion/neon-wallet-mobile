@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import type { FlatListProps, ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
 
-import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
@@ -20,7 +19,7 @@ import { TwSeparator } from './TwSeparator'
 import { TwTokenIcon } from './TwTokenIcon'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
-import type { TToken, TTokenBalance, TUseBalanceOptionShowType } from '@/types/query'
+import type { TTokenBalance, TUseBalanceOptionShowType } from '@/types/query'
 import type { TAccount } from '@/types/store'
 
 type Props = {
@@ -39,12 +38,6 @@ type TItem = TTokenBalance & {
 }
 
 const { t } = I18nextHelper.get()
-
-const getTokenKey = (token: TToken) => {
-  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[token.blockchain]
-
-  return `${service.tokenService.normalizeHash(token.hash)}-${token.blockchain}`
-}
 
 const renderItem: ListRenderItem<TItem> = ({ item }) => {
   return (
@@ -108,22 +101,21 @@ export const BalanceList = ({ onItemPress, onItemLongPress, accounts, className,
     if (balances.isLoading) return []
 
     const tokenBalancesMap: Map<string, TItem> = new Map()
-
     const allTokensBalances = balances.data.flatMap(balance => balance.tokensBalances)
 
     allTokensBalances.forEach(tokenBalance => {
-      const tokenKey = getTokenKey(tokenBalance.token)
+      const key = TokenHelper.getKey(tokenBalance.token.hash, tokenBalance.blockchain)
 
       let amountNumber = tokenBalance.amountNumber
       let exchangeAmountNumber = tokenBalance.exchangeAmount
 
-      const existentTokenBalance = tokenBalancesMap.get(tokenKey)
+      const existentTokenBalance = tokenBalancesMap.get(key)
       if (existentTokenBalance) {
         amountNumber += existentTokenBalance.amountNumber
         exchangeAmountNumber += existentTokenBalance.exchangeAmount
       }
 
-      tokenBalancesMap.set(tokenKey, {
+      tokenBalancesMap.set(key, {
         blockchain: tokenBalance.blockchain,
         token: tokenBalance.token,
         amountNumber,
@@ -144,7 +136,7 @@ export const BalanceList = ({ onItemPress, onItemLongPress, accounts, className,
   return (
     <FlatList
       data={data}
-      keyExtractor={item => getTokenKey(item.token)}
+      keyExtractor={item => TokenHelper.getKey(item.token.hash, item.blockchain)}
       className={StyleHelper.mergeStyles('w-full', className)}
       renderItem={renderItem}
       ItemSeparatorComponent={() => <TwSeparator withoutContainer />}
