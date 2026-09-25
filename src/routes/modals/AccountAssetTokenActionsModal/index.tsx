@@ -1,11 +1,9 @@
-import { useMemo } from 'react'
-
 import { useTranslation } from 'react-i18next'
 
 import { TwButton } from '@/components/TwButton'
 import { TwMenuButton } from '@/components/TwMenuButton'
 
-import { TokenHelper } from '@/helpers/TokenHelper'
+import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useAppDispatch } from '@/hooks/useRedux'
 
@@ -28,11 +26,8 @@ export const AccountAssetTokenActionsModal = ({
 
   const { showType, tokenBalance } = route.params
   const isActive = showType === 'active'
-
-  const isNativeToken = useMemo(
-    () => TokenHelper.isNativeToken(tokenBalance.token.hash, tokenBalance.blockchain),
-    [tokenBalance]
-  )
+  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[tokenBalance.blockchain]
+  const isNativeToken = service.tokenService.isNativeToken(tokenBalance.token.hash)
 
   const handlePress = () => {
     if (isNativeToken) return

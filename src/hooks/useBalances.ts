@@ -4,7 +4,6 @@ import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import type { QueryClient } from '@tanstack/react-query'
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { cloneDeep } from 'lodash'
-import { match } from 'ts-pattern'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ExchangeHelper } from '@/helpers/ExchangeHelper'
@@ -49,24 +48,26 @@ export function buildQueryKeyBalance(
 }
 
 const fetchBalance = async (
-  param: TUseBalancesParams,
+  params: TUseBalancesParams,
   network: TNetwork,
   queryClient: QueryClient,
   currency: TCurrency,
   currencyRatio: number
 ): Promise<TUseBalancesFetchResult> => {
+  const { address, blockchain } = params
+
   try {
-    const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[param.blockchain]
-    const balance = await service.blockchainDataService.getBalance(param.address)
+    const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
+    const balance = await service.blockchainDataService.getBalance(address)
     const tokens = balance.map(balance => balance.token)
-    const exchange = await fetchExchange(param.blockchain, tokens, network, queryClient, currency, currencyRatio)
+    const exchange = await fetchExchange(blockchain, tokens, network, queryClient, currency, currencyRatio)
     const tokensBalancesMap: Map<string, TTokenBalance> = new Map()
 
     await Promise.allSettled(
       balance.map(async balance => {
         const exchangeConvertedPrice = ExchangeHelper.getExchangeConvertedPrice(
           balance.token.hash,
-          param.blockchain,
+          blockchain,
           exchange
         )
 
@@ -75,9 +76,9 @@ const fetchBalance = async (
         const amountNumber = amountBn.toNumber()
         const exchangeAmount = amountNumber * exchangeConvertedPrice
 
-        tokensBalancesMap.set(service.tokenService.normalizeHash(balance.token.hash), {
-          token: { ...balance.token, blockchain: param.blockchain },
-          blockchain: param.blockchain,
+        tokensBalancesMap.set(TokenHelper.getKey(balance.token.hash, blockchain), {
+          token: { ...balance.token, blockchain },
+          blockchain,
           amount,
           amountNumber,
           exchangeAmount,
@@ -86,17 +87,9 @@ const fetchBalance = async (
       })
     )
 
-    return {
-      address: param.address,
-      blockchain: param.blockchain,
-      tokensBalancesMap,
-    }
+    return { address, blockchain, tokensBalancesMap }
   } catch {
-    return {
-      address: param.address,
-      blockchain: param.blockchain,
-      tokensBalancesMap: new Map(),
-    }
+    return { address, blockchain, tokensBalancesMap: new Map() }
   }
 }
 
@@ -106,49 +99,48 @@ const fixBalanceResult = (
   hiddenTokensByBlockchain: THiddenTokenByBlockchain
 ): TBalance => {
   const tokensBalancesMapClone = cloneDeep(result.tokensBalancesMap)
-  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[result.blockchain]
-  const mandatorySymbols = TokenHelper.mandatorySymbolsMap.get(result.blockchain) || []
+  const blockchain = result.blockchain
+  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
+  const mandatorySymbols = TokenHelper.mandatorySymbolsMap.get(blockchain) || []
 
   mandatorySymbols.forEach(symbol => {
-    const token = TokenHelper.getTokenBySymbol(symbol, result.blockchain)
+    const token = TokenHelper.getTokenBySymbol(symbol, blockchain)
+
     if (!token) return
 
-    if (tokensBalancesMapClone.has(token.hash)) return
+    const key = TokenHelper.getKey(token.hash, blockchain)
 
-    tokensBalancesMapClone.set(token.hash, {
+    if (tokensBalancesMapClone.has(key)) return
+
+    tokensBalancesMapClone.set(key, {
       amountNumber: 0,
       amount: '0',
       exchangeAmount: 0,
       exchangeConvertedPrice: 0,
-      blockchain: result.blockchain,
+      blockchain,
       token,
     })
   })
 
-  const hiddenTokens = hiddenTokensByBlockchain[result.blockchain]
-  let tokensBalances: TTokenBalance[] = []
+  const hiddenTokens = hiddenTokensByBlockchain[blockchain]
 
-  match(showType)
-    .with('active', () => {
-      hiddenTokens?.forEach(tokenHash => {
-        tokensBalancesMapClone.delete(service.tokenService.normalizeHash(tokenHash))
-      })
+  if (hiddenTokens) {
+    const keepHidden = showType === 'hidden'
 
-      tokensBalances = Array.from(tokensBalancesMapClone.values())
-    })
-    .otherwise(() => {
-      hiddenTokens?.forEach(tokenHash => {
-        const tokenBalance = tokensBalancesMapClone.get(service.tokenService.normalizeHash(tokenHash))
+    for (const [key, { token }] of tokensBalancesMapClone) {
+      const isHidden = hiddenTokens.some(tokenHash => service.tokenService.predicateByHash(tokenHash, token.hash))
 
-        if (!tokenBalance) return
+      if (isHidden !== keepHidden) {
+        tokensBalancesMapClone.delete(key)
+      }
+    }
+  }
 
-        tokensBalances.push(tokenBalance)
-      })
-    })
+  const tokensBalances = Array.from(tokensBalancesMapClone.values())
 
   return {
     address: result.address,
-    blockchain: result.blockchain,
+    blockchain,
     tokensBalances,
     tokensBalancesMap: tokensBalancesMapClone,
     exchangeTotal: tokensBalances.reduce((acc, tokenBalance) => acc + tokenBalance.exchangeAmount, 0),

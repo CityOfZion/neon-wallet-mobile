@@ -9,7 +9,6 @@ import { TwButton } from '@/components/TwButton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { TokenHelper } from '@/helpers/TokenHelper'
 
 import { useBalance } from '@/hooks/useBalances'
 import { usePressOnce } from '@/hooks/usePressOnce'
@@ -30,8 +29,11 @@ export const HideFraudulentTokenModal = ({
 }: TRootStackScreenProps<'HideFraudulentTokenModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'hideFraudulentToken' })
   const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
-  const balanceQuery = useBalance(account, { showType: 'active' })
+  const balanceQuery = useBalance(account)
   const dispatch = useAppDispatch()
+
+  const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
+
   const [isHiding, startHide] = usePressOnce(() => {
     dispatch(utilityReducerActions.toggleHiddenToken({ hash, blockchain: account.blockchain }))
     ToastHelper.success({ message: t('hideSuccessMessage') })
@@ -41,14 +43,10 @@ export const HideFraudulentTokenModal = ({
   const tokenBalance = useMemo(() => {
     if (balanceQuery.isLoading) return undefined
 
-    const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
-
     return balanceQuery.data?.tokensBalances?.find(({ token }) => service.tokenService.predicateByHash(hash, token))
-  }, [account.blockchain, balanceQuery.data?.tokensBalances, balanceQuery.isLoading, hash])
+  }, [balanceQuery.data?.tokensBalances, balanceQuery.isLoading, hash, service])
 
-  const isNativeToken = useMemo(() => TokenHelper.isNativeToken(hash, account.blockchain), [hash, account])
-
-  const isDisabled = isHiding || isNativeToken || !tokenBalance
+  const isDisabled = isHiding || service.tokenService.isNativeToken(hash) || !tokenBalance
 
   return (
     <ModalLayout.Root>
