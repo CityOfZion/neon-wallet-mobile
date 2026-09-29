@@ -1,4 +1,4 @@
-import lodash from 'lodash'
+import orderBy from 'lodash/orderBy'
 
 import { SelectorHelper } from '@/helpers/SelectorHelper'
 
@@ -13,7 +13,7 @@ const priorityOrder: Record<TNotificationPriority, number> = {
 }
 
 const orderNotifications = <T extends TNotification>(notifications: T[]): T[] => {
-  return lodash.orderBy(
+  return orderBy(
     [...notifications],
     [notification => notification.read, notification => priorityOrder[notification.priority], 'date'],
     ['asc', 'asc', 'desc']

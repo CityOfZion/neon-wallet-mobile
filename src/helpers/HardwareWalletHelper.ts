@@ -4,7 +4,7 @@ import { ledgerUSBVendorId } from '@ledgerhq/devices'
 import type Transport from '@ledgerhq/hw-transport'
 import HIDTransport from '@ledgerhq/react-native-hid'
 import BleTransport from '@ledgerhq/react-native-hw-transport-ble'
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import { DeviceEventEmitter } from 'react-native'
 import type { Device as BleDevice } from 'react-native-ble-plx'
 

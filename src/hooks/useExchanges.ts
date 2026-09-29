@@ -3,7 +3,8 @@ import { useMemo } from 'react'
 import { BSBigHumanAmount, type TBSToken, type TTokenPricesResponse } from '@cityofzion/blockchain-service'
 import type { Query, QueryClient } from '@tanstack/react-query'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
-import lodash from 'lodash'
+import assign from 'lodash/assign'
+import uniqBy from 'lodash/uniqBy'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ExchangeHelper } from '@/helpers/ExchangeHelper'
@@ -60,7 +61,8 @@ export async function fetchExchange(
   if (tokensToFetch.length > 0) {
     try {
       const newTokenPrices = await service.exchangeDataService.getTokenPrices({ tokens: tokensToFetch })
-      tokenPrices = lodash.uniqBy(newTokenPrices, 'token.hash')
+
+      tokenPrices = uniqBy(newTokenPrices, 'token.hash')
     } catch {
       // Empty block
     }
@@ -155,7 +157,7 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
       }
     }),
     combine: result => {
-      const data = lodash.assign(emptyObject, ...result.map(query => query.data || {})) as TMultiExchange
+      const data = assign(emptyObject, ...result.map(query => query.data || {})) as TMultiExchange
 
       return {
         isLoading: isCurrencyRatioLoading || result.some(query => query.isLoading),

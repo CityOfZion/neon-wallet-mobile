@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
 
+import orderBy from 'lodash/orderBy'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
+import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
@@ -133,7 +135,11 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
       accountsByBlockchain.set(account.blockchain, [...accountsForBlockchain, account])
     })
 
-    return accountsByBlockchain
+    return orderBy(
+      Array.from(accountsByBlockchain.entries()),
+      [([blockchain]) => BlockchainServiceHelper.blockchainNames.indexOf(blockchain)],
+      ['asc']
+    )
   }, [accounts])
 
   const selectedAccountsByBlockchain = useMemo(() => {
@@ -161,7 +167,7 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
       expandMultiple
       activeSections={openedSections}
       keyExtractor={(_item, index) => index}
-      sections={Array.from(accountsByBlockchain.entries())}
+      sections={accountsByBlockchain}
       renderHeader={(content, _index, isOpened) => (
         <AccountSelectionAccordionHeader
           blockchain={content[0]}

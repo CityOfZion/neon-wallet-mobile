@@ -1,7 +1,8 @@
 import { Fragment, useCallback, useMemo } from 'react'
 
 import { search } from 'fast-fuzzy'
-import { debounce, orderBy } from 'lodash'
+import debounce from 'lodash/debounce'
+import orderBy from 'lodash/orderBy'
 import { useTranslation } from 'react-i18next'
 import type { ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
