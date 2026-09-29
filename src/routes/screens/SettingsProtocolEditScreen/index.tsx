@@ -64,6 +64,9 @@ export const SettingsProtocolEditScreen = ({
   const isSelectedNetworkCustom = selectedNetwork.type === 'custom'
 
   const handlePress = async (network: TNetwork) => {
+    // Don't do anything if the network is already selected
+    if (network.id === selectedNetwork.id) return
+
     dispatch(
       settingsReducerActions.setSelectNetwork({
         blockchain,
