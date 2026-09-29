@@ -2,6 +2,7 @@ import { createListenerMiddleware } from '@reduxjs/toolkit'
 import { REHYDRATE } from 'redux-persist'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
+import { LoggerHelper } from '@/helpers/LoggerHelper'
 
 import { settingsReducerActions } from '../reducers/settings'
 
@@ -26,7 +27,11 @@ export function getNetworkMiddleware() {
       if (!selectedNetworkByBlockchain) return
 
       services.forEach(service => {
-        service.setNetwork(selectedNetworkByBlockchain[service.name])
+        try {
+          service.setNetwork(selectedNetworkByBlockchain[service.name])
+        } catch (error) {
+          LoggerHelper.sentry(error, { where: 'NetworkMiddleware', operation: `setNetwork:${service.name}` })
+        }
       })
     },
   })
