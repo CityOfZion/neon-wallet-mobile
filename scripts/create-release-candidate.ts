@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import fs from 'fs/promises'
 import inquirer from 'inquirer'
-import lodash from 'lodash'
+import isEqual from 'lodash/isEqual'
 import path from 'path'
 
 import packageJson from '../package.json'
@@ -102,7 +102,7 @@ export async function createOrUpdateChangelog(bumpedVersion: string) {
     }
   }
 
-  if (!lodash.isEqual(lastChangelog, updatedChangelog)) {
+  if (!isEqual(lastChangelog, updatedChangelog)) {
     // Directly commit the changes to the dev branch because it is important to keep the dev branch updated
     await runCommand('git add .')
     await runCommand(`git commit -m "Update changelog for version ${bumpedVersion}" --no-verify`)

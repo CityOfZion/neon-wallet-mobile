@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 
 import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'

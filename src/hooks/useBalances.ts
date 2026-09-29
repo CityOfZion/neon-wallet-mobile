@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
 import type { QueryClient } from '@tanstack/react-query'
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { ExchangeHelper } from '@/helpers/ExchangeHelper'

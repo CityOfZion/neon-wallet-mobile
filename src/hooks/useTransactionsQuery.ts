@@ -117,7 +117,8 @@ export const useTransactionsQuery = ({ account, dateFrom, dateTo }: TUseTransact
 
     const groupedDataByDates = new Map<string, TUseTransactionsGroupedTransactionsByDate>()
 
-    sortedTransactions.forEach(transaction => {
+    sortedTransactions.forEach(originalTransaction => {
+      let transaction = originalTransaction
       const hiddenTokens = hiddenTokensByBlockchain[transaction.blockchain]
       const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[transaction.blockchain]
 
@@ -127,18 +128,24 @@ export const useTransactionsQuery = ({ account, dateFrom, dateTo }: TUseTransact
         }
 
         if (transaction.view === 'utxo') {
-          transaction.inputs = transaction.inputs.filter(({ token }) => !isHiddenToken(token.hash))
-          transaction.outputs = transaction.outputs.filter(({ token }) => !isHiddenToken(token.hash))
+          transaction = {
+            ...transaction,
+            inputs: transaction.inputs.filter(({ token }) => !isHiddenToken(token.hash)),
+            outputs: transaction.outputs.filter(({ token }) => !isHiddenToken(token.hash)),
+          }
         } else {
-          transaction.events = transaction.events.filter(event => {
-            if (event.eventType !== 'token') return true
+          transaction = {
+            ...transaction,
+            events: transaction.events.filter(event => {
+              if (event.eventType !== 'token') return true
 
-            const tokenHash = event.token?.hash
+              const tokenHash = event.token?.hash
 
-            if (!tokenHash) return true
+              if (!tokenHash) return true
 
-            return !isHiddenToken(tokenHash)
-          })
+              return !isHiddenToken(tokenHash)
+            }),
+          }
         }
       }
 

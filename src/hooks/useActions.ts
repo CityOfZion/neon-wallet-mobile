@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 import type {
   TUseActionsActionState,
@@ -61,7 +61,8 @@ export const useActions = <T extends TUseActionsData>(initialData: T, options?: 
 
   const checkIsValid = useCallback(() => {
     const hasSomeError = Object.keys(actionStateRef.current.errors).length > 0
-    const hasSomeNotChanged = Object.values(actionStateRef.current.changed).some(value => value !== true)
+    const hasSomeNotChanged = Object.values(actionStateRef.current.changed).some(value => !value)
+
     if (hasSomeError || hasSomeNotChanged) {
       setState({ isValid: false })
       return
