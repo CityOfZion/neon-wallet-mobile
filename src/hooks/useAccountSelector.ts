@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import orderBy from 'lodash/orderBy'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
@@ -10,7 +10,7 @@ import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount, TAccountWithWallet } from '@/types/store'
 
 const orderAccounts = <T extends TAccount = TAccount>(accounts: T[]): T[] =>
-  _.orderBy(
+  orderBy(
     [...accounts],
     [({ blockchain }) => BlockchainServiceHelper.blockchainNames.indexOf(blockchain), 'order'],
     ['asc', 'asc']
