@@ -47,9 +47,15 @@ export const StellarPersistTrustlineModal = ({
   }
 
   const handleLimitChange = (limit: string) => {
-    setData({ limit, isLimitFormatting: true })
+    limit = limit.trim()
+
+    const isLimitFormatting = !!limit
+
+    setData({ limit, isLimitFormatting })
 
     debounce(() => {
+      if (!isLimitFormatting) return
+
       setData({
         limit: new BSBigHumanAmount(limit, actionData.token?.decimals).toFormatted(),
         isLimitFormatting: false,

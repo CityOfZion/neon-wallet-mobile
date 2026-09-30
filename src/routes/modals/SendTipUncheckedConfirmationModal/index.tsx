@@ -29,19 +29,23 @@ export const SendTipUncheckedConfirmationModal = ({
         <ModalLayout.Title>{t('title')}</ModalLayout.Title>
         <ModalLayout.CloseButton onPress={navigation.goBack} />
       </ModalLayout.Header>
-      <ModalLayout.ScrollContent>
-        <Image contentFit="contain" className="-mr-12 h-52" source={require('@/assets/images/neo-tipping-logo.png')} />
+      <ModalLayout.ScrollContent className="pt-4">
+        <Image
+          contentFit="contain"
+          className="-mr-12 mb-2 h-52 w-auto"
+          source={require('@/assets/images/neo-tipping-logo.png')}
+        />
 
-        <View className="mb-4 flex-row justify-center gap-x-2">
-          <Fa6RegStar className="size-6 text-neon" aria-hidden />
+        <View className="mb-2 flex-row justify-center gap-x-2">
+          <Fa6RegStar className="mt-0.5 size-6 text-neon" aria-hidden />
           <Text className="font-sans-medium text-1xl text-white">{t('subtitle')}</Text>
         </View>
 
         <Text className="text-center font-sans-light text-lg text-white">{t('description')}</Text>
 
-        <View className="mb-2 mt-auto flex flex-col gap-6">
-          <TwButton variant="contained-light" label={t('keepTip')} onPress={handlePress.bind(null, true)} />
-          <TwButton variant="contained-light" label={t('removeTip')} onPress={handlePress.bind(null, false)} />
+        <View className="mb-4 mt-auto flex flex-col gap-4">
+          <TwButton variant="contained-light" label={t('keepTipButtonLabel')} onPress={handlePress.bind(null, true)} />
+          <TwButton variant="outline" label={t('removeTipButtonLabel')} onPress={handlePress.bind(null, false)} />
         </View>
       </ModalLayout.ScrollContent>
     </ModalLayout.Root>

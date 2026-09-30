@@ -55,6 +55,7 @@ import type {
   TSellTokensDepositModalParams,
   TSellTokensDepositSuccessModalParams,
   TSendConfirmModalParams,
+  TSendTipCustomAmountModalParams,
   TSendTipUncheckedConfirmationModalParams,
   TStellarPersistTrustlineModalParams,
   TStellarTrustilneTokenSelectionModalParams,
@@ -205,6 +206,7 @@ export type TRootStackParamList = {
   ExportKeyModal: TExportKeyModalParams
   SendConfirmModal: TSendConfirmModalParams
   SendTipUncheckedConfirmationModal: TSendTipUncheckedConfirmationModalParams
+  SendTipCustomAmountModal: TSendTipCustomAmountModalParams
   WalletContextModal: TWalletContextModalParams
   ReorderWalletsModal: undefined
   EditWalletModal: TEditWalletModalParams
