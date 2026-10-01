@@ -88,7 +88,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
     {
       availableTokensToUse: { loading: true, value: [] },
       selectedTokenToUse: { loading: false, value: null },
-      selectedAccountToUse: { loading: false, value: route.params?.account || null, valid: null },
+      selectedAccountToUse: { loading: false, value: null, valid: null },
       selectedAmountToUse: { loading: false, value: null },
       availableTokensToReceive: { loading: false, value: [] },
       selectedTokenToReceive: { loading: false, value: null },
@@ -452,10 +452,17 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
   ])
 
   useLayoutEffect(() => {
-    if (!route.params?.account) return
+    const account = route.params?.account
 
-    handleSelectAccountToUse(route.params?.account)
-  }, [route.params?.account])
+    if (
+      !account ||
+      account.type === 'watch' ||
+      !SwapHelper.getNetwork(account.blockchain, selectedNetworkByBlockchain[account.blockchain])
+    )
+      return
+
+    handleSelectAccountToUse(account)
+  }, [route.params?.account, selectedNetworkByBlockchain])
 
   return (
     <ScreenLayout.Root>
