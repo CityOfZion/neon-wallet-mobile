@@ -20,6 +20,7 @@ import { ActionTokenButton } from '@/components/ActionTokenButton'
 import { Loader } from '@/components/Loader'
 import { Tooltip } from '@/components/Tooltip'
 import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
+import { TwBanner } from '@/components/TwBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwIconButton } from '@/components/TwIconButton'
 import { TwInput } from '@/components/TwInput'
@@ -35,6 +36,7 @@ import { StringHelper } from '@/helpers/StringHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { SwapHelper } from '@/helpers/SwapHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
+import { TokenHelper } from '@/helpers/TokenHelper'
 
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
@@ -710,6 +712,30 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
           fee={actionData.fee}
           service={service}
         />
+
+        {!!actionData.selectedTokenToUse.value &&
+          TokenHelper.isNonNativeStellarToken(actionData.selectedTokenToUse.value) && (
+            <TwBanner
+              type="warning"
+              className="mt-3"
+              textClassName="text-sm leading-5 py-3 px-4"
+              text={t('form.stellarTrustlineWarnings.source', {
+                token: actionData.selectedTokenToUse.value.symbol.toUpperCase(),
+              })}
+            />
+          )}
+
+        {!!actionData.selectedTokenToReceive.value &&
+          TokenHelper.isNonNativeStellarToken(actionData.selectedTokenToReceive.value) && (
+            <TwBanner
+              type="warning"
+              className="mt-3"
+              textClassName="text-sm leading-5 py-3 px-4"
+              text={t('form.stellarTrustlineWarnings.receiver', {
+                token: actionData.selectedTokenToReceive.value.symbol.toUpperCase(),
+              })}
+            />
+          )}
 
         {errorMessage && <TwAlertErrorBanner className="mt-3" message={errorMessage} />}
 

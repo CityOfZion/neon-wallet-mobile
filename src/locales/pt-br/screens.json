@@ -509,6 +509,10 @@
       "openAboutExtraIdToReceive": "Abrir modal sobre tag de destino/memo",
       "selectPlaceholder": "Selecionar…",
       "source": "Detalhes da conta",
+      "stellarTrustlineWarnings": {
+        "receiver": "Para receber {{token}} na Stellar, a conta de destino deve ter uma Trustline ativa para este token. Caso contrário o swap falhará. Você pode cadastrar uma Trustline na tela de sua conta.",
+        "source": "Para fazer swap de {{token}} na Stellar, a conta de origem deve ter uma Trustline ativa para este token. Caso contrário o swap falhará. Você pode cadastrar uma Trustline na tela de sua conta."
+      },
       "tokenToReceiveModalTitle": "Selecione um token a receber",
       "tokenToReceiveTitle": "Por este",
       "tokenToUseModalTitle": "Selecione um token para fazer swap",

@@ -509,6 +509,10 @@
       "openAboutExtraIdToReceive": "Destination Tag/Memo Info öffnen",
       "selectPlaceholder": "Wählen",
       "source": "Konto Details",
+      "stellarTrustlineWarnings": {
+        "receiver": "Um {{token}} auf Stellar zu empfangen, muss das empfangende Konto über eine aktive Trustline für dieses Token verfügen. Andernfalls schlägt der Swap fehl. Sie können eine Trustline auf Ihrem Konto-Bildschirm einrichten.",
+        "source": "Um {{token}} auf Stellar zu tauschen, muss das Quellkonto über eine aktive Trustline für dieses Token verfügen. Andernfalls schlägt der Swap fehl. Sie können eine Trustline auf Ihrem Konto-Bildschirm einrichten."
+      },
       "tokenToReceiveModalTitle": "Token zum Empfangen auswählen",
       "tokenToReceiveTitle": "Gegen dies",
       "tokenToUseModalTitle": "Token zum Tauschen auswählen",
