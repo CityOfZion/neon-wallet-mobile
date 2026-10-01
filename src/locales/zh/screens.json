@@ -509,6 +509,10 @@
       "openAboutExtraIdToReceive": "打开目标标签/备注说明",
       "selectPlaceholder": "请选择…",
       "source": "账户详情",
+      "stellarTrustlineWarnings": {
+        "receiver": "要在 Stellar 上接收 {{token}}，接收账户必须为此代币设置有效的信任线。否则兑换将失败。您可以在账户界面设置信任线。",
+        "source": "要在 Stellar 上兑换 {{token}}，源账户必须为此代币设置有效的信任线。否则兑换将失败。您可以在账户界面设置信任线。"
+      },
       "tokenToReceiveModalTitle": "选择要接收的代币",
       "tokenToReceiveTitle": "兑换为此代币",
       "tokenToUseModalTitle": "选择要兑换的代币",
