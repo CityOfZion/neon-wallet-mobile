@@ -10,6 +10,7 @@ import { TwIconButton } from '@/components/TwIconButton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
+import { SwapHelper } from '@/helpers/SwapHelper'
 
 import { useAccountByIdSelector } from '@/hooks/useAccountSelector'
 import { useBalance } from '@/hooks/useBalances'
@@ -71,6 +72,8 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
   const isAbleToNeo3Vote = account?.blockchain === 'neo3'
 
   const isAbleToStellarTrustline = account?.blockchain === 'stellar'
+
+  const isAbleToSwap = !isWatchAccount && !!SwapHelper.getNetwork(account.blockchain, selectedNetwork)
 
   const isSendDisabled =
     isNotConnected ||
@@ -220,7 +223,7 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
               <AccountScreenActionButton
                 label={t('buttons.swap')}
                 className="w-full"
-                disabled={isWatchAccount}
+                disabled={!isAbleToSwap}
                 icon={<TbTransform aria-hidden className="size-5 text-neon" />}
                 onPress={handlePressSwapButton}
               />
