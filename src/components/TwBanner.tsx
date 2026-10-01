@@ -14,19 +14,17 @@ import TbAlertSmall from '@/assets/images/tb-alert-small.svg'
 import TbAlertTriangle from '@/assets/images/tb-alert-triangle.svg'
 import TbAlertHexagonFilled from '@/assets/images/tb-filled-alert-hexagon.svg'
 
-export type TTwBannerType = 'info' | 'error' | 'success' | 'warning' | 'warningOrange' | 'alert'
+type TType = 'info' | 'error' | 'success' | 'warning' | 'warningOrange' | 'alert'
 
-export type TTwBannerProps = {
-  type: TTwBannerType
+export type TTwBannerProps = ViewProps & {
+  type: TType
   text?: ReactNode
   textClassName?: string
   iconClassName?: string
   iconContainerClassName?: string
 }
 
-type TProps = TTwBannerProps & ViewProps
-
-const iconsByType: Record<TTwBannerType, JSX.Element> = {
+const iconsByType: Record<TType, JSX.Element> = {
   error: <TbAlertHexagonFilled className="size-6 text-pink" />,
   info: <MdInfoOutline className="size-6 text-blue" />,
   success: <MdVerified className="size-6 text-green" />,
@@ -49,9 +47,8 @@ export const TwBanner = ({
   children,
   text,
   ...props
-}: TProps) => {
+}: TTwBannerProps) => {
   const icon = iconsByType[type]
-
   const childrenContent = children || text
 
   return (
@@ -63,8 +60,8 @@ export const TwBanner = ({
         )}
       >
         {cloneElement(icon, {
-          className: StyleHelper.mergeStyles(icon.props.className, iconClassName),
           'aria-hidden': true,
+          className: StyleHelper.mergeStyles(icon.props.className, iconClassName),
         })}
       </View>
 
