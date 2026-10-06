@@ -65,7 +65,7 @@ const toggleHiddenToken: CaseReducer<TUtilityReducer, PayloadAction<THiddenToken
   if (service.tokenService.isNativeToken(hash)) throw new AppError(t('errors.unexpected'))
 
   const normalizedHash = service.tokenService.normalizeHash(hash)
-  const hiddenTokens = (state.data.hiddenTokensByBlockchain[blockchain] ??= [])
+  const hiddenTokens = (state.data.hiddenTokensByBlockchain[blockchain] ||= [])
   const index = hiddenTokens.findIndex(tokenHash => service.tokenService.predicateByHash(normalizedHash, tokenHash))
 
   if (index < 0) {
