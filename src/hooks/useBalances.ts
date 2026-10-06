@@ -101,6 +101,8 @@ const fixBalanceResult = (
   const tokensBalancesMapClone = cloneDeep(result.tokensBalancesMap)
   const blockchain = result.blockchain
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
+  const hiddenTokens = hiddenTokensByBlockchain[blockchain] || []
+  const keepHidden = showType === 'hidden'
   const mandatorySymbols = TokenHelper.mandatorySymbolsMap.get(blockchain) || []
 
   mandatorySymbols.forEach(symbol => {
@@ -122,17 +124,11 @@ const fixBalanceResult = (
     })
   })
 
-  const hiddenTokens = hiddenTokensByBlockchain[blockchain]
+  for (const [key, { token }] of tokensBalancesMapClone) {
+    const isHidden = hiddenTokens.some(tokenHash => service.tokenService.predicateByHash(tokenHash, token.hash))
 
-  if (hiddenTokens) {
-    const keepHidden = showType === 'hidden'
-
-    for (const [key, { token }] of tokensBalancesMapClone) {
-      const isHidden = hiddenTokens.some(tokenHash => service.tokenService.predicateByHash(tokenHash, token.hash))
-
-      if (isHidden !== keepHidden) {
-        tokensBalancesMapClone.delete(key)
-      }
+    if (isHidden !== keepHidden) {
+      tokensBalancesMapClone.delete(key)
     }
   }
 
@@ -220,6 +216,7 @@ export function useBalance(
 
   const data = useMemo<TBalance | undefined>(() => {
     if (!query.data) return undefined
+
     return fixBalanceResult(query.data, showType, hiddenTokensByBlockchain)
   }, [query.data, showType, hiddenTokensByBlockchain])
 
