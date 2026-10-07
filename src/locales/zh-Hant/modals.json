@@ -227,6 +227,11 @@
     "title": "連接 dApp"
   },
   "dappPermission": {
+    "antiMevSwitch": {
+      "antiMevDisableUrlNotFoundError": "無法停用 Anti-MEV：所選網路沒有可用的標準 RPC URL",
+      "antiMevEnableUrlNotFoundError": "無法啟用 Anti-MEV：所選網路沒有可用的 Anti-MEV RPC URL",
+      "antiMevSwitchLabel": "Anti-MEV"
+    },
     "customContents": {
       "invokeNeo3": {
         "amountDetailsItemLabel": "金額",

@@ -18,11 +18,14 @@ import TbArrowsSort from '@/assets/images/tb-arrows-sort.svg'
 import TbCodeCircle from '@/assets/images/tb-code-circle.svg'
 import TbCopy from '@/assets/images/tb-copy.svg'
 
+import { DappPermissionAntiMevSwitch } from '../DappPermissionAntiMevSwitch'
 import type { TDappPermissionProps } from '../index'
 import { DappPermissionGenericContentFee } from './DappPermissionGenericContentFee'
 
 export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
-  const { session, onAccept, onReject, isAccepting, isRejecting, request, sessionDetails } = props
+  const { session, onAccept, onReject, isAccepting, isRejecting, request, sessionDetails, sessionAccount } = props
+
+  const blockchain = sessionAccount.blockchain || sessionDetails.blockchain
 
   const { t } = useTranslation('modals', { keyPrefix: 'dappPermission' })
   const { t: tCommon } = useTranslation('common')
@@ -54,7 +57,11 @@ export const DappPermissionGenericContent = (props: TDappPermissionProps) => {
       <Text className="mt-2 text-center font-sans-regular text-base text-gray-100">{t('description2')}</Text>
 
       <Details.Root className="mt-5">
-        <Details.Header labelClassName="capitalize" leftElement={<TbArrowsSort aria-hidden className="rotate-90" />}>
+        <Details.Header
+          labelClassName="capitalize"
+          leftElement={<TbArrowsSort aria-hidden className="rotate-90" />}
+          rightElement={<DappPermissionAntiMevSwitch blockchain={blockchain} />}
+        >
           {request.params.request.method}
         </Details.Header>
       </Details.Root>
