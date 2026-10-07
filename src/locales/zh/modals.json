@@ -227,6 +227,11 @@
     "title": "连接 dApp"
   },
   "dappPermission": {
+    "antiMevSwitch": {
+      "antiMevDisableUrlNotFoundError": "无法禁用 Anti-MEV：所选网络没有可用的标准 RPC URL",
+      "antiMevEnableUrlNotFoundError": "无法启用 Anti-MEV：所选网络没有可用的 Anti-MEV RPC URL",
+      "antiMevSwitchLabel": "Anti-MEV"
+    },
     "customContents": {
       "invokeNeo3": {
         "amountDetailsItemLabel": "数量",
