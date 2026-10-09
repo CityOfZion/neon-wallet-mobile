@@ -15,7 +15,7 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const SendConfirmModal = ({ navigation, route }: TRootStackScreenProps<'SendConfirmModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'sendConfirm' })
-  const { intents, fee, service, onConfirm } = route.params
+  const { intents, fee, memo, service, onConfirm } = route.params
 
   const [isLoading, handleSubmit] = usePressOnce(async () => {
     await onConfirm(navigation)
@@ -50,7 +50,7 @@ export const SendConfirmModal = ({ navigation, route }: TRootStackScreenProps<'S
       <ModalLayout.ScrollContent>
         <Text className="mb-6 mt-1 text-left font-sans-regular text-base leading-5 text-white">{t('description')}</Text>
 
-        <SendDetails data={data} blockchain={service.name} fee={fee} />
+        <SendDetails data={data} blockchain={service.name} fee={fee} memo={memo} />
 
         <View className="mt-auto">
           <TwButton
