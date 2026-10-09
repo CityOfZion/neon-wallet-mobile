@@ -392,6 +392,7 @@
       "feeError": "计算费用错误",
       "insufficientFunds": "你的余额不足",
       "invalidKey": "账户密钥有错误",
+      "memoRequired": "收款方需要备注，请填写备注字段后重试",
       "noAmountToTip": "余额不足以支付小费",
       "noFiatPriceToTip": "找不到提议的法币价格",
       "noTokenToTip": "没有代币支付提议",

@@ -21,10 +21,11 @@ type TProps = {
   transactions: TUseTransactionsTransaction[]
   selectedAccount: TAccount
   fee?: string
+  memo?: string
   navigation: TWalletsStackScreenProps<'SendScreen'>['navigation']
 }
 
-export const SendSuccessContent = ({ transactions, selectedAccount, fee, navigation }: TProps) => {
+export const SendSuccessContent = ({ transactions, selectedAccount, fee, memo, navigation }: TProps) => {
   const { t } = useTranslation('modals', { keyPrefix: 'sendConfirm.successContent' })
   const { wallet } = useWalletByIdSelector(selectedAccount.idWallet)
   const { handleErase } = useModalErase()
@@ -106,7 +107,7 @@ export const SendSuccessContent = ({ transactions, selectedAccount, fee, navigat
       <Text className="mx-12 mb-6 text-center font-sans-medium text-1xl text-white">{t('description')}</Text>
 
       {/* Assuming all transactions are from the same blockchain */}
-      <SendDetails data={data} blockchain={selectedAccount.blockchain} fee={fee} />
+      <SendDetails data={data} blockchain={selectedAccount.blockchain} fee={fee} memo={memo} />
 
       <View className="mt-auto flex flex-col items-center justify-between gap-y-4 py-4">
         <TwButton

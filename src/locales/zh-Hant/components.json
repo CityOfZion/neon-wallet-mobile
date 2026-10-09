@@ -66,6 +66,7 @@
   "sendDetails": {
     "amountLabel": "數量",
     "detailsLabel": "交易詳情",
+    "memoLabel": "備註",
     "recipientLabel": "接受者",
     "saveContactButtonLabel": "保存聯絡人",
     "totalFeeLabel": "總費用",
@@ -110,6 +111,12 @@
     "quickToolsButtonLabel": "快速工具",
     "searchStackButtonLabel": "搜尋",
     "walletsStackButtonLabel": "錢包"
+  },
+  "transactionMemoActionStep": {
+    "invalidMemo": "備註對於此區塊鏈來說過長",
+    "optionalLabel": "*可選",
+    "placeholder": "輸入備註…",
+    "title": "備註"
   },
   "twAccountList": {
     "emptyList": "找不到帳戶"

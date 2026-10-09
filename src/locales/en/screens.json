@@ -392,6 +392,7 @@
       "feeError": "Error calculating the fee",
       "insufficientFunds": "You don't have enough balance",
       "invalidKey": "There was an error with the account key",
+      "memoRequired": "The recipient requires a memo, please fill in the memo field and try again",
       "noAmountToTip": "Insufficient balance to pay the tip",
       "noFiatPriceToTip": "Fiat price not found to the tip",
       "noTokenToTip": "No token to pay the tip",

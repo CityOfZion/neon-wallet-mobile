@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+
 import type { TBSToken } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
@@ -41,6 +43,7 @@ type TProps = {
   data: TSendDetailsData[]
   blockchain: TBlockchainServiceKey
   fee?: string
+  memo?: string
 }
 
 const SendDetailsItem = ({ txId, address, amount, token, blockchain, order }: TSendDetailsItemProps) => {
@@ -84,7 +87,7 @@ const SendDetailsItem = ({ txId, address, amount, token, blockchain, order }: TS
   )
 }
 
-export const SendDetails = ({ data, blockchain, fee }: TProps) => {
+export const SendDetails = ({ data, blockchain, fee, memo }: TProps) => {
   const { t } = useTranslation('components', { keyPrefix: 'sendDetails' })
 
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
@@ -122,6 +125,16 @@ export const SendDetails = ({ data, blockchain, fee }: TProps) => {
       </Details.Root>
 
       <Details.Root>
+        {!!memo && (
+          <Fragment>
+            <Details.Item label={t('memoLabel')} contentClassName="flex-row justify-start">
+              <Text className="font-sans-medium text-base text-white">{memo}</Text>
+            </Details.Item>
+
+            <Details.ItemSeparator />
+          </Fragment>
+        )}
+
         <Details.Item label={t('totalFeeLabel')} className="p-0">
           <View className="flex-row items-center">
             <TwBlockchainIcon blockchain={blockchain} className="mr-2 mt-0.5 size-3.5 text-gray-300" />

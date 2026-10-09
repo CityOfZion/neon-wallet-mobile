@@ -196,6 +196,7 @@ export type TSendTipCustomAmountModalParams = {
 export type TSendConfirmModalParams = {
   intents: TTransferIntent[]
   fee?: string
+  memo?: string
   service: IBlockchainService<TBlockchainServiceKey>
   onConfirm: (navigation: TRootStackScreenProps<'SendConfirmModal'>['navigation']) => Promise<void>
 }
