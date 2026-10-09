@@ -392,6 +392,7 @@
       "feeError": "計算手續費錯誤",
       "insufficientFunds": "您的餘額不足",
       "invalidKey": "賬戶密鑰有錯誤",
+      "memoRequired": "收款方需要備註，請填寫備註欄位後重試",
       "noAmountToTip": "餘額不足以支付小費",
       "noFiatPriceToTip": "找不到小費的法幣價格",
       "noTokenToTip": "沒有代幣支付小費",
