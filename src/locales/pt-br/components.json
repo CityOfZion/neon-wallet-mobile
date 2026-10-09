@@ -66,6 +66,7 @@
   "sendDetails": {
     "amountLabel": "Quantia",
     "detailsLabel": "Detalhes da transação",
+    "memoLabel": "Memo",
     "recipientLabel": "Destinatário",
     "saveContactButtonLabel": "Salvar contato",
     "totalFeeLabel": "Taxa total",
@@ -110,6 +111,12 @@
     "quickToolsButtonLabel": "Ferramentas",
     "searchStackButtonLabel": "Buscar",
     "walletsStackButtonLabel": "Carteiras"
+  },
+  "transactionMemoActionStep": {
+    "invalidMemo": "O Memo é muito longo para esta blockchain",
+    "optionalLabel": "*Opcional",
+    "placeholder": "Insira um memo…",
+    "title": "Memo"
   },
   "twAccountList": {
     "emptyList": "Nenhuma conta encontrada"

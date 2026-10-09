@@ -66,6 +66,7 @@
   "sendDetails": {
     "amountLabel": "数量",
     "detailsLabel": "交易详情",
+    "memoLabel": "备注",
     "recipientLabel": "接受者",
     "saveContactButtonLabel": "保存联系人",
     "totalFeeLabel": "总费用",
@@ -110,6 +111,12 @@
     "quickToolsButtonLabel": "快捷工具",
     "searchStackButtonLabel": "搜索",
     "walletsStackButtonLabel": "钱包"
+  },
+  "transactionMemoActionStep": {
+    "invalidMemo": "备注对于此区块链来说过长",
+    "optionalLabel": "*可选",
+    "placeholder": "输入备注…",
+    "title": "备注"
   },
   "twAccountList": {
     "emptyList": "未找到账户"
