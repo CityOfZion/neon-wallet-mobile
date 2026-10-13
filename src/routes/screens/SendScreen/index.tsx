@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 
 import type { BSBigNumber, TTransferIntent } from '@cityofzion/blockchain-service'
-import { BSBigHumanAmount, isCalculableFee } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, BSError, hasMemo, isCalculableFee } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
@@ -9,6 +9,7 @@ import { ActionAddressButton } from '@/components/ActionAddressButton'
 import { ActionCard } from '@/components/ActionCard'
 import { ActionFeeStep } from '@/components/ActionFeeStep'
 import { ActionStep } from '@/components/ActionStep'
+import { TransactionMemoActionStep, type TTransactionMemo } from '@/components/TransactionMemoStep'
 import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwStepSeparator } from '@/components/TwStepSeparator'
@@ -55,6 +56,7 @@ type TActionsData = {
   tipCustomAmountBn?: BSBigNumber
   tipFiatPriceBn?: BSBigNumber
   tipError?: string
+  memo?: TTransactionMemo
 }
 
 export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'SendScreen'>) => {
@@ -112,7 +114,11 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     !service ||
     isCalculatingForm ||
     isFeeInvalid ||
-    !!actionData.tipError
+    !!actionData.tipError ||
+    (!!actionData.memo && !actionData.memo.isReady) ||
+    !!actionState.errors.memo
+
+  const tipAmount = actionData.tipAmountBn?.toFixed()
 
   const getSendFields = async () => {
     const { selectedAccount } = actionData
@@ -144,11 +150,14 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       })
     }
 
+    const memo = hasMemo(service) ? actionData.memo?.value : undefined
+
     return {
       service,
       serviceAccount,
       selectedAccount,
       intents,
+      memo,
     }
   }
 
@@ -192,7 +201,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
   const handleSelectAccount = (account?: TAccount) => {
     handleSetRecipients(() => [{ id: UtilsHelper.uuid(), addressInput: currentRecipientAddress.current }])
-    setData({ selectedAccount: account })
+    setData({ selectedAccount: account, memo: undefined })
   }
 
   const handleAddRecipient = () => {
@@ -307,6 +316,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     navigation.navigate('SendConfirmModal', {
       intents: fields.intents,
       fee: actionData.fee,
+      memo: fields.memo,
       service: service!,
       onConfirm: handleConfirm,
     })
@@ -318,11 +328,11 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
 
       if (!fields || isCalculatingForm || actionState.isActing || isFeeInvalid) return
 
-      const { service, intents, selectedAccount } = fields
+      const { service, intents, selectedAccount, memo } = fields
 
       await authenticate(selectedAccount)
 
-      const transactions = await service.transfer({ senderAccount: fields.serviceAccount, intents })
+      const transactions = await service.transfer({ senderAccount: fields.serviceAccount, intents, memo })
 
       const notificationPrefix = 'screens:send'
       const notificationSuccessPrefix = `${notificationPrefix}.successNotification`
@@ -357,6 +367,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
           <SendSuccessContent
             transactions={transactions}
             fee={actionData.fee}
+            memo={memo}
             selectedAccount={selectedAccount}
             navigation={navigation}
           />
@@ -371,6 +382,13 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
       })
     } catch (error: any) {
       LoggerHelper.sentry(error, { where: 'SendScreen', operation: 'processSend' })
+
+      if (error instanceof BSError && error.code === 'MEMO_REQUIRED') {
+        setError('memo', t('messages.memoRequired'))
+        ToastHelper.error({ message: t('messages.memoRequired') })
+        return
+      }
+
       ToastHelper.error({ message: AppError.wrap(error, t('messages.sendError')).message })
     }
   }
@@ -392,6 +410,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
         const fee = await fields.service.calculateTransferFee({
           senderAccount: fields.serviceAccount,
           intents: fields.intents,
+          memo: fields.memo,
         })
 
         setData({ fee })
@@ -430,7 +449,7 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
     handleCalculateFee()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balanceQuery.data, actionData.recipients, actionData.isTipChecked, actionData.tipAmountBn?.toFixed()])
+  }, [balanceQuery.data, actionData.recipients, actionData.isTipChecked, tipAmount, actionData.memo?.value])
 
   useEffect(() => {
     if (!service || !isMainnetNetwork || !tipConfig) {
@@ -637,6 +656,16 @@ export const SendScreen = ({ navigation, route }: TWalletsStackScreenProps<'Send
           leftElement={<TbPlus aria-hidden />}
           onPress={handleAddRecipient}
         />
+
+        {service && hasMemo(service) && (
+          <TransactionMemoActionStep
+            service={service}
+            memo={actionData.memo}
+            disabled={isAccountDisabled}
+            errorMessage={actionState.errors.memo}
+            onChange={memo => setData({ memo })}
+          />
+        )}
 
         <ActionFeeStep
           className="mb-4"

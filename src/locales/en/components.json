@@ -66,6 +66,7 @@
   "sendDetails": {
     "amountLabel": "Amount",
     "detailsLabel": "Transaction details",
+    "memoLabel": "Memo",
     "recipientLabel": "Recipient",
     "saveContactButtonLabel": "Save contact",
     "totalFeeLabel": "Total fee",
@@ -110,6 +111,12 @@
     "quickToolsButtonLabel": "Quick Tools",
     "searchStackButtonLabel": "Search",
     "walletsStackButtonLabel": "Wallets"
+  },
+  "transactionMemoActionStep": {
+    "invalidMemo": "Memo is too long for this blockchain",
+    "optionalLabel": "*Optional",
+    "placeholder": "Enter a memo…",
+    "title": "Memo"
   },
   "twAccountList": {
     "emptyList": "No accounts found"

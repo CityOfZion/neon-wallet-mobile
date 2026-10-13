@@ -392,6 +392,7 @@
       "feeError": "Fehler beim Berechnen der Gebühr",
       "insufficientFunds": "Sie haben nicht genug Guthaben",
       "invalidKey": "Es gab einen Fehler mit dem Kontoschlüssel",
+      "memoRequired": "Der Empfänger benötigt ein Memo, bitte füllen Sie das Memo-Feld aus und versuchen Sie es erneut",
       "noAmountToTip": "Unzureichendes Guthaben zum Bezahlen des Trinkgelds",
       "noFiatPriceToTip": "Fiat-Preis für das Trinkgeld nicht gefunden",
       "noTokenToTip": "Kein Token zum Bezahlen des Trinkgelds",
