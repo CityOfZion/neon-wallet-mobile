@@ -53,7 +53,7 @@ export const OnboardingCompletedScreen = ({
 
   return (
     <ScreenLayout.Root>
-      <ScreenLayout.ScrollContent contentContainerClassName="items-center px-6 pb-safe-or-8">
+      <ScreenLayout.ScrollContent contentContainerClassName="items-center px-6 pb-safe-or-16">
         <NeonWalletIcon aria-hidden className="mt-28 size-32 text-neon" />
 
         <Text className="mt-8 text-center font-sans-medium text-2xl text-neon">
