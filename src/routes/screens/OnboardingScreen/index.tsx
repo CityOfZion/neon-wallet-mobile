@@ -160,7 +160,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
 
         <OnboardingScreenPagination activePage={activeCarouselPage} totalPages={DATA.length} />
 
-        <View className="pb-safe-or-8 min-h-40 items-center gap-2 px-6 py-4">
+        <View className="pb-safe-or-16 min-h-40 items-center gap-2 px-6 py-4">
           {!step ? (
             <View className="w-full flex-col gap-y-4">
               <TwButton
