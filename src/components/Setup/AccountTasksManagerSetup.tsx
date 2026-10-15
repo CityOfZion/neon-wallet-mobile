@@ -332,7 +332,13 @@ export const AccountTasksManagerSetup = () => {
 
           accountsAlreadyProcessedRef.current.add(account.id)
 
-          const balance = await getBalance(account, { showType: 'active' })
+          let balance: TBalance | undefined = undefined
+
+          try {
+            balance = await getBalance(account, { showType: 'active' })
+          } catch (error) {
+            LoggerHelper.sentry(error, { where: 'AccountTasksManagerSetup', operation: 'getBalance' })
+          }
 
           fraudulentTokenProcess.process(account, balance)
           bNeoShutdownProcess.process(account, balance)
