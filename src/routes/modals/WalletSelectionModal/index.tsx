@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
@@ -8,7 +9,6 @@ import type { TWalletCardRef } from '@/components/WalletCard'
 import { WalletCarousel } from '@/components/WalletCarousel'
 
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useAccountsByWalletIdSelector, useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useBalances } from '@/hooks/useBalances'
@@ -64,7 +64,7 @@ export const WalletSelectionModal = ({ navigation, route }: TRootStackScreenProp
     ref.runOutAnimation(async () => {
       onSelect(wallet)
 
-      await UtilsHelper.sleep(500) // wait navigation
+      await BSUtilsHelper.wait(500)
 
       ref.resetAnimation()
     })

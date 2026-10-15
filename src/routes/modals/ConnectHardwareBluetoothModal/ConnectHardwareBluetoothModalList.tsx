@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import type { ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
@@ -13,7 +14,6 @@ import { AppError } from '@/helpers/ErrorHelper'
 import { HardwareWalletHelper } from '@/helpers/HardwareWalletHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useCreateHardwareWallet } from '@/hooks/useHardwareWallet'
 import { useMount } from '@/hooks/useMount'
@@ -51,7 +51,7 @@ export const ConnectHardwareBluetoothModalList = ({
       ToastHelper.success({ message: t('success') })
 
       navigation.pop(2)
-      await UtilsHelper.sleep(1000)
+      await BSUtilsHelper.wait(1000)
       navigation.navigate('TabStack', {
         screen: 'WalletsStack',
         params: {

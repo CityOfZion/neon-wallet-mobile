@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 
-import { BSBigHumanAmount, isCalculableFee } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, BSUtilsHelper, isCalculableFee } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import type { TextInput } from 'react-native'
 import { Text, View } from 'react-native'
@@ -23,7 +23,6 @@ import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { NumberHelper } from '@/helpers/NumberHelper'
 import { StringHelper } from '@/helpers/StringHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
 import { useAuthentication } from '@/hooks/useAuthentication'
@@ -203,7 +202,7 @@ export const SellTokensDepositModal = ({
       params.setDepositActionsData(null)
       navigation.popToTop()
 
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
 
       navigation.navigate('SellTokensDepositSuccessModal', { transaction })
     } catch (error) {

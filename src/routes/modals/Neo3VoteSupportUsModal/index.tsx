@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -9,7 +10,6 @@ import { TwCheckbox } from '@/components/TwCheckbox'
 
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { LinkHelper } from '@/helpers/LinkHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
 import { useAppDispatch } from '@/hooks/useRedux'
@@ -57,7 +57,7 @@ export const Neo3VoteSupportUsModal = ({
   const handleGoToNeo3VoteConfirmationModalForCoz = async () => {
     handleClose()
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('Neo3VoteConfirmationModal', { neo3Account, candidate: cozCandidate })
   }

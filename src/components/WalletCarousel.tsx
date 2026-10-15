@@ -1,9 +1,8 @@
 import React, { useMemo, useRef } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import type { CarouselRenderItem, TCarouselProps } from 'react-native-reanimated-carousel'
 import Carousel from 'react-native-reanimated-carousel'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import type { TWalletCardRef } from './WalletCard'
 import { getWalletCardDimensions, WalletCard } from './WalletCard'
@@ -90,7 +89,7 @@ export const WalletCarousel = ({
   const handleScrollEnd = async (index: number) => {
     if (onScrollEnd) onScrollEnd(index)
 
-    await UtilsHelper.sleep(100)
+    await BSUtilsHelper.wait(100)
 
     isSnapping.current = false
   }
