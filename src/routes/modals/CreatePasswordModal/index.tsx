@@ -1,5 +1,6 @@
 import { Fragment, useEffect } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Keyboard, Text, View } from 'react-native'
 
@@ -8,8 +9,6 @@ import { TwBanner } from '@/components/TwBanner'
 import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
 import { TwSeparator } from '@/components/TwSeparator'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
 
@@ -50,10 +49,10 @@ export const CreatePasswordModal = ({ navigation, route }: TRootStackScreenProps
   const handleSubmit = async () => {
     try {
       Keyboard.dismiss()
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
       await onCreate(actionData.password)
       navigation.goBack()
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
       await onSuccess()
     } catch (error) {
       await onError?.(error as Error)

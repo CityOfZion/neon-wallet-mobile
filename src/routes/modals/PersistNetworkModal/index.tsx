@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import debounce from 'lodash/debounce'
 import { useTranslation } from 'react-i18next'
 
@@ -49,7 +50,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
     debounce(async (url: string) => {
       setData({ isValidating: true })
 
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
 
       if (!url) {
         clearErrors('url')

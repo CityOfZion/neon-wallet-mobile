@@ -2,10 +2,6 @@ import type { NavigationAction } from '@react-navigation/native'
 import * as uuid from 'uuid'
 
 export class UtilsHelper {
-  static sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }
-
   static uuid() {
     return uuid.v4()
   }

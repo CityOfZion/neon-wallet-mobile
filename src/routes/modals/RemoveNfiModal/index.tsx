@@ -1,10 +1,9 @@
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
 import { TwMenuButton } from '@/components/TwMenuButton'
 import { TwSeparator } from '@/components/TwSeparator'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useItemNfiAuthentication } from '@/hooks/useItemNfiAuthentication'
 
@@ -27,7 +26,7 @@ export const RemoveNfiModal = ({ route, navigation }: TRootStackScreenProps<'Rem
     try {
       await removeNfiByNfi()
       navigation.goBack()
-      UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
       onSuccess()
     } catch (error) {
       navigation.goBack()
@@ -39,7 +38,7 @@ export const RemoveNfiModal = ({ route, navigation }: TRootStackScreenProps<'Rem
     try {
       await removeNfiByPassword()
       navigation.goBack()
-      UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
       onSuccess()
     } catch (error) {
       navigation.goBack()

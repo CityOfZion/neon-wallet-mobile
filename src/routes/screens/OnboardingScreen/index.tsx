@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { BSKeychainHelper } from '@cityofzion/blockchain-service'
+import { BSKeychainHelper, BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
 import type { ImageSourcePropType } from 'react-native'
 import { Text, useWindowDimensions, View } from 'react-native'
@@ -12,7 +12,6 @@ import { TwButton } from '@/components/TwButton'
 
 import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useCreateAccount } from '@/hooks/useAccountActions'
 import { useAccountsSelector } from '@/hooks/useAccountSelector'
@@ -122,7 +121,7 @@ export const OnboardingScreen = ({ navigation }: TRootStackScreenProps<'Onboardi
 
         setStep('finalizing')
 
-        await UtilsHelper.sleep(500)
+        await BSUtilsHelper.wait(500)
 
         dispatch(settingsReducerActions.setIsFirstTime(false))
 

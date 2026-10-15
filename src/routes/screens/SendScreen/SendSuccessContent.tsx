@@ -1,11 +1,10 @@
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import type { TSendDetailsData } from '@/components/SendDetails'
 import { SendDetails } from '@/components/SendDetails'
 import { TwButton } from '@/components/TwButton'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useModalErase } from '@/hooks/useModalErase'
 import { useWalletByIdSelector } from '@/hooks/useWalletSelector'
@@ -57,7 +56,7 @@ export const SendSuccessContent = ({ transactions, selectedAccount, fee, memo, n
   const handleNavigateViewTransactionStatus = async () => {
     handleErase()
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.replace('TabStack', {
       screen: 'WalletsStack',
@@ -67,7 +66,7 @@ export const SendSuccessContent = ({ transactions, selectedAccount, fee, memo, n
       },
     })
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
@@ -77,7 +76,7 @@ export const SendSuccessContent = ({ transactions, selectedAccount, fee, memo, n
       },
     })
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
@@ -91,7 +90,7 @@ export const SendSuccessContent = ({ transactions, selectedAccount, fee, memo, n
   const handlePressHelp = async () => {
     handleErase()
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.replace('TabStack', {
       screen: 'MoreStack',

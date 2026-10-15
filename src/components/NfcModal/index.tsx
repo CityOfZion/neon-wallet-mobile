@@ -1,11 +1,10 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { BlurView } from 'expo-blur'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { TwButton } from '../TwButton'
 import { NfcModalAnimatedCheck } from './NfcModalAnimatedCheck'
@@ -51,7 +50,7 @@ const NfcModal = () => {
   const success = useCallback(async () => {
     setStatus('success')
 
-    await UtilsHelper.sleep(2500)
+    await BSUtilsHelper.wait(2500)
 
     hide()
   }, [hide])

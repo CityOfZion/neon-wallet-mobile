@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -8,7 +9,6 @@ import { ScreenLoader } from '@/components/ScreenLoader'
 import { TwButton } from '@/components/TwButton'
 
 import { AppError } from '@/helpers/ErrorHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useCreateAccount } from '@/hooks/useAccountActions'
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
@@ -45,7 +45,7 @@ export const CreateAccountBlockchainSelectionModal = ({
   }
 
   const handlePressAdd = async () => {
-    await UtilsHelper.sleep(1000)
+    await BSUtilsHelper.wait(1000)
 
     if (wallet.type !== 'standard') throw new AppError(t('errors.walletCannotDerivate'))
 

@@ -1,13 +1,12 @@
 import React, { Fragment, useEffect, useLayoutEffect, useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { LinearGradient } from 'expo-linear-gradient'
 
 import { BalanceList } from '@/components/BalanceList'
 import { RefreshControl } from '@/components/RefreshControl'
 import type { TWalletCardRef } from '@/components/WalletCard'
 import { WalletCarousel } from '@/components/WalletCarousel'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
 import { useRefetch } from '@/hooks/useQuery'
@@ -37,7 +36,7 @@ export const WalletsScreen = ({ navigation }: TWalletsStackScreenProps<'WalletsS
     ref.runOutAnimation(async () => {
       navigation.navigate('WalletScreen', { wallet: pressedWallet })
 
-      await UtilsHelper.sleep(500) // wait navigation
+      await BSUtilsHelper.wait(500)
 
       ref.resetAnimation()
     })

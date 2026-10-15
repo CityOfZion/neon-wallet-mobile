@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -14,7 +15,6 @@ import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { QrCodeScanModalHelper } from '@/helpers/QrCodeScanModalHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useImportAction } from '@/hooks/useImportAction'
 import type { TUseImportFromFileResult } from '@/hooks/useImportFromFile'
@@ -52,7 +52,7 @@ export const OnboardingImportModal = ({ navigation, route }: TRootStackScreenPro
 
     navigation.pop(popCount)
 
-    await UtilsHelper.sleep(1000)
+    await BSUtilsHelper.wait(1000)
 
     navigation.reset({ index: 0, routes: [{ name: 'OnboardingCompletedScreen', params: { isImport: true } }] })
   }

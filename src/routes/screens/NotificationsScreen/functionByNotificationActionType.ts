@@ -1,3 +1,4 @@
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
 import { match } from 'ts-pattern'
 
@@ -5,7 +6,6 @@ import { AccountHelper } from '@/helpers/AccountHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { ReduxHelper } from '@/helpers/ReduxHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { selectAccounts } from '@/hooks/useAccountSelector'
 import { selectWalletById } from '@/hooks/useWalletSelector'
@@ -50,7 +50,7 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
 
         navigation.goBack()
 
-        await UtilsHelper.sleep(500)
+        await BSUtilsHelper.wait(500)
 
         navigation.navigate('TabStack', {
           screen: 'WalletsStack',
@@ -95,7 +95,7 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
 
         navigation.goBack()
 
-        await UtilsHelper.sleep(500)
+        await BSUtilsHelper.wait(500)
 
         navigation.navigate('TabStack', {
           screen: 'WalletsStack',
@@ -117,7 +117,7 @@ export const functionByNotificationActionType: TFunctionByNotificationActionType
           },
         })
 
-        await UtilsHelper.sleep(500)
+        await BSUtilsHelper.wait(500)
 
         navigation.navigate('CreateBackupModal')
       })
