@@ -1,11 +1,9 @@
-import { BSBigHumanAmount, type TBSToken } from '@cityofzion/blockchain-service'
+import { BSBigHumanAmount, BSUtilsHelper, type TBSToken } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 
 import { TwInput } from '@/components/TwInput'
 import { TwSelectButton } from '@/components/TwSelectButton'
 import { TwTokenIcon } from '@/components/TwTokenIcon'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
 import { useDebounceFunction } from '@/hooks/useDebounceFunction'
@@ -78,7 +76,7 @@ export const StellarPersistTrustlineModal = ({
 
     navigation.goBack()
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.replace('TabStack', {
       screen: 'WalletsStack',
@@ -88,7 +86,7 @@ export const StellarPersistTrustlineModal = ({
       },
     })
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
@@ -98,7 +96,7 @@ export const StellarPersistTrustlineModal = ({
       },
     })
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',

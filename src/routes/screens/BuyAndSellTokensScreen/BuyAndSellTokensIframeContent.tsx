@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import type { Dispatch } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -63,7 +64,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
   }
 
   const handleLoad = async () => {
-    await UtilsHelper.sleep(4000)
+    await BSUtilsHelper.wait(4000)
 
     setIsIframeLoading(false)
   }

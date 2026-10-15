@@ -1,3 +1,4 @@
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Keyboard, Text, View } from 'react-native'
 
 import { TwAlertErrorBanner } from '@/components/TwAlertErrorBanner'
@@ -6,7 +7,6 @@ import { TwButton } from '@/components/TwButton'
 import { TwInput } from '@/components/TwInput'
 
 import { AppError } from '@/helpers/ErrorHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
 
@@ -29,10 +29,10 @@ export const PasswordModal = ({ route, navigation }: TRootStackScreenProps<'Pass
   const handlePress = async () => {
     try {
       Keyboard.dismiss()
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
       await onConfirm(actionData.password)
       navigation.goBack()
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
       await onSuccess()
     } catch (error: any) {
       setError('password', AppError.wrap(error).message)

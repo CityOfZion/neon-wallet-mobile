@@ -7,6 +7,7 @@ import type {
   TBridgeValue,
   TBSBridgeName,
 } from '@cityofzion/blockchain-service'
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Neo3NeoXBridgeOrchestrator } from '@cityofzion/bs-multichain'
 import { useIsFocused } from '@react-navigation/core'
 import { useTranslation } from 'react-i18next'
@@ -31,7 +32,6 @@ import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { StringHelper } from '@/helpers/StringHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useActions } from '@/hooks/useActions'
@@ -308,7 +308,7 @@ export const Neo3NeoXBridgeScreen = ({
           const transactionHash = await bridgeOrchestratorRef.current.bridge()
 
           modalNavigation.popToTop()
-          await UtilsHelper.sleep(500)
+          await BSUtilsHelper.wait(500)
 
           modalNavigation.navigate('Neo3NeoXBridgeDetailsModal', {
             tokenToUse,

@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-import { BSKeychainHelper } from '@cityofzion/blockchain-service'
+import { BSKeychainHelper, BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { WalletKitHelper } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
@@ -11,7 +11,6 @@ import { TwSeparator } from '@/components/TwSeparator'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { HardwareWalletHelper } from '@/helpers/HardwareWalletHelper'
 import { QrCodeScanModalHelper } from '@/helpers/QrCodeScanModalHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useHasHardwareAccountSelector } from '@/hooks/useAccountSelector'
 
@@ -35,7 +34,7 @@ export const QuickToolsModal = ({ navigation }: TRootStackScreenProps<'QuickTool
 
   const handlePressQrCode = async () => {
     navigation.goBack()
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
     QrCodeScanModalHelper.show({
       onScan(data) {
         if (WalletKitHelper.isValidURI(data)) {

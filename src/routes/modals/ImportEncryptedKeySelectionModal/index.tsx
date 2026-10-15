@@ -1,4 +1,4 @@
-import { hasEncryption } from '@cityofzion/blockchain-service'
+import { BSUtilsHelper, hasEncryption } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
@@ -9,7 +9,6 @@ import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useDoesAccountExist, useImportAccount } from '@/hooks/useAccountActions'
 import { useActions } from '@/hooks/useActions'
@@ -82,7 +81,7 @@ export const ImportEncryptedKeySelectionModal = ({
 
         navigation.goBack()
 
-        await UtilsHelper.sleep(500)
+        await BSUtilsHelper.wait(500)
 
         onSuccess()
       },

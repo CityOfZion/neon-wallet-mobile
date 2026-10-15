@@ -1,3 +1,4 @@
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Trans, useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -7,7 +8,6 @@ import { TwButton } from '@/components/TwButton'
 import { AppError } from '@/helpers/ErrorHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useExportMnemonic } from '@/hooks/useExportMnemonic'
 import { usePressOnce } from '@/hooks/usePressOnce'
@@ -39,7 +39,7 @@ export const OnboardingBackupMnemonicModal = ({
 
       navigation.goBack()
 
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
 
       onSuccess()
     } catch (error) {

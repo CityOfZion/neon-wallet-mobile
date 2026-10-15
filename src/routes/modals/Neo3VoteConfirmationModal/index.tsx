@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { match } from 'ts-pattern'
@@ -16,7 +17,6 @@ import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useAuthentication } from '@/hooks/useAuthentication'
 import { useBalance } from '@/hooks/useBalances'
@@ -92,7 +92,7 @@ export const Neo3VoteConfirmationModal = ({
   const handleSuccessClose = async () => {
     handleErase()
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
@@ -102,7 +102,7 @@ export const Neo3VoteConfirmationModal = ({
       },
     })
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
@@ -112,7 +112,7 @@ export const Neo3VoteConfirmationModal = ({
       },
     })
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('TabStack', {
       screen: 'WalletsStack',
@@ -154,7 +154,7 @@ export const Neo3VoteConfirmationModal = ({
 
       navigation.popToTop()
 
-      await UtilsHelper.sleep(1000)
+      await BSUtilsHelper.wait(1000)
 
       navigation.navigate('SuccessModal', {
         title: t('title'),

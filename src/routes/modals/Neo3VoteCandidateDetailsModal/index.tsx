@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Image } from 'expo-image'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -12,7 +13,6 @@ import { TwSeparator } from '@/components/TwSeparator'
 
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
 import { NumberHelper } from '@/helpers/NumberHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useBalance } from '@/hooks/useBalances'
 import {
@@ -67,7 +67,7 @@ export const Neo3VoteCandidateDetailsModal = ({
 
     navigation.goBack()
 
-    await UtilsHelper.sleep(500)
+    await BSUtilsHelper.wait(500)
 
     navigation.navigate('Neo3VoteConfirmationModal', { neo3Account: neo3Account!, candidate })
   }
