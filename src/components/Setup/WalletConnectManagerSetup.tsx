@@ -23,17 +23,25 @@ export const WalletConnectManagerSetup = () => {
   useMount(() => {
     async function handleRequest(request: PendingRequestTypes.Struct) {
       const sessions = WalletKitHelper.kit.getActiveSessions()
-
       const session = sessions[request.topic]
+
       if (!session) return
 
       const sessionDetails = WalletKitHelper.getSessionDetails({
         session,
         services: BlockchainServiceHelper.bsAggregator.blockchainServices,
       })
-      const sessionAccount = accountsMapRef.current.get(AccountHelper.buildAccountKey(sessionDetails))
 
-      const serviceAccount = sessionAccount ? await BlockchainServiceHelper.getServiceAccount(sessionAccount) : null
+      const sessionAccount = accountsMapRef.current.get(AccountHelper.buildAccountKey(sessionDetails))
+      let serviceAccount: Awaited<ReturnType<typeof BlockchainServiceHelper.getServiceAccount>> | null = null
+
+      if (sessionAccount) {
+        try {
+          serviceAccount = await BlockchainServiceHelper.getServiceAccount(sessionAccount)
+        } catch (error) {
+          LoggerHelper.sentry(error, { where: 'WalletConnectManagerSetup', operation: 'getServiceAccount' })
+        }
+      }
 
       async function handleReject(reason?: ErrorResponse) {
         await WalletKitHelper.kit
