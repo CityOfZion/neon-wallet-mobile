@@ -1,3 +1,4 @@
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useNavigation } from '@react-navigation/native'
 import type { ErrorResponse } from '@walletconnect/jsonrpc-utils'
 import type { PendingRequestTypes } from '@walletconnect/types'
@@ -8,7 +9,6 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 
 import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
@@ -116,7 +116,7 @@ export const WalletConnectManagerSetup = () => {
         return
       }
 
-      await UtilsHelper.sleep(1000)
+      await BSUtilsHelper.wait(1000)
       navigation.navigate(
         'DappPermissionModal',
         {

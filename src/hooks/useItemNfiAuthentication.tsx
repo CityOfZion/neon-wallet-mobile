@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { Item, Utils } from '@item-systems/item'
 import { useNavigation } from '@react-navigation/native'
 import { Trans, useTranslation } from 'react-i18next'
@@ -11,7 +12,6 @@ import { activatedNfcModal } from '@/components/NfcModal'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
 import { SecureStoreHelper } from '@/helpers/SecureStoreHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import TbDialpad from '@/assets/images/tb-dialpad.svg'
 
@@ -67,7 +67,7 @@ export const useItemNfiAuthentication = () => {
     await RNNfcManager.cancelTechnologyRequest()
 
     // Wait for the nfc modal to close to avoid error when we call two times
-    await UtilsHelper.sleep(3000)
+    await BSUtilsHelper.wait(3000)
 
     try {
       const uri = Ndef.uri.decodePayload(Uint8Array.from(tag.ndefMessage[0].payload))
@@ -122,7 +122,7 @@ export const useItemNfiAuthentication = () => {
             leftElement: <TbDialpad aria-hidden />,
           },
           async onCreate(password) {
-            await UtilsHelper.sleep(500)
+            await BSUtilsHelper.wait(500)
             const firstTag = await getItemTag(t('linkMessage'))
             const firstTagPointer = parseInt(firstTag.decoded.message, 16)
             if (!firstTag.decoded.validSignature || firstTagPointer < MIN_MESSAGE_READ_POINTER) {

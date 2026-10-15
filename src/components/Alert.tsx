@@ -1,9 +1,8 @@
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { BlurView } from 'expo-blur'
 import { type GestureResponderEvent, Modal, Platform, Text, View } from 'react-native'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { TwButton } from './TwButton'
 import { TwSeparator } from './TwSeparator'
@@ -39,7 +38,7 @@ const Alert = () => {
 
   const handlePressButton = async (option: TAlertShowButtonOption) => {
     hide()
-    await UtilsHelper.sleep(500) // wait for the alert to close
+    await BSUtilsHelper.wait(500) // wait for the alert to close
     option.onPress?.()
   }
 

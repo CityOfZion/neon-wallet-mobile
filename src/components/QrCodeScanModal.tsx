@@ -1,11 +1,10 @@
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { type BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera'
 import { useTranslation } from 'react-i18next'
 import { Modal, Text, useWindowDimensions, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import MdClose from '@/assets/images/md-close.svg'
 import TbCameraOff from '@/assets/images/tb-camera-off.svg'
@@ -56,7 +55,7 @@ const QrCodeScanModal = () => {
 
       setTimeout(async () => {
         hide()
-        await UtilsHelper.sleep(500)
+        await BSUtilsHelper.wait(500)
         showOptions.current?.onScan(barcodeScanningDataRef.current!)
         barcodeScanningDataRef.current = null
       }, 250)

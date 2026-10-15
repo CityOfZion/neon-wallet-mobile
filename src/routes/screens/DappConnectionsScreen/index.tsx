@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import type { SessionTypes } from '@walletconnect/types'
 import { useTranslation } from 'react-i18next'
 import type { ListRenderItem } from 'react-native'
@@ -10,8 +11,6 @@ import { FlatListEmpty } from '@/components/FlatListEmpty'
 import { TwButton } from '@/components/TwButton'
 import { TwIconButton } from '@/components/TwIconButton'
 import { TwSeparator } from '@/components/TwSeparator'
-
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useIsConnectedSelector } from '@/hooks/useUtilitySelector'
 import { useWalletConnectSessions } from '@/hooks/useWalletConnectSessions'
@@ -46,7 +45,7 @@ export const DappConnectionsScreen = ({
     const abortController = new AbortController()
 
     const handleNavigate = async () => {
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
 
       if (abortController.signal.aborted) return
 

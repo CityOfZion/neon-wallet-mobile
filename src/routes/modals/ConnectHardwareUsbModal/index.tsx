@@ -1,5 +1,6 @@
 import { Fragment, useRef, useState } from 'react'
 
+import { BSUtilsHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { match } from 'ts-pattern'
@@ -11,7 +12,6 @@ import { AbortError, AppError } from '@/helpers/ErrorHelper'
 import { HardwareWalletHelper } from '@/helpers/HardwareWalletHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
-import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useCreateHardwareWallet } from '@/hooks/useHardwareWallet'
 import { useMount } from '@/hooks/useMount'
@@ -50,7 +50,7 @@ export const ConnectHardwareUsbModal = ({ navigation }: TRootStackScreenProps<'C
       })
 
       navigation.pop(2)
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
       navigation.navigate('TabStack', {
         screen: 'WalletsStack',
         params: {

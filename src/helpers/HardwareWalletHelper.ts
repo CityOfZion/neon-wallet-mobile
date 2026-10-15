@@ -1,5 +1,5 @@
 import type { TBSAccount } from '@cityofzion/blockchain-service'
-import { BSKeychainHelper, hasLedger } from '@cityofzion/blockchain-service'
+import { BSKeychainHelper, BSUtilsHelper, hasLedger } from '@cityofzion/blockchain-service'
 import { ledgerUSBVendorId } from '@ledgerhq/devices'
 import type Transport from '@ledgerhq/hw-transport'
 import HIDTransport from '@ledgerhq/react-native-hid'
@@ -14,7 +14,6 @@ import { BlockchainServiceHelper } from './BlockchainServiceHelper'
 import { AbortError, AppError } from './ErrorHelper'
 import { LoggerHelper } from './LoggerHelper'
 import { ReduxHelper } from './ReduxHelper'
-import { UtilsHelper } from './UtilsHelper'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { THardwareWalletHelperConnectByUsbParams, THardwareWalletHelperGetAccountParams } from '@/types/helpers'
@@ -64,7 +63,7 @@ export class HardwareWalletHelper {
   static async connectByUsb({ abortSignal }: THardwareWalletHelperConnectByUsbParams) {
     for (let index = 0; index < this.#connectByUsbMaxAttempts; index++) {
       if (index > 0) {
-        await UtilsHelper.sleep(2000)
+        await BSUtilsHelper.wait(2000)
       }
 
       if (abortSignal?.aborted) {
@@ -160,7 +159,7 @@ export class HardwareWalletHelper {
       }
 
       // Give some time for the transport to be ready for the next request
-      await UtilsHelper.sleep(500)
+      await BSUtilsHelper.wait(500)
 
       return this.#transport
     } catch (error) {
