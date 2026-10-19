@@ -295,10 +295,12 @@
       "placeholder": "輸入帳戶名稱",
       "title": "帳戶名稱"
     },
+    "colorLabel": "顏色 {{ color }}",
     "customizeYourCard": "自訂您的卡片",
     "invalidForm": "您必須填寫所有資料",
     "invalidName": "名稱必須至少 1 個字且少於 20 個字",
     "noPremiumThemes": "沒有可用的高級主題",
+    "premiumThemeLabel": "高級主題 {{ number }}",
     "selectColor": "顏色",
     "selectPremiumThemesTitle": "高級主題",
     "title": "自訂帳戶"

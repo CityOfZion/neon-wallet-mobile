@@ -1,8 +1,9 @@
 {
   "accountCard": {
     "accountPlaceholder": "Mein Konto",
-    "address": "ADRESSE",
-    "balance": "GUTHABEN"
+    "address": "Adresse",
+    "balance": "Guthaben",
+    "showQrCodeButtonLabel": "QR-Code anzeigen"
   },
   "accountSelectionAccordion": {
     "notFoundLabel": "Keine Kontos gefunden oder bereits vorhanden. Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es später erneut.",

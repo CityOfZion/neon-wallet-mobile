@@ -29,6 +29,7 @@ export const ColorSkinSelector = ({ selectedSkin, onPress }: TProps) => {
             <SkinSelectorItem
               key={`${color}-color-${index}`}
               isSelected={selectedSkin.id === color}
+              aria-label={t('colorLabel', { color })}
               style={{ backgroundColor: color }}
               onPress={() => onPress?.({ id: color, type: 'color' })}
             />

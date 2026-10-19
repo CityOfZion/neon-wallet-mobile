@@ -295,10 +295,12 @@
       "placeholder": "输入账户名称",
       "title": "账户名称"
     },
+    "colorLabel": "颜色 {{ color }}",
     "customizeYourCard": "自定义您的卡片",
     "invalidForm": "请填写所有数据",
     "invalidName": "名称至少为1个字符且少于20个字符",
     "noPremiumThemes": "没有可用的高级主题",
+    "premiumThemeLabel": "高级主题 {{ number }}",
     "selectColor": "颜色",
     "selectPremiumThemesTitle": "高级主题",
     "title": "自定义账户"

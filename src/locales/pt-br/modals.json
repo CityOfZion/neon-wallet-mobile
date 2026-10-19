@@ -295,10 +295,12 @@
       "placeholder": "Digite um nome para a conta",
       "title": "Nome da conta"
     },
+    "colorLabel": "Cor {{ color }}",
     "customizeYourCard": "Personalize seu cartão",
     "invalidForm": "Você deve preencher todos os dados",
     "invalidName": "O nome deve ter no mínimo 1 caractere e menos de 20 caracteres",
     "noPremiumThemes": "Nenhum tema premium disponível",
+    "premiumThemeLabel": "Tema premium {{ number }}",
     "selectColor": "Cores",
     "selectPremiumThemesTitle": "Temas premium",
     "title": "Personalizar conta"

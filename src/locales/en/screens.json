@@ -32,8 +32,10 @@
     }
   },
   "accountAssets": {
+    "actionsButtonLabel": "Actions",
     "balanceLabel": "Balance",
     "lastUpdatedLabel": "Last updated",
+    "refreshButtonLabel": "Refresh",
     "tabs": {
       "activeLabel": "Active",
       "hiddenLabel": "Hidden"
@@ -570,10 +572,13 @@
     "title": "Wallet Settings"
   },
   "wallets": {
+    "actionsButtonLabel": "Actions",
     "createFirstWallet": "Create first wallet",
+    "goToNotificationsButtonLabel": "Go to notifications",
     "incompleteBalanceWarningButton": "OK, I understand",
     "incompleteBalanceWarningText": "We haven't been able to retrieve price data for all your tokens so the total may not be accurate",
     "incompleteBalanceWarningTitle": "Incomplete price data",
+    "showIncompleteBalanceWarningButtonLabel": "Show incomplete price data warning",
     "walletBackupButtonLabel": "wallet not backed up"
   }
 }

@@ -1,8 +1,9 @@
 {
   "accountCard": {
     "accountPlaceholder": "Minha Conta",
-    "address": "ENDEREÇO",
-    "balance": "SALDO"
+    "address": "Endereço",
+    "balance": "Saldo",
+    "showQrCodeButtonLabel": "Mostrar QR code"
   },
   "accountSelectionAccordion": {
     "notFoundLabel": "Nenhuma conta encontrada ou conta(s) já existente.",

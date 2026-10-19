@@ -2,7 +2,8 @@
   "accountCard": {
     "accountPlaceholder": "我的帳戶",
     "address": "地址",
-    "balance": "餘額"
+    "balance": "餘額",
+    "showQrCodeButtonLabel": "顯示 QR 碼"
   },
   "accountSelectionAccordion": {
     "notFoundLabel": "找不到帳戶或已存在，請檢查您的輸入並稍後再試。",

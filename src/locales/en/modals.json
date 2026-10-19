@@ -295,10 +295,12 @@
       "placeholder": "Enter an account name",
       "title": "Account name"
     },
+    "colorLabel": "Color {{ color }}",
     "customizeYourCard": "Customize your card",
     "invalidForm": "You must fill in all the data",
     "invalidName": "Name must be at least 1 character and less than 20 characters",
     "noPremiumThemes": "No premium themes available",
+    "premiumThemeLabel": "Premium theme {{ number }}",
     "selectColor": "Colors",
     "selectPremiumThemesTitle": "Premium themes",
     "title": "Customize account"

@@ -295,10 +295,12 @@
       "placeholder": "Konto Namen eingeben",
       "title": "Konto Name"
     },
+    "colorLabel": "Farbe {{ color }}",
     "customizeYourCard": "Karte anpassen",
     "invalidForm": "Sie müssen alle Daten ausfüllen",
     "invalidName": "Name muss mindestens 1 und maximal 20 Zeichen haben",
     "noPremiumThemes": "Keine Premium Themes verfügbar",
+    "premiumThemeLabel": "Premium Theme {{ number }}",
     "selectColor": "Farben",
     "selectPremiumThemesTitle": "Premium Themes",
     "title": "Konto anpassen"

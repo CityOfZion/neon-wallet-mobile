@@ -29,6 +29,7 @@ export const SkinSelectorItem = ({ isSelected, className, children, style, ...pr
         className
       )}
       style={[{ height: SKIN_ITEM_SIZE, width: SKIN_ITEM_SIZE }, style]}
+      aria-selected={isSelected}
       {...props}
     >
       <View

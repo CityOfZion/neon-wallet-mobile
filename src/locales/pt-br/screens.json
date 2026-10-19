@@ -32,8 +32,10 @@
     }
   },
   "accountAssets": {
+    "actionsButtonLabel": "Ações",
     "balanceLabel": "Saldo",
     "lastUpdatedLabel": "Última atualização",
+    "refreshButtonLabel": "Atualizar",
     "tabs": {
       "activeLabel": "Ativo",
       "hiddenLabel": "Oculto"
@@ -570,10 +572,13 @@
     "title": "Configurações da Carteira"
   },
   "wallets": {
+    "actionsButtonLabel": "Ações",
     "createFirstWallet": "Criar primeira carteira",
+    "goToNotificationsButtonLabel": "Ir para notificações",
     "incompleteBalanceWarningButton": "OK, eu entendo",
     "incompleteBalanceWarningText": "Não conseguimos recuperar dados de preço para todos os seus tokens, portanto o total pode não ser preciso",
     "incompleteBalanceWarningTitle": "Dados de preço incompletos",
+    "showIncompleteBalanceWarningButtonLabel": "Mostrar aviso de dados de preço incompletos",
     "walletBackupButtonLabel": "carteira sem backup"
   }
 }
