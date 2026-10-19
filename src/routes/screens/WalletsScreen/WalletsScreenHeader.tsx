@@ -71,7 +71,11 @@ export const WalletsScreenHeader = ({ selectedWallet }: Props) => {
         </View>
       )}
 
-      <TwIconButton icon={<MdMoreHoriz aria-hidden className="text-white" />} onPress={handlePressMore} />
+      <TwIconButton
+        aria-label={t('actionsButtonLabel')}
+        icon={<MdMoreHoriz aria-hidden className="text-white" />}
+        onPress={handlePressMore}
+      />
     </View>
   )
 }

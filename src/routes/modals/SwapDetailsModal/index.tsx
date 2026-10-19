@@ -81,6 +81,7 @@ const SmallContent = ({ title, children }: TSmallContentProps) => (
 
 export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'SwapDetailsModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'swapDetails' })
+  const { t: tCommon } = useTranslation('common')
   const dispatch = useAppDispatch()
   const { contacts } = useContactsSelector()
   const timeoutRef = useRef<NodeJS.Timeout>(undefined)
@@ -240,6 +241,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
                         )}
                         <TwIconButton
                           onPress={() => ClipboardHelper.write(txFrom)}
+                          aria-label={tCommon('general.copy')}
                           icon={<TbCopy aria-hidden className="text-neon" />}
                           className="p-0"
                         />
@@ -273,6 +275,7 @@ export const SwapDetailsModal = ({ navigation, route }: TRootStackScreenProps<'S
                         )}
                         <TwIconButton
                           onPress={() => ClipboardHelper.write(txFrom)}
+                          aria-label={tCommon('general.copy')}
                           icon={<TbCopy aria-hidden className="text-neon" />}
                           className="p-0"
                         />

@@ -65,7 +65,12 @@ export const DappConnectionsScreen = ({
       <ScreenLayout.Header>
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
         <ScreenLayout.ButtonContent position="right">
-          <TwIconButton onPress={handlePressAdd} disabled={isNotConnected} aria-hidden icon={<TbPlus aria-hidden />} />
+          <TwIconButton
+            onPress={handlePressAdd}
+            disabled={isNotConnected}
+            aria-label={t('connectDappLabel')}
+            icon={<TbPlus aria-hidden />}
+          />
         </ScreenLayout.ButtonContent>
       </ScreenLayout.Header>
       <ScreenLayout.ViewContent>

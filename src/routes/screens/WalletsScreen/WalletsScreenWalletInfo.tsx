@@ -49,7 +49,11 @@ export const WalletsScreenWalletInfo = ({ selectedWalletAccounts }: Props) => {
         </Text>
 
         {showBalanceAlert && (
-          <TwIconButton icon={<TbAlertTriangle aria-hidden className="size-5 text-neon" />} onPress={handlePress} />
+          <TwIconButton
+            aria-label={t('showIncompleteBalanceWarningButtonLabel')}
+            icon={<TbAlertTriangle aria-hidden className="size-5 text-neon" />}
+            onPress={handlePress}
+          />
         )}
       </Skeleton.Content>
     </Skeleton.Root>

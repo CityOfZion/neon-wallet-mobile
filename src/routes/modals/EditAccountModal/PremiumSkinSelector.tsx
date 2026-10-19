@@ -72,6 +72,7 @@ export const PremiumSkinSelector = ({ selectedSkin, onPress, account }: TProps) 
                 <SkinSelectorItem
                   key={`${skin.id}-${skin.type}-${index}`}
                   isSelected={skin.id === selectedSkin.id && skin.type === selectedSkin.type}
+                  aria-label={t('premiumThemeLabel', { number: index + 1 })}
                   onPress={() => onPress?.(skin)}
                 >
                   <ImageFallback

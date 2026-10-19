@@ -1,8 +1,9 @@
 {
   "accountCard": {
     "accountPlaceholder": "My Account",
-    "address": "ADDRESS",
-    "balance": "BALANCE"
+    "address": "Address",
+    "balance": "Balance",
+    "showQrCodeButtonLabel": "Show QR code"
   },
   "accountSelectionAccordion": {
     "notFoundLabel": "No accounts found or already exist, check your input and try again later, please.",

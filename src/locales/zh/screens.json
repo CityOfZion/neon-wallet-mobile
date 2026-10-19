@@ -32,8 +32,10 @@
     }
   },
   "accountAssets": {
+    "actionsButtonLabel": "操作",
     "balanceLabel": "余额",
     "lastUpdatedLabel": "上次更新",
+    "refreshButtonLabel": "刷新",
     "tabs": {
       "activeLabel": "活跃",
       "hiddenLabel": "隐藏"
@@ -570,10 +572,13 @@
     "title": "钱包设置"
   },
   "wallets": {
+    "actionsButtonLabel": "操作",
     "createFirstWallet": "创建第一个钱包",
+    "goToNotificationsButtonLabel": "前往通知",
     "incompleteBalanceWarningButton": "好的，我明白了",
     "incompleteBalanceWarningText": "我们无法获取您所有代币的价格数据，因此总额可能不准确",
     "incompleteBalanceWarningTitle": "价格数据不完整",
+    "showIncompleteBalanceWarningButtonLabel": "显示价格数据不完整警告",
     "walletBackupButtonLabel": "钱包未备份"
   }
 }
