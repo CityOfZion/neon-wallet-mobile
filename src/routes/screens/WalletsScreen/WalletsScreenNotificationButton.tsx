@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import { TwIconButton } from '@/components/TwIconButton'
@@ -8,6 +9,7 @@ import { useHasNewNotificationsSelector } from '@/hooks/useNotificationSelector'
 import TbBell from '@/assets/images/tb-bell.svg'
 
 export const WalletsScreenNotificationButton = () => {
+  const { t } = useTranslation('screens', { keyPrefix: 'wallets' })
   const { hasNewNotifications } = useHasNewNotificationsSelector()
   const navigation = useNavigation()
 
@@ -22,6 +24,7 @@ export const WalletsScreenNotificationButton = () => {
   }
   return (
     <TwIconButton
+      aria-label={t('goToNotificationsButtonLabel')}
       onPress={handlePress}
       icon={
         <View className="relative">

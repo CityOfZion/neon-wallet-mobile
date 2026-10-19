@@ -48,6 +48,7 @@ const AccountCardComponent = ({
   const navigation = useNavigation()
   const { t } = useTranslation('components', { keyPrefix: 'accountCard' })
   const { t: tCommonBlockchain } = useTranslation('common', { keyPrefix: 'blockchain' })
+  const { t: tCommon } = useTranslation('common')
   const balance = useBalance(account)
   const { currency } = useCurrencySelector()
 
@@ -132,6 +133,7 @@ const AccountCardComponent = ({
               {!hideQRCode && (
                 <TwIconButton
                   className="p-0"
+                  aria-label={t('showQrCodeButtonLabel')}
                   icon={<TbQrcode aria-hidden className="size-7 text-white" />}
                   onPress={handlePressQRCode}
                 />
@@ -196,6 +198,7 @@ const AccountCardComponent = ({
                 {!hideCopy && (
                   <TwIconButton
                     className="p-0"
+                    aria-label={tCommon('general.copy')}
                     icon={<TbCopy aria-hidden className="text-white" />}
                     onPress={handlePressCopy}
                   />

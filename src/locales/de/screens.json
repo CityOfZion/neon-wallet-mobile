@@ -32,8 +32,10 @@
     }
   },
   "accountAssets": {
+    "actionsButtonLabel": "Aktionen",
     "balanceLabel": "Guthaben",
     "lastUpdatedLabel": "Zuletzt aktualisiert",
+    "refreshButtonLabel": "Aktualisieren",
     "tabs": {
       "activeLabel": "Aktiv",
       "hiddenLabel": "Verborgen"
@@ -570,10 +572,13 @@
     "title": "Wallet Einstellungen"
   },
   "wallets": {
+    "actionsButtonLabel": "Aktionen",
     "createFirstWallet": "Erstes Wallet erstellen",
+    "goToNotificationsButtonLabel": "Zu den Benachrichtigungen",
     "incompleteBalanceWarningButton": "OK, verstanden",
     "incompleteBalanceWarningText": "Wir konnten nicht für alle Ihre Tokens Preisdaten abrufen, daher ist die Gesamtsumme möglicherweise nicht genau",
     "incompleteBalanceWarningTitle": "Unvollständige Preisdaten",
+    "showIncompleteBalanceWarningButtonLabel": "Warnung zu unvollständigen Preisdaten anzeigen",
     "walletBackupButtonLabel": "Wallet nicht gesichert"
   }
 }
