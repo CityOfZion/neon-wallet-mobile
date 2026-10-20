@@ -181,6 +181,7 @@
   },
   "import": {
     "enterAnAddress": "Digite um endereço, chave criptografada, chave privada ou palavras mnemônicas",
+    "label": "Informações",
     "mnemonicComplete": "Mnemônico completo",
     "mnemonicIncorrect": "Mnemônico incorreto",
     "placeholder": "Digite aqui…",
@@ -354,6 +355,7 @@
       "noFunction": "Não há ação disponível para este item. Por favor, contate nosso suporte."
     },
     "idleResultDescription": "Procurando por algo?",
+    "inputLabel": "Busca",
     "inputPlaceholder": "Digite sua busca…",
     "resetButtonLabel": "Redefinir",
     "resultDescription": "Você pode estar interessado nestes tópicos:",

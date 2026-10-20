@@ -181,6 +181,7 @@
   },
   "import": {
     "enterAnAddress": "請輸入地址、加密金鑰、私鑰或助記詞",
+    "label": "資訊",
     "mnemonicComplete": "助記詞正確",
     "mnemonicIncorrect": "助記詞錯誤",
     "placeholder": "請輸入資訊",
@@ -354,6 +355,7 @@
       "noFunction": "此項目無可用操作。如有疑問，請聯絡我們的客服。"
     },
     "idleResultDescription": "想找什麼嗎？",
+    "inputLabel": "搜尋",
     "inputPlaceholder": "請輸入搜尋內容…",
     "resetButtonLabel": "重設",
     "resultDescription": "您可能對以下主題感興趣：",

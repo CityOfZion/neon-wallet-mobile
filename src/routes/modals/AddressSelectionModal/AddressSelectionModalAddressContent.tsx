@@ -54,6 +54,7 @@ export const AddressSelectionModalAddressContent = ({ onSelect, blockchain }: TP
   return (
     <ModalLayout.KeyboardAvoidingContent keyboardVerticalOffset={240}>
       <TwInput
+        aria-label={t('inputLabel')}
         placeholder={t('inputPlaceholder')}
         value={addressInput}
         clearable
