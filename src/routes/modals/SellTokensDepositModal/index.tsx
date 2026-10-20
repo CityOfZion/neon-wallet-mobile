@@ -427,6 +427,7 @@ export const SellTokensDepositModal = ({
             leftElement={<VscCircleFilled aria-hidden className="size-2" />}
           >
             <ActionInput
+              aria-label={t('form.amount.label')}
               ref={amountTextInputRef}
               placeholder={t('form.amount.placeholder')}
               className="ml-auto mr-0 w-30 whitespace-nowrap rounded-md bg-gray-800"

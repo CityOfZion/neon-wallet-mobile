@@ -115,6 +115,7 @@ export const StellarTrustilneTokenSelectionModal = ({
 
       <ModalLayout.ViewContent>
         <TwInput
+          aria-label={t('searchInputLabel')}
           className="placeholder:text-neon"
           placeholder={t('searchInputPlaceholder')}
           value={actionData.filter}

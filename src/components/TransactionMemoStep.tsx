@@ -76,6 +76,7 @@ export const TransactionMemoActionStep = ({ className, service, memo, disabled, 
 
       <View className="px-2 pb-2">
         <TwInput
+          aria-label={t('title')}
           value={value}
           placeholder={t('placeholder')}
           pastable

@@ -181,6 +181,7 @@
   },
   "import": {
     "enterAnAddress": "请输入地址、加密密钥、私钥或助记词",
+    "label": "信息",
     "mnemonicComplete": "助记词完整",
     "mnemonicIncorrect": "助记词不正确",
     "placeholder": "请输入信息",
@@ -354,6 +355,7 @@
       "noFunction": "该项目暂无可用操作。如有疑问，请联系客服。"
     },
     "idleResultDescription": "您在找什么？",
+    "inputLabel": "搜索",
     "inputPlaceholder": "请输入搜索内容…",
     "resetButtonLabel": "重置",
     "resultDescription": "您可能对以下主题感兴趣：",
