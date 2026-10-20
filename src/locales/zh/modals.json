@@ -78,15 +78,15 @@
     "labels": {
       "back": "返回"
     },
+    "mercuryo": {
+      "description": "所有其他数据由我们的法币通道合作伙伴处理：",
+      "link": "关于 Mercuryo 的服务"
+    },
     "sumsub": {
       "description": "您的 KYC 数据已加密，并由我们的 KYC 合作伙伴使用：",
       "link": "关于 Sumsub 的服务"
     },
-    "title": "关于您的数据",
-    "unlimit": {
-      "description": "所有其他数据由我们的法币通道合作伙伴处理：",
-      "link": "关于 Unlimit 的服务"
-    }
+    "title": "关于您的数据"
   },
   "buyAndSellTokensAccounts": {
     "description": "复制您希望接收购买代币的账户地址：",

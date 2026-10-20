@@ -78,15 +78,15 @@
     "labels": {
       "back": "Voltar"
     },
+    "mercuryo": {
+      "description": "Todos os outros dados são tratados pelo nosso parceiro de on/off ramp:",
+      "link": "Sobre o serviço da Mercuryo"
+    },
     "sumsub": {
       "description": "Seus dados de KYC são criptografados e usados pelo nosso parceiro de KYC:",
       "link": "Sobre o serviço da Sumsub"
     },
-    "title": "Sobre seus dados",
-    "unlimit": {
-      "description": "Todos os outros dados são tratados pelo nosso parceiro de on/off ramp:",
-      "link": "Sobre o serviço da Unlimit"
-    }
+    "title": "Sobre seus dados"
   },
   "buyAndSellTokensAccounts": {
     "description": "Copie o endereço da conta para a qual você deseja que seus tokens comprados sejam transferidos:",

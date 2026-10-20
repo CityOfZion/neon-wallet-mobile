@@ -78,15 +78,15 @@
     "labels": {
       "back": "Zurück"
     },
+    "mercuryo": {
+      "description": "Alle anderen Daten werden von unserem On/Off Ramp Partner verarbeitet:",
+      "link": "Über Mercuryos Service"
+    },
     "sumsub": {
       "description": "Ihre KYC-Daten werden verschlüsselt und von unserem KYC-Partner verwendet:",
       "link": "Über Sumsubs Service"
     },
-    "title": "Über Ihre Daten",
-    "unlimit": {
-      "description": "Alle anderen Daten werden von unserem On/Off Ramp Partner verarbeitet:",
-      "link": "Über Unlimits Service"
-    }
+    "title": "Über Ihre Daten"
   },
   "buyAndSellTokensAccounts": {
     "description": "Kopieren Sie die Adresse des Kontos, in das Ihre gekauften Tokens eingehen sollen:",

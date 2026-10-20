@@ -78,15 +78,15 @@
     "labels": {
       "back": "Go back"
     },
+    "mercuryo": {
+      "description": "All other data is handled by our on/ off ramp partner:",
+      "link": "About Mercuryo's service"
+    },
     "sumsub": {
       "description": "Your KYC data is encrypted and used by our KYC partner:",
       "link": "About Sumsub's service"
     },
-    "title": "About your data",
-    "unlimit": {
-      "description": "All other data is handled by our on/ off ramp partner:",
-      "link": "About Unlimit's service"
-    }
+    "title": "About your data"
   },
   "buyAndSellTokensAccounts": {
     "description": "Copy the address of the account you want your purchased tokens to go into:",
