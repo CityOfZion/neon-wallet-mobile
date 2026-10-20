@@ -205,6 +205,7 @@ export const SearchScreen = ({ navigation }: TSearchStackScreenProps<'SearchScre
       </ScreenLayout.Header>
       <ScreenLayout.ViewContent>
         <TwInput
+          aria-label={t('inputLabel')}
           containerProps={{ className: 'w-full' }}
           placeholder={t('inputPlaceholder')}
           inputContainerProps={{ className: 'bg-gray-300/15' }}

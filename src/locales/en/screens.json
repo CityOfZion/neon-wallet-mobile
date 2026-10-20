@@ -179,6 +179,7 @@
   },
   "import": {
     "enterAnAddress": "Enter an address, encrypted key, private key or mnemonic words",
+    "label": "Information",
     "mnemonicComplete": "Mnemonic complete",
     "mnemonicIncorrect": "Mnemonic incorrect",
     "placeholder": "Please enter information",
@@ -352,6 +353,7 @@
       "noFunction": "There is no action available for this item. Please, contact our support."
     },
     "idleResultDescription": "Looking for something?",
+    "inputLabel": "Search",
     "inputPlaceholder": "Enter your search…",
     "resetButtonLabel": "Reset",
     "resultDescription": "You may be interested in these topics:",

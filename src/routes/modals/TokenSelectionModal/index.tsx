@@ -134,6 +134,7 @@ export const TokenSelectionModal = ({ navigation, route }: TRootStackScreenProps
 
       <ModalLayout.ViewContent>
         <TwInput
+          aria-label={t('inputLabel')}
           className="placeholder:text-neon"
           placeholder={t('inputPlaceholder')}
           containerProps={{

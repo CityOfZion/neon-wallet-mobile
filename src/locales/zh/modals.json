@@ -59,6 +59,7 @@
     "errors": {
       "invalidAddress": "{{ blockchain }} 的无效地址"
     },
+    "inputLabel": "地址",
     "inputPlaceholder": "输入地址…",
     "title": "选择地址"
   },
@@ -795,6 +796,7 @@
   "stellarTrustilneTokenSelection": {
     "noTokensFound": "未找到代币",
     "placeholderMessage": "输入以搜索代币",
+    "searchInputLabel": "代币",
     "searchInputPlaceholder": "搜索代币",
     "title": "信任线"
   },
@@ -859,6 +861,7 @@
   "tokenSelection": {
     "balanceLabel": "余额",
     "emptyList": "无代币",
+    "inputLabel": "代币",
     "inputPlaceholder": "搜索代币…",
     "title": "代币",
     "tokenLabel": "代币"

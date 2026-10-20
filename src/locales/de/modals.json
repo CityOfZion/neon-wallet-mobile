@@ -59,6 +59,7 @@
     "errors": {
       "invalidAddress": "Ungültige Adresse für {{ blockchain }}"
     },
+    "inputLabel": "Adresse",
     "inputPlaceholder": "Adresse eingeben…",
     "title": "Adresse auswählen"
   },
@@ -795,6 +796,7 @@
   "stellarTrustilneTokenSelection": {
     "noTokensFound": "Keine Token gefunden",
     "placeholderMessage": "Zum Suchen tippen",
+    "searchInputLabel": "Token",
     "searchInputPlaceholder": "Nach einem Token suchen",
     "title": "Trustline"
   },
@@ -859,6 +861,7 @@
   "tokenSelection": {
     "balanceLabel": "Guthaben",
     "emptyList": "Kein Token",
+    "inputLabel": "Token",
     "inputPlaceholder": "Nach Token suchen…",
     "title": "Tokens",
     "tokenLabel": "Token"

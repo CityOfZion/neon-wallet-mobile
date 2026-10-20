@@ -660,6 +660,7 @@ export const SwapScreen = ({ navigation, route }: TWalletsStackScreenProps<'Swap
             <Tooltip.Root type="focus">
               <Tooltip.Trigger>
                 <ActionInput
+                  aria-label={t('form.amountToUseTitle')}
                   onChangeText={handleChangeAmountToUse}
                   placeholder={t('form.amountPlaceholder')}
                   value={actionData.selectedAmountToUse.value || ''}

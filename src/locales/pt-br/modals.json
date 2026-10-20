@@ -59,6 +59,7 @@
     "errors": {
       "invalidAddress": "Endereço inválido para {{ blockchain }}"
     },
+    "inputLabel": "Endereço",
     "inputPlaceholder": "Digite o endereço…",
     "title": "Selecione um endereço"
   },
@@ -795,6 +796,7 @@
   "stellarTrustilneTokenSelection": {
     "noTokensFound": "Nenhum token encontrado",
     "placeholderMessage": "Digite para pesquisar tokens",
+    "searchInputLabel": "Token",
     "searchInputPlaceholder": "Buscar um token",
     "title": "Trustline"
   },
@@ -859,6 +861,7 @@
   "tokenSelection": {
     "balanceLabel": "Saldo",
     "emptyList": "Nenhum token",
+    "inputLabel": "Token",
     "inputPlaceholder": "Procure um token…",
     "title": "Tokens",
     "tokenLabel": "Token"

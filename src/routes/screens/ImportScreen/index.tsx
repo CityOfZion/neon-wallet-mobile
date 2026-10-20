@@ -109,6 +109,7 @@ export const ImportScreen = ({ navigation, route }: TMoreStackScreenProps<'Impor
         )}
 
         <TwInput
+          aria-label={t('label')}
           placeholder={t('placeholder')}
           value={actionData.text}
           onChangeText={handleChange}
