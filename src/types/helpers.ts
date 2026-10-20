@@ -4,7 +4,7 @@ import type { CoreTypes } from '@walletconnect/types'
 
 import type { TBlockchainServiceKey } from './blockchain'
 import type { Optional } from './global'
-import type { TAccount, TCurrency, TLanguage } from './store'
+import type { TCurrency, TLanguage } from './store'
 import type { TToasterToastOptions } from './toaster'
 
 export type TWalletConnectRedirectParams = {
@@ -26,11 +26,14 @@ export type TClickupHelperCreateSupportTicketParams = {
   description: string
 }
 
-export type TBuyAndSellTokensHelperBuildIframeParams = {
+export type TBuyAndSellTokensHelperType = 'buy' | 'sell'
+
+export type TBuyAndSellTokensHelperBuildUrlParams = {
+  type: TBuyAndSellTokensHelperType
   currency: TCurrency
-  account?: TAccount
-  baseUrl: string
-  id: string
+  merchantTransactionId: string
+  address?: string
+  refundAddress?: string
 }
 
 export type TDateHelperFormatLocalizedOptions = {

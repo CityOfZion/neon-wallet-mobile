@@ -40,7 +40,6 @@
     "@cityofzion/bs-stellar": "3.1.21",
     "@craftzdog/react-native-buffer": "^6.1.2",
     "@ethersproject/shims": "5.8.0",
-    "@gatefi/js-sdk": "~1.2.0",
     "@item-systems/item": "~0.6.1",
     "@ledgerhq/devices": "~8.15.1",
     "@ledgerhq/hw-transport": "~6.35.4",

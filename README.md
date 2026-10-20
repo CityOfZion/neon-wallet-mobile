@@ -1,14 +1,18 @@
 # Neon Wallet Mobile
 
 ## Description
+
 Your self-custodial and open-source blockchain wallet as mobile app.
 
 ## Installation
+
 - [Play Store (Android)](https://play.google.com/store/apps/details?id=io.cityofzion.neon)
 - [App Store (iOS)](https://apps.apple.com/us/app/neon-wallet-mobile/id1530111452)
 
 ## Development
+
 Run the development mode:
+
 ```bash
 # Install dependencies
 npm i
@@ -21,11 +25,11 @@ npm run ios
 ```
 
 ## Environment Configuration
+
 Create a `.env` file in the project root with the following variables:
+
 ```env
-EXPO_PUBLIC_UNLIMIT_MERCHANT_ID=00000000-0000-0000-0000-000000000000
-EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL=https://onramp.com
-EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL=https://offramp.com
+EXPO_PUBLIC_MERCURYO_WIDGET_ID=00000000-0000-0000-0000-000000000000
 
 EXPO_PUBLIC_CLICK_UP_API_KEY=pk_123456789
 EXPO_PUBLIC_CLICK_UP_LIST_ID=123456789
@@ -40,6 +44,7 @@ EXPO_PUBLIC_CRISP_WEBSITE_ID=00000000-0000-0000-0000-000000000000
 ```
 
 ## Technologies Used
+
 - **React Native**
 - **TypeScript**
 - **Expo**
@@ -47,9 +52,11 @@ EXPO_PUBLIC_CRISP_WEBSITE_ID=00000000-0000-0000-0000-000000000000
 - **Swift** (for iOS native code)
 
 ## Translation (Optional)
+
 This project uses a [Claude Code](https://claude.ai/code) skill to keep all locale files up-to-date.
 
 **Prerequisites**
+
 - Claude Code CLI installed and authenticated
 
 **Running translations**
@@ -63,5 +70,6 @@ npm run translate
 The skill detects changed keys via `git diff`, then translates additions, updates, and deletions into all supported languages (`de`, `pt-br`, `zh`, `zh-Hant`).
 
 **Important**
+
 - Only modify files in the `en/` locale directory — other language files are managed automatically
 - Commit your English changes before running the script (it will refuse to run if non-English locales have uncommitted changes)

@@ -6,12 +6,14 @@ import type { Dispatch } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import WebView from 'react-native-webview'
+import type { WebViewOpenWindowEvent } from 'react-native-webview/lib/WebViewTypes'
 
 import { Skeleton } from '@/components/Skeleton'
 import { TwButton } from '@/components/TwButton'
 
 import { AlertHelper } from '@/helpers/AlertHelper'
 import { BuyAndSellTokensHelper } from '@/helpers/BuyAndSellTokensHelper'
+import { LinkHelper } from '@/helpers/LinkHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
@@ -22,25 +24,31 @@ import TbArrowLeft from '@/assets/images/tb-arrow-left.svg'
 
 import type { TDepositActionsData } from './index'
 
+import type { TBuyAndSellTokensHelperType } from '@/types/helpers'
 import type { TAccount } from '@/types/store'
 
 type TProps = {
-  baseUrl: string
+  type: TBuyAndSellTokensHelperType
   hidden: boolean
   account?: TAccount
   setDepositActionsData?: Dispatch<TDepositActionsData | null>
 }
 
-export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDepositActionsData }: TProps) => {
+export const BuyAndSellTokensIframeContent = ({ type, hidden, account, setDepositActionsData }: TProps) => {
   const { t } = useTranslation('screens', { keyPrefix: 'buyAndSellTokens.iframeContent' })
   const { currency } = useCurrencySelector()
   const navigation = useNavigation()
 
   const [isIframeLoading, setIsIframeLoading] = useState(true)
   const [hasIframeError, setHasIframeError] = useState(false)
-  const [iframeId, setIframeId] = useState(UtilsHelper.uuid())
+  const [id, setId] = useState(UtilsHelper.uuid())
 
-  const url = BuyAndSellTokensHelper.buildIframeUrl({ id: iframeId, baseUrl, currency, account })
+  const url = BuyAndSellTokensHelper.buildUrl({
+    type,
+    currency,
+    refundAddress: account?.address,
+    merchantTransactionId: id,
+  })
 
   const handleRestart = () => {
     if (isIframeLoading) return
@@ -56,7 +64,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
             setDepositActionsData?.(null)
             setHasIframeError(false)
             setIsIframeLoading(true)
-            setIframeId(UtilsHelper.uuid())
+            setId(UtilsHelper.uuid())
           },
         },
       ],
@@ -72,6 +80,10 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
   const handleError = () => {
     setIsIframeLoading(false)
     setHasIframeError(true)
+  }
+
+  const handleOpenWindow = ({ nativeEvent }: WebViewOpenWindowEvent) => {
+    if (nativeEvent.targetUrl.startsWith('https://')) LinkHelper.open(nativeEvent.targetUrl)
   }
 
   const handleBack = () => {
@@ -99,7 +111,9 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
           )}
         >
           {hasIframeError || !url ? (
-            <Text className="mt-2 flex-grow px-4 text-center font-sans-regular text-lg text-white">{t('error')}</Text>
+            <View className="flex-1 items-center justify-center p-4">
+              <Text className="text-center font-sans-regular text-2xl text-white">{t('error')}</Text>
+            </View>
           ) : (
             <WebView
               source={{ uri: url }}
@@ -108,6 +122,7 @@ export const BuyAndSellTokensIframeContent = ({ baseUrl, hidden, account, setDep
               originWhitelist={['*']}
               onLoad={handleLoad}
               onError={handleError}
+              onOpenWindow={handleOpenWindow}
             />
           )}
         </Skeleton.Content>
