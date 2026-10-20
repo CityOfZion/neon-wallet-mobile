@@ -14,9 +14,9 @@ import { LinkHelper } from '@/helpers/LinkHelper'
 import { ModalLayout } from '@/layouts/ModalLayout'
 
 import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
-import SumsubLogoIcon from '@/assets/images/sumsub-logo.svg'
+import MercuryoLogo from '@/assets/images/mercuryo-logo.svg'
+import SumsubLogo from '@/assets/images/sumsub-logo.svg'
 import TbArrowLeft from '@/assets/images/tb-arrow-left.svg'
-import UnlimitLogoIcon from '@/assets/images/unlimit-logo.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
@@ -51,7 +51,7 @@ export const BuyAndSellTokensAboutDataModal = ({
         <Text className="mt-2 font-sans-regular text-white">{t('sumsub.description')}</Text>
 
         <View className="mx-auto my-4 flex max-h-12 w-[80%] items-center justify-center rounded-full bg-gray-300/15 p-2">
-          <SumsubLogoIcon aria-hidden className="h-full" />
+          <SumsubLogo aria-hidden className="h-full" />
         </View>
 
         <TwButton
@@ -66,20 +66,20 @@ export const BuyAndSellTokensAboutDataModal = ({
 
         <TwSeparator containerClassName="my-5" />
 
-        <Text className="font-sans-regular text-white">{t('unlimit.description')}</Text>
+        <Text className="font-sans-regular text-white">{t('mercuryo.description')}</Text>
 
         <View className="mx-auto my-4 flex max-h-12 w-[80%] items-center justify-center rounded-full bg-gray-300/15 p-2">
-          <UnlimitLogoIcon aria-hidden className="h-full" />
+          <MercuryoLogo aria-hidden className="relative top-1 h-full w-40" />
         </View>
 
         <TwButton
-          label={t('unlimit.link')}
+          label={t('mercuryo.link')}
           variant="text-slim"
           className="mx-auto flex-shrink-0 flex-grow-0"
           contentProps={{ className: 'w-fit flex-shrink-0 flex-grow-0 gap-x-2' }}
           labelProps={{ className: 'text-sm font-sans-medium w-fit flex-shrink-0 flex-grow-0' }}
           rightElement={<MdOpenInNew aria-hidden className="size-5 text-neon" />}
-          onPress={LinkHelper.open.bind(null, BuyAndSellTokensHelper.unlimitUseTermsUrl)}
+          onPress={LinkHelper.open.bind(null, BuyAndSellTokensHelper.mercuryoTermsUrl)}
         />
 
         <TwSeparator containerClassName="my-5" />

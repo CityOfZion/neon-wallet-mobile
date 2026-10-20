@@ -4,9 +4,7 @@
 import { z } from 'zod'
 
 const envSchema = z.object({
-  EXPO_PUBLIC_UNLIMIT_MERCHANT_ID: z.string().nonempty().optional(),
-  EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL: z.url().optional(),
-  EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL: z.url().optional(),
+  EXPO_PUBLIC_MERCURYO_WIDGET_ID: z.string().nonempty().optional(),
   EXPO_PUBLIC_SENTRY_DSN: z.string().optional(),
   EXPO_PUBLIC_GA_MEASUREMENT_ID: z.string().nonempty().optional(),
   EXPO_PUBLIC_GA_API_SECRET: z.string().nonempty().optional(),
@@ -23,9 +21,7 @@ class EnvHelperClass {
 
   static async setup() {
     const envVars: Record<keyof EnvSchema, any> = {
-      EXPO_PUBLIC_UNLIMIT_MERCHANT_ID: process.env.EXPO_PUBLIC_UNLIMIT_MERCHANT_ID,
-      EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL: process.env.EXPO_PUBLIC_UNLIMIT_BUY_TOKENS_IFRAME_URL,
-      EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL: process.env.EXPO_PUBLIC_UNLIMIT_SELL_TOKENS_IFRAME_URL,
+      EXPO_PUBLIC_MERCURYO_WIDGET_ID: process.env.EXPO_PUBLIC_MERCURYO_WIDGET_ID,
       EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
       EXPO_PUBLIC_GA_MEASUREMENT_ID: process.env.EXPO_PUBLIC_GA_MEASUREMENT_ID,
       EXPO_PUBLIC_GA_API_SECRET: process.env.EXPO_PUBLIC_GA_API_SECRET,
