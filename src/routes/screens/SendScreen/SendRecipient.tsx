@@ -193,6 +193,7 @@ export const SendRecipient = ({
         leftElement={<VscCircleFilled aria-hidden className="size-2" />}
       >
         <ActionInput
+          aria-label={t('amountLabel')}
           placeholder="0"
           value={recipient.amount || ''}
           keyboardType="decimal-pad"

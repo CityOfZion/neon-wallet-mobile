@@ -60,6 +60,7 @@ export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenP
         <Text className="mt-1 font-sans-regular text-base text-white">{t('body1')}</Text>
 
         <TwInput
+          aria-label={t('labelWalletName')}
           placeholder={t('labelWalletName')}
           containerProps={{ className: 'mt-6' }}
           inputContainerProps={{ className: 'bg-gray-900' }}
