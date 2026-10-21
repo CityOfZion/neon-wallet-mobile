@@ -54,8 +54,16 @@ const AccountAssetScreen = ({ route, navigation }: TWalletsStackScreenProps<'Acc
         <ScreenLayout.BackButton />
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
         <View className="absolute right-0 flex-row">
-          <TwIconButton icon={<TbRefresh aria-hidden className="text-neon" />} onPress={balanceQuery.refetch} />
-          <TwIconButton icon={<MdMoreHoriz aria-hidden className="text-white" />} onPress={handlePressMore} />
+          <TwIconButton
+            aria-label={t('refreshButtonLabel')}
+            icon={<TbRefresh aria-hidden className="text-neon" />}
+            onPress={balanceQuery.refetch}
+          />
+          <TwIconButton
+            aria-label={t('actionsButtonLabel')}
+            icon={<MdMoreHoriz aria-hidden className="text-white" />}
+            onPress={handlePressMore}
+          />
         </View>
       </ScreenLayout.Header>
       <ScreenLayout.ViewContent>

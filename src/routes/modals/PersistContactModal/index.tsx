@@ -160,6 +160,7 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
 
                   <TwIconButton
                     size="sm"
+                    aria-label={tCommon('general.delete')}
                     icon={<TbX aria-hidden className="text-white" />}
                     onPress={() => handleDeleteAddress(index)}
                   />
