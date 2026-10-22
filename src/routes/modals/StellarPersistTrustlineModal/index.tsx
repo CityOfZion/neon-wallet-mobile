@@ -149,6 +149,10 @@ export const StellarPersistTrustlineModal = ({
           error={actionState.errors.limit}
           disabled={actionState.isActing || !actionData.token}
           keyboardType="decimal-pad"
+          autoCorrect={false}
+          spellCheck={false}
+          autoCapitalize="none"
+          autoComplete="off"
           loading={actionData.isLimitFormatting}
         />
       </ModalLayout.ScrollContent>
