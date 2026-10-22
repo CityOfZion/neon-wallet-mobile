@@ -553,7 +553,7 @@
   "networkUrlSelection": {
     "antiMevLabel": "反MEV",
     "blockHeightLabel": "区块高度：",
-    "description": "如果您遇到性能问题，请尝试在下方选择自定义网络",
+    "description": "如果您遇到性能问题，请尝试在下方选择自定义网络。",
     "latencyLabel": "{{latency}}毫秒",
     "listLabel": "网络 URL 列表",
     "refreshButtonLabel": "刷新",
@@ -636,7 +636,7 @@
       "name": "输入网络名称",
       "url": "https://mainnet1.neo.coz.io:443"
     },
-    "invalidName": "名称至少为1个字符且少于20个字符",
+    "invalidName": "名称至少为1个字符且最多20个字符",
     "invalidUrl": "无效的URL",
     "notConnected": "未连接"
   },

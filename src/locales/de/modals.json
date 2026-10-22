@@ -553,7 +553,7 @@
   "networkUrlSelection": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Block Höhe:",
-    "description": "Wenn Sie Leistungsprobleme haben, versuchen Sie unten ein benutzerdefiniertes Netzwerk auszuwählen",
+    "description": "Wenn Sie Leistungsprobleme haben, versuchen Sie unten ein benutzerdefiniertes Netzwerk auszuwählen.",
     "latencyLabel": "{{latency}}ms",
     "listLabel": "Netzwerk-URL-Liste",
     "refreshButtonLabel": "Aktualisieren",
@@ -628,12 +628,12 @@
     "delete": "Network löschen",
     "editTitle": "{{networkName}} bearbeiten",
     "inputLabels": {
-      "name": "Network Name",
-      "nameDescription": "(Max. 20 Zeichen)",
+      "name": "Network-Name",
+      "nameDescription": "(max. 20 Zeichen)",
       "url": "Neue URL"
     },
     "inputPlaceholder": {
-      "name": "Network Namen eingeben",
+      "name": "Network-Namen eingeben",
       "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "Name muss mindestens 1 und maximal 20 Zeichen haben",

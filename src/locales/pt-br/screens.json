@@ -154,12 +154,12 @@
   "createWalletStep4": {
     "body1": "Dê à sua carteira um nome memorável, talvez pudesse ser relacionado ao que você quer usar a carteira, como \"trading\" ou \"investimentos\".",
     "errors": {
-      "name": "Deve ter no mínimo 1 caractere e menos de 21 caracteres"
+      "name": "Deve ter no mínimo 1 caractere e no máximo 20 caracteres"
     },
     "label": "Dê um nome à sua carteira",
-    "labelWalletName": "Nome da Carteira",
+    "labelWalletName": "Nome da carteira",
     "threeOfThree": "3 de 3",
-    "title": "Criar Carteira"
+    "title": "Criar carteira"
   },
   "createWalletStep5": {
     "continueButtonLabel": "Criar Agora",
