@@ -165,6 +165,7 @@
     "errors": {
       "walletCannotDerivate": "此钱包无法创建账户"
     },
+    "successMessage": "账户添加成功",
     "title": "添加新账户"
   },
   "createBackup": {

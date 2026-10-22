@@ -9,6 +9,7 @@ import { ScreenLoader } from '@/components/ScreenLoader'
 import { TwButton } from '@/components/TwButton'
 
 import { AppError } from '@/helpers/ErrorHelper'
+import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useCreateAccount } from '@/hooks/useAccountActions'
 import { useAccountsByWalletIdSelector } from '@/hooks/useAccountSelector'
@@ -53,6 +54,8 @@ export const CreateAccountBlockchainSelectionModal = ({
       blockchain: actionData.blockchain,
       wallet,
     })
+
+    ToastHelper.success({ message: t('successMessage') })
 
     navigation.goBack()
   }

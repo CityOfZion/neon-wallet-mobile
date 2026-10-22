@@ -533,6 +533,7 @@
   },
   "wallet": {
     "addNewAccountButtonLabel": "新增帳戶",
+    "addedAccountSuccessMessage": "帳戶新增成功",
     "moreButtonLabel": "更多"
   },
   "walletBackupStep1": {

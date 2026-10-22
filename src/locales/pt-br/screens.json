@@ -533,6 +533,7 @@
   },
   "wallet": {
     "addNewAccountButtonLabel": "Adicionar nova conta",
+    "addedAccountSuccessMessage": "Conta adicionada com sucesso",
     "moreButtonLabel": "Mais"
   },
   "walletBackupStep1": {

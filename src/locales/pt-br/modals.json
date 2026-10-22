@@ -165,6 +165,7 @@
     "errors": {
       "walletCannotDerivate": "Esta carteira não pode criar contas"
     },
+    "successMessage": "Conta adicionada com sucesso",
     "title": "Adicionar nova conta"
   },
   "createBackup": {

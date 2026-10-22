@@ -165,6 +165,7 @@
     "errors": {
       "walletCannotDerivate": "This wallet cannot create accounts"
     },
+    "successMessage": "Account added successfully",
     "title": "Add new account"
   },
   "createBackup": {
