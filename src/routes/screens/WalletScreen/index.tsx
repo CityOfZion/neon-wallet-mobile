@@ -13,6 +13,7 @@ import { RefreshControl } from '@/components/RefreshControl'
 import { TwIconButton } from '@/components/TwIconButton'
 
 import { ConstantsHelper } from '@/helpers/ConstantsHelper'
+import { ToastHelper } from '@/helpers/ToastHelper'
 
 import { useAccountsByWalletIdSelector, useHasHardwareAccountSelector } from '@/hooks/useAccountSelector'
 import { useHardwareWalletAddAccount } from '@/hooks/useHardwareWallet'
@@ -56,6 +57,8 @@ export const WalletScreen = ({ navigation, route }: TWalletsStackScreenProps<'Wa
   const createNewAccountAction = useLoadingActions(async () => {
     if (wallet.type === 'hardware') {
       await addHardwareAccount(wallet)
+
+      ToastHelper.success({ message: t('addedAccountSuccessMessage') })
     } else {
       navigation.navigate('CreateAccountBlockchainSelectionModal', {
         wallet,
