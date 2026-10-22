@@ -154,12 +154,12 @@
   "createWalletStep4": {
     "body1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
     "errors": {
-      "name": "Must be at least 1 character and less than 21 characters"
+      "name": "Must be at least 1 character and max of 20 characters"
     },
     "label": "Give your wallet a name",
-    "labelWalletName": "Wallet Name",
+    "labelWalletName": "Wallet name",
     "threeOfThree": "3 of 3",
-    "title": "Create Wallet"
+    "title": "Create wallet"
   },
   "createWalletStep5": {
     "continueButtonLabel": "Create Now",
