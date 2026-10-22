@@ -165,6 +165,7 @@
     "errors": {
       "walletCannotDerivate": "Dieses Wallet kann keine Kontos erstellen"
     },
+    "successMessage": "Konto erfolgreich hinzugefügt",
     "title": "Neues Konto hinzufügen"
   },
   "createBackup": {
