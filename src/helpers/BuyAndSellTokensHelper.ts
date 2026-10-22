@@ -1,39 +1,54 @@
-import type { GateFiLangEnum } from '@gatefi/js-sdk'
-
 import { EnvHelper } from './EnvHelper'
 
-import type { TBuyAndSellTokensHelperBuildIframeParams } from '@/types/helpers'
+import type { TBuyAndSellTokensHelperBuildUrlParams, TBuyAndSellTokensHelperType } from '@/types/helpers'
 import type { TAvailableCurrency } from '@/types/store'
 
 export class BuyAndSellTokensHelper {
-  static readonly sumsubTermsAndConditionsUrl = 'https://sumsub.com/terms-and-conditions'
-  static readonly unlimitUseTermsUrl =
-    'https://cdn.unlimit.com/site-crypto/wp-content/uploads/2023/11/24062357/Unl-Crypto_User-TC_.pdf'
-  static readonly #supportedCurrencyLabels: TAvailableCurrency[] = ['USD', 'EUR', 'BRL', 'GBP']
-  static readonly #defaultCurrencyLabel: TAvailableCurrency = this.#supportedCurrencyLabels[0]
-  static readonly #hideBrand: true
-  static readonly #lang: GateFiLangEnum.en_US
-  static readonly #theme: 'dark'
+  static readonly #baseUrl = 'https://exchange.mercuryo.io'
+  static readonly #defaultCurrencyLabel: TAvailableCurrency = 'USD'
 
-  static #getValidCurrencyLabel(currencyLabel: TAvailableCurrency): TAvailableCurrency {
-    return this.#supportedCurrencyLabels.includes(currencyLabel) ? currencyLabel : this.#defaultCurrencyLabel
+  static readonly #supportedCurrencyLabelsByType: Record<TBuyAndSellTokensHelperType, TAvailableCurrency[]> = {
+    buy: [this.#defaultCurrencyLabel, 'EUR', 'BRL', 'GBP'],
+    sell: [this.#defaultCurrencyLabel, 'EUR', 'GBP'],
   }
 
-  static buildIframeUrl({ currency, account, id, baseUrl }: TBuyAndSellTokensHelperBuildIframeParams) {
-    if (!EnvHelper.EXPO_PUBLIC_UNLIMIT_MERCHANT_ID) {
-      return
-    }
+  static readonly sumsubTermsAndConditionsUrl = 'https://sumsub.com/terms-and-conditions'
+  static readonly mercuryoTermsUrl = 'https://mercuryo.io/legal/terms'
+
+  static #getValidCurrencyLabel(
+    currencyLabel: TAvailableCurrency,
+    supportedCurrencyLabels: TAvailableCurrency[]
+  ): TAvailableCurrency {
+    return supportedCurrencyLabels.includes(currencyLabel) ? currencyLabel : this.#defaultCurrencyLabel
+  }
+
+  static buildUrl({
+    type,
+    currency,
+    merchantTransactionId,
+    address,
+    refundAddress,
+  }: TBuyAndSellTokensHelperBuildUrlParams) {
+    if (!EnvHelper.EXPO_PUBLIC_MERCURYO_WIDGET_ID) return ''
 
     const params = new URLSearchParams({
-      merchantId: EnvHelper.EXPO_PUBLIC_UNLIMIT_MERCHANT_ID,
-      fiatCurrency: this.#getValidCurrencyLabel(currency.label),
-      lang: this.#lang,
-      themeMode: this.#theme,
-      hideBrand: String(this.#hideBrand),
-      wallet: account?.address || '',
-      reloadId: id,
+      widget_id: EnvHelper.EXPO_PUBLIC_MERCURYO_WIDGET_ID,
+      type,
+      currency: 'BTC',
+      fiat_currency: this.#getValidCurrencyLabel(currency.label, this.#supportedCurrencyLabelsByType[type]),
+      lang: 'en',
+      theme: 'exolix',
+      merchant_transaction_id: merchantTransactionId,
     })
 
-    return `${baseUrl}?${params.toString()}`
+    if (address) {
+      params.set('address', address)
+    }
+
+    if (refundAddress) {
+      params.set('refund_address', refundAddress)
+    }
+
+    return `${this.#baseUrl}?${params.toString()}`
   }
 }
