@@ -154,12 +154,12 @@
   "createWalletStep4": {
     "body1": "为您的錢包取一个容易记住的名字，比如“交易”或“投资”等。",
     "errors": {
-      "name": "至1个字符且少于21个字符"
+      "name": "至少1个字符且最多20个字符"
     },
     "label": "为錢包命名",
-    "labelWalletName": "錢包名称",
+    "labelWalletName": "钱包名称",
     "threeOfThree": "3/3",
-    "title": "创建錢包"
+    "title": "创建钱包"
   },
   "createWalletStep5": {
     "continueButtonLabel": "立即创建",

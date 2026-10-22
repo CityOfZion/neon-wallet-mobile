@@ -553,7 +553,7 @@
   "networkUrlSelection": {
     "antiMevLabel": "Anti-MEV",
     "blockHeightLabel": "Altura do bloco:",
-    "description": "Se você estiver enfrentando problemas de desempenho, tente selecionar uma rede personalizada abaixo",
+    "description": "Se você estiver enfrentando problemas de desempenho, tente selecionar uma rede personalizada abaixo.",
     "latencyLabel": "{{latency}}ms",
     "listLabel": "Lista de URLs de rede",
     "refreshButtonLabel": "Atualizar",
@@ -625,18 +625,18 @@
   "persistNetwork": {
     "connected": "Conexão boa",
     "createTitle": "Rede customizada",
-    "delete": "Deletar Rede",
+    "delete": "Deletar rede",
     "editTitle": "Editar {{networkName}}",
     "inputLabels": {
-      "name": "Nome da Rede",
-      "nameDescription": "(Máximo 20 Caracteres)",
+      "name": "Nome da rede",
+      "nameDescription": "(máximo 20 caracteres)",
       "url": "Nova URL"
     },
     "inputPlaceholder": {
-      "name": "Digite o Nome da Rede",
+      "name": "Digite o nome da rede",
       "url": "https://mainnet1.neo.coz.io:443"
     },
-    "invalidName": "O nome deve ter no mínimo 1 caractere e menos de 20 caracteres",
+    "invalidName": "O nome deve ter no mínimo 1 caractere e no máximo 20 caracteres",
     "invalidUrl": "URL inválida",
     "notConnected": "Não conectado"
   },

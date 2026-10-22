@@ -154,10 +154,10 @@
   "createWalletStep4": {
     "body1": "Geben Sie Ihrem Wallet einen einprägsamen Namen, vielleicht könnte er damit zusammenhängen, wofür Sie das Wallet verwenden möchten, wie \"Trading\" oder \"Investitionen\".",
     "errors": {
-      "name": "Muss mindestens 1 und maximal 21 Zeichen haben"
+      "name": "Muss mindestens 1 und maximal 20 Zeichen haben"
     },
     "label": "Geben Sie Ihrem Wallet einen Namen",
-    "labelWalletName": "Wallet Name",
+    "labelWalletName": "Wallet-Name",
     "threeOfThree": "3 von 3",
     "title": "Wallet erstellen"
   },
