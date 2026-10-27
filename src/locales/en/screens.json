@@ -123,11 +123,13 @@
   "createWalletStep1": {
     "body1": "This set of secret words make it easy to back up and restore your account. This makes your wallet really secure ",
     "body2": "It’s really important you remember your phrase correctly so we will help you with that. If you’re in a rush you can do it another time.",
-    "body3": "Give your wallet a memorable name and you're ready to go!",
+    "body3": "Give your wallet a memorable name.",
+    "body4": "Choose which blockchains you want to create accounts for and you're ready to go!",
     "createWallet": "Create Wallet",
     "label1": "Generate security phrase",
     "label2": "Confirm security phrase",
     "label3": "Give your wallet a name",
+    "label4": "Select blockchains",
     "title": "Create Wallet"
   },
   "createWalletStep2": {
@@ -138,7 +140,7 @@
     "dialogDismiss": "OK, I understand",
     "dialogTitle": "Make sure you keep your security phrase safe",
     "label": "Generate security phrase",
-    "oneOfThree": "1 of 3",
+    "oneOfFour": "1 of 4",
     "title": "Create Wallet"
   },
   "createWalletStep3": {
@@ -149,7 +151,7 @@
     "dialog2Title": "Incorrect word order",
     "label": "Confirm security phrase",
     "title": "Create Wallet",
-    "twoOfThree": "2 of 3"
+    "twoOfFour": "2 of 4"
   },
   "createWalletStep4": {
     "body1": "Give your wallet a memorable name, maybe it could be related to what you want to use the wallet for like “trading” or “investments”.",
@@ -158,12 +160,14 @@
     },
     "label": "Give your wallet a name",
     "labelWalletName": "Wallet name",
-    "threeOfThree": "3 of 3",
+    "threeOfFour": "3 of 4",
     "title": "Create wallet"
   },
   "createWalletStep5": {
     "continueButtonLabel": "Create Now",
-    "subtitle": "Select the desired blockchain for your new account",
+    "fourOfFour": "4 of 4",
+    "label": "Select blockchains",
+    "subtitle": "Select which blockchains you would like to use for this wallet.",
     "title": "Create Wallet"
   },
   "createWalletStep6": {

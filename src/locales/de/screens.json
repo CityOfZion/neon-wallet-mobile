@@ -123,11 +123,13 @@
   "createWalletStep1": {
     "body1": "Diese geheimen Wörter erleichtern das Sichern und Wiederherstellen Ihres Kontos. Dies macht Ihr Wallet wirklich sicher",
     "body2": "Es ist wirklich wichtig, dass Sie sich Ihre Phrase korrekt merken, also helfen wir Ihnen dabei. Wenn Sie es eilig haben, können Sie es später tun.",
-    "body3": "Geben Sie Ihrem Wallet einen einprägsamen Namen und los geht's!",
+    "body3": "Geben Sie Ihrem Wallet einen einprägsamen Namen.",
+    "body4": "Wählen Sie die Blockchains aus, für die Konten erstellt werden sollen, und los geht's!",
     "createWallet": "Wallet erstellen",
     "label1": "Sicherheitsphrase generieren",
     "label2": "Sicherheitsphrase bestätigen",
     "label3": "Geben Sie Ihrem Wallet einen Namen",
+    "label4": "Blockchains auswählen",
     "title": "Wallet erstellen"
   },
   "createWalletStep2": {
@@ -138,7 +140,7 @@
     "dialogDismiss": "OK, verstanden",
     "dialogTitle": "Stellen Sie sicher, dass Sie Ihre Sicherheitsphrase sicher aufbewahren",
     "label": "Sicherheitsphrase generieren",
-    "oneOfThree": "1 von 3",
+    "oneOfFour": "1 von 4",
     "title": "Wallet erstellen"
   },
   "createWalletStep3": {
@@ -149,7 +151,7 @@
     "dialog2Title": "Falsche Wortreihenfolge",
     "label": "Sicherheitsphrase bestätigen",
     "title": "Wallet erstellen",
-    "twoOfThree": "2 von 3"
+    "twoOfFour": "2 von 4"
   },
   "createWalletStep4": {
     "body1": "Geben Sie Ihrem Wallet einen einprägsamen Namen, vielleicht könnte er damit zusammenhängen, wofür Sie das Wallet verwenden möchten, wie \"Trading\" oder \"Investitionen\".",
@@ -158,12 +160,14 @@
     },
     "label": "Geben Sie Ihrem Wallet einen Namen",
     "labelWalletName": "Wallet-Name",
-    "threeOfThree": "3 von 3",
+    "threeOfFour": "3 von 4",
     "title": "Wallet erstellen"
   },
   "createWalletStep5": {
     "continueButtonLabel": "Jetzt erstellen",
-    "subtitle": "Wählen Sie die gewünschte Blockchain für Ihr neues Konto",
+    "fourOfFour": "4 von 4",
+    "label": "Blockchains auswählen",
+    "subtitle": "Wählen Sie aus, welche Blockchains Sie für dieses Wallet verwenden möchten.",
     "title": "Wallet erstellen"
   },
   "createWalletStep6": {

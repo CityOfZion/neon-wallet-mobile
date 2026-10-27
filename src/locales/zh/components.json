@@ -6,7 +6,9 @@
     "showQrCodeButtonLabel": "显示二维码"
   },
   "accountSelectionAccordion": {
+    "deselectAllButtonLabel": "取消全选",
     "notFoundLabel": "未找到账户或已存在，请检查输入稍后再试。",
+    "selectAllButtonLabel": "全选",
     "selectedOfTotal": "已选择{{selectedCount}}个，共{{totalCount}}个地址"
   },
   "accountTransactionsTransactionCard": {
@@ -39,6 +41,8 @@
     "value": "价值"
   },
   "blockchainList": {
+    "deselectAllButtonLabel": "取消全选",
+    "selectAllButtonLabel": "全选",
     "xExisting": "已有{{amount}}个"
   },
   "modalLayout": {
