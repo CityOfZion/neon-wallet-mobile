@@ -49,7 +49,12 @@ export const CreateWalletStep5Screen = ({ navigation, route }: TMoreStackScreenP
         <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
       </ScreenLayout.Header>
       <ScreenLayout.ScrollContent contentContainerClassName="justify-between">
-        <Text className="text-center font-sans-medium text-lg text-white">{t('subtitle')}</Text>
+        <View className="w-full flex-shrink flex-row items-center justify-between gap-2">
+          <Text className="flex-shrink font-sans-semibold text-base text-white">{t('label')}</Text>
+          <Text className="font-sans-bold text-base text-white">{t('fourOfFour')}</Text>
+        </View>
+
+        <Text className="mt-1 font-sans-regular text-base text-white">{t('subtitle')}</Text>
 
         <BlockchainList
           className="mt-6"

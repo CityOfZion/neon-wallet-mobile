@@ -6,7 +6,9 @@
     "showQrCodeButtonLabel": "顯示 QR 碼"
   },
   "accountSelectionAccordion": {
+    "deselectAllButtonLabel": "取消全選",
     "notFoundLabel": "找不到帳戶或已存在，請檢查您的輸入並稍後再試。",
+    "selectAllButtonLabel": "全選",
     "selectedOfTotal": "已選擇 {{selectedCount}} / 共 {{totalCount}} 個地址"
   },
   "accountTransactionsTransactionCard": {
@@ -39,6 +41,8 @@
     "value": "價值"
   },
   "blockchainList": {
+    "deselectAllButtonLabel": "取消全選",
+    "selectAllButtonLabel": "全選",
     "xExisting": "已有 {{amount}} 個"
   },
   "modalLayout": {

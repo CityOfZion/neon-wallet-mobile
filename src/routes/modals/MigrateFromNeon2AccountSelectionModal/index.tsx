@@ -15,7 +15,6 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbArrowRight from '@/assets/images/tb-arrow-right.svg'
 
-import type { TUseImportNep6Account } from '@/types/hooks'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 export const MigrateFromNeon2AccountSelectionModal = ({
@@ -32,20 +31,21 @@ export const MigrateFromNeon2AccountSelectionModal = ({
     account => !accountsRef.current.some(AccountHelper.predicate(account))
   )
 
-  const [accounts, setAccounts] = useState<TUseImportNep6Account[]>(availableAccounts)
+  const [selectedAccounts, setSelectedAccounts] = useState<TAccountSelectionAccordionAccount[]>([])
 
   const handleSelectAccount = (account: TAccountSelectionAccordionAccount) => {
-    setAccounts(previousData => {
-      const findIndex = previousData.findIndex(AccountHelper.predicate(account))
+    setSelectedAccounts(previousData => {
+      if (!previousData.some(AccountHelper.predicate(account))) {
+        return [...previousData, account]
+      }
 
-      if (findIndex === -1) return [...previousData, account as TUseImportNep6Account]
-
-      previousData.splice(findIndex, 1)
-      return [...previousData]
+      return previousData.filter(AccountHelper.predicateNot(account))
     })
   }
 
   const handleNext = () => {
+    const accounts = content.accounts.filter(account => selectedAccounts.some(AccountHelper.predicate(account)))
+
     navigation.navigate('MigrateFromNeon2PasswordModal', { accounts, content, onSuccess })
   }
 
@@ -64,9 +64,10 @@ export const MigrateFromNeon2AccountSelectionModal = ({
           </Text>
 
           <AccountSelectionAccordion
-            selectedAccounts={accounts}
+            selectedAccounts={selectedAccounts}
             accounts={content.accounts}
             onPressAccount={handleSelectAccount}
+            onToggleAll={setSelectedAccounts}
           />
         </View>
 
@@ -76,7 +77,7 @@ export const MigrateFromNeon2AccountSelectionModal = ({
             className="mb-4 mt-8"
             label={tCommon('general.next')}
             rightElement={<TbArrowRight aria-hidden />}
-            disabled={accounts.length === 0}
+            disabled={selectedAccounts.length === 0}
             onPress={handleNext}
           />
         ) : (

@@ -13,7 +13,6 @@ import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useImportAccounts } from '@/hooks/useAccountActions'
-import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useMount } from '@/hooks/useMount'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useLastIndexesByWallet } from '@/hooks/useUtilitySelector'
@@ -27,7 +26,6 @@ import type { TRootStackScreenProps } from '@/types/stacks'
 export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'ImportMnemonicSelectionModal'>) => {
   const { mnemonic, onSuccess } = route.params
 
-  const { accountsRef } = useAccountsSelector()
   const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelection' })
   const { t: tCommon } = useTranslation('common')
   const { lastIndexesByWallet } = useLastIndexesByWallet()
@@ -50,6 +48,7 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
       blockchain: account.blockchain,
       type: 'standard',
       key: account.key,
+      order: account.order,
     }))
 
     await importAccounts({ wallet, accountsToImport })
@@ -79,14 +78,11 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
         lastIndexesByWallet
       )
 
-      const generatedAccountsArray = Array.from(generatedAccounts.entries()).flatMap(([, accounts]) => accounts)
-      setGeneratedAccounts(generatedAccountsArray)
-
-      const selectedAccounts = generatedAccountsArray.filter(
-        account => !accountsRef.current.some(AccountHelper.predicate(account))
+      const fixGeneratedAccounts = Array.from(generatedAccounts.entries()).flatMap(([, accounts]) =>
+        accounts.map((account, order) => ({ ...account, order }))
       )
 
-      setSelectedAccounts(selectedAccounts)
+      setGeneratedAccounts(fixGeneratedAccounts)
     },
     [],
     1000
@@ -112,6 +108,7 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
                 selectedAccounts={selectedAccounts}
                 accounts={generatedAccounts}
                 onPressAccount={handleSelectAccount}
+                onToggleAll={setSelectedAccounts}
               />
             </View>
 

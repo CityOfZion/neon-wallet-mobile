@@ -54,7 +54,7 @@ export const CreateWalletStep4Screen = ({ navigation, route }: TMoreStackScreenP
       <ScreenLayout.KeyboardAvoidingContent>
         <View className="w-full flex-shrink flex-row items-center justify-between gap-2">
           <Text className="flex-shrink font-sans-semibold text-base text-white">{t('label')}</Text>
-          <Text className="font-sans-bold text-base text-white">{t('threeOfThree')}</Text>
+          <Text className="font-sans-bold text-base text-white">{t('threeOfFour')}</Text>
         </View>
 
         <Text className="mt-1 font-sans-regular text-base text-white">{t('body1')}</Text>

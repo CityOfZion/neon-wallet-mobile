@@ -29,6 +29,7 @@ export const CreateWalletStep1Screen = ({ navigation }: TMoreStackScreenProps<'C
           <CreateWalletStep1ScreenItem index={1} title={t('label1')} body={t('body1')} />
           <CreateWalletStep1ScreenItem index={2} title={t('label2')} body={t('body2')} />
           <CreateWalletStep1ScreenItem index={3} title={t('label3')} body={t('body3')} />
+          <CreateWalletStep1ScreenItem index={4} title={t('label4')} body={t('body4')} />
         </View>
 
         <View className="mt-auto py-3">

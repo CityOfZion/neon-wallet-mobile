@@ -6,7 +6,9 @@
     "showQrCodeButtonLabel": "Mostrar QR code"
   },
   "accountSelectionAccordion": {
+    "deselectAllButtonLabel": "Desmarcar todas",
     "notFoundLabel": "Nenhuma conta encontrada ou conta(s) já existente.",
+    "selectAllButtonLabel": "Selecionar todas",
     "selectedOfTotal": "{{selectedCount}} selecionada(s) de {{totalCount}} endereço(s)"
   },
   "accountTransactionsTransactionCard": {
@@ -39,6 +41,8 @@
     "value": "Valor"
   },
   "blockchainList": {
+    "deselectAllButtonLabel": "Desmarcar todas",
+    "selectAllButtonLabel": "Selecionar todas",
     "xExisting": "{{amount}} existente(s)"
   },
   "modalLayout": {
