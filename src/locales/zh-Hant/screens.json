@@ -123,11 +123,13 @@
   "createWalletStep1": {
     "body1": "這組秘密單詞讓您可以輕鬆備份和還原帳戶，讓您的錢包更加安全。",
     "body2": "正確記住您的助記詞非常重要，我們會協助您完成。如果您趕時間，也可以稍後再做。",
-    "body3": "給您的錢包取個好記的名字，您就可以開始使用了！",
+    "body3": "給您的錢包取個好記的名字。",
+    "body4": "選擇要建立帳戶的區塊鏈，您就可以開始使用了！",
     "createWallet": "建立錢包",
     "label1": "產生安全助記詞",
     "label2": "確認安全助記詞",
     "label3": "為您的錢包命名",
+    "label4": "選擇區塊鏈",
     "title": "建立錢包"
   },
   "createWalletStep2": {
@@ -138,7 +140,7 @@
     "dialogDismiss": "好的，我明白了",
     "dialogTitle": "請確保妥善保存您的安全助記詞",
     "label": "產生安全助記詞",
-    "oneOfThree": "1 / 3",
+    "oneOfFour": "1 / 4",
     "title": "建立錢包"
   },
   "createWalletStep3": {
@@ -149,7 +151,7 @@
     "dialog2Title": "單詞順序錯誤",
     "label": "確認安全助記詞",
     "title": "建立錢包",
-    "twoOfThree": "2 / 3"
+    "twoOfFour": "2 / 4"
   },
   "createWalletStep4": {
     "body1": "給您的錢包取個好記的名字，也許可以和用途有關，例如「交易」或「投資」。",
@@ -158,12 +160,14 @@
     },
     "label": "為您的錢包命名",
     "labelWalletName": "錢包名稱",
-    "threeOfThree": "3 / 3",
+    "threeOfFour": "3 / 4",
     "title": "建立錢包"
   },
   "createWalletStep5": {
     "continueButtonLabel": "立即建立",
-    "subtitle": "為您的新帳戶選擇所需的區塊鏈",
+    "fourOfFour": "4 / 4",
+    "label": "選擇區塊鏈",
+    "subtitle": "選擇您要在此錢包中使用的區塊鏈。",
     "title": "建立錢包"
   },
   "createWalletStep6": {

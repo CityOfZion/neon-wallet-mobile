@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 
 import orderBy from 'lodash/orderBy'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +16,7 @@ import TbMinus from '@/assets/images/tb-minus.svg'
 import TbPlus from '@/assets/images/tb-plus.svg'
 
 import { TwBlockchainIcon } from './TwBlockchainIcon'
+import { TwButton } from './TwButton'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 
@@ -24,12 +25,14 @@ export type TAccountSelectionAccordionAccount = {
   address: string
   bipPath?: string
   key?: string
+  order?: number
 }
 
 type TProps = {
   accounts: TAccountSelectionAccordionAccount[]
   selectedAccounts: TAccountSelectionAccordionAccount[]
   onPressAccount: (account: TAccountSelectionAccordionAccount) => void
+  onToggleAll: (accounts: TAccountSelectionAccordionAccount[]) => void
 }
 
 type TAccountSelectionAccordionHeaderProps = {
@@ -122,9 +125,20 @@ const AccountSelectionAccordionContent = ({
   )
 }
 
-export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAccounts }: TProps) => {
+export const AccountSelectionAccordion = ({ accounts, onPressAccount, onToggleAll, selectedAccounts }: TProps) => {
   const { t } = useTranslation('components', { keyPrefix: 'accountSelectionAccordion' })
+  const { accountsRef } = useAccountsSelector()
   const [openedSections, setOpenedSections] = useState<number[]>([])
+
+  const selectableAccounts = accounts.filter(account => !accountsRef.current.some(AccountHelper.predicate(account)))
+
+  const areAllAccountsSelected =
+    selectableAccounts.length > 0 &&
+    selectableAccounts.every(account => selectedAccounts.some(AccountHelper.predicate(account)))
+
+  const handleToggleAll = () => {
+    onToggleAll(areAllAccountsSelected ? [] : selectableAccounts)
+  }
 
   const accountsByBlockchain = useMemo(() => {
     const accountsByBlockchain = new Map<TBlockchainServiceKey, TAccountSelectionAccordionAccount[]>()
@@ -154,6 +168,10 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
     return selectedAccountsByBlockchain
   }, [selectedAccounts])
 
+  useLayoutEffect(() => {
+    setOpenedSections([0])
+  }, [])
+
   if (accounts.length === 0)
     return (
       <Text className="mx-auto px-6 text-center font-sans-regular text-base leading-5 text-gray-100">
@@ -162,27 +180,39 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, selectedAc
     )
 
   return (
-    <Accordion
-      onChange={setOpenedSections}
-      expandMultiple
-      activeSections={openedSections}
-      keyExtractor={(_item, index) => index}
-      sections={accountsByBlockchain}
-      renderHeader={(content, _index, isOpened) => (
-        <AccountSelectionAccordionHeader
-          blockchain={content[0]}
-          isOpened={isOpened}
-          accountsCount={content[1].length}
-          accountsSelectedCount={selectedAccountsByBlockchain.get(content[0])?.length || 0}
+    <View className="flex w-full flex-col">
+      <View className="mb-2 flex-row justify-end">
+        <TwButton
+          variant="text-slim"
+          label={areAllAccountsSelected ? t('deselectAllButtonLabel') : t('selectAllButtonLabel')}
+          labelProps={{ className: 'text-sm' }}
+          disabled={selectableAccounts.length === 0}
+          onPress={handleToggleAll}
         />
-      )}
-      renderContent={content => (
-        <AccountSelectionAccordionContent
-          accounts={content[1]}
-          onPress={onPressAccount}
-          selectedAccounts={selectedAccountsByBlockchain.get(content[0]) || []}
-        />
-      )}
-    />
+      </View>
+
+      <Accordion
+        keyExtractor={(_item, index) => index}
+        expandMultiple
+        activeSections={openedSections}
+        sections={accountsByBlockchain}
+        onChange={setOpenedSections}
+        renderHeader={([blockchain], _index, isOpened) => (
+          <AccountSelectionAccordionHeader
+            blockchain={blockchain}
+            isOpened={isOpened}
+            accountsCount={selectableAccounts.filter(account => account.blockchain === blockchain).length}
+            accountsSelectedCount={selectedAccountsByBlockchain.get(blockchain)?.length || 0}
+          />
+        )}
+        renderContent={([blockchain, accounts]) => (
+          <AccountSelectionAccordionContent
+            accounts={accounts}
+            selectedAccounts={selectedAccountsByBlockchain.get(blockchain) || []}
+            onPress={onPressAccount}
+          />
+        )}
+      />
+    </View>
   )
 }

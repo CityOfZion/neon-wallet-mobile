@@ -123,11 +123,13 @@
   "createWalletStep1": {
     "body1": "Este conjunto de palavras secretas facilita o backup e a restauração de sua conta. Isso torna sua carteira realmente segura",
     "body2": "É muito importante que você lembre sua frase corretamente, então iremos ajudá-lo com isso. Se estiver com pressa, pode fazer isso em outro momento.",
-    "body3": "Dê à sua carteira um nome memorável e está pronto para começar!",
+    "body3": "Dê à sua carteira um nome memorável.",
+    "body4": "Escolha as blockchains para as quais deseja criar contas e está pronto para começar!",
     "createWallet": "Criar Carteira",
     "label1": "Gerar frase de segurança",
     "label2": "Confirmar frase de segurança",
     "label3": "Dê um nome à sua carteira",
+    "label4": "Selecionar blockchains",
     "title": "Criar Carteira"
   },
   "createWalletStep2": {
@@ -138,7 +140,7 @@
     "dialogDismiss": "OK, eu entendo",
     "dialogTitle": "Certifique-se de manter sua frase de segurança segura",
     "label": "Gerar frase de segurança",
-    "oneOfThree": "1 de 3",
+    "oneOfFour": "1 de 4",
     "title": "Criar Carteira"
   },
   "createWalletStep3": {
@@ -149,7 +151,7 @@
     "dialog2Title": "Ordem de palavras incorreta",
     "label": "Confirmar frase de segurança",
     "title": "Criar Carteira",
-    "twoOfThree": "2 de 3"
+    "twoOfFour": "2 de 4"
   },
   "createWalletStep4": {
     "body1": "Dê à sua carteira um nome memorável, talvez pudesse ser relacionado ao que você quer usar a carteira, como \"trading\" ou \"investimentos\".",
@@ -158,12 +160,14 @@
     },
     "label": "Dê um nome à sua carteira",
     "labelWalletName": "Nome da carteira",
-    "threeOfThree": "3 de 3",
+    "threeOfFour": "3 de 4",
     "title": "Criar carteira"
   },
   "createWalletStep5": {
     "continueButtonLabel": "Criar Agora",
-    "subtitle": "Selecione a blockchain desejada para sua nova conta",
+    "fourOfFour": "4 de 4",
+    "label": "Selecionar blockchains",
+    "subtitle": "Selecione quais blockchains você deseja usar nesta carteira.",
     "title": "Criar Carteira"
   },
   "createWalletStep6": {

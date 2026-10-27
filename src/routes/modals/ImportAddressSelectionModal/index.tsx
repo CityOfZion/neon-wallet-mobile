@@ -13,7 +13,6 @@ import { AnalyticsHelper } from '@/helpers/AnalyticsHelper'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useImportAccounts } from '@/hooks/useAccountActions'
-import { useAccountsSelector } from '@/hooks/useAccountSelector'
 import { useMount } from '@/hooks/useMount'
 import { usePressOnce } from '@/hooks/usePressOnce'
 import { useCreateWallet } from '@/hooks/useWalletActions'
@@ -28,7 +27,6 @@ export const ImportAddressSelectionModal = ({ route }: TRootStackScreenProps<'Im
 
   const { t } = useTranslation('modals', { keyPrefix: 'importMnemonicSelection' })
   const { t: tCommon } = useTranslation('common')
-  const { accountsRef } = useAccountsSelector()
 
   const { createWallet } = useCreateWallet()
   const { importAccounts } = useImportAccounts()
@@ -80,12 +78,6 @@ export const ImportAddressSelectionModal = ({ route }: TRootStackScreenProps<'Im
       })
 
       setGeneratedAccounts(generatedAccounts)
-
-      const selectedAccounts = generatedAccounts.filter(
-        account => !accountsRef.current.some(AccountHelper.predicate(account))
-      )
-
-      setSelectedAccounts(selectedAccounts)
     },
     [],
     500
@@ -111,6 +103,7 @@ export const ImportAddressSelectionModal = ({ route }: TRootStackScreenProps<'Im
                 selectedAccounts={selectedAccounts}
                 accounts={generatedAccounts}
                 onPressAccount={handleSelectAccount}
+                onToggleAll={setSelectedAccounts}
               />
             </View>
 

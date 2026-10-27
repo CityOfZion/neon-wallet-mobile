@@ -123,11 +123,13 @@
   "createWalletStep1": {
     "body1": "这组秘密单词可以帮助您轻松备份和恢复账户，让您的钱包更加安全。",
     "body2": "正确记住您的短语非常重要，我们会帮助您完成。如果您着急，可以稍后再做。",
-    "body3": "为您的钱包取一个容易记住的名字，您就可以开始了！",
+    "body3": "为您的钱包取一个容易记住的名字。",
+    "body4": "选择要创建账户的区块链，您就可以开始了！",
     "createWallet": "创建钱包",
     "label1": "生成安全短语",
     "label2": "确认安全短语",
     "label3": "为钱包命名",
+    "label4": "选择区块链",
     "title": "创建钱包"
   },
   "createWalletStep2": {
@@ -138,7 +140,7 @@
     "dialogDismiss": "好的，我明白了",
     "dialogTitle": "请确保妥善保管您的安全短语",
     "label": "生成安全短语",
-    "oneOfThree": "1/3",
+    "oneOfFour": "1/4",
     "title": "创建钱包"
   },
   "createWalletStep3": {
@@ -149,7 +151,7 @@
     "dialog2Title": "单词顺序不正确",
     "label": "确认安全短语",
     "title": "创建钱包",
-    "twoOfThree": "2/3"
+    "twoOfFour": "2/4"
   },
   "createWalletStep4": {
     "body1": "为您的錢包取一个容易记住的名字，比如“交易”或“投资”等。",
@@ -158,12 +160,14 @@
     },
     "label": "为錢包命名",
     "labelWalletName": "钱包名称",
-    "threeOfThree": "3/3",
+    "threeOfFour": "3/4",
     "title": "创建钱包"
   },
   "createWalletStep5": {
     "continueButtonLabel": "立即创建",
-    "subtitle": "为您的新账户选择所需的区块链",
+    "fourOfFour": "4/4",
+    "label": "选择区块链",
+    "subtitle": "选择您要在此钱包中使用的区块链。",
     "title": "创建钱包"
   },
   "createWalletStep6": {
