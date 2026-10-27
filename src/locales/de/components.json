@@ -6,7 +6,9 @@
     "showQrCodeButtonLabel": "QR-Code anzeigen"
   },
   "accountSelectionAccordion": {
+    "deselectAllButtonLabel": "Alle abwählen",
     "notFoundLabel": "Keine Kontos gefunden oder bereits vorhanden. Bitte überprüfen Sie Ihre Eingabe und versuchen Sie es später erneut.",
+    "selectAllButtonLabel": "Alle auswählen",
     "selectedOfTotal": "{{selectedCount}} von {{totalCount}} Adressen ausgewählt"
   },
   "accountTransactionsTransactionCard": {
@@ -39,6 +41,8 @@
     "value": "Wert"
   },
   "blockchainList": {
+    "deselectAllButtonLabel": "Alle abwählen",
+    "selectAllButtonLabel": "Alle auswählen",
     "xExisting": "{{amount}} vorhanden"
   },
   "modalLayout": {

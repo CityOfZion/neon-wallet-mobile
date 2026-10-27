@@ -6,6 +6,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { PressableScale } from './PressableScale'
 import { TwBlockchainIcon } from './TwBlockchainIcon'
+import { TwButton } from './TwButton'
 
 import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount } from '@/types/store'
@@ -32,6 +33,12 @@ export const BlockchainList = ({
 
   const blockchainsToIterate = blockchains || BlockchainServiceHelper.blockchainNames
 
+  const areAllBlockchainsSelected = blockchainsToIterate.every(blockchain => selectedBlockchains.includes(blockchain))
+
+  const handleToggleAll = () => {
+    onSelect(areAllBlockchainsSelected ? [] : blockchainsToIterate)
+  }
+
   const handlePress = (blockchain: TBlockchainServiceKey) => {
     if (isMulti) {
       onSelect(
@@ -47,6 +54,16 @@ export const BlockchainList = ({
 
   return (
     <View className={StyleHelper.mergeStyles('gap-2', className)} {...props}>
+      {isMulti && (
+        <View className="flex-row justify-end">
+          <TwButton
+            variant="text-slim"
+            label={areAllBlockchainsSelected ? t('deselectAllButtonLabel') : t('selectAllButtonLabel')}
+            onPress={handleToggleAll}
+          />
+        </View>
+      )}
+
       {blockchainsToIterate.map(blockchain => {
         const isSelected = selectedBlockchains.includes(blockchain)
 
