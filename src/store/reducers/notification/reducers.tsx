@@ -1,7 +1,6 @@
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit'
 import * as ExpoNotifications from 'expo-notifications'
 
-import { DateHelper } from '@/helpers/DateHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
@@ -14,7 +13,7 @@ const { t } = I18nextHelper.get()
 const saveNotification: CaseReducer<TNotificationReducer, PayloadAction<TSaveNotification>> = (state, action) => {
   const notification: TNotification = {
     id: UtilsHelper.uuid(),
-    date: DateHelper.getNowUnix(),
+    date: new Date().toJSON(),
     read: false,
     priority: 'low',
     provider: 'system',

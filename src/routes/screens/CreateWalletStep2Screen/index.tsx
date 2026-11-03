@@ -56,7 +56,7 @@ export const CreateWalletStep2Screen = ({ navigation }: TMoreStackScreenProps<'C
   }
 
   const handlePressDownload = async () => {
-    await writeFile(`neon-mnemonic-${DateHelper.getNowUnix()}`, mnemonic, 'text/txt')
+    await writeFile(`neon-mnemonic-${DateHelper.getCurrentFullDateString()}`, mnemonic, 'text/txt')
 
     ToastHelper.success({ message: tCommonGeneral('savedSuccessfully') })
   }
