@@ -27,7 +27,7 @@ export function getNotificationReducer() {
     storage,
     timeout: 0,
     migrate: createMigrate(notificationMigrations),
-    version: 2,
+    version: 3,
   }
 
   const notificationSlice = createSlice({

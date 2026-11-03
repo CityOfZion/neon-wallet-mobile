@@ -48,7 +48,7 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
 
     qrRef.current.toDataURL(async (dataURL: string) => {
       await writeFile(
-        `neon-address-${actionData.selectedAccount?.address}-${DateHelper.getNowUnix()}`,
+        `neon-address-${actionData.selectedAccount?.address}-${DateHelper.getCurrentFullDateString()}`,
         dataURL,
         'image/png'
       )

@@ -19,30 +19,31 @@ export class DateHelper {
     'zh-Hant': dateFnsLocales.zhTW,
   }
 
-  static getNowUnix(): number {
-    return Date.now() / 1000
+  static #fixDate(date: TDate): TDate {
+    if (typeof date === 'string') {
+      return new Date(date)
+    }
+
+    return date
   }
 
   static formatLocalized(date: TDate, options: TDateHelperFormatLocalizedOptions): string {
-    if (typeof date === 'string') {
-      date = new Date(date)
-    } else if (typeof date === 'number') {
-      date = date < 1e10 ? date * 1000 : date
-    }
-
-    return dateFns.format(date, options.format, {
+    return dateFns.format(this.#fixDate(date), options.format, {
       locale: this.#dateFnsLocaleByLanguage[options.language.value],
     })
   }
 
   static format(date: TDate, formatString: string): string {
-    if (typeof date === 'string') {
-      date = new Date(date)
-    } else if (typeof date === 'number') {
-      date *= 1000
-    }
+    return dateFns.format(this.#fixDate(date), formatString)
+  }
 
-    return dateFns.format(date, formatString)
+  static getCurrentFullDateString() {
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0')
+    const day = currentDate.getDate().toString().padStart(2, '0')
+
+    return `${year}${month}${day}`
   }
 
   static calculateDateFromSelectionMaxOneYear = ({

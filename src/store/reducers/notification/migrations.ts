@@ -32,5 +32,14 @@ export function getNotificationMigrations() {
         return notification
       }),
     }),
+    3: (state: any) => ({
+      ...state,
+      data: state.data.map((notification: any) => {
+        return {
+          ...notification,
+          date: new Date(notification.date * 1000).toJSON(),
+        }
+      }),
+    }),
   }
 }
