@@ -41,6 +41,7 @@ const AccountAssetScreen = ({ route, navigation }: TWalletsStackScreenProps<'Acc
       showType: tab,
     })
   }
+
   const handlePressMore = () => {
     navigation.navigate('AccountAssetActionsModal', {
       account,
