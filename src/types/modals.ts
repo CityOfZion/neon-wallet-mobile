@@ -11,7 +11,6 @@ import type { TWalletKitHelperSessionDetails } from '@cityofzion/bs-multichain'
 import type { TBSNeo3Name, TVoteServiceCandidate } from '@cityofzion/bs-neo3'
 import type { TBSStellarName } from '@cityofzion/bs-stellar'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import type { ErrorResponse } from '@walletconnect/jsonrpc-utils'
 import type { PendingRequestTypes, ProposalTypes, SessionTypes } from '@walletconnect/types'
 import type { Dispatch, ReactNode } from 'react'
 
@@ -164,7 +163,7 @@ export type TDappPermissionModalParams = {
   request: PendingRequestTypes.Struct
   sessionDetails: TWalletKitHelperSessionDetails
   sessionAccount: TAccount
-  onReject: (reason?: ErrorResponse) => Promise<void>
+  onReject: (error?: unknown) => Promise<void>
   onAccept: () => Promise<any>
 }
 
