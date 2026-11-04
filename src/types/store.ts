@@ -169,7 +169,7 @@ export type TNotification = {
   titleValue?: string
   previewBody: string
   previewBodyValue?: string
-  date: number
+  date: string
   body?: string
   read: boolean
   priority: TNotificationPriority

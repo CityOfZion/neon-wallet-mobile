@@ -71,7 +71,7 @@ export const DappConnectionDetailsModal = ({
         >
           <Details.Panel label={t('expiresAtPanelTitle')}>
             <Details.Item>
-              {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PPPp', language })}
+              {DateHelper.formatLocalized(session.expiry * 1000, { format: 'PPPp', language })}
             </Details.Item>
           </Details.Panel>
 

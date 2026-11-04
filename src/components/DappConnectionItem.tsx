@@ -73,7 +73,7 @@ export const DappConnectionItem = ({ session }: Props) => {
       label={
         <View>
           <Text className="font-sans-regular text-xs text-gray-300">
-            {DateHelper.formatLocalized(new Date(session.expiry * 1000), { format: 'PP, p', language })}
+            {DateHelper.formatLocalized(session.expiry * 1000, { format: 'PP, p', language })}
           </Text>
 
           <Text className="font-sans-medium text-lg text-white" numberOfLines={1} ellipsizeMode="tail">
