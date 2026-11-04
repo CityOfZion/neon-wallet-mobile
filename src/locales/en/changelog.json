@@ -1,6 +1,11 @@
 {
   "notes": [
     {
+      "changes": [],
+      "date": "2026-11-04",
+      "version": "1.14.0"
+    },
+    {
       "changes": [
         "New Network - Stellar Support",
         "New Network - Bitcoin Support",
