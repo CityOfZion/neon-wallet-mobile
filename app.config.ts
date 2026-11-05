@@ -124,13 +124,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-image',
     'expo-sharing',
     'expo-web-browser',
-    [
-      'expo-build-properties',
-      {
-        buildReactNativeFromSource: true,
-        useHermesV1: true,
-      },
-    ],
     'crisp-sdk-react-native',
   ],
 })
