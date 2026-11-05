@@ -100,3 +100,7 @@ Expected in `.env` with `EXPO_PUBLIC_` prefix (see `src/helpers/EnvHelper.ts` fo
 ### Git Workflow
 
 Branch names and commit messages reference ClickUp task IDs (e.g., `CU-86ah218g4`). The main integration branch is `dev`. Pre-commit hooks run lint-staged via Husky.
+
+## ClickUp Tasks
+
+Follow the `clickup-task` skill (`.claude/skills/clickup-task/SKILL.md`) when creating or editing ClickUp tasks.
