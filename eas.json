@@ -12,6 +12,9 @@
       "node": "22.14.0"
     },
     "preview": {
+      "android": {
+        "buildType": "apk"
+      },
       "autoIncrement": true,
       "channel": "preview",
       "node": "22.14.0"
