@@ -20,12 +20,6 @@ export type TAccountHelperPredicateParams = {
 
 export type TToastHelperParams = Optional<Omit<TToasterToastOptions, 'component'>, 'duration' | 'id'>
 
-export type TClickupHelperCreateSupportTicketParams = {
-  email: string
-  name: string
-  description: string
-}
-
 export type TBuyAndSellTokensHelperType = 'buy' | 'sell'
 
 export type TBuyAndSellTokensHelperBuildUrlParams = {

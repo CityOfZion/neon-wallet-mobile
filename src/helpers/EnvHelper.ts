@@ -8,9 +8,6 @@ const envSchema = z.object({
   EXPO_PUBLIC_SENTRY_DSN: z.string().optional(),
   EXPO_PUBLIC_GA_MEASUREMENT_ID: z.string().nonempty().optional(),
   EXPO_PUBLIC_GA_API_SECRET: z.string().nonempty().optional(),
-  EXPO_PUBLIC_CLICK_UP_LIST_ID: z.string().nonempty().optional(),
-  EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID: z.string().nonempty().optional(),
-  EXPO_PUBLIC_CLICK_UP_API_KEY: z.string().nonempty().optional(),
   EXPO_PUBLIC_CRISP_WEBSITE_ID: z.string().nonempty(),
 })
 
@@ -25,9 +22,6 @@ class EnvHelperClass {
       EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
       EXPO_PUBLIC_GA_MEASUREMENT_ID: process.env.EXPO_PUBLIC_GA_MEASUREMENT_ID,
       EXPO_PUBLIC_GA_API_SECRET: process.env.EXPO_PUBLIC_GA_API_SECRET,
-      EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID: process.env.EXPO_PUBLIC_CLICK_UP_ASSIGNEE_ID,
-      EXPO_PUBLIC_CLICK_UP_API_KEY: process.env.EXPO_PUBLIC_CLICK_UP_API_KEY,
-      EXPO_PUBLIC_CLICK_UP_LIST_ID: process.env.EXPO_PUBLIC_CLICK_UP_LIST_ID,
       EXPO_PUBLIC_CRISP_WEBSITE_ID: process.env.EXPO_PUBLIC_CRISP_WEBSITE_ID,
     }
 

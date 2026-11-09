@@ -10,4 +10,11 @@ export class CrispHelper {
   static show() {
     crispSdk.openChat()
   }
+
+  static startNegativeFeedbackChat(message: string) {
+    crispSdk.setSessionSegment('negative-survey')
+    crispSdk.pushSessionEvent('Negative survey feedback', crispSdk.CrispSessionEventColors.RED)
+    crispSdk.showMessage({ type: 'text', text: message })
+    crispSdk.openChat()
+  }
 }

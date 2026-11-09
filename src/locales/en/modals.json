@@ -805,16 +805,14 @@
   },
   "survey": {
     "descriptionFeedbackSubmitted": "Your feedback is really appreciated!",
-    "detailsInputLabel": "What can we do better?",
-    "detailsInputPlaceholder": "Add some more details here…",
     "dislikeButtonLabel": "Dislike",
     "error": {
       "storeReviewNotAvailable": "Store review is not available."
     },
     "likeButtonLabel": "Like",
+    "liveChatGreeting": "Sorry to hear Neon didn't meet your expectations. What could we do better? Tell us what happened and our team will get back to you.",
     "notNowButtonLabel": "Not now",
     "requestReview": "Enjoying Neon? Leave us a review, it really helps!",
-    "submitButtonLabel": "Submit",
     "title": "How was your experience?",
     "titleFeedbackSubmitted": "Thank you!"
   },

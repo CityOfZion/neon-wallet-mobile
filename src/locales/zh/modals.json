@@ -805,16 +805,14 @@
   },
   "survey": {
     "descriptionFeedbackSubmitted": "非常感谢您的反馈！",
-    "detailsInputLabel": "我们可以改进什么？",
-    "detailsInputPlaceholder": "在此处添加更多详细信息…",
     "dislikeButtonLabel": "不喜欢",
     "error": {
       "storeReviewNotAvailable": "商店评价不可用。"
     },
     "likeButtonLabel": "喜欢",
+    "liveChatGreeting": "很遗憾 Neon 没有达到您的期望。我们可以在哪些方面做得更好？请告诉我们发生了什么，我们的团队会尽快回复您。",
     "notNowButtonLabel": "暂不",
     "requestReview": "喜欢 Neon 吗？给我们留下评价，这对我们很有帮助！",
-    "submitButtonLabel": "提交",
     "title": "您觉得体验如何？",
     "titleFeedbackSubmitted": "谢谢！"
   },

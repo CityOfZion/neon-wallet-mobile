@@ -69,11 +69,6 @@ export const MoreStack = () => {
       />
 
       <MoreNavigator.Screen
-        name="SupportTicketScreen"
-        getComponent={() => require('@/routes/screens/SupportTicketScreen').SupportTicketScreen}
-      />
-
-      <MoreNavigator.Screen
         name="ContactsScreen"
         getComponent={() => require('@/routes/screens/ContactsScreen').ContactsScreen}
       />

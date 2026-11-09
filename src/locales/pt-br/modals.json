@@ -805,16 +805,14 @@
   },
   "survey": {
     "descriptionFeedbackSubmitted": "Agradecemos pelo feedback!",
-    "detailsInputLabel": "O que podemos melhorar?",
-    "detailsInputPlaceholder": "Adicione mais detalhes aqui…",
     "dislikeButtonLabel": "Não gostei",
     "error": {
       "storeReviewNotAvailable": "Avaliação da loja não está disponível."
     },
     "likeButtonLabel": "Gostei",
+    "liveChatGreeting": "Que pena que a Neon não atendeu às suas expectativas. O que podemos melhorar? Conte para nós o que aconteceu e nossa equipe entrará em contato.",
     "notNowButtonLabel": "Não agora",
     "requestReview": "Curtindo Neon? Deixa uma avaliação para gente, ajuda a gente muito!",
-    "submitButtonLabel": "Enviar",
     "title": "Como foi sua experiência?",
     "titleFeedbackSubmitted": "Obrigado!"
   },

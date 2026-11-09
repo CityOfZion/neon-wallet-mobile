@@ -198,7 +198,6 @@
     "helpButtonLabel": "Ajuda",
     "importButtonLabel": "Importar",
     "liveSupportButtonLabel": "Suporte ao vivo",
-    "openSupportTicketButtonLabel": "Abrir ticket de suporte",
     "privatePolicyButtonLabel": "Política de privacidade",
     "settingsButtonLabel": "Configurações",
     "title": "Mais opções"
@@ -469,24 +468,6 @@
     "addTrustlineButtonLabel": "Adicionar trustline",
     "emptyList": "Nenhuma trustline encontrada",
     "title": "Stellar Trustline"
-  },
-  "supportTicket": {
-    "descriptionLabel": "Descrição",
-    "descriptionPlaceholder": "Descreva seu problema…",
-    "emailLabel": "Email",
-    "emailPlaceholder": "Digite seu email…",
-    "errors": {
-      "descriptionRequired": "É necessário descrever o processo.",
-      "emailRequired": "Email é obrigatório",
-      "invalidEmail": "Por favor, digite um endereço de email válido",
-      "nameRequired": "Nome é obrigatório",
-      "submitError": "Ocorreu um erro ao enviar seu ticket. Tente novamente mais tarde."
-    },
-    "nameLabel": "Nome",
-    "namePlaceholder": "Digite seu nome…",
-    "submitTicketButtonLabel": "Enviar ticket",
-    "successToast": "Recebemos seu ticket de suporte e entraremos em contato em breve.",
-    "title": "Abrir ticket de suporte"
   },
   "swap": {
     "form": {

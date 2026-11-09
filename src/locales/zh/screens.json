@@ -198,7 +198,6 @@
     "helpButtonLabel": "帮助",
     "importButtonLabel": "导入",
     "liveSupportButtonLabel": "在线支持",
-    "openSupportTicketButtonLabel": "打开支持票",
     "privatePolicyButtonLabel": "隐私政策",
     "settingsButtonLabel": "设置",
     "title": "更多选项"
@@ -469,24 +468,6 @@
     "addTrustlineButtonLabel": "添加信任线",
     "emptyList": "未找到信任线",
     "title": "Stellar 信任线"
-  },
-  "supportTicket": {
-    "descriptionLabel": "描述",
-    "descriptionPlaceholder": "描述你的问题…",
-    "emailLabel": "电子邮件",
-    "emailPlaceholder": "输入你的电子邮件…",
-    "errors": {
-      "descriptionRequired": "必须填写描述。",
-      "emailRequired": "电子邮件为必填项",
-      "invalidEmail": "请输入有效的电子邮件地址",
-      "nameRequired": "名称为必填项",
-      "submitError": "提交票证时出错。请稍后重试。"
-    },
-    "nameLabel": "名称",
-    "namePlaceholder": "输入你的名称…",
-    "submitTicketButtonLabel": "提交票证",
-    "successToast": "我们已收到你的支持票证，将在不久后与你联系。",
-    "title": "打开支持票"
   },
   "swap": {
     "form": {

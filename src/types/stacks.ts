@@ -158,8 +158,6 @@ export type TMoreStackParamList = {
   SettingsWalletBackupStep2Screen: TSettingsWalletBackupStep2ScreenParams
   SettingsWalletBackupStep3Screen: TSettingsWalletBackupStep3ScreenParams
   NotificationsScreen: undefined
-  SupportTicketScreen: undefined
-  SupportTicketSuccessScreen: undefined
 
   ContactsScreen: undefined
   ContactScreen: TContactScreenParams
