@@ -75,10 +75,6 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
     LinkHelper.open(ConstantsHelper.cozDiscordUrl)
   }
 
-  const handlePressOpenTicket = () => {
-    navigation.navigate('SupportTicketScreen')
-  }
-
   useMount(() => {
     if (helpAccordionOpen) {
       scrollRef.current?.scrollToEnd({ animated: true })
@@ -167,13 +163,6 @@ export const MoreScreen = ({ navigation, route }: TMoreStackScreenProps<'MoreScr
               className="px-3.5"
               leftElement={<MenuButtonHelpBullet />}
               onPress={handlePressLiveSupport}
-            />
-
-            <TwMenuButton
-              label={t('openSupportTicketButtonLabel')}
-              className="px-3.5"
-              leftElement={<MenuButtonHelpBullet />}
-              onPress={handlePressOpenTicket}
             />
 
             <TwMenuButton
