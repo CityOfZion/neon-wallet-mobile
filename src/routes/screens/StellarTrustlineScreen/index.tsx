@@ -18,6 +18,8 @@ import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
 
+import { StellarTrustlineRecommendedButtons } from './StellarTrustlineRecommendedButtons'
+
 import type { TWalletsStackScreenProps } from '@/types/stacks'
 
 type TItem = {
@@ -103,8 +105,16 @@ export const StellarTrustlineScreen = ({ navigation, route }: TWalletsStackScree
               renderItem={renderItem}
             />
 
+            <StellarTrustlineRecommendedButtons
+              stellarAccount={stellarAccount}
+              trustlines={trustlinesQuery.data}
+              onAddToken={token => {
+                navigation.navigate('StellarPersistTrustlineModal', { stellarAccount, token })
+              }}
+            />
+
             <TwButton
-              className="mb-4 mt-8"
+              className="my-4"
               label={t('addTrustlineButtonLabel')}
               variant="contained-light"
               onPress={() => {

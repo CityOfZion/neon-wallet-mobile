@@ -465,7 +465,6 @@
     }
   },
   "stellarTrustline": {
-    "addTrustlineButtonLabel": "Trustline hinzufügen",
     "emptyList": "Keine Trustlines gefunden",
     "title": "Stellar Trustline"
   },
