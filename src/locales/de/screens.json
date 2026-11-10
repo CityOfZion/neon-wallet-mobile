@@ -198,7 +198,6 @@
     "helpButtonLabel": "Hilfe",
     "importButtonLabel": "Importieren",
     "liveSupportButtonLabel": "Live-Support",
-    "openSupportTicketButtonLabel": "Support-Ticket öffnen",
     "privatePolicyButtonLabel": "Datenschutz",
     "settingsButtonLabel": "Einstellungen",
     "title": "Weitere Optionen"
@@ -469,24 +468,6 @@
     "addTrustlineButtonLabel": "Trustline hinzufügen",
     "emptyList": "Keine Trustlines gefunden",
     "title": "Stellar Trustline"
-  },
-  "supportTicket": {
-    "descriptionLabel": "Beschreibung",
-    "descriptionPlaceholder": "Beschreiben Sie Ihr Problem…",
-    "emailLabel": "E-Mail",
-    "emailPlaceholder": "Geben Sie Ihre E-Mail ein…",
-    "errors": {
-      "descriptionRequired": "Eine Beschreibung ist erforderlich.",
-      "emailRequired": "E-Mail ist erforderlich",
-      "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
-      "nameRequired": "Name ist erforderlich",
-      "submitError": "Es gab einen Fehler beim Absenden Ihres Tickets. Bitte versuchen Sie es später erneut."
-    },
-    "nameLabel": "Name",
-    "namePlaceholder": "Geben Sie Ihren Namen ein…",
-    "submitTicketButtonLabel": "Ticket einreichen",
-    "successToast": "Wir haben Ihr Support-Ticket erhalten und melden uns in Kürze bei Ihnen.",
-    "title": "Support-Ticket öffnen"
   },
   "swap": {
     "form": {
