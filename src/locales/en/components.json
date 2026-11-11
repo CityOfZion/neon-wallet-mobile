@@ -63,10 +63,10 @@
     "backButtonLabel": "Go back"
   },
   "screenLayoutBars": {
-    "customMode": "Custom Network Mode",
+    "custom": "Custom network",
     "noInternet": "No internet connection",
-    "testnetMode": "Testnet Network Mode",
-    "warning": "WARNING"
+    "testnet": "Testnet network",
+    "warning": "Warning"
   },
   "sendDetails": {
     "amountLabel": "Amount",

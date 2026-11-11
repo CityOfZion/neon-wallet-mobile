@@ -46,8 +46,8 @@ export const BuyAndSellTokensIframeContent = ({ type, hidden, account, setDeposi
   const url = BuyAndSellTokensHelper.buildUrl({
     type,
     currency,
-    refundAddress: account?.address,
     merchantTransactionId: id,
+    ...(type === 'buy' ? { address: account?.address } : { refundAddress: account?.address }),
   })
 
   const handleRestart = () => {
@@ -72,7 +72,7 @@ export const BuyAndSellTokensIframeContent = ({ type, hidden, account, setDeposi
   }
 
   const handleLoad = async () => {
-    await BSUtilsHelper.wait(4000)
+    await BSUtilsHelper.wait(2000)
 
     setIsIframeLoading(false)
   }
