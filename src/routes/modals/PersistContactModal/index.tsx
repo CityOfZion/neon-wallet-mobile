@@ -186,7 +186,7 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
           <View>
             <TwSeparator className="my-8" />
 
-            <Text className="font-sans-bold text-sm text-gray-300">{t('deleteContact')}</Text>
+            <Text className="font-sans-bold text-sm uppercase text-gray-300">{t('deleteContact')}</Text>
 
             <Text className="mb-8 mt-1.5 font-sans-regular text-white">{t('deleteContactSubtitle')}</Text>
 

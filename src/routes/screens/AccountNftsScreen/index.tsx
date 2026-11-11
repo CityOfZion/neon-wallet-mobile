@@ -105,7 +105,7 @@ export const AccountNftsSScreen = (props: TWalletsStackScreenProps<'AccountNftsS
     <ScreenLayout.Root>
       <ScreenLayout.Header>
         <ScreenLayout.BackButton />
-        <ScreenLayout.Title>{t('title')}</ScreenLayout.Title>
+        <ScreenLayout.Title className="uppercase">{t('title')}</ScreenLayout.Title>
       </ScreenLayout.Header>
       <ScreenLayout.ViewContent>
         <AccountSubTitle account={account} className="mb-2" />
