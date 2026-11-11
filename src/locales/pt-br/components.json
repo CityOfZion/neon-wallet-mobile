@@ -63,10 +63,10 @@
     "backButtonLabel": "Voltar"
   },
   "screenLayoutBars": {
-    "customMode": "Modo Rede Customizada",
+    "custom": "Rede customizada",
     "noInternet": "Sem conexão com a internet",
-    "testnetMode": "Modo Rede Testnet",
-    "warning": "AVISO"
+    "testnet": "Rede testnet",
+    "warning": "Aviso"
   },
   "sendDetails": {
     "amountLabel": "Quantia",

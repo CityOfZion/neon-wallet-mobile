@@ -63,9 +63,9 @@
     "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
-    "customMode": "自定义网络模式",
+    "custom": "自定义网络",
     "noInternet": "无网络连接",
-    "testnetMode": "测试网模式",
+    "testnet": "测试网络",
     "warning": "警告"
   },
   "sendDetails": {
