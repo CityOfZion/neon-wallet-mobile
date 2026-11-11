@@ -44,14 +44,14 @@ const Banners = () => {
       {hasCustom && (
         <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-neon bg-black p-4">
           <TbAlertTriangleFilled aria-hidden className="size-6 text-neon" />
-          <Text className="font-sans-regular text-lg leading-5 text-white">{t('customMode')}</Text>
+          <Text className="font-sans-regular text-lg leading-5 text-white">{t('custom')}</Text>
         </View>
       )}
 
       {hasTestnet && (
         <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-magenta bg-black p-4">
           <TbAlertTriangleFilled aria-hidden className="size-6 text-magenta" />
-          <Text className="font-sans-regular text-lg leading-5 text-white">{t('testnetMode')}</Text>
+          <Text className="font-sans-regular text-lg leading-5 text-white">{t('testnet')}</Text>
         </View>
       )}
 

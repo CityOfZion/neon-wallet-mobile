@@ -63,9 +63,9 @@
     "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
-    "customMode": "自訂網路模式",
+    "custom": "自訂網路",
     "noInternet": "沒有網路連線",
-    "testnetMode": "測試網路模式",
+    "testnet": "測試網路",
     "warning": "警告"
   },
   "sendDetails": {
