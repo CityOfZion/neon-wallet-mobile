@@ -23,7 +23,7 @@
     "nep6FileDetected": "NEP-6-Backup-Datei erkannt"
   },
   "useItemNfiAuthentication": {
-    "authenticateMessage": "Scannen Sie Ihr AKTUELLES NFI Objekt",
+    "authenticateMessage": "Scannen Sie Ihr aktuelles NFI Objekt",
     "confirmLinkMessage": "Bitte bestätigen Sie Ihr NFI Objekt erneut",
     "createPassword": {
       "confirmPasswordInputLabel": "Passcode bestätigen",

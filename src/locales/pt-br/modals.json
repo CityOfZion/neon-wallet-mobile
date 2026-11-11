@@ -340,7 +340,7 @@
     "title": "Exportar"
   },
   "exportKey": {
-    "details": "DETALHES DA CHAVE",
+    "details": "Detalhes da chave",
     "title": "Exportar Chave",
     "unexpectedError": "Erro inesperado ao obter a chave"
   },
@@ -599,11 +599,11 @@
     "addAnotherAddress": "Adicionar outro endereço",
     "addressLabel": "Endereço",
     "deleteButton": "Deletar Contato",
-    "deleteContact": "DELETAR CONTATO",
+    "deleteContact": "Deletar contato",
     "deleteContactAlert": "Tem certeza que deseja deletar este contato?",
     "deleteContactSubtitle": "Deletar um contato removerá todos os seus endereços da lista de contatos e é permanente.",
     "nameInvalid": "O nome deve ter no mínimo 1 caractere e menos de 20 caracteres",
-    "nameLabel": "NOME",
+    "nameLabel": "Nome",
     "namePlaceholder": "Digite o nome do contato",
     "title": {
       "create": "Criar contato",

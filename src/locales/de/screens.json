@@ -52,7 +52,7 @@
   },
   "accountNfts": {
     "emptyList": "Keine NFTs vorhanden",
-    "title": "NFTS"
+    "title": "NFTs"
   },
   "accountSettings": {
     "customize": "Konto anpassen",
