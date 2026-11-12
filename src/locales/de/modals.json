@@ -340,7 +340,7 @@
     "title": "Exportieren"
   },
   "exportKey": {
-    "details": "KEY DETAILS",
+    "details": "Key-Details",
     "title": "Key exportieren",
     "unexpectedError": "Unerwarteter Fehler beim Abrufen des Keys"
   },
@@ -599,11 +599,11 @@
     "addAnotherAddress": "Weitere Adresse hinzufügen",
     "addressLabel": "Adresse",
     "deleteButton": "Kontakt löschen",
-    "deleteContact": "KONTAKT LÖSCHEN",
+    "deleteContact": "Kontakt löschen",
     "deleteContactAlert": "Möchten Sie diesen Kontakt wirklich löschen?",
     "deleteContactSubtitle": "Das Löschen eines Kontakts entfernt alle zugehörigen Adressen aus Ihrer Kontaktliste und ist dauerhaft.",
     "nameInvalid": "Name muss mindestens 1 und maximal 20 Zeichen haben",
-    "nameLabel": "NAME",
+    "nameLabel": "Name",
     "namePlaceholder": "Kontaktnamen eingeben",
     "title": {
       "create": "Kontakt erstellen",
