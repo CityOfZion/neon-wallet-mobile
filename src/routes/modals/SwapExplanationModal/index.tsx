@@ -26,7 +26,7 @@ export const SwapExplanationModal = () => {
         <ModalLayout.CloseButton />
       </ModalLayout.Header>
       <ModalLayout.ScrollContent contentContainerClassName="items-center">
-        <TbReplace className="mt-10 size-32 stroke-1 text-blue" />
+        <TbReplace className="mt-10 size-32 stroke-1 text-blue min-size-32 max-size-32" />
 
         <View className="mt-14 flex-grow gap-8 px-4">
           <Text className="font-sans-bold text-lg text-white">{t('description1')}</Text>

@@ -828,6 +828,7 @@
     "failed": "Fehlgeschlagen",
     "help": "Brauchen Sie Hilfe? Live-Support",
     "log": "Swap Log",
+    "notFound": "Wir konnten die Details dieses Swaps nicht laden",
     "pending": "Ausstehend…",
     "processingInfo": "Wir streben an, Swaps in unter 7 Minuten abzuschließen",
     "receivingAddress": "Empfangsadresse",

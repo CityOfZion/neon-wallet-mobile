@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
+
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type Props = {
-  blockchain: TBlockchainServiceKey | 'all'
+  blockchain: TBSServiceName | 'all'
 }
 
 export const useLocalTokens = ({ blockchain }: Props) => {

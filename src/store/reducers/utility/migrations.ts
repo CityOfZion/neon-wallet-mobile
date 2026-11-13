@@ -1,6 +1,7 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
+
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { THiddenTokenByBlockchain } from '@/types/store'
 
 export function getUtilityMigrations() {
@@ -27,7 +28,7 @@ export function getUtilityMigrations() {
 
       const hiddenTokensByBlockchain = Object.entries(state.data.hiddenTokensByBlockchain).reduce(
         (previous, actual) => {
-          const blockchain = actual[0] as TBlockchainServiceKey
+          const blockchain = actual[0] as TBSServiceName
           const tokens = actual[1] as string[] | undefined
           const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 

@@ -1,15 +1,15 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
+
 import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
 import type { TTwButtonProps } from '@/components/TwButton'
 import { TwButton } from '@/components/TwButton'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = Omit<TTwButtonProps, 'leftElement'> & {
   label: string
   address?: string | null
-  blockchain?: TBlockchainServiceKey | null
+  blockchain?: TBSServiceName | null
   error?: boolean
 }
 

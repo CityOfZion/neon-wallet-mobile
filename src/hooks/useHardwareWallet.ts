@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 
 import { BSKeychainHelper, type TBSAccount } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
@@ -13,7 +14,6 @@ import { useAppDispatch } from './useRedux'
 import { useCreateWallet, useEditWallet } from './useWalletActions'
 
 import { utilityReducerActions } from '@/store/reducers/utility'
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount, TWallet } from '@/types/store'
 
 export const useCreateHardwareWallet = () => {
@@ -25,13 +25,13 @@ export const useCreateHardwareWallet = () => {
   const { accountsWithWalletMapRef } = useAccountsWithWalletMapSelector()
 
   const createHardwareWallet = useCallback(
-    async (accounts: TBSAccount<TBlockchainServiceKey>[]) => {
-      const existentWalletsByBlockchain = new Map<TBlockchainServiceKey, TWallet>()
+    async (accounts: TBSAccount<TBSServiceName>[]) => {
+      const existentWalletsByBlockchain = new Map<TBSServiceName, TWallet>()
       const groupedAccountInfosByBlockchain = new Map<
-        TBlockchainServiceKey,
+        TBSServiceName,
         {
           existentAccount?: TAccount
-          account: TBSAccount<TBlockchainServiceKey>
+          account: TBSAccount<TBSServiceName>
         }[]
       >()
 

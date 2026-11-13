@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import type { FlatListProps, ListRenderItem } from 'react-native'
 import { FlatList, Pressable, Text, View } from 'react-native'
@@ -11,7 +12,6 @@ import { useAccountsWithWalletSelector } from '@/hooks/useAccountSelector'
 import { TwBlockchainIcon } from './TwBlockchainIcon'
 import { TwSeparator } from './TwSeparator'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount, TAccountWithWallet, TWallet } from '@/types/store'
 
 type TItem = TAccount & {
@@ -23,7 +23,7 @@ type TItem = TAccount & {
 type TProps = {
   onPress: (account: TAccount) => void
   selectedAccount?: TAccount | null
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
   accountsWithWallet?: TAccountWithWallet[]
 } & Omit<FlatListProps<TItem>, 'data' | 'renderItem'>
 

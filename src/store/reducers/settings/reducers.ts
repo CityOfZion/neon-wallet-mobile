@@ -1,10 +1,11 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import type { TSettingsReducer } from './index'
 
-import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
+import type { TNetwork } from '@/types/blockchain'
 import type { TCurrency, TLanguage, TSecurity, TSelectedNetworks, TSurveyInfoStatus } from '@/types/store'
 
 const setSecurity: CaseReducer<TSettingsReducer, PayloadAction<TSecurity>> = (state, action) => {
@@ -28,7 +29,7 @@ const setSurveyInfo: CaseReducer<TSettingsReducer, PayloadAction<TSurveyInfoStat
   state.data.surveyInfo.updatedAt = Date.now()
 }
 
-const setSelectNetwork = <T extends TBlockchainServiceKey>(
+const setSelectNetwork = <T extends TBSServiceName>(
   state: TSettingsReducer,
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {
@@ -43,7 +44,7 @@ const setSelectedNetworkByBlockchain = (state: TSettingsReducer, action: Payload
 
 const setSelectedNetworkUrl: CaseReducer<
   TSettingsReducer,
-  PayloadAction<{ blockchain: TBlockchainServiceKey; url: string; isAutomatic?: boolean }>
+  PayloadAction<{ blockchain: TBSServiceName; url: string; isAutomatic?: boolean }>
 > = (state, action) => {
   const { blockchain, url, isAutomatic } = action.payload
   const selectedNetwork = state.data.selectedNetworkByBlockchain[blockchain]
@@ -52,7 +53,7 @@ const setSelectedNetworkUrl: CaseReducer<
   selectedNetwork.isAutomatic = isAutomatic
 }
 
-const saveCustomNetwork = <T extends TBlockchainServiceKey>(
+const saveCustomNetwork = <T extends TBSServiceName>(
   state: TSettingsReducer,
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {
@@ -73,7 +74,7 @@ const saveCustomNetwork = <T extends TBlockchainServiceKey>(
   }
 }
 
-const deleteCustomNetwork = <T extends TBlockchainServiceKey>(
+const deleteCustomNetwork = <T extends TBSServiceName>(
   state: TSettingsReducer,
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {

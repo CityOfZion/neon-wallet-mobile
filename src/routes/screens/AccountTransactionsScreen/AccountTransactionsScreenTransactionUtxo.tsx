@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 
 import type { TTransactionUtxo } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -9,10 +10,8 @@ import { AccountTransactionsTransactionCard } from '@/components/AccountTransact
 
 import TbChevronRight from '@/assets/images/tb-chevron-right.svg'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
-  transaction: TTransactionUtxo<TBlockchainServiceKey>
+  transaction: TTransactionUtxo<TBSServiceName>
 }
 
 export const AccountTransactionsScreenTransactionUtxo = memo(({ transaction }: TProps) => {

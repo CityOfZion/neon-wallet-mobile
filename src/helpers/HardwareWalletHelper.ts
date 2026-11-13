@@ -1,5 +1,6 @@
 import type { TBSAccount } from '@cityofzion/blockchain-service'
 import { BSKeychainHelper, BSUtilsHelper, hasLedger } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { ledgerUSBVendorId } from '@ledgerhq/devices'
 import type Transport from '@ledgerhq/hw-transport'
 import HIDTransport from '@ledgerhq/react-native-hid'
@@ -15,7 +16,6 @@ import { AbortError, AppError } from './ErrorHelper'
 import { LoggerHelper } from './LoggerHelper'
 import { ReduxHelper } from './ReduxHelper'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { THardwareWalletHelperConnectByUsbParams, THardwareWalletHelperGetAccountParams } from '@/types/helpers'
 
 const { t } = I18nextHelper.get()
@@ -27,12 +27,12 @@ export class HardwareWalletHelper {
   static removeDeviceDetachListener?: () => void
   static onHardwareWalletDisconnect?: () => void
 
-  static async #connect(transport: Transport): Promise<TBSAccount<TBlockchainServiceKey>[]> {
+  static async #connect(transport: Transport): Promise<TBSAccount<TBSServiceName>[]> {
     if (this.#transport) {
       throw new AppError(t('hardwareWallet.errors.disconnectFirst'))
     }
 
-    const newAccounts: TBSAccount<TBlockchainServiceKey>[] = []
+    const newAccounts: TBSAccount<TBSServiceName>[] = []
 
     const services = Object.values(BlockchainServiceHelper.bsAggregator.blockchainServicesByName)
 
@@ -141,7 +141,7 @@ export class HardwareWalletHelper {
     return cloneDeep(account)
   }
 
-  static async getTransport(account: TBSAccount<TBlockchainServiceKey>) {
+  static async getTransport(account: TBSAccount<TBSServiceName>) {
     try {
       if (!this.#transport) throw new AppError(t('hardwareWallet.errors.hardwareWalletNotFound'))
 

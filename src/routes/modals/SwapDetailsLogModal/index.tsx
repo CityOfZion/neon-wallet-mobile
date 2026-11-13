@@ -1,7 +1,5 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
-import { SimpleSwapService } from '@cityofzion/bs-multichain'
-import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text } from 'react-native'
 
@@ -10,35 +8,30 @@ import { TwButton } from '@/components/TwButton'
 
 import { ClipboardHelper } from '@/helpers/ClipboardHelper'
 
+import { useSwapOrderQuery } from '@/hooks/useSwapOrderQuery'
+
 import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-const swapService = new SimpleSwapService()
-
 export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetailsLogModal'>) => {
   const { t } = useTranslation('modals', { keyPrefix: 'swapDetailsLog' })
 
-  const {
-    swapRecord: { swapId, ...swapRecord },
-  } = route.params
+  const { orderId } = route.params
 
-  const { isLoading, data: log } = useQuery({
-    queryKey: ['swap-details-log', swapId, swapRecord.txFrom, swapRecord.txTo],
-    queryFn: async () => {
-      let finalLog = swapRecord.log
+  const swapOrderQuery = useSwapOrderQuery(orderId)
 
-      if (!finalLog) {
-        const response = await swapService.getStatus(swapId!)
+  const log = useMemo(() => {
+    if (!swapOrderQuery.data?.log) return ''
 
-        if (response.log) finalLog = response.log
-      }
-
-      return finalLog ? JSON.stringify(JSON.parse(finalLog), null, 1) : ''
-    },
-  })
+    try {
+      return JSON.stringify(JSON.parse(swapOrderQuery.data.log), null, 1)
+    } catch {
+      return swapOrderQuery.data.log
+    }
+  }, [swapOrderQuery.data?.log])
 
   return (
     <ModalLayout.Root>
@@ -47,7 +40,7 @@ export const SwapDetailsLogModal = ({ route }: TRootStackScreenProps<'SwapDetail
         <ModalLayout.CloseButton />
       </ModalLayout.Header>
       <ModalLayout.ViewContent>
-        <Skeleton.Root loading={isLoading} className="w-full flex-1">
+        <Skeleton.Root loading={swapOrderQuery.isLoading} className="w-full flex-1">
           <Skeleton.Group>
             <Skeleton.Item />
           </Skeleton.Group>

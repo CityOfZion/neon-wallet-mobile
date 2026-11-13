@@ -1,20 +1,20 @@
 import { useCallback } from 'react'
 
 import type { TBSNetworkId } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useSelectedNetworkByBlockchainSelector, useSelectedNetworkSelector } from './useSettingsSelector'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TBaseOptions, TPingNetwork } from '@/types/query'
 
-const buildPingNetworksQueryKey = (blockchain: TBlockchainServiceKey, id: TBSNetworkId) => {
+const buildPingNetworksQueryKey = (blockchain: TBSServiceName, id: TBSNetworkId) => {
   return ['ping-networks', blockchain, id]
 }
 
-const pingNetworks = async (blockchain: TBlockchainServiceKey): Promise<TPingNetwork[]> => {
+const pingNetworks = async (blockchain: TBSServiceName): Promise<TPingNetwork[]> => {
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
   const promises = service.networkUrls.map(async url => {
@@ -41,7 +41,7 @@ const pingNetworks = async (blockchain: TBlockchainServiceKey): Promise<TPingNet
   })
 }
 
-export const usePingNetworks = (blockchain: TBlockchainServiceKey, queryOptions?: TBaseOptions<TPingNetwork[]>) => {
+export const usePingNetworks = (blockchain: TBSServiceName, queryOptions?: TBaseOptions<TPingNetwork[]>) => {
   const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
 
   return useQuery({
@@ -56,7 +56,7 @@ export const useLazyPingNetworks = () => {
   const { selectedNetworkByBlockchainRef } = useSelectedNetworkByBlockchainSelector()
 
   const getPingNetworks = useCallback(
-    async (blockchain: TBlockchainServiceKey) => {
+    async (blockchain: TBSServiceName) => {
       const selectedNetwork = selectedNetworkByBlockchainRef.current[blockchain]
 
       return await queryClient.ensureQueryData({

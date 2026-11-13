@@ -1,4 +1,5 @@
 import type { IBlockchainService } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -16,14 +17,12 @@ import TbReceipt from '@/assets/images/tb-receipt.svg'
 
 import { ActionStep } from './ActionStep'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
   title: string
   feePlaceholder: string
   isCalculatingFee: boolean
   fee?: string
-  service?: IBlockchainService<TBlockchainServiceKey>
+  service?: IBlockchainService<TBSServiceName>
   className?: string
   iconClassName?: string
 }

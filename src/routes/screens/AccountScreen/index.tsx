@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { hasWalletConnect, isClaimable } from '@cityofzion/blockchain-service'
+import { SwapHelper } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform, View } from 'react-native'
 
@@ -10,7 +11,6 @@ import { TwIconButton } from '@/components/TwIconButton'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
-import { SwapHelper } from '@/helpers/SwapHelper'
 
 import { useAccountByIdSelector } from '@/hooks/useAccountSelector'
 import { useBalance } from '@/hooks/useBalances'
@@ -73,7 +73,10 @@ export const AccountScreen = ({ navigation, route }: TWalletsStackScreenProps<'A
 
   const isAbleToStellarTrustline = account?.blockchain === 'stellar'
 
-  const isAbleToSwap = !isWatchAccount && !!SwapHelper.getNetwork(account.blockchain, selectedNetwork)
+  const isAbleToSwap =
+    !isWatchAccount &&
+    !!selectedNetwork &&
+    SwapHelper.isBlockchainSupported(account.blockchain, BlockchainServiceHelper.bsAggregator)
 
   const isSendDisabled =
     isNotConnected ||

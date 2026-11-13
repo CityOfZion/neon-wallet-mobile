@@ -1,13 +1,13 @@
 import React, { useMemo, useRef } from 'react'
 
 import { BSUtilsHelper } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { CarouselRenderItem, TCarouselProps } from 'react-native-reanimated-carousel'
 import Carousel from 'react-native-reanimated-carousel'
 
 import type { TWalletCardRef } from './WalletCard'
 import { getWalletCardDimensions, WalletCard } from './WalletCard'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TWallet } from '@/types/store'
 
 type TProps = {
@@ -17,12 +17,12 @@ type TProps = {
   onScrollEnd?: (index: number) => void
   selectedWallet?: TWallet
   wallets: TWallet[]
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
 }
 
 type TItem = TWallet & {
   isSelected: () => boolean
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
   onPress: (wallet: TWallet, ref: TWalletCardRef) => void
 }
 

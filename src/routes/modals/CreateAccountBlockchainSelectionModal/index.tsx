@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 
 import { BSUtilsHelper } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -17,11 +18,10 @@ import { useActions } from '@/hooks/useActions'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 type TActionData = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export const CreateAccountBlockchainSelectionModal = ({
@@ -39,7 +39,7 @@ export const CreateAccountBlockchainSelectionModal = ({
     blockchain: wallet.type === 'hardware' ? accountsByWalletId[0].blockchain : 'neo3',
   })
 
-  const handleSelect = (blockchains: TBlockchainServiceKey[]) => {
+  const handleSelect = (blockchains: TBSServiceName[]) => {
     setData({
       blockchain: blockchains[0],
     })

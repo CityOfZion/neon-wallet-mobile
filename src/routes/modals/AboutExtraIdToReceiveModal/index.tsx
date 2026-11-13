@@ -19,7 +19,7 @@ export const AboutExtraIdToReceiveModal = () => {
         <ModalLayout.CloseButton />
       </ModalLayout.Header>
       <ModalLayout.ScrollContent contentContainerClassName="gap-6">
-        <TbHelp aria-hidden className="mx-auto size-32 stroke-1 text-blue" />
+        <TbHelp aria-hidden className="mx-auto size-32 stroke-1 text-blue min-size-32 max-size-32" />
 
         <View className="gap-2">
           <Text className="font-sans-semibold text-base uppercase text-gray-100">{t('what.title')}</Text>

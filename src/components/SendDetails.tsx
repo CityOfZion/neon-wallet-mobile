@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 
 import type { TBSToken } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -16,8 +17,6 @@ import TbUsers from '@/assets/images/tb-users.svg'
 import { Details } from './Details'
 import { TwBlockchainIcon } from './TwBlockchainIcon'
 import { TwButton } from './TwButton'
-
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 
 type TSendDetailsDataItem = {
   address: string
@@ -35,13 +34,13 @@ type TSendDetailsItemProps = {
   address: string
   amount: string
   token?: TBSToken
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   order: number
 }
 
 type TProps = {
   data: TSendDetailsData[]
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   fee?: string
   memo?: string
 }

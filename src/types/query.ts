@@ -1,7 +1,7 @@
 import type { TBSToken, TPingNetworkResponse, TTokenPricesResponse } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
 
-import type { TBlockchainServiceKey } from './blockchain'
 import type { Optional } from './global'
 
 export type TBaseOptions<T = unknown> = Omit<UseQueryOptions<T, unknown, T, QueryKey>, 'queryKey' | 'queryFn'>
@@ -11,34 +11,34 @@ export type TUseCurrencyRatioResult = {
   isLoading: boolean
 }
 
-export type TToken = TBSToken & { blockchain: TBlockchainServiceKey }
+export type TToken = TBSToken & { blockchain: TBSServiceName }
 
 export type TUseExchangeParams = {
   tokens: TBSToken[]
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TExchange = TTokenPricesResponse & {
   convertedPrice: number
 }
-export type TMultiExchange = Record<TBlockchainServiceKey, Map<string, TExchange>>
+export type TMultiExchange = Record<TBSServiceName, Map<string, TExchange>>
 export type TUseExchangeResult = {
   data: TMultiExchange | undefined
   isLoading: boolean
-  convertAmount: (amount: string | number, hash: string, blockchain: TBlockchainServiceKey) => number
+  convertAmount: (amount: string | number, hash: string, blockchain: TBSServiceName) => number
 }
 
 export type TTokenBalance = {
   amount: string
   token: TToken
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   amountNumber: number
   exchangeConvertedPrice: number
   exchangeAmount: number
 }
 export type TBalance = {
   address: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   tokensBalances: TTokenBalance[]
   tokensBalancesMap: Map<string, TTokenBalance>
   exchangeTotal: number
@@ -75,12 +75,12 @@ export type TUseUnclaimedResult = {
 
 export type TUseBalancesParams = {
   address: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TUseBalancesFetchResult = {
   address: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   tokensBalancesMap: Map<string, TTokenBalance>
 }
 

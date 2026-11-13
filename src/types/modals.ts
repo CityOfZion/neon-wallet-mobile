@@ -7,7 +7,7 @@ import type {
   TTransactionUtxo,
   TTransferIntent,
 } from '@cityofzion/blockchain-service'
-import type { TWalletKitHelperSessionDetails } from '@cityofzion/bs-multichain'
+import type { TBSServiceName, TWalletKitHelperSessionDetails } from '@cityofzion/bs-multichain'
 import type { TBSNeo3Name, TVoteServiceCandidate } from '@cityofzion/bs-neo3'
 import type { TBSStellarName } from '@cityofzion/bs-stellar'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -20,7 +20,7 @@ import type { TTwInputProps } from '@/components/TwInput'
 
 import type { TDepositActionsData } from '@/routes/screens/BuyAndSellTokensScreen'
 
-import type { TBlockchainServiceKey, TNetwork } from './blockchain'
+import type { TNetwork } from './blockchain'
 import type {
   TUseImportNep6Account,
   TUseNeonMigrateParsedContent,
@@ -29,16 +29,7 @@ import type {
 } from './hooks'
 import type { TTokenBalance, TUseBalanceOptionShowType } from './query'
 import type { TRootStackScreenProps } from './stacks'
-import type {
-  TAccount,
-  TAccountType,
-  TContact,
-  TContactAddress,
-  TNotification,
-  TSwapRecord,
-  TWallet,
-  TWalletType,
-} from './store'
+import type { TAccount, TAccountType, TContact, TContactAddress, TNotification, TWallet, TWalletType } from './store'
 
 export type TOnboardingBackupMnemonicModalParams = {
   wallet: TWallet
@@ -76,7 +67,7 @@ export type TBlockchainSelectionModalParams = {
   description?: string
   isMulti?: boolean
   buttonProps?: TTwButtonProps
-  onSelect: (blockchain: TBlockchainServiceKey[]) => void
+  onSelect: (blockchain: TBSServiceName[]) => void
 }
 
 export type TEditWalletModalParams = {
@@ -84,7 +75,7 @@ export type TEditWalletModalParams = {
 }
 
 export type TPersistNetworkModalParams = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   network?: TNetwork
 }
 
@@ -103,7 +94,7 @@ export type TQRCodeAddressContextModalParams = {
 export type TWalletSelectionModalParams = {
   onSelect: (wallet: TWallet) => void
   onRequestClose?: () => void
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
   title?: string
   description?: string
   walletTypes?: TWalletType[]
@@ -115,7 +106,7 @@ export type TTokenSelectionModalToken = {
   imageUrl?: string
   hash?: string
   network?: string
-  blockchain?: TBlockchainServiceKey
+  blockchain?: TBSServiceName
   amount?: string
 }
 
@@ -125,7 +116,7 @@ export type TTokenSelectionModalParams<T extends TTokenSelectionModalToken = TTo
   onSelect(token: T): void
   account?: TAccount
   title?: string
-  blockchain?: TBlockchainServiceKey
+  blockchain?: TBSServiceName
 }
 
 export type TCreateAccountBlockchainSelectionModalParams = {
@@ -149,7 +140,7 @@ export type TAccountStackListSelectionModalParams = {
   title: string
   description: string
   onSelect(account: TAccount): void
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
   onRequestClose?: () => void
   accountTypes?: TAccountType[]
 }
@@ -171,7 +162,7 @@ export type TDappPermissionContractDetailsModalParams = {
   session: SessionTypes.Struct
   hash: string
   operation: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   values: any[]
 }
 
@@ -196,28 +187,28 @@ export type TSendConfirmModalParams = {
   intents: TTransferIntent[]
   fee?: string
   memo?: string
-  service: IBlockchainService<TBlockchainServiceKey>
+  service: IBlockchainService<TBSServiceName>
   onConfirm: (navigation: TRootStackScreenProps<'SendConfirmModal'>['navigation']) => Promise<void>
 }
 
 export type TAccountSelectionModalParams = {
   title?: string
   onSelect: (account: TAccount, wallet: TWallet) => void
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
 }
 
 export type TAddressSelectionModalParams = {
   title?: string
   onSelect: (address: string) => void
-  blockchain?: TBlockchainServiceKey
+  blockchain?: TBSServiceName
 }
 
 export type TSwapDetailsModalParams = {
-  swapRecord: TSwapRecord
+  orderId: string
 }
 
 export type TSwapDetailsLogModalParams = {
-  swapRecord: TSwapRecord
+  orderId: string
 }
 
 export type TPasswordModalParams = {
@@ -279,7 +270,7 @@ export type TAccountTransactionsContextModalParams = {
 }
 
 export type TAccountTransactionsUtxoDetailsModalParams = {
-  transaction: TTransactionUtxo<TBlockchainServiceKey>
+  transaction: TTransactionUtxo<TBSServiceName>
 }
 
 export type TAccountAssetActionsModalParams = {
@@ -288,7 +279,7 @@ export type TAccountAssetActionsModalParams = {
 }
 
 export type TNetworkUrlSelectionModalParams = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TExportFullTransactionsModalParams = {
