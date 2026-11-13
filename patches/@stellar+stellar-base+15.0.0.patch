@@ -1,0 +1,14 @@
+diff --git a/node_modules/@stellar/stellar-base/package.json b/node_modules/@stellar/stellar-base/package.json
+index 1bc55fb..ac133f3 100644
+--- a/node_modules/@stellar/stellar-base/package.json
++++ b/node_modules/@stellar/stellar-base/package.json
+@@ -6,6 +6,9 @@
+   "browser": {
+     "./lib/index.js": "./dist/stellar-base.min.js"
+   },
++  "react-native": {
++    "./lib/index.js": "./lib/index.js"
++  },
+   "types": "./types/index.d.ts",
+   "scripts": {
+     "build": "yarn build:node && yarn build:browser",

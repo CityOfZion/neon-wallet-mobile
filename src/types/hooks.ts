@@ -1,20 +1,12 @@
 import type { TBSToken, TTransactionDefault, TTransactionUtxo } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { TBSStellarName } from '@cityofzion/bs-stellar'
 import type { ImageURISource } from 'react-native'
 
 import type { TValidationSchemaHelperNeonBackupFileSchema } from '@/helpers/ValidationSchemaHelper'
 
-import type { TBlockchainServiceKey, TNetwork } from './blockchain'
-import type {
-  TAccount,
-  TAccountType,
-  TContact,
-  TSkin,
-  TSwapRecord,
-  TWallet,
-  TWalletBackupStatus,
-  TWalletType,
-} from './store'
+import type { TNetwork } from './blockchain'
+import type { TAccount, TAccountType, TContact, TSkin, TWallet, TWalletBackupStatus, TWalletType } from './store'
 
 export type TUseActionsData = Record<string, any>
 
@@ -39,7 +31,7 @@ export type TUseActionsOptions = {
 
 export type TUseImportAccountParams = {
   address: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   wallet: TWallet
   type: TAccountType
   skin?: TSkin
@@ -57,7 +49,7 @@ export type TUseCreateAccountParams = {
   wallet: TWallet
   name?: string
   id?: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TUseCreateWalletParams = {
@@ -95,12 +87,12 @@ export type TUseImportNep6Account = {
   address: string
   label: string
   key: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TUseNeonMigrateContacts = {
   name: string
-  addresses: { address: string; blockchain: TBlockchainServiceKey }[]
+  addresses: { address: string; blockchain: TBSServiceName }[]
 }
 
 export type TUseImportNep6DecryptedAccount = TUseImportNep6Account & {
@@ -126,7 +118,6 @@ export type TUseNeonBackupWalletToCreate = {
 export type TUseNeonBackupGeneratedData = {
   walletsToCreate: TUseNeonBackupWalletToCreate[]
   contactsToCreate: TContact[]
-  swapRecordsToCreate: TSwapRecord[]
 }
 
 export type TUseNeonMigrateData = {
@@ -155,7 +146,7 @@ export type TUseImageErrorProps = {
 //* useTransactions types *//
 
 export type TUseTransactionsQueryBuildTransactionsQueryKeyParams = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   address: string
   network: TNetwork
   dateFrom?: Date
@@ -175,8 +166,8 @@ export type TUseTransactionsQueryParams = {
   dateTo?: Date
 }
 
-export type TUseTransactionsTransaction = TBlockchainServiceKey extends infer N
-  ? N extends TBlockchainServiceKey
+export type TUseTransactionsTransaction = TBSServiceName extends infer N
+  ? N extends TBSServiceName
     ? TTransactionDefault<N> | TTransactionUtxo<N>
     : never
   : never

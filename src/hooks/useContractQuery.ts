@@ -1,13 +1,12 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useQuery } from '@tanstack/react-query'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useSelectedNetworkSelector } from './useSettingsSelector'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   hash: string
 }
 

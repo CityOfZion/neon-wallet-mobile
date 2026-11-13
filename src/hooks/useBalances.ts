@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 
 import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { QueryClient } from '@tanstack/react-query'
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import cloneDeep from 'lodash/cloneDeep'
@@ -14,7 +15,7 @@ import { fetchExchange } from './useExchanges'
 import { useCurrencySelector, useSelectedNetworkByBlockchainSelector } from './useSettingsSelector'
 import { useHiddenTokensByBlockchainSelector } from './useUtilitySelector'
 
-import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
+import type { TNetwork } from '@/types/blockchain'
 import type {
   TBalance,
   TTokenBalance,
@@ -29,7 +30,7 @@ import type { TCurrency, THiddenTokenByBlockchain } from '@/types/store'
 
 export function buildQueryKeyBalance(
   address: string,
-  blockchain: TBlockchainServiceKey,
+  blockchain: TBSServiceName,
   network: TNetwork,
   currency?: TCurrency,
   hasCurrencyRatio?: boolean

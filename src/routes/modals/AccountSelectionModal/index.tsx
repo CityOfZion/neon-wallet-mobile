@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -18,7 +19,6 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbX from '@/assets/images/tb-x.svg'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TAccount, TWallet } from '@/types/store'
 
@@ -29,7 +29,7 @@ type TActionData = {
   accountAccordionIsOpen: boolean
 }
 
-const selectOwnAccountsByWalletId = (walletId?: string, blockchains?: TBlockchainServiceKey[]) =>
+const selectOwnAccountsByWalletId = (walletId?: string, blockchains?: TBSServiceName[]) =>
   createAppSelector([selectAccountsByWalletId(walletId)], accounts =>
     accounts.filter(account => {
       if (account.type === 'watch') return false

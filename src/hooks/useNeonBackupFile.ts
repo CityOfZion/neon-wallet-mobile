@@ -19,17 +19,14 @@ import { useAccountsSelector } from './useAccountSelector'
 import { useContactsSelector } from './useContactSelector'
 import { useFileSystem } from './useFileSystem'
 import { useAppDispatch } from './useRedux'
-import { useSwapRecordsSelector } from './useUtilitySelector'
 import { useCreateWallet, useEditWallet } from './useWalletActions'
 import { useWalletsSelector } from './useWalletSelector'
 
 import { contactReducerActions } from '@/store/reducers/contact'
-import { utilityReducerActions } from '@/store/reducers/utility'
 import type { TUseImportAccountsParams, TUseNeonBackupGeneratedData, TUseNeonBackupWalletToCreate } from '@/types/hooks'
 import type { TContactAddress } from '@/types/store'
 
 export const useNeonCreateBackup = () => {
-  const { swapRecords } = useSwapRecordsSelector()
   const { wallets } = useWalletsSelector()
   const { accounts } = useAccountsSelector()
   const { contacts } = useContactsSelector()
@@ -41,29 +38,12 @@ export const useNeonCreateBackup = () => {
     const backupFile: TValidationSchemaHelperNeonBackupDataSchema = {
       wallets: [],
       contacts: [],
-      swapRecords: [],
     }
 
     backupFile.contacts = contacts.map(contact => ({
       id: contact.id,
       name: contact.name,
       addresses: contact.addresses.map(address => ({ address: address.address, blockchain: address.blockchain })),
-    }))
-
-    backupFile.swapRecords = swapRecords.map(swap => ({
-      account: swap.account,
-      swapId: swap.swapId,
-      addressTo: swap.addressTo,
-      extraIdTo: swap.extraIdTo,
-      amountFrom: swap.amountFrom,
-      amountTo: swap.amountTo,
-      swapProvider: swap.swapProvider,
-      swapStatus: swap.swapStatus,
-      tokenFrom: swap.tokenFrom,
-      tokenTo: swap.tokenTo,
-      fee: swap.fee,
-      txFrom: swap.txFrom,
-      txTo: swap.txTo,
     }))
 
     const backupAccountsByWalletId = new Map<string, TValidationSchemaHelperBackupAccountSchema[]>()
@@ -177,30 +157,8 @@ export const useNeonBackupFile = () => {
   }
 
   const handleGenerateData = (data: TValidationSchemaHelperNeonBackupDataSchema): TUseNeonBackupGeneratedData => {
-    const swapRecordsToCreate: TUseNeonBackupGeneratedData['swapRecordsToCreate'] = []
     const contactsToCreate: TUseNeonBackupGeneratedData['contactsToCreate'] = []
     const walletsToCreate: TUseNeonBackupWalletToCreate[] = []
-
-    data.swapRecords?.forEach(swap => {
-      const account = NeonBackupHelper.fixAccountProperties(swap.account)
-      if (!account) return
-
-      swapRecordsToCreate.push({
-        addressTo: swap.addressTo,
-        extraIdTo: swap.extraIdTo,
-        amountFrom: swap.amountFrom,
-        amountTo: swap.amountTo,
-        fee: swap.fee,
-        swapId: swap.swapId,
-        swapProvider: swap.swapProvider,
-        tokenFrom: swap.tokenFrom,
-        tokenTo: swap.tokenTo,
-        txFrom: swap.txFrom,
-        swapStatus: swap.swapStatus,
-        txTo: swap.txTo,
-        account,
-      })
-    })
 
     data.contacts.forEach(contact => {
       const addresses: TContactAddress[] = []
@@ -237,15 +195,11 @@ export const useNeonBackupFile = () => {
       })
     })
 
-    return { walletsToCreate, contactsToCreate, swapRecordsToCreate }
+    return { walletsToCreate, contactsToCreate }
   }
 
   const handleImportBackupData = async (generatedData: TUseNeonBackupGeneratedData) => {
     try {
-      generatedData.swapRecordsToCreate.forEach(swap => {
-        dispatch(utilityReducerActions.saveSwapRecord(swap))
-      })
-
       generatedData.contactsToCreate.forEach(contact => {
         dispatch(contactReducerActions.saveContact(contact))
       })

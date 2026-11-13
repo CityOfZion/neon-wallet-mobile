@@ -470,50 +470,54 @@
     "title": "Stellar Trustline"
   },
   "swap": {
-    "form": {
-      "accountToUseModalTitle": "Selecione uma conta de origem",
-      "accountToUseTitle": "Enviar daqui",
-      "addressToReceiveModalTitle": "Selecione uma conta de recebimento",
-      "addressToReceiveTitle": "Receber aqui",
+    "amountsCard": {
       "amountPlaceholder": "0.00",
       "amountToReceiveDescription": "(depois das taxas)",
       "amountToReceiveTitle": "Quantidade que você receberá",
       "amountToUseTitle": "Quantidade",
       "amounts": "Quantidades",
-      "assets": "Ativos",
       "balanceLabel": "Saldo",
-      "buttonSubmitLabel": "Fazer swap agora",
-      "errors": {
-        "amountMax": "Quantidade muito alta. Quantidade máxima é {{amount}}",
-        "amountMin": "Quantidade muito baixa. Quantidade mínima é {{amount}}",
-        "insufficientFunds": "Você não tem saldo suficiente",
-        "insufficientFundsFee": "Você não tem saldo suficiente para pagar a taxa",
-        "invalidAddress": "Endereço do destinatário inválido",
-        "invalidExtraIdToReceive": "Tag de destino/memo inválida"
-      },
-      "extraIdToReceive": "Tag de dest./memo",
-      "extraIdToReceiveLabel": "Tag de destino/memo",
-      "extraIdToReceivePlaceholder": "Digite…",
-      "feePlaceholder": "0.00",
-      "minimumAmountTitle": "Mínimo {{amount}}",
-      "openAboutExtraIdToReceive": "Abrir modal sobre tag de destino/memo",
+      "tooltipTitle": "As taxas de câmbio são melhores com valores de swap maiores, experimente!"
+    },
+    "assetsCard": {
+      "addressToReceiveModalTitle": "Selecione uma conta de recebimento",
+      "addressToReceiveTitle": "Receber aqui",
+      "assets": "Ativos",
       "selectPlaceholder": "Selecionar…",
-      "source": "Detalhes da conta",
-      "stellarTrustlineWarnings": {
-        "receiver": "Para receber {{token}} na Stellar, a conta de destino deve ter uma Trustline ativa para este token. Caso contrário o swap falhará. Você pode cadastrar uma Trustline na tela de sua conta.",
-        "source": "Para fazer swap de {{token}} na Stellar, a conta de origem deve ter uma Trustline ativa para este token. Caso contrário o swap falhará. Você pode cadastrar uma Trustline na tela de sua conta."
-      },
       "tokenToReceiveModalTitle": "Selecione um token a receber",
       "tokenToReceiveTitle": "Por este",
       "tokenToUseModalTitle": "Selecione um token para fazer swap",
-      "tokenToUseTitle": "Fazer swap deste",
-      "transactionFee": "Taxa de transação"
+      "tokenToUseTitle": "Fazer swap deste"
     },
+    "buttonSubmitLabel": "Fazer swap agora",
+    "errors": {
+      "amountMax": "Quantidade muito alta. Quantidade máxima é {{amount}}",
+      "amountMin": "Quantidade muito baixa. Quantidade mínima é {{amount}}",
+      "amountZero": "A quantidade deve ser maior que zero",
+      "insufficientFunds": "Você não tem saldo suficiente",
+      "insufficientFundsFee": "Você não tem saldo suficiente para pagar a taxa",
+      "invalidAddress": "Endereço do destinatário inválido",
+      "noQuotesAvailable": "Nenhuma cotação disponível para este swap, tente uma quantidade ou token diferente"
+    },
+    "extraIdCard": {
+      "extraIdToReceiveLabel": "Tag de destino/memo",
+      "extraIdToReceivePlaceholder": "Digite…",
+      "openAboutExtraIdToReceive": "Abrir modal sobre tag de destino/memo"
+    },
+    "feePlaceholder": "0.00",
     "restartButtonLabel": "Reiniciar",
-    "title": "Fazer swap de tokens",
-    "tooltips": {
-      "experimentHigherAmounts": "As taxas de câmbio são melhores com valores de swap maiores, experimente!"
+    "sourceCard": {
+      "accountToUseModalTitle": "Selecione uma conta de origem",
+      "accountToUseTitle": "Enviar daqui",
+      "selectPlaceholder": "Selecionar…",
+      "source": "Detalhes da conta"
     },
+    "stellarTrustlineWarnings": {
+      "receiver": "Para receber {{token}} na Stellar, a conta de destino deve ter uma Trustline ativa para este token. Caso contrário o swap falhará. Você pode cadastrar uma Trustline na tela de sua conta.",
+      "source": "Para fazer swap de {{token}} na Stellar, a conta de origem deve ter uma Trustline ativa para este token. Caso contrário o swap falhará. Você pode cadastrar uma Trustline na tela de sua conta."
+    },
+    "title": "Fazer swap de tokens",
+    "transactionFee": "Taxa de transação",
     "viewExplanationButtonLabel": "Ver explicação"
   },
   "wallet": {

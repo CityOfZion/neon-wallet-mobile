@@ -470,50 +470,54 @@
     "title": "Stellar Trustline"
   },
   "swap": {
-    "form": {
-      "accountToUseModalTitle": "Select a source account",
-      "accountToUseTitle": "Send from here",
-      "addressToReceiveModalTitle": "Select a receiving account",
-      "addressToReceiveTitle": "Receive here",
+    "amountsCard": {
       "amountPlaceholder": "0.00",
       "amountToReceiveDescription": "(after fees)",
       "amountToReceiveTitle": "Amount you'll get",
       "amountToUseTitle": "Amount",
       "amounts": "Amounts",
-      "assets": "Assets",
       "balanceLabel": "Balance",
-      "buttonSubmitLabel": "Swap now",
-      "errors": {
-        "amountMax": "Amount is too high. Maximum amount is {{amount}}",
-        "amountMin": "Amount is too low. Minimum amount is {{amount}}",
-        "insufficientFunds": "You don't have enough balance",
-        "insufficientFundsFee": "You don't have enough balance to pay the fee",
-        "invalidAddress": "Invalid receiver address",
-        "invalidExtraIdToReceive": "Invalid destination tag/memo"
-      },
-      "extraIdToReceive": "Dest. tag/memo",
-      "extraIdToReceiveLabel": "Destination tag/memo",
-      "extraIdToReceivePlaceholder": "Enter…",
-      "feePlaceholder": "0.00",
-      "minimumAmountTitle": "Minimum {{amount}}",
-      "openAboutExtraIdToReceive": "Open destination tag/memo about modal",
+      "tooltipTitle": "Exchange rates are better with higher swap amounts, experiment!"
+    },
+    "assetsCard": {
+      "addressToReceiveModalTitle": "Select a receiving account",
+      "addressToReceiveTitle": "Receive here",
+      "assets": "Assets",
       "selectPlaceholder": "Select…",
-      "source": "Account details",
-      "stellarTrustlineWarnings": {
-        "receiver": "To receive {{token}} on Stellar, the receiving account must have an active trustline for this token. Otherwise the swap will fail. You can set up a trustline on your account screen.",
-        "source": "To swap {{token}} on Stellar, the source account must have an active trustline for this token. Otherwise the swap will fail. You can set up a trustline on your account screen."
-      },
       "tokenToReceiveModalTitle": "Select a token to receive",
       "tokenToReceiveTitle": "For this",
       "tokenToUseModalTitle": "Select a token to swap",
-      "tokenToUseTitle": "Swap this",
-      "transactionFee": "Transaction fee"
+      "tokenToUseTitle": "Swap this"
     },
+    "buttonSubmitLabel": "Swap now",
+    "errors": {
+      "amountMax": "Amount is too high. Maximum amount is {{amount}}",
+      "amountMin": "Amount is too low. Minimum amount is {{amount}}",
+      "amountZero": "Amount must be greater than zero",
+      "insufficientFunds": "You don't have enough balance",
+      "insufficientFundsFee": "You don't have enough balance to pay the fee",
+      "invalidAddress": "Invalid receiver address",
+      "noQuotesAvailable": "No quotes available for this swap, try a different amount or token"
+    },
+    "extraIdCard": {
+      "extraIdToReceiveLabel": "Destination tag/memo",
+      "extraIdToReceivePlaceholder": "Enter…",
+      "openAboutExtraIdToReceive": "Open destination tag/memo about modal"
+    },
+    "feePlaceholder": "0.00",
     "restartButtonLabel": "Restart",
-    "title": "Swap tokens",
-    "tooltips": {
-      "experimentHigherAmounts": "Exchange rates are better with higher swap amounts, experiment!"
+    "sourceCard": {
+      "accountToUseModalTitle": "Select a source account",
+      "accountToUseTitle": "Send from here",
+      "selectPlaceholder": "Select…",
+      "source": "Account details"
     },
+    "stellarTrustlineWarnings": {
+      "receiver": "To receive {{token}} on Stellar, the receiving account must have an active trustline for this token. Otherwise the swap will fail. You can set up a trustline on your account screen.",
+      "source": "To swap {{token}} on Stellar, the source account must have an active trustline for this token. Otherwise the swap will fail. You can set up a trustline on your account screen."
+    },
+    "title": "Swap tokens",
+    "transactionFee": "Transaction fee",
     "viewExplanationButtonLabel": "View explanation"
   },
   "wallet": {

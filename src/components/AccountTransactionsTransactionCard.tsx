@@ -25,7 +25,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useAccountsMapSelector } from '@/hooks/useAccountSelector'
 import { useLanguageSelector } from '@/hooks/useSettingsSelector'
-import { useSwapRecordSelector } from '@/hooks/useUtilitySelector'
+import { useSwapOrdersByAddressQuery } from '@/hooks/useSwapOrderQuery'
 
 import MdOpenInNew from '@/assets/images/md-open-in-new.svg'
 import TbBell from '@/assets/images/tb-bell.svg'
@@ -55,8 +55,8 @@ export const AccountTransactionsTransactionCard = ({ transaction, className, chi
   const { t } = useTranslation('components', { keyPrefix: 'accountTransactionsTransactionCard' })
   const navigation = useNavigation()
   const { language } = useLanguageSelector()
-  const { swapRecord } = useSwapRecordSelector(transaction.txId)
   const { accountsMap } = useAccountsMapSelector()
+  const swapOrdersByAddressQuery = useSwapOrdersByAddressQuery({ address: transaction.relatedAddress })
 
   const opacity = useSharedValue(DEFAULT_OPACITY)
   const pulseStyle = useAnimatedStyle(() => ({ opacity: opacity.value }))
@@ -67,13 +67,19 @@ export const AccountTransactionsTransactionCard = ({ transaction, className, chi
     ? service.neo3NeoXBridgeService.getTransactionData(transaction)
     : undefined
 
+  const swapOrder = swapOrdersByAddressQuery.data?.find(
+    ({ sourceTxHash }) => !!sourceTxHash && service.tokenService.predicateByHash(sourceTxHash, transaction.txId)
+  )
+
   const isUtxo = transaction.view === 'utxo'
   const feeBn = new BSBigHumanAmount(transaction.networkFeeAmount || 0).plus(transaction.systemFeeAmount || 0)
 
   const handleSwapPress = (event: GestureResponderEvent) => {
     event.stopPropagation()
-    if (!swapRecord) return
-    navigation.navigate('SwapDetailsModal', { swapRecord })
+
+    if (!swapOrder) return
+
+    navigation.navigate('SwapDetailsModal', { orderId: swapOrder.orderId })
   }
 
   const handleNeo3NeoXBridgePress = (event: GestureResponderEvent) => {
@@ -224,9 +230,9 @@ export const AccountTransactionsTransactionCard = ({ transaction, className, chi
         )}
       </View>
 
-      {(swapRecord || bridgeData) && (
+      {(swapOrder || bridgeData) && (
         <View className="mt-4 flex-row items-center gap-3">
-          {swapRecord && (
+          {swapOrder && (
             <TwButton
               label={t('swapButtonLabel')}
               variant="text-slim"

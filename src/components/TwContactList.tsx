@@ -1,5 +1,6 @@
 import { Fragment, useMemo, useState } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import type { ListRenderItem, SectionListData, SectionListProps, ViewProps } from 'react-native'
 import { Pressable, SectionList, Text, View } from 'react-native'
@@ -13,7 +14,6 @@ import type { TTwInputProps } from './TwInput'
 import { TwInput } from './TwInput'
 import { TwSeparator } from './TwSeparator'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TContact, TContactAddress } from '@/types/store'
 
 type TAddressItem = TContactAddress & { isSelected: boolean; onPress: () => void }
@@ -28,7 +28,7 @@ type TProps = {
   onPress?: (contact?: TContact, address?: TContactAddress) => void
   containerProps?: ViewProps
   inputProps?: TTwInputProps
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
 } & Omit<SectionListProps<TItem>, 'sections' | 'renderItem' | 'renderSectionHeader'>
 
 const renderItem: ListRenderItem<TItem> = ({ item }) => {

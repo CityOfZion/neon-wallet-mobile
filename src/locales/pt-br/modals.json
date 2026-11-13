@@ -828,6 +828,7 @@
     "failed": "Falhou",
     "help": "Precisa de ajuda? Suporte ao vivo",
     "log": "Log do swap",
+    "notFound": "Não foi possível carregar os detalhes deste swap",
     "pending": "Pendente…",
     "processingInfo": "Nosso objetivo é concluir swaps em menos de 7 minutos",
     "receivingAddress": "Endereço de recebimento",

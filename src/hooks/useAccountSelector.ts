@@ -1,3 +1,4 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import orderBy from 'lodash/orderBy'
 
 import { AccountHelper } from '@/helpers/AccountHelper'
@@ -6,7 +7,6 @@ import { SelectorHelper } from '@/helpers/SelectorHelper'
 
 import { createAppSelector, useAppSelector } from './useRedux'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount, TAccountWithWallet } from '@/types/store'
 
 const orderAccounts = <T extends TAccount = TAccount>(accounts: T[]): T[] =>
@@ -64,7 +64,7 @@ export const selectAccounts = createAppSelector([state => state.account.data], a
   SelectorHelper.fallbackToEmptyArray<TAccount>(orderAccounts(accounts))
 )
 
-export const selectAccountsByBlockchains = (blockchains: TBlockchainServiceKey[]) =>
+export const selectAccountsByBlockchains = (blockchains: TBSServiceName[]) =>
   createAppSelector([({ account }) => account.data], (accounts): TAccount[] => {
     if (blockchains.length === 0) return SelectorHelper.fallbackToEmptyArray<TAccount>()
 
@@ -125,7 +125,7 @@ export const useHasHardwareAccountSelector = () => {
   return { hasHardwareAccount: value, hasHardwareAccountRef: ref }
 }
 
-export const useAccountsByBlockchainsSelector = (blockchains: TBlockchainServiceKey[]) => {
+export const useAccountsByBlockchainsSelector = (blockchains: TBSServiceName[]) => {
   const { value: accountsByBlockchains, ref: accountsByBlockchainsRef } = useAppSelector(
     selectAccountsByBlockchains(blockchains)
   )

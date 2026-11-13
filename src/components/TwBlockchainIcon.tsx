@@ -1,5 +1,6 @@
 import React from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { SvgProps } from 'react-native-svg'
 
 import { StyleHelper } from '@/helpers/StyleHelper'
@@ -15,9 +16,7 @@ import { Polygon } from '@/assets/images/blockchains/Polygon'
 import { Solana } from '@/assets/images/blockchains/Solana'
 import { Stellar } from '@/assets/images/blockchains/Stellar'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
-export const ICONS_BY_BLOCKCHAIN: Record<TBlockchainServiceKey, React.FC<SvgProps>> = {
+export const ICONS_BY_BLOCKCHAIN: Record<TBSServiceName, React.FC<SvgProps>> = {
   neo3: Neo3,
   neoLegacy: NeoLegacy,
   neox: NeoX,
@@ -31,7 +30,7 @@ export const ICONS_BY_BLOCKCHAIN: Record<TBlockchainServiceKey, React.FC<SvgProp
 }
 
 type Props = SvgProps & {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export const TwBlockchainIcon = ({ blockchain, className, ...props }: Props) => {

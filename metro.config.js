@@ -17,6 +17,10 @@ module.exports = (() => {
   }
 
   config.resolver.resolveRequest = (context, moduleName, platform) => {
+    if (moduleName.startsWith('node:')) {
+      return config.resolver.resolveRequest(context, moduleName.slice('node:'.length), platform)
+    }
+
     if (moduleName === 'buffer') {
       return context.resolveRequest(context, '@craftzdog/react-native-buffer', platform)
     }

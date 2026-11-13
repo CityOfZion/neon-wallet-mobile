@@ -1,6 +1,7 @@
 import React from 'react'
 
 import type { TTransactionDefaultEvent } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -13,12 +14,10 @@ import { AccountTransactionsTransactionDefaultEventGeneric } from './AccountTran
 import { AccountTransactionsTransactionDefaultEventToken } from './AccountTransactionsTransactionDefaultEventToken'
 import { AccountTransactionsTransactionItemNft } from './AccountTransactionsTransactionItemNft'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
   event: TTransactionDefaultEvent
   relatedAddress?: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export const AccountTransactionsTransactionDefaultEvent = ({ event, relatedAddress, blockchain }: TProps) => {
