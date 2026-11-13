@@ -1,3 +1,4 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View, type ViewProps } from 'react-native'
 
@@ -8,15 +9,14 @@ import { PressableScale } from './PressableScale'
 import { TwBlockchainIcon } from './TwBlockchainIcon'
 import { TwButton } from './TwButton'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount } from '@/types/store'
 
 type TProps = {
-  selectedBlockchains?: TBlockchainServiceKey[]
-  onSelect: (blockchains: TBlockchainServiceKey[]) => void
+  selectedBlockchains?: TBSServiceName[]
+  onSelect: (blockchains: TBSServiceName[]) => void
   isMulti?: boolean
   walletAccounts?: TAccount[]
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
 } & ViewProps
 
 export const BlockchainList = ({
@@ -39,7 +39,7 @@ export const BlockchainList = ({
     onSelect(areAllBlockchainsSelected ? [] : blockchainsToIterate)
   }
 
-  const handlePress = (blockchain: TBlockchainServiceKey) => {
+  const handlePress = (blockchain: TBSServiceName) => {
     if (isMulti) {
       onSelect(
         selectedBlockchains.includes(blockchain)

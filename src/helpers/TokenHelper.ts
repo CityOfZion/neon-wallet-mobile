@@ -1,9 +1,8 @@
-import type { TSwapToken } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import cloneDeep from 'lodash/cloneDeep'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TToken } from '@/types/query'
 
 export class TokenHelper {
@@ -34,11 +33,11 @@ export class TokenHelper {
     ['0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b', '#56f33f'],
   ])
 
-  static readonly mandatorySymbolsMap = new Map<TBlockchainServiceKey, string[]>([
+  static readonly mandatorySymbolsMap = new Map<TBSServiceName, string[]>([
     ['neo3', ['NEO', 'GAS', 'FLM', 'GM', 'fUSDT', 'bNEO', 'fWBTC']],
   ])
 
-  static generateTokenColor(hash: string, blockchain: TBlockchainServiceKey) {
+  static generateTokenColor(hash: string, blockchain: TBSServiceName) {
     if (hash.length === 0) {
       return this.#availableRandomColors[0]
     }
@@ -58,7 +57,7 @@ export class TokenHelper {
     return this.#availableRandomColors[randomColorIndex]
   }
 
-  static getTokenBySymbol(symbol: string, blockchain: TBlockchainServiceKey): TToken | undefined {
+  static getTokenBySymbol(symbol: string, blockchain: TBSServiceName): TToken | undefined {
     const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
     const token = cloneDeep(service.tokens.find(item => item.symbol === symbol))
 
@@ -69,16 +68,10 @@ export class TokenHelper {
     return { ...token, blockchain }
   }
 
-  static getKey(tokenHash: string, blockchain: TBlockchainServiceKey): string {
+  static getKey(tokenHash: string, blockchain: TBSServiceName): string {
     const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
     const normalizedTokenHash = service.tokenService.normalizeHash(tokenHash)
 
     return `${normalizedTokenHash}-${blockchain}`
-  }
-
-  static isNonNativeStellarToken(token: TSwapToken<TBlockchainServiceKey>): token is TSwapToken<'stellar'> {
-    const stellarService = BlockchainServiceHelper.bsAggregator.blockchainServicesByName.stellar
-
-    return token.blockchain === 'stellar' && !!token.hash && !stellarService.tokenService.isNativeToken(token.hash)
   }
 }

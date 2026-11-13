@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { BSBigHumanAmount, type TBSToken, type TTokenPricesResponse } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { Query, QueryClient } from '@tanstack/react-query'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import assign from 'lodash/assign'
@@ -12,11 +13,11 @@ import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 import { useCurrencyRatio } from './useCurrencyRatio'
 import { useCurrencySelector, useSelectedNetworkByBlockchainSelector } from './useSettingsSelector'
 
-import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
+import type { TNetwork } from '@/types/blockchain'
 import type { TExchange, TMultiExchange, TUseExchangeParams, TUseExchangeResult } from '@/types/query'
 import type { TCurrency } from '@/types/store'
 
-function buildQueryKey(blockchain: TBlockchainServiceKey, network: TNetwork, currency: TCurrency, token?: TBSToken) {
+function buildQueryKey(blockchain: TBSServiceName, network: TNetwork, currency: TCurrency, token?: TBSToken) {
   const queryKey = ['exchange', blockchain, network, currency]
 
   if (token) {
@@ -29,7 +30,7 @@ function buildQueryKey(blockchain: TBlockchainServiceKey, network: TNetwork, cur
 }
 
 function buildExchangeByBlockchainQueryKey(
-  blockchain: TBlockchainServiceKey,
+  blockchain: TBSServiceName,
   network: TNetwork,
   currency: TCurrency,
   hasCurrencyRatio: boolean
@@ -38,7 +39,7 @@ function buildExchangeByBlockchainQueryKey(
 }
 
 export async function fetchExchange(
-  blockchain: TBlockchainServiceKey,
+  blockchain: TBSServiceName,
   tokens: TBSToken[],
   network: TNetwork,
   queryClient: QueryClient,
@@ -115,8 +116,8 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
 
   const hasCurrencyRatio = typeof currencyRatio === 'number'
 
-  const tokensToFetchByBlockchain = useMemo<Record<TBlockchainServiceKey, TBSToken[]>>(() => {
-    if (params.length === 0) return {} as Record<TBlockchainServiceKey, TBSToken[]>
+  const tokensToFetchByBlockchain = useMemo<Record<TBSServiceName, TBSToken[]>>(() => {
+    if (params.length === 0) return {} as Record<TBSServiceName, TBSToken[]>
 
     return params.reduce(
       (acc, param) => {
@@ -129,24 +130,19 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
 
         return acc
       },
-      {} as Record<TBlockchainServiceKey, TBSToken[]>
+      {} as Record<TBSServiceName, TBSToken[]>
     )
   }, [params])
 
   return useQueries({
     queries: Object.entries(tokensToFetchByBlockchain).map(([blockchain, tokens]) => {
-      const network = selectedNetworkByBlockchain[blockchain as TBlockchainServiceKey]
+      const network = selectedNetworkByBlockchain[blockchain as TBSServiceName]
 
       return {
-        queryKey: buildExchangeByBlockchainQueryKey(
-          blockchain as TBlockchainServiceKey,
-          network,
-          currency,
-          hasCurrencyRatio
-        ),
+        queryKey: buildExchangeByBlockchainQueryKey(blockchain as TBSServiceName, network, currency, hasCurrencyRatio),
         queryFn: fetchExchange.bind(
           null,
-          blockchain as TBlockchainServiceKey,
+          blockchain as TBSServiceName,
           tokens,
           network,
           queryClient,
@@ -162,7 +158,7 @@ export function useExchange(params: TUseExchangeParams[]): TUseExchangeResult {
       return {
         isLoading: isCurrencyRatioLoading || result.some(query => query.isLoading),
         data,
-        convertAmount: (amount: string | number, hash: string, blockchain: TBlockchainServiceKey) => {
+        convertAmount: (amount: string | number, hash: string, blockchain: TBSServiceName) => {
           const convertedPrice = ExchangeHelper.getExchangeConvertedPrice(hash, blockchain, data)
           if (convertedPrice === 0) return 0
           return new BSBigHumanAmount(amount).multipliedBy(convertedPrice).toNumber()

@@ -1,8 +1,8 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { NavigationProp } from '@react-navigation/native'
 import type { Event } from '@sentry/react-native'
 import type { CoreTypes } from '@walletconnect/types'
 
-import type { TBlockchainServiceKey } from './blockchain'
 import type { Optional } from './global'
 import type { TCurrency, TLanguage } from './store'
 import type { TToasterToastOptions } from './toaster'
@@ -15,7 +15,7 @@ export type TWalletConnectRedirectParams = {
 
 export type TAccountHelperPredicateParams = {
   address: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TToastHelperParams = Optional<Omit<TToasterToastOptions, 'component'>, 'duration' | 'id'>
@@ -36,7 +36,7 @@ export type TDateHelperFormatLocalizedOptions = {
 }
 
 export type TSkinHelperLocalSkin = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   collectionHash: string
   imageUrl: string
 }
@@ -57,7 +57,7 @@ export type TStringHelperRemoveSpecialCharacterOptions = {
 }
 
 export type THardwareWalletHelperGetAccountParams = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   index: number
 }
 
@@ -90,7 +90,7 @@ export type TSentryHelperOptions = TLoggerHelperOptions & {
 }
 
 export type TNetworkHelperIsNeoxAntiMevParams = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   networkId: string
   url: string
 }

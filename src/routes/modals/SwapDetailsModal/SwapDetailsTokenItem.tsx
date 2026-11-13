@@ -1,17 +1,16 @@
 import React from 'react'
 
 import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
   symbol: string
   amount: string
-  blockchain?: TBlockchainServiceKey
+  blockchain?: TBSServiceName
   decimals?: number
 }
 
@@ -23,7 +22,9 @@ export const SwapDetailsTokenItem = ({ symbol, amount, blockchain, decimals = 0 
   return (
     <View className="flex-row items-center justify-between gap-2">
       <View className="flex-row items-center gap-2">
-        {blockchain && <TwBlockchainIcon blockchain={blockchain} className="size-4 text-gray-300" />}
+        {blockchain && (
+          <TwBlockchainIcon blockchain={blockchain} className="size-4 text-gray-300 min-size-4 max-size-4" />
+        )}
 
         <Text className="font-sans-regular text-lg uppercase text-white">
           {symbol}

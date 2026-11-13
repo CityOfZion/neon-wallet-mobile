@@ -1,5 +1,6 @@
 import React from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -10,11 +11,10 @@ import { useActions } from '@/hooks/useActions'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 type TActionData = {
-  blockchains: TBlockchainServiceKey[]
+  blockchains: TBSServiceName[]
 }
 
 export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'BlockchainSelectionModal'>) => {
@@ -26,7 +26,7 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
     blockchains: ['neo3'],
   })
 
-  const handleSelect = (blockchains: TBlockchainServiceKey[]) => {
+  const handleSelect = (blockchains: TBSServiceName[]) => {
     setData({ blockchains })
   }
 

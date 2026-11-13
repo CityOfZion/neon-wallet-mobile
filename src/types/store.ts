@@ -1,6 +1,6 @@
-import type { TSwapServiceStatusResponse, TSwapToken } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 
-import type { TBlockchainServiceKey, TNetwork } from './blockchain'
+import type { TNetwork } from './blockchain'
 import type { Optional } from './global'
 
 export type TColorSkin = {
@@ -24,7 +24,7 @@ export type TSkin = TColorSkin | TLocalSkin | TNftSkin
 
 export type TAccountType = 'standard' | 'watch' | 'hardware'
 
-export type TAccount<N extends TBlockchainServiceKey = TBlockchainServiceKey> = N extends TBlockchainServiceKey
+export type TAccount<N extends TBSServiceName = TBSServiceName> = N extends TBSServiceName
   ? {
       id: string
       address: string
@@ -51,7 +51,7 @@ export type TWallet = {
 
 export type TAccountWithWallet = TAccount & { wallet: TWallet }
 
-export type TContactAddress = { address: string; blockchain: TBlockchainServiceKey }
+export type TContactAddress = { address: string; blockchain: TBSServiceName }
 
 export type TContact = {
   id: string
@@ -97,41 +97,24 @@ export type TSecurity = TDeviceSecurity | TPasswordSecurity | TNfiSecurity | TDi
 export type TSecurityType = TSecurity['type']
 
 export type TSelectedNetworks = {
-  [K in TBlockchainServiceKey]: TNetwork
+  [K in TBSServiceName]: TNetwork
 }
 
 export type TCustomNetworks = {
-  [K in TBlockchainServiceKey]: TNetwork[]
-}
-
-export type TSwapRecord = {
-  account: TAccount
-  txFrom?: string
-  txTo?: string
-  swapProvider: 'simpleswap'
-  swapId?: string
-  swapStatus: TSwapServiceStatusResponse['status']
-  tokenFrom: TSwapToken<TBlockchainServiceKey>
-  tokenTo: TSwapToken<TBlockchainServiceKey>
-  amountFrom: string
-  amountTo: string
-  addressTo: string
-  extraIdTo?: string
-  fee?: string
-  log?: string
+  [K in TBSServiceName]: TNetwork[]
 }
 
 export type TNotificationNavigateActionHideFraudulentTokenPayload = {
   to: 'hide-fraudulent-token'
   address: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   tokenHash?: string
 }
 
 export type TNotificationNavigateActionBNeoShutdownPayload = {
   to: 'bneo-shutdown'
   address: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TNotificationNavigateAction = {
@@ -140,18 +123,18 @@ export type TNotificationNavigateAction = {
     | {
         to: 'account-transaction'
         address: string
-        blockchain: TBlockchainServiceKey
+        blockchain: TBSServiceName
       }
     | {
         to: 'account-tokens'
         address: string
-        blockchain: TBlockchainServiceKey
+        blockchain: TBSServiceName
       }
     | TNotificationNavigateActionHideFraudulentTokenPayload
     | {
         to: 'neo3-vote'
         address: string
-        blockchain: TBlockchainServiceKey
+        blockchain: TBSServiceName
       }
     | {
         to: 'backup-wallet'
@@ -176,16 +159,16 @@ export type TNotification = {
   provider: 'system'
   action?: TNotificationAction
   related?: {
-    blockchain: TBlockchainServiceKey
+    blockchain: TBSServiceName
     address: string
   }
 }
 
 export type TSaveNotification = Optional<TNotification, 'id' | 'date' | 'provider' | 'read' | 'priority'>
 
-export type THiddenTokenByBlockchain = Partial<Record<TBlockchainServiceKey, string[]>>
+export type THiddenTokenByBlockchain = Partial<Record<TBSServiceName, string[]>>
 
-export type TLastIndexesByWallet = Partial<Record<TBlockchainServiceKey, Record<string, number>>>
+export type TLastIndexesByWallet = Partial<Record<TBSServiceName, Record<string, number>>>
 
 export type TSurveyInfoStatus = 'not-submitted' | 'submitted-positive' | 'submitted-negative'
 

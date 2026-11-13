@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 
 import { hasWalletConnect } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { ListRenderItem } from 'react-native'
 import { FlatList } from 'react-native'
 
@@ -22,11 +23,11 @@ import TbPencil from '@/assets/images/tb-pencil.svg'
 import TbPlus from '@/assets/images/tb-plus.svg'
 
 import { settingsReducerActions } from '@/store/reducers/settings'
-import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
+import type { TNetwork } from '@/types/blockchain'
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
 type TItem = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   network: TNetwork
   selectedNetwork: TNetwork
   isDefault?: boolean

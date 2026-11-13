@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 
 import { TwAccountList } from '@/components/TwAccountList'
@@ -7,12 +8,11 @@ import { TwButton } from '@/components/TwButton'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TAccount } from '@/types/store'
 
 type TProps = {
   onSelect: (address: string) => void
-  blockchain?: TBlockchainServiceKey
+  blockchain?: TBSServiceName
 }
 
 export const AddressSelectionModalAccountsContent = ({ onSelect, blockchain }: TProps) => {

@@ -1,4 +1,5 @@
 import { BSUtilsHelper, hasEncryption } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
@@ -18,12 +19,11 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import TbArrowRight from '@/assets/images/tb-arrow-right.svg'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TWallet } from '@/types/store'
 
 type TActionsData = {
-  blockchain: TBlockchainServiceKey[]
+  blockchain: TBSServiceName[]
 }
 
 export const ImportEncryptedKeySelectionModal = ({
@@ -41,7 +41,7 @@ export const ImportEncryptedKeySelectionModal = ({
     blockchain: [],
   })
 
-  const handleSelect = (blockchains: TBlockchainServiceKey[]) => {
+  const handleSelect = (blockchains: TBSServiceName[]) => {
     setData({ blockchain: blockchains })
   }
 

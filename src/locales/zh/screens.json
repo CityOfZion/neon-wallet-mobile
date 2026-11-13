@@ -470,50 +470,54 @@
     "title": "Stellar 信任线"
   },
   "swap": {
-    "form": {
-      "accountToUseModalTitle": "选择来源账户",
-      "accountToUseTitle": "从这里发送",
-      "addressToReceiveModalTitle": "选择接收账户",
-      "addressToReceiveTitle": "接收地址",
+    "amountsCard": {
       "amountPlaceholder": "0.00",
       "amountToReceiveDescription": "（扣除手续费后）",
       "amountToReceiveTitle": "您将获得的数量",
       "amountToUseTitle": "数量",
       "amounts": "金额",
-      "assets": "资产",
       "balanceLabel": "余额",
-      "buttonSubmitLabel": "立即兑换",
-      "errors": {
-        "amountMax": "金额太高。最大金额为 {{amount}}",
-        "amountMin": "金额太低。最小金额为 {{amount}}",
-        "insufficientFunds": "余额不足",
-        "insufficientFundsFee": "余额不足以支付手续费",
-        "invalidAddress": "接收地址无效",
-        "invalidExtraIdToReceive": "目标标签/备注无效"
-      },
-      "extraIdToReceive": "目标标签/备注",
-      "extraIdToReceiveLabel": "目标标签/备注",
-      "extraIdToReceivePlaceholder": "请输入…",
-      "feePlaceholder": "0.00",
-      "minimumAmountTitle": "最小 {{amount}}",
-      "openAboutExtraIdToReceive": "打开目标标签/备注说明",
+      "tooltipTitle": "兑换金额越大，汇率越优，欢迎尝试！"
+    },
+    "assetsCard": {
+      "addressToReceiveModalTitle": "选择接收账户",
+      "addressToReceiveTitle": "接收地址",
+      "assets": "资产",
       "selectPlaceholder": "请选择…",
-      "source": "账户详情",
-      "stellarTrustlineWarnings": {
-        "receiver": "要在 Stellar 上接收 {{token}}，接收账户必须为此代币设置有效的信任线。否则兑换将失败。您可以在账户界面设置信任线。",
-        "source": "要在 Stellar 上兑换 {{token}}，源账户必须为此代币设置有效的信任线。否则兑换将失败。您可以在账户界面设置信任线。"
-      },
       "tokenToReceiveModalTitle": "选择要接收的代币",
       "tokenToReceiveTitle": "兑换为此代币",
       "tokenToUseModalTitle": "选择要兑换的代币",
-      "tokenToUseTitle": "兑换此代币",
-      "transactionFee": "交易手续费"
+      "tokenToUseTitle": "兑换此代币"
     },
+    "buttonSubmitLabel": "立即兑换",
+    "errors": {
+      "amountMax": "金额太高。最大金额为 {{amount}}",
+      "amountMin": "金额太低。最小金额为 {{amount}}",
+      "amountZero": "金额必须大于零",
+      "insufficientFunds": "余额不足",
+      "insufficientFundsFee": "余额不足以支付手续费",
+      "invalidAddress": "接收地址无效",
+      "noQuotesAvailable": "此兑换暂无可用报价，请尝试其他金额或代币"
+    },
+    "extraIdCard": {
+      "extraIdToReceiveLabel": "目标标签/备注",
+      "extraIdToReceivePlaceholder": "请输入…",
+      "openAboutExtraIdToReceive": "打开目标标签/备注说明"
+    },
+    "feePlaceholder": "0.00",
     "restartButtonLabel": "重新开始",
-    "title": "兑换代币",
-    "tooltips": {
-      "experimentHigherAmounts": "兑换金额越大，汇率越优，欢迎尝试！"
+    "sourceCard": {
+      "accountToUseModalTitle": "选择来源账户",
+      "accountToUseTitle": "从这里发送",
+      "selectPlaceholder": "请选择…",
+      "source": "账户详情"
     },
+    "stellarTrustlineWarnings": {
+      "receiver": "要在 Stellar 上接收 {{token}}，接收账户必须为此代币设置有效的信任线。否则兑换将失败。您可以在账户界面设置信任线。",
+      "source": "要在 Stellar 上兑换 {{token}}，源账户必须为此代币设置有效的信任线。否则兑换将失败。您可以在账户界面设置信任线。"
+    },
+    "title": "兑换代币",
+    "transactionFee": "交易手续费",
     "viewExplanationButtonLabel": "查看说明"
   },
   "wallet": {

@@ -469,50 +469,54 @@
     "title": "Stellar Trustline"
   },
   "swap": {
-    "form": {
-      "accountToUseModalTitle": "Quell-Konto auswählen",
-      "accountToUseTitle": "Von hier senden",
-      "addressToReceiveModalTitle": "Empfangs-Konto auswählen",
-      "addressToReceiveTitle": "Hier empfangen",
+    "amountsCard": {
       "amountPlaceholder": "0.00",
       "amountToReceiveDescription": "(nach Gebühren)",
       "amountToReceiveTitle": "Betrag, den Sie erhalten",
       "amountToUseTitle": "Betrag",
       "amounts": "Beträge",
-      "assets": "Assets",
       "balanceLabel": "Guthaben",
-      "buttonSubmitLabel": "Jetzt tauschen",
-      "errors": {
-        "amountMax": "Betrag ist zu hoch. Maximalbetrag ist {{amount}}",
-        "amountMin": "Betrag ist zu niedrig. Mindestbetrag ist {{amount}}",
-        "insufficientFunds": "Sie haben nicht genug Guthaben",
-        "insufficientFundsFee": "Sie haben nicht genug Guthaben, um die Gebühr zu bezahlen",
-        "invalidAddress": "Ungültige Empfängeradresse",
-        "invalidExtraIdToReceive": "Ungültiges Destination Tag/Memo"
-      },
-      "extraIdToReceive": "Dest. Tag/Memo",
-      "extraIdToReceiveLabel": "Destination Tag/Memo",
-      "extraIdToReceivePlaceholder": "Eingeben…",
-      "feePlaceholder": "0.00",
-      "minimumAmountTitle": "Minimum {{amount}}",
-      "openAboutExtraIdToReceive": "Destination Tag/Memo Info öffnen",
+      "tooltipTitle": "Wechselkurse sind bei höheren Swap-Beträgen besser, probieren Sie es aus!"
+    },
+    "assetsCard": {
+      "addressToReceiveModalTitle": "Empfangs-Konto auswählen",
+      "addressToReceiveTitle": "Hier empfangen",
+      "assets": "Assets",
       "selectPlaceholder": "Wählen",
-      "source": "Konto Details",
-      "stellarTrustlineWarnings": {
-        "receiver": "Um {{token}} auf Stellar zu empfangen, muss das empfangende Konto über eine aktive Trustline für dieses Token verfügen. Andernfalls schlägt der Swap fehl. Sie können eine Trustline auf Ihrem Konto-Bildschirm einrichten.",
-        "source": "Um {{token}} auf Stellar zu tauschen, muss das Quellkonto über eine aktive Trustline für dieses Token verfügen. Andernfalls schlägt der Swap fehl. Sie können eine Trustline auf Ihrem Konto-Bildschirm einrichten."
-      },
       "tokenToReceiveModalTitle": "Token zum Empfangen auswählen",
       "tokenToReceiveTitle": "Gegen dies",
       "tokenToUseModalTitle": "Token zum Tauschen auswählen",
-      "tokenToUseTitle": "Dies tauschen",
-      "transactionFee": "Transaktionsgebühr"
+      "tokenToUseTitle": "Dies tauschen"
     },
+    "buttonSubmitLabel": "Jetzt tauschen",
+    "errors": {
+      "amountMax": "Betrag ist zu hoch. Maximalbetrag ist {{amount}}",
+      "amountMin": "Betrag ist zu niedrig. Mindestbetrag ist {{amount}}",
+      "amountZero": "Der Betrag muss größer als null sein",
+      "insufficientFunds": "Sie haben nicht genug Guthaben",
+      "insufficientFundsFee": "Sie haben nicht genug Guthaben, um die Gebühr zu bezahlen",
+      "invalidAddress": "Ungültige Empfängeradresse",
+      "noQuotesAvailable": "Für diesen Swap sind keine Angebote verfügbar, versuchen Sie einen anderen Betrag oder Token"
+    },
+    "extraIdCard": {
+      "extraIdToReceiveLabel": "Destination Tag/Memo",
+      "extraIdToReceivePlaceholder": "Eingeben…",
+      "openAboutExtraIdToReceive": "Destination Tag/Memo Info öffnen"
+    },
+    "feePlaceholder": "0.00",
     "restartButtonLabel": "Neu starten",
-    "title": "Tokens tauschen",
-    "tooltips": {
-      "experimentHigherAmounts": "Wechselkurse sind bei höheren Swap-Beträgen besser, probieren Sie es aus!"
+    "sourceCard": {
+      "accountToUseModalTitle": "Quell-Konto auswählen",
+      "accountToUseTitle": "Von hier senden",
+      "selectPlaceholder": "Wählen",
+      "source": "Konto Details"
     },
+    "stellarTrustlineWarnings": {
+      "receiver": "Um {{token}} auf Stellar zu empfangen, muss das empfangende Konto über eine aktive Trustline für dieses Token verfügen. Andernfalls schlägt der Swap fehl. Sie können eine Trustline auf Ihrem Konto-Bildschirm einrichten.",
+      "source": "Um {{token}} auf Stellar zu tauschen, muss das Quellkonto über eine aktive Trustline für dieses Token verfügen. Andernfalls schlägt der Swap fehl. Sie können eine Trustline auf Ihrem Konto-Bildschirm einrichten."
+    },
+    "title": "Tokens tauschen",
+    "transactionFee": "Transaktionsgebühr",
     "viewExplanationButtonLabel": "Erklärung anzeigen"
   },
   "wallet": {

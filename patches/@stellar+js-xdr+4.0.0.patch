@@ -1,0 +1,12 @@
+diff --git a/node_modules/@stellar/js-xdr/package.json b/node_modules/@stellar/js-xdr/package.json
+index 7741b34..aa73402 100644
+--- a/node_modules/@stellar/js-xdr/package.json
++++ b/node_modules/@stellar/js-xdr/package.json
+@@ -8,6 +8,7 @@
+   },
+   "main": "lib/xdr.js",
+   "browser": "dist/xdr.js",
++  "react-native": "lib/xdr.js",
+   "module": "src/index.js",
+   "repository": {
+     "type": "git",

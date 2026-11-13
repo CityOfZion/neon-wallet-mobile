@@ -76,22 +76,6 @@ const contactSchema = zod.object({
   ),
 })
 
-const swapSchema = zod.object({
-  account: accountSchema,
-  txFrom: zod.string().optional(),
-  txTo: zod.string().optional(),
-  swapProvider: zod.literal('simpleswap'),
-  swapId: zod.string().optional(),
-  swapStatus: zod.any(),
-  tokenFrom: zod.any(),
-  tokenTo: zod.any(),
-  amountFrom: zod.string(),
-  amountTo: zod.string(),
-  addressTo: zod.string(),
-  extraIdTo: zod.string().optional(),
-  fee: zod.string().optional(),
-})
-
 const backupAccountSchema = accountSchema.omit({ blockchain: true }).extend({
   blockchain: zod.string(),
   key: zod.string().optional(),
@@ -112,7 +96,6 @@ const backupWalletSchema = walletSchema
 const neonBackupDataSchema = zod.object({
   wallets: zod.array(backupWalletSchema),
   contacts: zod.array(contactSchema),
-  swapRecords: zod.array(swapSchema).optional(),
 })
 
 const neonBackupFileSchema = zod.object({

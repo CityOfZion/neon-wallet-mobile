@@ -470,50 +470,54 @@
     "title": "Stellar 信任線"
   },
   "swap": {
-    "form": {
-      "accountToUseModalTitle": "選擇來源帳戶",
-      "accountToUseTitle": "從這裡發送",
-      "addressToReceiveModalTitle": "選擇接收帳戶",
-      "addressToReceiveTitle": "接收至此",
+    "amountsCard": {
       "amountPlaceholder": "0.00",
       "amountToReceiveDescription": "（扣除手續費後）",
       "amountToReceiveTitle": "您將收到的金額",
       "amountToUseTitle": "金額",
       "amounts": "金額",
-      "assets": "資產",
       "balanceLabel": "餘額",
-      "buttonSubmitLabel": "立即兌換",
-      "errors": {
-        "amountMax": "金額太高。最高金額為 {{amount}}",
-        "amountMin": "金額太低。最低金額為 {{amount}}",
-        "insufficientFunds": "餘額不足",
-        "insufficientFundsFee": "餘額不足以支付手續費",
-        "invalidAddress": "接收地址無效",
-        "invalidExtraIdToReceive": "目的標籤/備註無效"
-      },
-      "extraIdToReceive": "目的標籤/備註",
-      "extraIdToReceiveLabel": "目的標籤/備註",
-      "extraIdToReceivePlaceholder": "請輸入…",
-      "feePlaceholder": "0.00",
-      "minimumAmountTitle": "最低 {{amount}}",
-      "openAboutExtraIdToReceive": "開啟目的標籤/備註說明",
+      "tooltipTitle": "兌換較高金額時，匯率會更優惠，快來試試看！"
+    },
+    "assetsCard": {
+      "addressToReceiveModalTitle": "選擇接收帳戶",
+      "addressToReceiveTitle": "接收至此",
+      "assets": "資產",
       "selectPlaceholder": "請選擇…",
-      "source": "帳戶詳情",
-      "stellarTrustlineWarnings": {
-        "receiver": "若要在 Stellar 上接收 {{token}}，接收帳戶必須為此代幣設定有效的信任線。否則兌換將會失敗。您可以在帳戶畫面設定信任線。",
-        "source": "若要在 Stellar 上兌換 {{token}}，來源帳戶必須為此代幣設定有效的信任線。否則兌換將會失敗。您可以在帳戶畫面設定信任線。"
-      },
       "tokenToReceiveModalTitle": "選擇要接收的代幣",
       "tokenToReceiveTitle": "換取此代幣",
       "tokenToUseModalTitle": "選擇要兌換的代幣",
-      "tokenToUseTitle": "兌換此代幣",
-      "transactionFee": "交易手續費"
+      "tokenToUseTitle": "兌換此代幣"
     },
+    "buttonSubmitLabel": "立即兌換",
+    "errors": {
+      "amountMax": "金額太高。最高金額為 {{amount}}",
+      "amountMin": "金額太低。最低金額為 {{amount}}",
+      "amountZero": "金額必須大於零",
+      "insufficientFunds": "餘額不足",
+      "insufficientFundsFee": "餘額不足以支付手續費",
+      "invalidAddress": "接收地址無效",
+      "noQuotesAvailable": "此兌換暫無可用報價，請嘗試其他金額或代幣"
+    },
+    "extraIdCard": {
+      "extraIdToReceiveLabel": "目的標籤/備註",
+      "extraIdToReceivePlaceholder": "請輸入…",
+      "openAboutExtraIdToReceive": "開啟目的標籤/備註說明"
+    },
+    "feePlaceholder": "0.00",
     "restartButtonLabel": "重新開始",
-    "title": "兌換代幣",
-    "tooltips": {
-      "experimentHigherAmounts": "兌換較高金額時，匯率會更優惠，快來試試看！"
+    "sourceCard": {
+      "accountToUseModalTitle": "選擇來源帳戶",
+      "accountToUseTitle": "從這裡發送",
+      "selectPlaceholder": "請選擇…",
+      "source": "帳戶詳情"
     },
+    "stellarTrustlineWarnings": {
+      "receiver": "若要在 Stellar 上接收 {{token}}，接收帳戶必須為此代幣設定有效的信任線。否則兌換將會失敗。您可以在帳戶畫面設定信任線。",
+      "source": "若要在 Stellar 上兌換 {{token}}，來源帳戶必須為此代幣設定有效的信任線。否則兌換將會失敗。您可以在帳戶畫面設定信任線。"
+    },
+    "title": "兌換代幣",
+    "transactionFee": "交易手續費",
     "viewExplanationButtonLabel": "查看說明"
   },
   "wallet": {

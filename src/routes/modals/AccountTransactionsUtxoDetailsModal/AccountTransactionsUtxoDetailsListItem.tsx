@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { BSBigHumanAmount, type TTransactionUtxoInputOutput } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -17,10 +18,8 @@ import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
 import TbCopy from '@/assets/images/tb-copy.svg'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   inputOutput: TTransactionUtxoInputOutput
 }
 

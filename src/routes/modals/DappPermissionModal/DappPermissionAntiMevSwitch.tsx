@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { BSNeoXConstants } from '@cityofzion/bs-neox'
 import { useTranslation } from 'react-i18next'
 
@@ -12,10 +13,9 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import { useSelectedNetworkSelector } from '@/hooks/useSettingsSelector'
 
 import { settingsReducerActions } from '@/store/reducers/settings'
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 
 type TProps = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export const DappPermissionAntiMevSwitch = ({ blockchain }: TProps) => {

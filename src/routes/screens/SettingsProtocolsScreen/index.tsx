@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import type { ListRenderItem } from 'react-native'
 import { FlatList } from 'react-native'
@@ -14,11 +15,10 @@ import { useSelectedNetworkByBlockchainSelector } from '@/hooks/useSettingsSelec
 
 import { ScreenLayout } from '@/layouts/ScreenLayout'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
 type TItem = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   label: string
   subtitle: string
   onPress(): void

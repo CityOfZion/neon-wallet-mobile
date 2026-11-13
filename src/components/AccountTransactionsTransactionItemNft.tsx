@@ -1,6 +1,7 @@
 import React from 'react'
 
 import type { TNftResponse } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { Image } from 'expo-image'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -9,10 +10,8 @@ import { Skeleton } from '@/components/Skeleton'
 
 import { useNftQuery } from '@/hooks/useNftsQuery'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   nft: TNftResponse
 }
 

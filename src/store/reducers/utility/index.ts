@@ -8,7 +8,7 @@ import { getUtilityMigrations } from './migrations'
 import { utilitySliceReducers } from './reducers'
 
 import type { TUseTransactionsTransaction } from '@/types/hooks'
-import type { THiddenTokenByBlockchain, TLastIndexesByWallet, TSwapRecord } from '@/types/store'
+import type { THiddenTokenByBlockchain, TLastIndexesByWallet } from '@/types/store'
 
 export type TUtilityReducer = {
   memoryData: {
@@ -16,7 +16,6 @@ export type TUtilityReducer = {
     isConnected?: boolean
   }
   data: {
-    swapRecords: TSwapRecord[]
     unlockedSkinIds: string[]
     hiddenTokensByBlockchain: THiddenTokenByBlockchain
     lastIndexesByWallet: TLastIndexesByWallet
@@ -34,7 +33,6 @@ export function getUtilityReducer() {
       isConnected: undefined,
     },
     data: {
-      swapRecords: [],
       unlockedSkinIds: [],
       hiddenTokensByBlockchain: {},
       lastIndexesByWallet: {},

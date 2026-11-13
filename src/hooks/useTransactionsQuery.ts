@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import type { TGetTransactionsByAddressResponse } from '@cityofzion/blockchain-service'
 import { hasFullTransactions } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import * as dateFns from 'date-fns'
 
@@ -13,7 +14,6 @@ import { useLanguageSelector, useSelectedNetworkSelector } from '@/hooks/useSett
 
 import { useHiddenTokensByBlockchainSelector, usePendingTransactionsSelector } from './useUtilitySelector'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type {
   TUseTransactionsGroupedTransactionsByDate,
   TUseTransactionsQueryBuildTransactionsQueryKeyParams,
@@ -45,7 +45,7 @@ export const buildTransactionsQueryKey = ({
 async function fetchTransaction({ account, dateFrom, dateTo, page }: TUseTransactionsQueryFetchTransactionParams) {
   const blockchainService = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[account.blockchain]
 
-  let response: TGetTransactionsByAddressResponse<TBlockchainServiceKey>
+  let response: TGetTransactionsByAddressResponse<TBSServiceName>
 
   if (dateFrom && dateTo && hasFullTransactions(blockchainService)) {
     const dateNow = new Date()
