@@ -1,6 +1,6 @@
 import { type JSX, useEffect } from 'react'
 
-import type { TWalletKitHelperSessionDetails } from '@cityofzion/bs-multichain'
+import type { TBSServiceName, TWalletKitHelperSessionDetails } from '@cityofzion/bs-multichain'
 import { BSNeoXConstants } from '@cityofzion/bs-neox'
 import type { WalletKitTypes } from '@reown/walletkit'
 import type { PendingRequestTypes, SessionTypes } from '@walletconnect/types'
@@ -23,7 +23,6 @@ import { DappPermissionGenericContent } from './DappPermissionGenericContent'
 import { DappPermissionInvokeNeo3Content } from './DappPermissionInvokeNeo3Content'
 import { DappPermissionSuccessContent } from './DappPermissionSuccessContent'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TAccount } from '@/types/store'
 
@@ -39,7 +38,7 @@ export type TDappPermissionProps = {
 }
 
 const CUSTOM_CONTENT_BY_REQUEST: Partial<
-  Record<TBlockchainServiceKey, Record<string, (props: TDappPermissionProps) => JSX.Element>>
+  Record<TBSServiceName, Record<string, (props: TDappPermissionProps) => JSX.Element>>
 > = {
   neo3: {
     invokeFunction: DappPermissionInvokeNeo3Content,

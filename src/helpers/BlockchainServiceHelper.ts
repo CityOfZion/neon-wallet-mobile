@@ -1,21 +1,22 @@
 import type { TBSAccount } from '@cityofzion/blockchain-service'
 import { BSKeychainHelper, hasLedger } from '@cityofzion/blockchain-service'
 import { BSBitcoinConstants } from '@cityofzion/bs-bitcoin'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 
 import { AppError } from './ErrorHelper'
 import { I18nextHelper } from './I18nextHelper'
 import { SecureStoreHelper } from './SecureStoreHelper'
 
-import type { TBlockchainServiceKey, TBSAggregator } from '@/types/blockchain'
+import type { TBSAggregator } from '@/types/blockchain'
 import type { TAccount } from '@/types/store'
 
 const { t } = I18nextHelper.get()
 
 export class BlockchainServiceHelper {
   static bsAggregator: TBSAggregator
-  static blockchainNames: TBlockchainServiceKey[]
+  static blockchainNames: TBSServiceName[]
 
-  static async #getHardwareWalletTransport(account: TBSAccount<TBlockchainServiceKey>) {
+  static async #getHardwareWalletTransport(account: TBSAccount<TBSServiceName>) {
     try {
       const { HardwareWalletHelper } = await import('./HardwareWalletHelper')
       return HardwareWalletHelper.getTransport(account)
@@ -69,7 +70,7 @@ export class BlockchainServiceHelper {
     this.blockchainNames = Object.values(services).map(service => service.name)
   }
 
-  static async getServiceAccount<T extends TBlockchainServiceKey>(account: TAccount<T>): Promise<TBSAccount<T>> {
+  static async getServiceAccount<T extends TBSServiceName>(account: TAccount<T>): Promise<TBSAccount<T>> {
     const key = await SecureStoreHelper.getKey(account)
     if (!key) throw new AppError(t('common:errors.noKey'))
 
@@ -86,7 +87,7 @@ export class BlockchainServiceHelper {
     return serviceAccount as TBSAccount<T>
   }
 
-  static doesBlockchainSupported(blockchain: string): blockchain is TBlockchainServiceKey {
-    return this.blockchainNames.includes(blockchain as TBlockchainServiceKey)
+  static doesBlockchainSupported(blockchain: string): blockchain is TBSServiceName {
+    return this.blockchainNames.includes(blockchain as TBSServiceName)
   }
 }

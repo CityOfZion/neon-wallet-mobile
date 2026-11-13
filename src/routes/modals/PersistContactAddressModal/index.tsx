@@ -1,5 +1,6 @@
 import React from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 
 import { TwBlockchainIcon } from '@/components/TwBlockchainIcon'
@@ -14,12 +15,11 @@ import { useNameService } from '@/hooks/useNameService'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
 type TActionData = {
   address: string
-  blockchain?: TBlockchainServiceKey
+  blockchain?: TBSServiceName
 }
 
 export const PersistContactAddressModal = ({
@@ -47,7 +47,7 @@ export const PersistContactAddressModal = ({
 
   const handleSelectBlockchain = () => {
     navigation.navigate('BlockchainSelectionModal', {
-      onSelect: (blockchains: TBlockchainServiceKey[]) => {
+      onSelect: (blockchains: TBSServiceName[]) => {
         const [blockchain] = blockchains
 
         setData({ blockchain })

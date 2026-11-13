@@ -1,5 +1,6 @@
 import React, { forwardRef, Fragment, memo, Suspense, useImperativeHandle, useMemo, useRef } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { PressableProps, ViewStyle } from 'react-native'
 import { Dimensions, Pressable, View } from 'react-native'
 import type { AnimationCallback } from 'react-native-reanimated'
@@ -15,7 +16,6 @@ import type { TAccountCardNoContentProps } from '../AccountCard/AccountCardNoCon
 import { AccountCardNoContent } from '../AccountCard/AccountCardNoContent'
 import { WalletCardLabel } from './WalletCardLabel'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TWallet } from '@/types/store'
 
 const WalletCardBalanceBar = React.lazy(() =>
@@ -34,7 +34,7 @@ type TProps = {
   onPress?: (wallet: TWallet, ref: TWalletCardRef) => void | Promise<void>
   withBalanceBar?: boolean
   width?: number
-  blockchains?: TBlockchainServiceKey[]
+  blockchains?: TBSServiceName[]
   style?: ViewStyle
 } & Omit<PressableProps, 'children' | 'onPress' | 'style'>
 

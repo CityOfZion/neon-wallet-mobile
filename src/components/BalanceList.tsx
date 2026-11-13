@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { BSBigHumanAmount } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import type { FlatListProps, ListRenderItem } from 'react-native'
 import { FlatList, Text, View } from 'react-native'
@@ -18,7 +19,6 @@ import { Skeleton } from './Skeleton'
 import { TwSeparator } from './TwSeparator'
 import { TwTokenIcon } from './TwTokenIcon'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TTokenBalance, TUseBalanceOptionShowType } from '@/types/query'
 import type { TAccount } from '@/types/store'
 
@@ -31,7 +31,7 @@ type Props = {
 
 type TItem = TTokenBalance & {
   tokenColor: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   formattedExchangeAmount: string
   onPress?: (token: TTokenBalance) => void
   onLongPress?: (token: TTokenBalance) => void

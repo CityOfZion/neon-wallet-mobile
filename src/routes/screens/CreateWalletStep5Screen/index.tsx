@@ -1,3 +1,4 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -10,11 +11,10 @@ import { useCreateWallet } from '@/hooks/useWalletActions'
 
 import { ScreenLayout } from '@/layouts/ScreenLayout'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
 type TActionData = {
-  selectedBlockchains: TBlockchainServiceKey[]
+  selectedBlockchains: TBSServiceName[]
 }
 
 export const CreateWalletStep5Screen = ({ navigation, route }: TMoreStackScreenProps<'CreateWalletStep5Screen'>) => {

@@ -1,11 +1,11 @@
 import type { TBSBridgeName } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { TBSNeo3Name } from '@cityofzion/bs-neo3'
 import type { TBSStellarName } from '@cityofzion/bs-stellar'
 
 import type { EBuyAndSellTokensScreenTabValue } from '@/routes/screens/BuyAndSellTokensScreen'
 import type { TSettingsTab } from '@/routes/screens/SettingsScreen'
 
-import type { TBlockchainServiceKey } from './blockchain'
 import type { TAccount, TContact, TWallet } from './store'
 
 export type TOnboardingCompletedScreenParams = {
@@ -93,7 +93,7 @@ export type TSendScreenParams = {
 }
 
 export type TSettingsProtocolEditScreen = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export type TSettingsWalletBackupStep1ScreenParams = {
