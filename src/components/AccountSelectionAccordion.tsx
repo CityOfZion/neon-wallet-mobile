@@ -1,5 +1,6 @@
 import { useLayoutEffect, useMemo, useState } from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import orderBy from 'lodash/orderBy'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -18,10 +19,8 @@ import TbPlus from '@/assets/images/tb-plus.svg'
 import { TwBlockchainIcon } from './TwBlockchainIcon'
 import { TwButton } from './TwButton'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 export type TAccountSelectionAccordionAccount = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   address: string
   bipPath?: string
   key?: string
@@ -36,7 +35,7 @@ type TProps = {
 }
 
 type TAccountSelectionAccordionHeaderProps = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   accountsSelectedCount: number
   accountsCount: number
   isOpened: boolean
@@ -141,7 +140,7 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, onToggleAl
   }
 
   const accountsByBlockchain = useMemo(() => {
-    const accountsByBlockchain = new Map<TBlockchainServiceKey, TAccountSelectionAccordionAccount[]>()
+    const accountsByBlockchain = new Map<TBSServiceName, TAccountSelectionAccordionAccount[]>()
 
     accounts.forEach(account => {
       const accountsForBlockchain = accountsByBlockchain.get(account.blockchain) || []
@@ -157,7 +156,7 @@ export const AccountSelectionAccordion = ({ accounts, onPressAccount, onToggleAl
   }, [accounts])
 
   const selectedAccountsByBlockchain = useMemo(() => {
-    const selectedAccountsByBlockchain = new Map<TBlockchainServiceKey, TAccountSelectionAccordionAccount[]>()
+    const selectedAccountsByBlockchain = new Map<TBSServiceName, TAccountSelectionAccordionAccount[]>()
 
     selectedAccounts.forEach(account => {
       const accountsForBlockchain = selectedAccountsByBlockchain.get(account.blockchain) || []

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { hasNft } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { QueryClient } from '@tanstack/react-query'
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -8,11 +9,11 @@ import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 
 import { useSelectedNetworkSelector } from './useSettingsSelector'
 
-import type { TBlockchainServiceKey, TNetwork } from '@/types/blockchain'
+import type { TNetwork } from '@/types/blockchain'
 import type { TAccount } from '@/types/store'
 
 const buildUniqueQueryKey = (
-  blockchain: TBlockchainServiceKey,
+  blockchain: TBSServiceName,
   network: TNetwork,
   tokenHash?: string,
   collectionHash?: string
@@ -45,7 +46,7 @@ async function fetchNfts(
   return response
 }
 
-async function fetchNft(blockchain: TBlockchainServiceKey, tokenHash?: string, collectionHash?: string) {
+async function fetchNft(blockchain: TBSServiceName, tokenHash?: string, collectionHash?: string) {
   const blockchainService = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
 
   if (!hasNft(blockchainService) || !tokenHash) return
@@ -69,7 +70,7 @@ export const useNftsQuery = (account: TAccount) => {
   return { aggregatedData, ...query }
 }
 
-export const useNftQuery = (blockchain: TBlockchainServiceKey, tokenHash?: string, collectionHash?: string) => {
+export const useNftQuery = (blockchain: TBSServiceName, tokenHash?: string, collectionHash?: string) => {
   const { selectedNetwork } = useSelectedNetworkSelector(blockchain)
 
   return useQuery({

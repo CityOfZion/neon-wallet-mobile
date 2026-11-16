@@ -1,8 +1,7 @@
 import { BSBigHumanAmount, type TBSNetworkType, type TBSToken } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { BSNeo3Constants } from '@cityofzion/bs-neo3'
 import { BSStellarConstants } from '@cityofzion/bs-stellar'
-
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 
 // If you need to add more constants, please verify if they fit better in other helper or in your own helper.
 export class ConstantsHelper {
@@ -17,7 +16,7 @@ export class ConstantsHelper {
 
   static readonly surveyExpiryMs = 90 * 24 * 60 * 60 * 1000 // 90 days
 
-  static readonly fraudulentTokenHashesByBlockchain: Map<TBlockchainServiceKey, Set<string>> = new Map([
+  static readonly fraudulentTokenHashesByBlockchain: Map<TBSServiceName, Set<string>> = new Map([
     ['neo3', new Set(['0x42e6b0379e39a428362e08cf9d7e40903cdb0fe7', '0x90591dbfddd3c5a8e8fd0b5c8eb4a904e13a4c32'])],
   ])
 

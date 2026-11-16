@@ -1,5 +1,5 @@
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit'
-import cloneDeep from 'lodash/cloneDeep'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { AppError } from '@/helpers/ErrorHelper'
@@ -7,13 +7,11 @@ import { I18nextHelper } from '@/helpers/I18nextHelper'
 
 import type { TUtilityReducer } from './index'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
 import type { TUseTransactionsTransaction } from '@/types/hooks'
-import type { TSwapRecord } from '@/types/store'
 
 type THiddenTokenParams = {
   hash: string
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 const { t } = I18nextHelper.get()
@@ -33,25 +31,6 @@ const removePendingTransaction: CaseReducer<TUtilityReducer, PayloadAction<strin
   state.memoryData.pendingTransactions = state.memoryData.pendingTransactions.filter(
     transaction => transaction.txId !== action.payload
   )
-}
-
-const saveSwapRecord: CaseReducer<TUtilityReducer, PayloadAction<TSwapRecord>> = (state, action) => {
-  const swapRecord = cloneDeep(action.payload)
-
-  // We don't want to save this long information in the storage
-  swapRecord.log = undefined
-
-  const index = state.data.swapRecords.findIndex(
-    ({ swapId, swapProvider }) => swapId === swapRecord.swapId && swapProvider === swapRecord.swapProvider
-  )
-
-  if (index === -1) {
-    state.data.swapRecords = [...state.data.swapRecords, swapRecord]
-
-    return
-  }
-
-  state.data.swapRecords[index] = swapRecord
 }
 
 const setUnlockedSkinIds: CaseReducer<TUtilityReducer, PayloadAction<string[]>> = (state, action) => {
@@ -81,7 +60,7 @@ const saveLastIndexByWallet: CaseReducer<
   PayloadAction<{
     index: number
     firstAccountAddress: string
-    blockchain: TBlockchainServiceKey
+    blockchain: TBSServiceName
   }>
 > = (state, action) => {
   const { firstAccountAddress, index, blockchain } = action.payload
@@ -96,7 +75,6 @@ export const utilitySliceReducers = {
   setIsConnected,
   addPendingTransaction,
   removePendingTransaction,
-  saveSwapRecord,
   setUnlockedSkinIds,
   toggleHiddenToken,
   saveLastIndexByWallet,

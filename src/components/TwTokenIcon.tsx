@@ -1,5 +1,6 @@
 import React from 'react'
 
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { ImageProps } from 'expo-image'
 import { Image } from 'expo-image'
 
@@ -8,10 +9,8 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { useImageError } from '@/hooks/useImageError'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type Props = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   hash: string
   width: number
   height: number

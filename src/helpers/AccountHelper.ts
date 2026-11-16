@@ -1,4 +1,5 @@
-import type { TBlockchainServiceKey } from '@/types/blockchain'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
+
 import type { TAccountHelperPredicateParams } from '@/types/helpers'
 import type { TAccount } from '@/types/store'
 
@@ -15,7 +16,7 @@ export class AccountHelper {
     return `${address}-${blockchain}`
   }
 
-  static getNextOrderOrMissing(accounts: TAccount[], blockchain: TBlockchainServiceKey, walletId: string) {
+  static getNextOrderOrMissing(accounts: TAccount[], blockchain: TBSServiceName, walletId: string) {
     const orders = accounts
       .filter(account => account.idWallet === walletId && account.blockchain === blockchain)
       .map(({ order }) => order)

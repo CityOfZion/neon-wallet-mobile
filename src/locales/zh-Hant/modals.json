@@ -828,6 +828,7 @@
     "failed": "失敗",
     "help": "需要協助？線上支援",
     "log": "兌換日誌",
+    "notFound": "無法載入此兌換的詳情",
     "pending": "處理中…",
     "processingInfo": "我們目標在 7 分鐘內完成兌換",
     "receivingAddress": "接收地址",

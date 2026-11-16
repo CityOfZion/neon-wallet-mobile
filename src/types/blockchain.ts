@@ -20,8 +20,6 @@ export type TBlockchainService =
   | BSStellar
   | BSBitcoin
 
-export type TBlockchainServiceKey = TBlockchainService['name']
-
 export type TBSAggregator = BSAggregator<TBlockchainService[], TBSServiceByName<TBlockchainService[]>>
 
 export type TNetwork = { isAutomatic?: boolean } & TBSNetwork

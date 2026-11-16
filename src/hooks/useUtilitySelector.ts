@@ -19,11 +19,6 @@ const selectHasClaimPendingTransaction = (account: TAccount) =>
     )
   })
 
-const selectSwapRecord = (txId: string) =>
-  createAppSelector([state => state.utility.data.swapRecords], swapRecords => {
-    return swapRecords.find(swapRecord => swapRecord.txFrom === txId)
-  })
-
 export const useIsConnectedSelector = () => {
   const { value } = useAppSelector(state => state.utility.memoryData.isConnected)
 
@@ -70,16 +65,4 @@ export const useLastIndexesByWallet = () => {
     lastIndexesByWallet: value,
     lastIndexesByWalletRef: ref,
   }
-}
-
-export const useSwapRecordsSelector = () => {
-  const { value: swapRecords, ref: swapRecordsRef } = useAppSelector(state => state.utility.data.swapRecords)
-
-  return { swapRecords, swapRecordsRef }
-}
-
-export const useSwapRecordSelector = (txId: string) => {
-  const { value: swapRecord, ref: swapRecordRef } = useAppSelector(selectSwapRecord(txId))
-
-  return { swapRecord, swapRecordRef }
 }

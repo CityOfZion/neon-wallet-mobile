@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { BSBigHumanAmount, type TTransactionDefaultTokenEvent } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { Text, View } from 'react-native'
 
 import { Skeleton } from '@/components/Skeleton'
@@ -12,10 +13,8 @@ import { ExchangeHelper } from '@/helpers/ExchangeHelper'
 import { useExchange } from '@/hooks/useExchanges'
 import { useCurrencySelector } from '@/hooks/useSettingsSelector'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
   event: TTransactionDefaultTokenEvent
 }
 

@@ -1,14 +1,13 @@
 import type { TBSToken } from '@cityofzion/blockchain-service'
+import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import { TwBlockchainIcon } from './TwBlockchainIcon'
 
-import type { TBlockchainServiceKey } from '@/types/blockchain'
-
 type TProps = {
   token: TBSToken
-  blockchain: TBlockchainServiceKey
+  blockchain: TBSServiceName
 }
 
 export const BlockchainIconWithLabel = ({ token, blockchain }: TProps) => {
