@@ -1,5 +1,6 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 
+import { BSKeychainHelper } from '@cityofzion/blockchain-service'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
@@ -35,11 +36,13 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
   const [generatedAccounts, setGeneratedAccounts] = useState<TAccountSelectionAccordionAccount[]>([])
   const [selectedAccounts, setSelectedAccounts] = useState<TAccountSelectionAccordionAccount[]>([])
 
+  const normalizedMnemonic = useMemo(() => BSKeychainHelper.normalizeMnemonic(mnemonic), [mnemonic])
+
   const [isImporting, startImport] = usePressOnce(async () => {
     const wallet = await createWallet({
       name: tCommon('wallet.mnemonicWalletName'),
       type: 'standard',
-      mnemonic,
+      mnemonic: normalizedMnemonic,
       backupStatus: 'successful',
     })
 
@@ -74,7 +77,7 @@ export const ImportMnemonicSelectionModal = ({ route }: TRootStackScreenProps<'I
   const { isMounting } = useMount(
     async () => {
       const generatedAccounts = await BlockchainServiceHelper.bsAggregator.generateAccountsFromMnemonic(
-        mnemonic,
+        normalizedMnemonic,
         lastIndexesByWallet
       )
 

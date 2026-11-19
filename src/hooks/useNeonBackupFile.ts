@@ -190,7 +190,10 @@ export const useNeonBackupFile = () => {
       const fixedWallet = NeonBackupHelper.fixWalletProperties(backupWallet)
 
       walletsToCreate.push({
-        walletToCreate: { ...fixedWallet, mnemonic: backupWallet.mnemonic },
+        walletToCreate: {
+          ...fixedWallet,
+          mnemonic: backupWallet.mnemonic,
+        },
         accountsToImport,
       })
     })
