@@ -59,79 +59,88 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
   }
 
   const handleSubmit = async () => {
-    const proposal = await handlePair(actionDataRef.current.uri)
+    try {
+      const proposal = await handlePair(actionDataRef.current.uri)
 
-    const handleClose = async () => {
-      reset()
-      WalletKitHelper.kit
-        .rejectSession({ id: proposal.id, reason: WalletKitHelper.getError('USER_REJECTED') })
-        .catch(error =>
-          LoggerHelper.error(error, { where: 'DappConnectionModal', operation: 'rejectSession/handleClose' })
-        )
+      const handleClose = async () => {
+        reset()
+        WalletKitHelper.kit
+          .rejectSession({ id: proposal.id, reason: WalletKitHelper.getError('USER_REJECTED') })
+          .catch(error =>
+            LoggerHelper.error(error, { where: 'DappConnectionModal', operation: 'rejectSession/handleClose' })
+          )
 
-      await WalletKitHelper.redirect({
-        metadata: proposal.proposer.metadata,
-        navigation,
-        fromDeeplink: route.params?.fromDeeplink,
-      })
-    }
+        await WalletKitHelper.redirect({
+          metadata: proposal.proposer.metadata,
+          navigation,
+          fromDeeplink: route.params?.fromDeeplink,
+        })
+      }
 
-    const services = WalletKitHelper.getProposalServices({
-      proposal,
-      services: BlockchainServiceHelper.bsAggregator.blockchainServices,
-    })
-    if (services.length === 0) {
-      ToastHelper.error({
-        message: t('errors.unsupportedNamespaceKey'),
-        id: 'dapp-connection-details-proposal-error',
-      })
-      handleClose()
-      return
-    }
-
-    const blockchains = services.map(service => service.name)
-
-    const handleSelectAccount = async (account: TAccount) => {
-      navigation.navigate('DappConnectionRequestModal', {
-        account,
+      const services = WalletKitHelper.getProposalServices({
         proposal,
-        fromDeeplink: route.params?.fromDeeplink,
+        services: BlockchainServiceHelper.bsAggregator.blockchainServices,
       })
-    }
 
-    if (route.params?.account) {
-      handleSelectAccount(route.params.account)
-      return
-    }
+      if (services.length === 0) {
+        ToastHelper.error({
+          message: t('errors.unsupportedNamespaceKey'),
+          id: 'dapp-connection-details-proposal-error',
+        })
+        handleClose()
+        return
+      }
 
-    if (walletsRef.current.length === 1) {
-      navigation.navigate('AccountStackListSelectionModal', {
-        title: t('accountSelection.title'),
-        description: t('accountSelection.description'),
-        onSelect: handleSelectAccount,
-        wallet: walletsRef.current[0],
-        onRequestClose: handleClose,
-        blockchains,
-      })
-      return
-    }
+      const blockchains = services.map(service => service.name)
 
-    navigation.navigate('WalletSelectionModal', {
-      title: t('walletSelection.title'),
-      description: t('walletSelection.description'),
-      onRequestClose: handleClose,
-      blockchains,
-      onSelect: (wallet: TWallet) => {
+      const handleSelectAccount = async (account: TAccount) => {
+        navigation.navigate('DappConnectionRequestModal', {
+          account,
+          proposal,
+          fromDeeplink: route.params?.fromDeeplink,
+        })
+      }
+
+      if (route.params?.account) {
+        handleSelectAccount(route.params.account)
+        return
+      }
+
+      if (walletsRef.current.length === 1) {
         navigation.navigate('AccountStackListSelectionModal', {
-          wallet,
           title: t('accountSelection.title'),
           description: t('accountSelection.description'),
           onSelect: handleSelectAccount,
+          wallet: walletsRef.current[0],
           onRequestClose: handleClose,
           blockchains,
         })
-      },
-    })
+        return
+      }
+
+      navigation.navigate('WalletSelectionModal', {
+        title: t('walletSelection.title'),
+        description: t('walletSelection.description'),
+        onRequestClose: handleClose,
+        blockchains,
+        onSelect: (wallet: TWallet) => {
+          navigation.navigate('AccountStackListSelectionModal', {
+            wallet,
+            title: t('accountSelection.title'),
+            description: t('accountSelection.description'),
+            onSelect: handleSelectAccount,
+            onRequestClose: handleClose,
+            blockchains,
+          })
+        },
+      })
+    } catch (error) {
+      LoggerHelper.sentry(error, { operation: 'handleSubmit', where: 'DappConnectionModal' })
+      ToastHelper.error({
+        message: AppError.wrap(error, t('errors.connectionFailed')).message,
+        id: 'dapp-connection-details-proposal-error',
+      })
+    }
   }
 
   const handleChangeText = (text: string) => {

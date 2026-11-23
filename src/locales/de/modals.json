@@ -202,6 +202,7 @@
     },
     "connectLabel": "Verbinden",
     "errors": {
+      "connectionFailed": "Verbindung zur dApp konnte nicht hergestellt werden. Bitte überprüfen Sie die URI und versuchen Sie es erneut.",
       "invalidUrl": "Ungültige URI",
       "timeout": "Die Verbindungsanfrage ist abgelaufen.",
       "unsupportedNamespaceKey": "Die dApp versucht, sich mit einer nicht unterstützten Blockchain oder einem nicht unterstützten Network zu verbinden."

@@ -202,6 +202,7 @@
     },
     "connectLabel": "Connect",
     "errors": {
+      "connectionFailed": "Could not connect to the dApp. Please check the URI and try again.",
       "invalidUrl": "Invalid URI",
       "timeout": "The connection request has timed out.",
       "unsupportedNamespaceKey": "The dApp is trying to connect to an unsupported blockchain or network."

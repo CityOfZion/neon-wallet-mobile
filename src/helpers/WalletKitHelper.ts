@@ -8,6 +8,7 @@ import { Platform } from 'react-native'
 
 import pkg from '../../package.json'
 import { ConstantsHelper } from './ConstantsHelper'
+import { EnvHelper } from './EnvHelper'
 import { StringHelper } from './StringHelper'
 
 import type { TWalletConnectRedirectParams } from '@/types/helpers'
@@ -19,7 +20,7 @@ export abstract class WalletKitHelper extends BSWalletKitHelper {
     if (this.kit) return
 
     const core = new Core({
-      projectId: '92546a82a052e0a70f22d57fd5764125',
+      projectId: EnvHelper.EXPO_PUBLIC_WALLET_CONNECT_PROJECT_ID,
       logger: 'silent',
     })
 

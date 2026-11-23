@@ -9,6 +9,7 @@ const envSchema = z.object({
   EXPO_PUBLIC_GA_MEASUREMENT_ID: z.string().nonempty().optional(),
   EXPO_PUBLIC_GA_API_SECRET: z.string().nonempty().optional(),
   EXPO_PUBLIC_CRISP_WEBSITE_ID: z.string().nonempty(),
+  EXPO_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string().nonempty(),
 })
 
 type EnvSchema = z.infer<typeof envSchema>
@@ -23,6 +24,7 @@ class EnvHelperClass {
       EXPO_PUBLIC_GA_MEASUREMENT_ID: process.env.EXPO_PUBLIC_GA_MEASUREMENT_ID,
       EXPO_PUBLIC_GA_API_SECRET: process.env.EXPO_PUBLIC_GA_API_SECRET,
       EXPO_PUBLIC_CRISP_WEBSITE_ID: process.env.EXPO_PUBLIC_CRISP_WEBSITE_ID,
+      EXPO_PUBLIC_WALLET_CONNECT_PROJECT_ID: process.env.EXPO_PUBLIC_WALLET_CONNECT_PROJECT_ID,
     }
 
     const result = await this.schema.parseAsync(envVars)

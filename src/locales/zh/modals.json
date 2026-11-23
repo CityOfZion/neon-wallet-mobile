@@ -202,6 +202,7 @@
     },
     "connectLabel": "连接",
     "errors": {
+      "connectionFailed": "无法连接到 dApp。请检查 URI 后重试。",
       "invalidUrl": "无效的URI",
       "timeout": "连接请求超时。",
       "unsupportedNamespaceKey": "该dApp正在尝试连接到不受支持的区块链或网络。"
