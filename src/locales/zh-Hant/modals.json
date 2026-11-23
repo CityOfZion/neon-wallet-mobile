@@ -202,6 +202,7 @@
     },
     "connectLabel": "連接",
     "errors": {
+      "connectionFailed": "無法連接到 dApp。請檢查 URI 後重試。",
       "invalidUrl": "無效的URI",
       "timeout": "連線請求逾時。",
       "unsupportedNamespaceKey": "該dApp正在嘗試連接到不支援的區塊鏈或網絡。"
