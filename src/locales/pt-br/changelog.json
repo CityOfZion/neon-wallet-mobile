@@ -1,6 +1,11 @@
 {
   "notes": [
     {
+      "changes": ["Correção de problemas de conexão com o WalletConnect"],
+      "date": "2026-11-24",
+      "version": "1.14.1"
+    },
+    {
       "changes": [],
       "date": "2026-11-04",
       "version": "1.14.0"
