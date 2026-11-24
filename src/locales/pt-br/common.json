@@ -16,7 +16,7 @@
   },
   "deeplink": {
     "errors": {
-      "firstTime": "Você precisa passar pelo processo de onboarding primeiro. Tente novamente após completá-lo."
+      "firstTime": "Configure uma carteira no Neon primeiro e depois abra o link novamente."
     }
   },
   "errors": {

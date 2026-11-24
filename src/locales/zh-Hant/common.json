@@ -16,7 +16,7 @@
   },
   "deeplink": {
     "errors": {
-      "firstTime": "您必須先完成初始引導流程。完成後請重試。"
+      "firstTime": "請先在 Neon 中設定錢包，然後再次開啟連結。"
     }
   },
   "errors": {

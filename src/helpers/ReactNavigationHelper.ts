@@ -13,16 +13,11 @@ import type { TRootStackParamList } from '@/types/stacks'
 export class ReactNavigationHelper {
   static getLinking(): LinkingOptions<ReactNavigation.RootParamList> {
     const { t } = I18nextHelper.get()
-    const {
-      settings: {
-        data: { isFirstTime },
-      },
-    } = ReduxHelper.store.getState()
 
     return {
       prefixes: ['neon://', 'neon3://', 'wc:', Linking.createURL('/', { scheme: 'neon' })],
       getStateFromPath: (path, options) => {
-        if (isFirstTime) {
+        if (ReduxHelper.store.getState().settings.data.isFirstTime) {
           ToastHelper.error({
             message: t('common:deeplink.errors.firstTime'),
           })
