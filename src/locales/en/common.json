@@ -16,7 +16,7 @@
   },
   "deeplink": {
     "errors": {
-      "firstTime": "You must go to the onboarding process first. Try again after you finish it."
+      "firstTime": "Set up a wallet in Neon first, then open the link again."
     }
   },
   "errors": {

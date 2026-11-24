@@ -16,7 +16,7 @@
   },
   "deeplink": {
     "errors": {
-      "firstTime": "您必须先完成初始引导流程。完成后请重试。"
+      "firstTime": "请先在 Neon 中设置钱包，然后再次打开链接。"
     }
   },
   "errors": {
