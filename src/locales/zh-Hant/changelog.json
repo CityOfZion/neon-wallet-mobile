@@ -1,6 +1,11 @@
 {
   "notes": [
     {
+      "changes": ["修復了 WalletConnect 連線問題"],
+      "date": "2026-11-24",
+      "version": "1.13.1"
+    },
+    {
       "changes": ["新網路 - Stellar 支援", "新網路 - 比特幣支援", "使用者體驗改進", "小錯誤修復"],
       "date": "2026-05-05",
       "version": "1.13.0"
