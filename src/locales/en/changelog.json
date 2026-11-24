@@ -1,6 +1,11 @@
 {
   "notes": [
     {
+      "changes": ["Fixed WalletConnect connection issues"],
+      "date": "2026-11-24",
+      "version": "1.13.1"
+    },
+    {
       "changes": [
         "New Network - Stellar Support",
         "New Network - Bitcoin Support",
