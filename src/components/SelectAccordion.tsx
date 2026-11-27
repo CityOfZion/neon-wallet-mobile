@@ -7,16 +7,17 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 import type { TTwAccordionRootProps, TTwAccordionTriggerProps } from './TwAccordion'
 import { TwAccordion } from './TwAccordion'
 
-type TSelectAccordionContext = {
+type TContextValue = {
   value?: string
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }
 
-const SelectAccordionContext = createContext<TSelectAccordionContext | null>(null)
+const SelectAccordionContext = createContext<TContextValue | null>(null)
 
-export const useSelectAccordionContext = () => {
+const useSelectAccordion = () => {
   const context = useContext(SelectAccordionContext)
+
   if (!context) {
     throw new Error('SelectAccordion compound components cannot be rendered outside the SelectAccordion.Root component')
   }
@@ -24,8 +25,9 @@ export const useSelectAccordionContext = () => {
   return context
 }
 
-type TSelectAccordionRootProps = TSelectAccordionContext & Omit<TTwAccordionRootProps, 'value'>
-const Root = ({ value, open, onOpenChange, ...props }: TSelectAccordionRootProps) => {
+type TRootProps = TContextValue & Omit<TTwAccordionRootProps, 'value'>
+
+const Root = ({ value, open, onOpenChange, ...props }: TRootProps) => {
   return (
     <SelectAccordionContext.Provider value={{ value }}>
       <TwAccordion.Root value={open} onValueChange={onOpenChange} {...props} />
@@ -33,10 +35,10 @@ const Root = ({ value, open, onOpenChange, ...props }: TSelectAccordionRootProps
   )
 }
 
-type TSelectAccordionTriggerProps = TTwAccordionTriggerProps
+type TTriggerProps = TTwAccordionTriggerProps
 
-const Trigger = forwardRef<View, TSelectAccordionTriggerProps>(({ className, label, ...props }, ref) => {
-  const { value: selectAccordionValue } = useSelectAccordionContext()
+const Trigger = forwardRef<View, TTriggerProps>(({ className, label, ...props }, ref) => {
+  const { value: selectAccordionValue } = useSelectAccordion()
 
   return (
     <TwAccordion.Trigger

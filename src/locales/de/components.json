@@ -63,10 +63,10 @@
     "backButtonLabel": "Zurück"
   },
   "screenLayoutBars": {
-    "custom": "Benutzerdefiniertes Netzwerk",
-    "noInternet": "Keine Internetverbindung",
-    "testnet": "Testnet-Netzwerk",
-    "warning": "Warnung"
+    "noInternetLabel": "Kein Internet",
+    "nonMainnetLabel_one": "Nicht-Mainnet-Netzwerk",
+    "nonMainnetLabel_other": "Nicht-Mainnet-Netzwerke",
+    "warningLabel": "Warnung"
   },
   "sendDetails": {
     "amountLabel": "Menge",

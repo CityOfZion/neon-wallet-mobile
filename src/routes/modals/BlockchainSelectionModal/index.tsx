@@ -13,7 +13,7 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   blockchains: TBSServiceName[]
 }
 
@@ -22,7 +22,7 @@ export const BlockchainSelectionModal = ({ route }: TRootStackScreenProps<'Block
 
   const { t } = useTranslation('modals', { keyPrefix: 'blockchainSelection' })
   const { t: tCommon } = useTranslation('common')
-  const { actionData, setData, handleAct } = useActions<TActionData>({
+  const { actionData, setData, handleAct } = useActions<TActionsData>({
     blockchains: ['neo3'],
   })
 

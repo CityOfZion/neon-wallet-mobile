@@ -63,10 +63,10 @@
     "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
-    "custom": "自訂網路",
-    "noInternet": "沒有網路連線",
-    "testnet": "測試網路",
-    "warning": "警告"
+    "noInternetLabel": "沒有網路",
+    "nonMainnetLabel_one": "非主網網路",
+    "nonMainnetLabel_other": "非主網網路",
+    "warningLabel": "警告"
   },
   "sendDetails": {
     "amountLabel": "數量",

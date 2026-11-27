@@ -39,7 +39,7 @@ type TItem = {
   nonVerbsMatchedQuantity: number
 }
 
-type TActionData = {
+type TActionsData = {
   isSearching: boolean
   foundActions?: TSearchAction[]
   search: string
@@ -79,7 +79,7 @@ export const SearchScreen = ({ navigation }: TSearchStackScreenProps<'SearchScre
   const { t } = useTranslation('screens', { keyPrefix: 'search' })
   const { t: tSearch } = useTranslation('search')
 
-  const { actionData, setData, reset } = useActions<TActionData>({
+  const { actionData, setData, reset } = useActions<TActionsData>({
     isSearching: false,
     search: '',
     foundActions: undefined,
@@ -93,9 +93,11 @@ export const SearchScreen = ({ navigation }: TSearchStackScreenProps<'SearchScre
   const handleClick = async (action: Omit<TSearchAction, 'onPress'>) => {
     try {
       const func = functionsByActionId[action.id]
+
       if (!func) throw new AppError(t('errors.noFunction'))
 
       await func({ navigation })
+
       reset()
     } catch (error) {
       LoggerHelper.error(error, { where: 'SearchScreen', operation: 'handleClick' })

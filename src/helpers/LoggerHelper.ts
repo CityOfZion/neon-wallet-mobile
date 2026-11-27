@@ -15,7 +15,9 @@ export class LoggerHelper {
     'white', 'grey', 'magentaBright', 'cyanBright',
     'whiteBright',
   ]
+
   static extensionColors: Record<string, any> = {}
+
   static #logger = ReactNativeLogs.logger.createLogger({
     levels: {
       debug: 0,
@@ -68,6 +70,7 @@ export class LoggerHelper {
 
   static sentry(log: unknown, options: TLoggerHelperOptions) {
     this.#whereLogger(options).error(log)
+
     SentryHelper.capture(log, { where: options.where, operation: options.operation, level: 'error' })
   }
 }

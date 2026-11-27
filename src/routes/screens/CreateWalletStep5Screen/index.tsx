@@ -13,7 +13,7 @@ import { ScreenLayout } from '@/layouts/ScreenLayout'
 
 import type { TMoreStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   selectedBlockchains: TBSServiceName[]
 }
 
@@ -24,7 +24,7 @@ export const CreateWalletStep5Screen = ({ navigation, route }: TMoreStackScreenP
   const { createWallet } = useCreateWallet()
   const { createAccount } = useCreateAccount()
 
-  const { actionData, actionState, setDataWrapper, handleAct } = useActions<TActionData>({ selectedBlockchains: [] })
+  const { actionData, actionState, setDataWrapper, handleAct } = useActions<TActionsData>({ selectedBlockchains: [] })
 
   const handlePressContinue = async () => {
     const wallet = await createWallet({

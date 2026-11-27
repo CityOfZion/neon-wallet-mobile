@@ -27,7 +27,7 @@ import { contactReducerActions } from '@/store/reducers/contact'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TContactAddress } from '@/types/store'
 
-type TActionData = {
+type TActionsData = {
   name: string
   addresses: TContactAddress[]
 }
@@ -40,7 +40,7 @@ export const PersistContactModal = ({ navigation, route }: TRootStackScreenProps
   const { t } = useTranslation('modals', { keyPrefix: 'persistContact' })
   const { t: tCommon } = useTranslation('common')
 
-  const { actionData, actionState, setData, setError, handleAct } = useActions<TActionData>({
+  const { actionData, actionState, setData, setError, handleAct } = useActions<TActionsData>({
     addresses: contact?.addresses || addresses || [],
     name: contact?.name || '',
   })

@@ -63,10 +63,10 @@
     "backButtonLabel": "返回"
   },
   "screenLayoutBars": {
-    "custom": "自定义网络",
-    "noInternet": "无网络连接",
-    "testnet": "测试网络",
-    "warning": "警告"
+    "noInternetLabel": "无网络",
+    "nonMainnetLabel_one": "非主网网络",
+    "nonMainnetLabel_other": "非主网网络",
+    "warningLabel": "警告"
   },
   "sendDetails": {
     "amountLabel": "数量",

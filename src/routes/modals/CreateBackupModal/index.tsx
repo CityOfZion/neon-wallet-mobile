@@ -22,7 +22,7 @@ import { CreateBackupModalSuccessContent } from './CreateBackupModalSuccessConte
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   password: string
   confirmPassword: string
 }
@@ -31,7 +31,7 @@ export const CreateBackupModal = ({ navigation }: TRootStackScreenProps<'CreateB
   const { t } = useTranslation('modals', { keyPrefix: 'createBackup' })
   const { handleCreateBackup } = useNeonCreateBackup()
 
-  const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionData>(
+  const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionsData>(
     {
       password: '',
       confirmPassword: '',

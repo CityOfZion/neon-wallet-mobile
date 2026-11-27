@@ -30,11 +30,13 @@ const validateItemValue = (value: any) => {
   throw new Error('Invalid value type. Expected string or object with id property.')
 }
 
-const RadioGroupContext = React.createContext<TRootProps | null>(null)
-export const useRadioGroupContext = () => {
-  const context = React.useContext(RadioGroupContext)
+const RadioContext = React.createContext<TRootProps | null>(null)
+
+const useRadio = () => {
+  const context = React.useContext(RadioContext)
+
   if (!context) {
-    throw new Error('RadioGroup compound components cannot be rendered outside the RadioGroup.Root component')
+    throw new Error('Radio compound components cannot be rendered outside the Radio.Root component')
   }
 
   return context
@@ -45,7 +47,7 @@ const Root = React.forwardRef<View, TRootProps>(
     if (value) validateItemValue(value)
 
     return (
-      <RadioGroupContext.Provider
+      <RadioContext.Provider
         value={{
           value,
           disabled,
@@ -64,16 +66,17 @@ const Root = React.forwardRef<View, TRootProps>(
             {children}
           </View>
         </View>
-      </RadioGroupContext.Provider>
+      </RadioContext.Provider>
     )
   }
 )
 
 const Item = React.forwardRef<View, TItemProps>(
   ({ value, label, id, leftElement, className, disabled: disabledProp = false, onPress, ...props }, ref) => {
-    const context = useRadioGroupContext()
+    const context = useRadio()
 
     validateItemValue(value)
+
     if (context.value && typeof context.value !== typeof value) {
       throw new Error('Root value and Item value must be the same type')
     }
@@ -83,6 +86,7 @@ const Item = React.forwardRef<View, TItemProps>(
 
     function handlePress(event: GestureResponderEvent) {
       if (isDisabled) return
+
       context.onValueChange(value)
       onPress?.(event)
     }

@@ -42,11 +42,11 @@ type TModalLayoutContext = {
 
 const ModalLayoutContext = createContext<TModalLayoutContext | null>(null)
 
-const useModalLayoutContext = () => {
+const useModalLayout = () => {
   const context = useContext(ModalLayoutContext)
 
   if (!context) {
-    throw new Error('useModalLayoutContext must be used within ModalLayout')
+    throw new Error('useModalLayout must be used within ModalLayout')
   }
 
   return context
@@ -225,7 +225,7 @@ const Root = ({ full = true, disableSwipeToClose = false, onRequestClose, classN
 }
 
 const Header = ({ className, children }: ViewProps) => {
-  const { pan } = useModalLayoutContext()
+  const { pan } = useModalLayout()
 
   return (
     <GestureDetector gesture={pan}>
@@ -343,7 +343,7 @@ const ViewContent = ({ className, ...props }: ViewProps) => {
 }
 
 const KeyboardAvoidingContent = ({ className, children, ...props }: KeyboardAvoidingViewProps) => {
-  const { modalTopOffset } = useModalLayoutContext()
+  const { modalTopOffset } = useModalLayout()
 
   const childrenArray = Children.toArray(children)
   const scrollChildren = childrenArray.filter(child => !isValidElement(child) || child.type !== KeyboardAvoidingArea)

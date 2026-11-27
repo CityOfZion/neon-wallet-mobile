@@ -1,6 +1,5 @@
 import { Fragment } from 'react'
 
-import { BSNeoXConstants } from '@cityofzion/bs-neox'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { match, P } from 'ts-pattern'
@@ -11,6 +10,7 @@ import { TwCheckbox } from '@/components/TwCheckbox'
 import { TwIconButton } from '@/components/TwIconButton'
 import { TwSeparator } from '@/components/TwSeparator'
 
+import { NetworkHelper } from '@/helpers/NetworkHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
 import { usePingNetworks } from '@/hooks/usePingNetworks'
@@ -81,9 +81,11 @@ export const NetworkUrlSelectionModal = ({ route }: TRootStackScreenProps<'Netwo
 
             <Radio.Root value={selectedNetwork.url} onValueChange={handlePress}>
               {pingNetworksQuery.data?.map((network, index, array) => {
-                const isNeoxAntiMev =
-                  blockchain === 'neox' &&
-                  BSNeoXConstants.ANTI_MEV_RPC_LIST_BY_NETWORK_ID[selectedNetwork.id].some(url => url === network.url)
+                const isNeoxAntiMev = NetworkHelper.isNeoxAntiMev({
+                  blockchain,
+                  networkId: selectedNetwork.id,
+                  url: network.url,
+                })
 
                 return (
                   <Fragment key={network.url}>

@@ -27,7 +27,7 @@ import tailwindConfig from '../../../../tailwind.config'
 import type { TWalletsStackScreenProps } from '@/types/stacks'
 import type { TAccount } from '@/types/store'
 
-type TActionData = {
+type TActionsData = {
   selectedAccount?: TAccount
 }
 
@@ -37,7 +37,7 @@ export const ReceiveScreen = ({ navigation, route }: TWalletsStackScreenProps<'R
   const { t } = useTranslation('screens', { keyPrefix: 'receive' })
   const { writeFile } = useFileSystem()
 
-  const { actionData, setDataWrapper } = useActions<TActionData>({
+  const { actionData, setDataWrapper } = useActions<TActionsData>({
     selectedAccount: route.params?.account,
   })
 

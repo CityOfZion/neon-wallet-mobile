@@ -28,6 +28,7 @@ export const useImportAction = (
 
   const validateMnemonic = (value: string) => {
     const isValid = BSKeychainHelper.isValidMnemonic(value)
+
     if (!isValid) throw new AppError(t('errors.mnemonicIncomplete'))
   }
 
@@ -62,7 +63,9 @@ export const useImportAction = (
       const validationByInputType: Partial<Record<TUseImportActionInputType, (value: string) => void>> = {
         mnemonic: validateMnemonic,
       }
+
       const validateFunc = validationByInputType[inputType]
+
       validateFunc?.(value)
 
       clearErrors()

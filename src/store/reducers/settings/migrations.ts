@@ -1,6 +1,7 @@
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { LanguageHelper } from '@/helpers/LanguageHelper'
+import { NetworkHelper } from '@/helpers/NetworkHelper'
 
 export function getSettingsMigrations() {
   return {
@@ -159,6 +160,20 @@ export function getSettingsMigrations() {
           stellar: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.stellar.defaultNetwork,
         },
         canShowNeo3VoteSupportUsModal: true,
+      },
+    }),
+    13: (state: any) => ({
+      ...state,
+      data: {
+        ...state.data,
+        customNetworksByBlockchain: {
+          ...state.data.customNetworksByBlockchain,
+          neo3: [NetworkHelper.defaultCozNeo3CustomNetwork, ...(state.data.customNetworksByBlockchain?.neo3 || [])],
+        },
+        selectedNetworkByBlockchain: {
+          ...state.data.selectedNetworkByBlockchain,
+          bitcoin: BlockchainServiceHelper.bsAggregator.blockchainServicesByName.bitcoin.defaultNetwork,
+        },
       },
     }),
   }

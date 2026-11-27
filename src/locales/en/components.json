@@ -63,10 +63,10 @@
     "backButtonLabel": "Go back"
   },
   "screenLayoutBars": {
-    "custom": "Custom network",
-    "noInternet": "No internet connection",
-    "testnet": "Testnet network",
-    "warning": "Warning"
+    "noInternetLabel": "No internet",
+    "nonMainnetLabel_one": "Non-mainnet network",
+    "nonMainnetLabel_other": "Non-mainnet networks",
+    "warningLabel": "Warning"
   },
   "sendDetails": {
     "amountLabel": "Amount",

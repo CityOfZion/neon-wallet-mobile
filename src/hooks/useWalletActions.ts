@@ -83,6 +83,7 @@ export const useEditWallet = () => {
     async ({ data, wallet }: TUseEditWalletParams) => {
       if (data.mnemonic) {
         await SecureStoreHelper.saveMnemonic(wallet, data.mnemonic)
+
         delete data.mnemonic
       }
 

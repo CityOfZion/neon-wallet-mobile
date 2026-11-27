@@ -2,6 +2,7 @@ import type { TBSServiceName } from '@cityofzion/bs-multichain'
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
+import { NetworkHelper } from '@/helpers/NetworkHelper'
 
 import type { TSettingsReducer } from './index'
 
@@ -58,6 +59,9 @@ const saveCustomNetwork = <T extends TBSServiceName>(
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {
   const { blockchain, network } = action.payload
+
+  if (NetworkHelper.isDefaultCustomNetwork(network)) return
+
   const customNetworks = state.data.customNetworksByBlockchain[blockchain]
   const foundIndex = customNetworks.findIndex(({ id }) => id === network.id)
 
@@ -79,6 +83,9 @@ const deleteCustomNetwork = <T extends TBSServiceName>(
   action: PayloadAction<{ blockchain: T; network: TNetwork }>
 ) => {
   const { network, blockchain } = action.payload
+
+  if (NetworkHelper.isDefaultCustomNetwork(network)) return
+
   const customNetworks = state.data.customNetworksByBlockchain[blockchain]
   const foundIndex = customNetworks.findIndex(currentNetwork => currentNetwork.id === network.id)
 

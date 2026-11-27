@@ -20,7 +20,7 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   blockchain: TBSServiceName
 }
 
@@ -35,7 +35,7 @@ export const CreateAccountBlockchainSelectionModal = ({
   const { createAccount } = useCreateAccount()
   const { accountsByWalletId } = useAccountsByWalletIdSelector(wallet.id)
 
-  const { actionData, actionState, setData, handleAct } = useActions<TActionData>({
+  const { actionData, actionState, setData, handleAct } = useActions<TActionsData>({
     blockchain: wallet.type === 'hardware' ? accountsByWalletId[0].blockchain : 'neo3',
   })
 

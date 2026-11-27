@@ -14,7 +14,7 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   password: string
 }
 
@@ -22,7 +22,7 @@ export const PasswordModal = ({ route, navigation }: TRootStackScreenProps<'Pass
   const { title, description, inputProps, buttonProps, bannerProps, onConfirm, onError, onRequestClose, onSuccess } =
     route.params
 
-  const { actionData, actionState, handleAct, setError, setDataWrapper } = useActions<TActionData>({
+  const { actionData, actionState, handleAct, setError, setDataWrapper } = useActions<TActionsData>({
     password: '',
   })
 

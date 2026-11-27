@@ -626,15 +626,15 @@
   "persistNetwork": {
     "connected": "Connection good",
     "createTitle": "Custom network",
-    "delete": "Delete network",
+    "deleteNetworkButtonLabel": "Delete network",
     "editTitle": "Edit {{networkName}}",
     "inputLabels": {
-      "name": "Network name",
-      "nameDescription": "(max of 20 characters)",
-      "url": "New URL"
+      "name": "Name",
+      "nameDescription": "(max. of 20 characters)",
+      "url": "URL"
     },
     "inputPlaceholder": {
-      "name": "Enter network name",
+      "name": "Enter the name",
       "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "Name must be at least 1 character and max of 20 characters",

@@ -17,7 +17,7 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   address: string
   blockchain?: TBSServiceName
 }
@@ -40,7 +40,7 @@ export const PersistContactAddressModal = ({
     validatedAddress,
   } = useNameService()
 
-  const { actionData, setData } = useActions<TActionData>({
+  const { actionData, setData } = useActions<TActionsData>({
     address: address?.address || '',
     blockchain: address?.blockchain,
   })
@@ -53,6 +53,7 @@ export const PersistContactAddressModal = ({
         setData({ blockchain })
 
         if (actionData.address) validateAddressOrNS(actionData.address, blockchain)
+
         navigation.goBack()
       },
     })

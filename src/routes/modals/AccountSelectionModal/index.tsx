@@ -22,7 +22,7 @@ import TbX from '@/assets/images/tb-x.svg'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TAccount, TWallet } from '@/types/store'
 
-type TActionData = {
+type TActionsData = {
   selectedAccount?: TAccount
   selectedWallet?: TWallet
   walletAccordionIsOpen: boolean
@@ -51,7 +51,7 @@ export const AccountSelectionModal = ({ navigation, route }: TRootStackScreenPro
     setData,
     setDataWrapper,
     reset,
-  } = useActions<TActionData>({
+  } = useActions<TActionsData>({
     selectedAccount: undefined,
     selectedWallet: undefined,
     accountAccordionIsOpen: false,

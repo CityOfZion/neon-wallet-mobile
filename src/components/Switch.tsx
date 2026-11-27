@@ -6,13 +6,21 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-type TRootContext = {
+type TContextValue = {
   id?: string
 }
 
-const SwitchContext = React.createContext<TRootContext>({})
+const SwitchContext = React.createContext<TContextValue>({})
 
-const useSwitch = () => useContext(SwitchContext)
+const useSwitch = () => {
+  const context = useContext(SwitchContext)
+
+  if (!context) {
+    throw new Error('Switch compound components cannot be rendered outside the Switch.Root component')
+  }
+
+  return context
+}
 
 const Root = React.forwardRef<View, ViewProps>(({ className, children, ...props }, ref) => {
   const id = useId()

@@ -21,7 +21,7 @@ import { accountReducerActions } from '@/store/reducers/account'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TSkin } from '@/types/store'
 
-type TActionData = {
+type TActionsData = {
   name: string
   skin: TSkin
 }
@@ -32,7 +32,7 @@ const EditAccountModal = ({ navigation, route }: TRootStackScreenProps<'EditAcco
   const { t } = useTranslation('modals', { keyPrefix: 'editAccount' })
   const { t: tCommon } = useTranslation('common')
 
-  const { actionData, setData, setDataWrapper, setError, actionState, handleAct } = useActions<TActionData>({
+  const { actionData, setData, setDataWrapper, setError, actionState, handleAct } = useActions<TActionsData>({
     name: account.name,
     skin: account.skin,
   })
