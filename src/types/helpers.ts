@@ -56,6 +56,10 @@ export type TStringHelperRemoveSpecialCharacterOptions = {
   trimText?: boolean
 }
 
+export type TStringHelperCapitalizeOptions = {
+  preserveRest?: boolean
+}
+
 export type THardwareWalletHelperGetAccountParams = {
   blockchain: TBSServiceName
   index: number

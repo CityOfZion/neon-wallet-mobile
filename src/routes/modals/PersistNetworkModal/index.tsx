@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
-import { BSUtilsHelper } from '@cityofzion/blockchain-service'
-import debounce from 'lodash/debounce'
 import { useTranslation } from 'react-i18next'
 
 import { TwButton } from '@/components/TwButton'
@@ -13,6 +11,7 @@ import { StringHelper } from '@/helpers/StringHelper'
 import { UtilsHelper } from '@/helpers/UtilsHelper'
 
 import { useActions } from '@/hooks/useActions'
+import { useDebounceFunction } from '@/hooks/useDebounceFunction'
 import { useAppDispatch } from '@/hooks/useRedux'
 
 import { ModalLayout } from '@/layouts/ModalLayout'
@@ -22,46 +21,47 @@ import TbTrash from '@/assets/images/tb-trash.svg'
 import { settingsReducerActions } from '@/store/reducers/settings'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   name: string
   url: string
+  isValid: boolean
   isValidating: boolean
-  isUrlValid: boolean
 }
+
+const NAME_MAX_LENGTH = 20
 
 export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps<'PersistNetworkModal'>) => {
   const { blockchain, network } = route.params
 
-  const dispatch = useAppDispatch()
   const { t } = useTranslation('modals', { keyPrefix: 'persistNetwork' })
-  const { t: tCommon } = useTranslation('common')
+  const { t: tCommonGeneral } = useTranslation('common', { keyPrefix: 'general' })
 
-  const { actionData, actionState, setData, setError, clearErrors } = useActions<TActionData>({
-    isUrlValid: false,
+  const dispatch = useAppDispatch()
+  const debounce = useDebounceFunction()
+
+  const { actionData, actionState, setData, setError, clearErrors } = useActions<TActionsData>({
+    name: network?.name || '',
+    url: network?.url || '',
+    isValid: false,
     isValidating: false,
-    name: '',
-    url: '',
   })
 
   const canShowUrlInputMessage = !!actionData.url && !actionData.isValidating
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const validateURL = useCallback(
-    debounce(async (url: string) => {
-      setData({ isValidating: true })
+  const handleChangeUrl = (url: string) => {
+    url = StringHelper.removeLineBreaks(url).toLowerCase().trim()
 
-      await BSUtilsHelper.wait(500)
+    const isValidating = !!url
 
-      if (!url) {
-        clearErrors('url')
-        setData({ isUrlValid: false, isValidating: false })
+    clearErrors('url')
+    setData({ url, isValid: false, isValidating })
 
-        return
-      }
+    debounce(async () => {
+      if (!isValidating) return
 
       if (!UtilsHelper.validateURL(url)) {
         setError('url', t('invalidUrl'))
-        setData({ isUrlValid: false, isValidating: false })
+        setData({ isValidating: false })
 
         return
       }
@@ -71,35 +71,23 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
 
         await service.pingNetwork(url)
 
-        clearErrors('url')
-        setData({ isUrlValid: true })
+        setData({ isValid: true })
       } catch (error) {
         setError('url', AppError.wrap(error, t('notConnected')).message)
-        setData({ isUrlValid: false })
       } finally {
         setData({ isValidating: false })
       }
-    }, 1000),
-    []
-  )
+    })
+  }
 
   const handleChangeName = (text: string) => {
     setData({ name: text })
 
     text = text.trim()
 
-    if (text.length === 0 || text.length > 20) {
+    if (text.length === 0 || text.length > NAME_MAX_LENGTH) {
       setError('name', t('invalidName'))
     }
-  }
-
-  const handleChangeNetworkUrl = (url: string) => {
-    setData({ isUrlValid: false })
-
-    url = StringHelper.removeLineBreaks(url).toLowerCase().trim()
-
-    validateURL(url)
-    setData({ url })
   }
 
   const handleSave = () => {
@@ -112,6 +100,7 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
         network: network ? { ...network, name, url } : { id: UtilsHelper.uuid(), name, url, type: 'custom' },
       })
     )
+
     navigation.goBack()
   }
 
@@ -124,11 +113,14 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
   }
 
   useEffect(() => {
-    if (!network) return
+    if (!network) {
+      return
+    }
 
-    validateURL(network.url)
-    setData({ name: network.name, url: network.url })
-  }, [network, setData, validateURL])
+    handleChangeUrl(network.url)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [network])
 
   return (
     <ModalLayout.Root>
@@ -144,36 +136,39 @@ export const PersistNetworkModal = ({ navigation, route }: TRootStackScreenProps
           label={t('inputLabels.name')}
           labelDescription={t('inputLabels.nameDescription')}
           placeholder={t('inputPlaceholder.name')}
-          onChangeText={handleChangeName}
           value={actionData.name}
+          maxLength={NAME_MAX_LENGTH}
           error={actionState.errors.name}
+          onChangeText={handleChangeName}
         />
 
         <TwInput
-          containerProps={{ className: 'mt-7' }}
           label={t('inputLabels.url')}
           placeholder={t('inputPlaceholder.url')}
-          onChangeText={handleChangeNetworkUrl}
           value={actionData.url}
-          error={canShowUrlInputMessage && !actionData.isUrlValid ? actionState.errors.url : undefined}
-          success={canShowUrlInputMessage && actionData.isUrlValid ? t('connected') : undefined}
+          maxLength={200}
+          loading={actionData.isValidating}
+          error={canShowUrlInputMessage && !actionData.isValid ? actionState.errors.url : undefined}
+          success={canShowUrlInputMessage && actionData.isValid ? t('connected') : undefined}
+          containerProps={{ className: 'mt-6' }}
+          onChangeText={handleChangeUrl}
         />
 
-        <ModalLayout.KeyboardAvoidingArea className="gap-4 pt-7">
+        <ModalLayout.KeyboardAvoidingArea className="gap-4 pt-8">
           {network && (
             <TwButton
+              label={t('deleteNetworkButtonLabel')}
               variant="outline"
               leftElement={<TbTrash aria-hidden />}
-              label={t('delete')}
               onPress={handleDelete}
             />
           )}
 
           <TwButton
+            label={tCommonGeneral('save')}
             variant="contained-light"
-            label={tCommon('general.save')}
+            disabled={!actionData.isValid || actionData.isValidating}
             onPress={handleSave}
-            disabled={!actionState.isValid || actionData.isValidating || !actionData.isUrlValid}
           />
         </ModalLayout.KeyboardAvoidingArea>
       </ModalLayout.KeyboardAvoidingContent>

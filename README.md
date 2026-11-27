@@ -59,7 +59,7 @@ This project uses a [Claude Code](https://claude.ai/code) skill to keep all loca
 
 **Running translations**
 
-After modifying English locale files in `src/shared/locales/en/`, run:
+After modifying English locale files in `src/locales/en/`, run:
 
 ```bash
 npm run translate

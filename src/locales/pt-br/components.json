@@ -63,10 +63,10 @@
     "backButtonLabel": "Voltar"
   },
   "screenLayoutBars": {
-    "custom": "Rede customizada",
-    "noInternet": "Sem conexão com a internet",
-    "testnet": "Rede testnet",
-    "warning": "Aviso"
+    "noInternetLabel": "Sem internet",
+    "nonMainnetLabel_one": "Rede não mainnet",
+    "nonMainnetLabel_other": "Redes não mainnet",
+    "warningLabel": "Aviso"
   },
   "sendDetails": {
     "amountLabel": "Quantia",

@@ -22,7 +22,7 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 import type { TRootStackScreenProps } from '@/types/stacks'
 import type { TAccount, TWallet } from '@/types/store'
 
-type TActionData = {
+type TActionsData = {
   uri: string
 }
 
@@ -31,7 +31,7 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
   const { isNotConnected } = useIsConnectedSelector()
   const { walletsRef } = useOwnWalletsSelector()
 
-  const { actionData, actionDataRef, actionState, setData, setError, reset, handleAct } = useActions<TActionData>({
+  const { actionData, actionDataRef, actionState, setData, setError, reset, handleAct } = useActions<TActionsData>({
     uri: '',
   })
 
@@ -153,7 +153,8 @@ export const DappConnectionModal = ({ navigation, route }: TRootStackScreenProps
 
   const handleScan = async (data: string) => {
     handleChangeText(data)
-    handleAct(handleSubmit)()
+
+    await handleAct(handleSubmit)()
   }
 
   useEffect(() => {

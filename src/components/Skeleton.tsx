@@ -24,13 +24,17 @@ import tailwindConfig from '../../tailwind.config'
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
 const { theme } = resolveConfig(tailwindConfig)
 
-type TSkeletonContext = { loading: boolean; shimmerSharedValue: SharedValue<number> }
-const SkeletonContext = createContext<TSkeletonContext | null>(null)
+type TContextValue = { loading: boolean; shimmerSharedValue: SharedValue<number> }
+
+const SkeletonContext = createContext<TContextValue | null>(null)
+
 const useSkeleton = () => {
   const context = useContext(SkeletonContext)
+
   if (!context) {
     throw new Error('Skeleton compound components cannot be rendered outside the Skeleton.Root component')
   }
+
   return context
 }
 

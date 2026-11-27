@@ -10,6 +10,7 @@ import { TwSeparator } from '@/components/TwSeparator'
 
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { I18nextHelper } from '@/helpers/I18nextHelper'
+import { NetworkHelper } from '@/helpers/NetworkHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 
 import { useAppDispatch } from '@/hooks/useRedux'
@@ -62,7 +63,9 @@ export const SettingsProtocolEditScreen = ({
   const { customNetworks } = useCustomNetworksSelector(blockchain)
 
   const service = BlockchainServiceHelper.bsAggregator.blockchainServicesByName[blockchain]
-  const isSelectedNetworkCustom = selectedNetwork.type === 'custom'
+
+  const isSelectedNetworkEditable =
+    selectedNetwork.type === 'custom' && !NetworkHelper.isDefaultCustomNetwork(selectedNetwork)
 
   const handlePress = async (network: TNetwork) => {
     // Don't do anything if the network is already selected
@@ -150,12 +153,12 @@ export const SettingsProtocolEditScreen = ({
 
             <TwMenuButton
               label={
-                isSelectedNetworkCustom
+                isSelectedNetworkEditable
                   ? t('screens:settingsProtocolEdit.editCustomNetworkButtonLabel')
                   : t('screens:settingsProtocolEdit.addCustomNetworkButtonLabel')
               }
-              leftElement={isSelectedNetworkCustom ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
-              onPress={isSelectedNetworkCustom ? handleEditCustomNetwork : handleAddCustomNetwork}
+              leftElement={isSelectedNetworkEditable ? <TbPencil aria-hidden /> : <TbPlus aria-hidden />}
+              onPress={isSelectedNetworkEditable ? handleEditCustomNetwork : handleAddCustomNetwork}
             />
           </Fragment>
         )}

@@ -8,7 +8,7 @@ import Svg, { Path } from 'react-native-svg'
 import { ElementHelper } from '@/helpers/ElementHelper'
 import { StyleHelper } from '@/helpers/StyleHelper'
 
-type TRootContextValue = {
+type TContextValue = {
   visible: boolean
   setVisible: Dispatch<SetStateAction<boolean>>
   triggerRef: RefObject<View | null>
@@ -26,9 +26,11 @@ type TTriggerProps = {
 
 type TContentProps = ViewProps
 
-const TooltipContext = createContext<TRootContextValue | null>(null)
-export const useTooltipContext = () => {
+const TooltipContext = createContext<TContextValue | null>(null)
+
+const useTooltip = () => {
   const context = useContext(TooltipContext)
+
   if (!context) {
     throw new Error('Tooltip compound components cannot be rendered outside the Tooltip.Root component')
   }
@@ -59,7 +61,7 @@ const Root = ({ children, type }: TRootProps) => {
 }
 
 const Trigger = ({ children }: TTriggerProps) => {
-  const { setVisible, triggerRef, visible, nativeId, type } = useTooltipContext()
+  const { setVisible, triggerRef, visible, nativeId, type } = useTooltip()
 
   let Component: JSX.Element
 
@@ -99,7 +101,7 @@ const Trigger = ({ children }: TTriggerProps) => {
 }
 
 const ContentPress = ({ children, className, ...props }: TContentProps) => {
-  const { visible, setVisible, triggerRef, nativeId } = useTooltipContext()
+  const { visible, setVisible, triggerRef, nativeId } = useTooltip()
   const windowDimensions = useWindowDimensions()
   const [style, setStyle] = useState<ViewStyle>()
   const [arrowStyle, setArrowStyle] = useState<ViewStyle>()
@@ -153,17 +155,22 @@ const ContentPress = ({ children, className, ...props }: TContentProps) => {
             aria-modal={false}
           >
             <View
-              className={StyleHelper.mergeStyles('flex-row rounded-lg bg-gray-800 px-2 py-1', className)}
+              className={StyleHelper.mergeStyles('mx-2 flex-row rounded-lg bg-gray-800 px-2 py-1', className)}
               {...props}
             >
               {ElementHelper.isTextContentValid(children) ? (
-                <Text className="font-sans-regular text-sm text-white">{children}</Text>
+                <Text className="wrap-break-word text-center font-sans-regular text-sm text-white">{children}</Text>
               ) : (
                 children
               )}
             </View>
 
-            <Svg viewBox="0 0 26 14" className="ml-2 h-2 w-4 fill-gray-800 stroke-gray-800" style={arrowStyle}>
+            <Svg
+              aria-hidden
+              viewBox="0 0 26 14"
+              className="ml-2 h-2 w-4 fill-gray-800 stroke-gray-800"
+              style={arrowStyle}
+            >
               <Path strokeWidth={2} d="m1 1 12 12L25 1H1Z" />
             </Svg>
           </View>
@@ -174,7 +181,7 @@ const ContentPress = ({ children, className, ...props }: TContentProps) => {
 }
 
 const ContentFocus = ({ children, className, ...props }: TContentProps) => {
-  const { visible, triggerRef, nativeId } = useTooltipContext()
+  const { visible, triggerRef, nativeId } = useTooltip()
   const [style, setStyle] = useState<ViewStyle>()
   const [arrowStyle, setArrowStyle] = useState<ViewStyle>()
   const windowDimensions = useWindowDimensions()
@@ -232,19 +239,24 @@ const ContentFocus = ({ children, className, ...props }: TContentProps) => {
     >
       <View
         className={StyleHelper.mergeStyles(
-          'w-full flex-shrink flex-row rounded-lg bg-gray-900/90 px-2 py-1',
+          'mx-2 w-full flex-shrink flex-row rounded-lg bg-gray-900/90 px-2 py-1',
           className
         )}
         {...props}
       >
         {ElementHelper.isTextContentValid(children) ? (
-          <Text className="font-sans-regular text-sm text-white">{children}</Text>
+          <Text className="wrap-break-word text-center font-sans-regular text-sm text-white">{children}</Text>
         ) : (
           children
         )}
       </View>
 
-      <Svg viewBox="0 0 26 14" className="ml-2 h-2 w-4 fill-gray-900/90 stroke-gray-900/90" style={arrowStyle}>
+      <Svg
+        aria-hidden
+        viewBox="0 0 26 14"
+        className="ml-2 h-2 w-4 fill-gray-900/90 stroke-gray-900/90"
+        style={arrowStyle}
+      >
         <Path strokeWidth={2} d="m1 1 12 12L25 1H1Z" />
       </Svg>
     </View>
@@ -252,7 +264,7 @@ const ContentFocus = ({ children, className, ...props }: TContentProps) => {
 }
 
 const Content = (props: TContentProps) => {
-  const { type } = useTooltipContext()
+  const { type } = useTooltip()
 
   if (type === 'press') {
     return <ContentPress {...props} />

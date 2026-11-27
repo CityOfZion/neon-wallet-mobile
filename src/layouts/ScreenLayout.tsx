@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import type { GestureResponderEvent, ScrollViewProps, TextProps, ViewProps } from 'react-native'
 import { ScrollView, Text, View } from 'react-native'
 import { KeyboardAvoidingView, type KeyboardAvoidingViewProps } from 'react-native-keyboard-controller'
+import { match, P } from 'ts-pattern'
 
 import { type TTwButtonProps, TwButton } from '@/components/TwButton'
 import { type TTwIconButtonProps, TwIconButton } from '@/components/TwIconButton'
@@ -24,46 +25,44 @@ const Banners = () => {
   const { selectedNetworkByBlockchain } = useSelectedNetworkByBlockchainSelector()
   const { isNotConnected } = useIsConnectedSelector()
 
-  let hasCustom = false
-  let hasTestnet = false
-
-  Object.entries(selectedNetworkByBlockchain).forEach(([_blockchain, network]) => {
-    hasCustom = hasCustom || network.type === 'custom'
-    hasTestnet = hasTestnet || network.type === 'testnet'
-  })
+  const nonMainnetCount = Object.values(selectedNetworkByBlockchain).filter(
+    network => network.type !== 'mainnet'
+  ).length
 
   return (
     <View>
       <View
         className={StyleHelper.mergeStyles('h-[env(safe-area-inset-top)]', {
-          'bg-black': hasCustom || hasTestnet,
-          'bg-transparent': !hasCustom && !hasTestnet && isNotConnected,
+          'bg-black': nonMainnetCount > 0 && !isNotConnected,
+          'bg-gray-900': isNotConnected,
         })}
       />
 
-      {hasCustom && (
-        <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-neon bg-black p-4">
-          <TbAlertTriangleFilled aria-hidden className="size-6 text-neon" />
-          <Text className="font-sans-regular text-lg leading-5 text-white">{t('custom')}</Text>
-        </View>
-      )}
+      {match({ isNotConnected, nonMainnetCount })
+        .with({ isNotConnected: true }, () => (
+          <View className="w-full flex-row items-center justify-center gap-2 border-b border-neon bg-gray-900 p-4">
+            <TbCircleOff aria-hidden className="size-6 text-neon" />
 
-      {hasTestnet && (
-        <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-magenta bg-black p-4">
-          <TbAlertTriangleFilled aria-hidden className="size-6 text-magenta" />
-          <Text className="font-sans-regular text-lg leading-5 text-white">{t('testnet')}</Text>
-        </View>
-      )}
-
-      {isNotConnected && (
-        <View className="w-full flex-row items-center justify-center gap-2 border-b border-neon bg-gray-900 p-4">
-          <TbCircleOff aria-hidden className="size-8.5 text-neon" />
-          <View>
-            <Text className="font-sans-regular text-1xs uppercase text-neon">{t('warning')}</Text>
-            <Text className="font-sans-regular text-xs text-white">{t('noInternet')}</Text>
+            <View>
+              <Text className="font-sans-regular text-1xs uppercase text-neon" numberOfLines={1}>
+                {t('warningLabel')}
+              </Text>
+              <Text className="font-sans-regular text-xs text-white" numberOfLines={1}>
+                {t('noInternetLabel')}
+              </Text>
+            </View>
           </View>
-        </View>
-      )}
+        ))
+        .with({ nonMainnetCount: P.number.gt(0) }, () => (
+          <View className="w-full flex-row items-center justify-center gap-2 border-b-2 border-purple bg-black p-4">
+            <TbAlertTriangleFilled aria-hidden className="size-6 text-purple" />
+
+            <Text className="font-sans-regular text-lg leading-5 text-white" numberOfLines={1}>
+              {t('nonMainnetLabel', { count: nonMainnetCount })}
+            </Text>
+          </View>
+        ))
+        .otherwise(() => null)}
     </View>
   )
 }
@@ -148,6 +147,7 @@ const Title = ({ className, children, accessibilityRole = 'header', ...props }: 
 }
 
 type TScrollContentProps = ScrollViewProps & { ref?: Ref<ScrollView> }
+
 const ScrollContent = ({ className, contentContainerClassName, ref, ...props }: TScrollContentProps) => (
   <ScrollView
     ref={ref}
@@ -196,6 +196,7 @@ const KeyboardAvoidingArea = ({ className, children, ...props }: ViewProps) => {
 
 type TButtonPosition = 'left' | 'right'
 type TButtonContentProps = ViewProps & { position: TButtonPosition }
+
 const ButtonContent = ({ className, children, position, ...props }: TButtonContentProps) => {
   return (
     <View
@@ -212,6 +213,7 @@ const ButtonContent = ({ className, children, position, ...props }: TButtonConte
 }
 
 type TButtonProps = TTwButtonProps & { position: TButtonPosition }
+
 const Button = ({ contentProps, labelProps, position, className, ...props }: TButtonProps) => {
   return (
     <TwButton
@@ -241,6 +243,7 @@ const BackButton = ({ className, onPress, ...props }: Omit<TTwIconButtonProps, '
       onPress(event)
       return
     }
+
     navigation.goBack()
   })
 

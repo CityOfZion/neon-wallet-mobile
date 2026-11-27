@@ -13,7 +13,7 @@ npm run ios          # Run on iOS
 # Code quality
 npm run lint         # ESLint with auto-fix
 npm run typecheck    # TypeScript type checking (tsc --noEmit)
-npm run check        # lint + typecheck + check-env (runs all checks)
+npm run check        # check-env + prebuild + lint + typecheck (runs all checks)
 
 # Build
 npm run prebuild     # Expo prebuild for native code generation
@@ -54,7 +54,9 @@ Redux Toolkit with Redux Persist. Six slices in `src/store/reducers/`:
 | `contact` | Yes | Address book |
 | `utility` | No | Ephemeral UI state (modals, alerts, loading) |
 
-Each slice includes a **migrations system** — when changing the persisted shape of a reducer, add a versioned migration entry. Actions are exported alongside reducers (e.g., `walletReducerActions`). Two listener middlewares handle side effects: network changes and language changes.
+Each slice includes a **migrations system** — when changing the persisted shape or defaults of a reducer (e.g. `settings.data.customNetworksByBlockchain`), add a versioned migration entry in `store/reducers/<slice>/migrations.ts` and bump `version` in its persist config so existing users' data is preserved. Actions are exported alongside reducers (e.g., `walletReducerActions`). Two listener middlewares handle side effects: network changes and language changes.
+
+Neo3 ships a default custom network (`NetworkHelper.defaultCozNeo3CustomNetwork`, COZ RPC `https://chain1.coz.io:443`) that is always the first custom network and can't be edited or deleted (guarded in the `saveCustomNetwork`/`deleteCustomNetwork` reducers and `PersistNetworkModal`, and hidden from edit in `SettingsProtocolEditScreen`). `ScreenLayout`'s network banner doesn't distinguish it: any selected non-mainnet network (testnet, default COZ or user custom) counts toward a single pluralized "Non-mainnet network(s)" banner. Use `NetworkHelper.isDefaultCustomNetwork` to check for it.
 
 ### Navigation
 
@@ -87,7 +89,14 @@ Strict mode is enabled (`strict: true`, `strictNullChecks`, `noImplicitAny`). Av
 
 ### i18n
 
-English (`src/locales/en/`) is the source of truth. Running `npm run translate` uses the Claude Code `/translate` skill to propagate English changes to de, pt-BR, zh, and zh-Hant. Locale JSON keys are sorted by ESLint.
+English (`src/locales/en/`) is the source of truth. Running `npm run translate` uses the Claude Code `/translate` skill to propagate English changes to de, pt-br, zh, and zh-Hant. Locale JSON keys are sorted by ESLint.
+
+### Component & Code Patterns
+
+- Form/action state uses `useActions<TActionsData>(...)` (`src/hooks/useActions`); name the local type `TActionsData`.
+- Compound components (`Tooltip`, `ModalLayout`, `ScreenLayout`, etc.) expose sub-components on a `Root`; their context hook is named `use<Component>` (e.g. `useTooltip`, `useModalLayout`) and throws when used outside `Root`.
+- For debouncing inside components, use `useDebounceFunction` (`src/hooks/useDebounceFunction.ts`) instead of `lodash/debounce` + `useCallback`.
+- Separate logical statements with blank lines (before `return`/`if`/calls after declarations), matching existing code.
 
 ### Blockchain Services
 

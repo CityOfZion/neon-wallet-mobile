@@ -1,12 +1,14 @@
-import type { TStringHelperRemoveSpecialCharacterOptions } from '@/types/helpers'
+import type { TStringHelperCapitalizeOptions, TStringHelperRemoveSpecialCharacterOptions } from '@/types/helpers'
 
 export class StringHelper {
   static normalizeText(text: string) {
     return text.trim().toLowerCase()
   }
 
-  static capitalize(text: string) {
-    return text.charAt(0).toUpperCase() + text.slice(1)
+  static capitalize(text: string, { preserveRest = true }: TStringHelperCapitalizeOptions = {}) {
+    const rest = text.slice(1)
+
+    return `${text.charAt(0).toUpperCase()}${preserveRest ? rest : rest.toLowerCase()}`
   }
 
   static removeLineBreaks(text: string) {

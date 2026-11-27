@@ -7,6 +7,7 @@ import { createMigrate, persistReducer } from 'redux-persist'
 import { BlockchainServiceHelper } from '@/helpers/BlockchainServiceHelper'
 import { CurrencyHelper } from '@/helpers/CurrencyHelper'
 import { LanguageHelper } from '@/helpers/LanguageHelper'
+import { NetworkHelper } from '@/helpers/NetworkHelper'
 
 import { getSettingsMigrations } from './migrations'
 import { settingsSliceReducers } from './reducers'
@@ -39,7 +40,7 @@ export function getSettingsReducer() {
       isOnboardingCompleted: false,
       security: { type: 'disabled' },
       customNetworksByBlockchain: {
-        neo3: [],
+        neo3: [NetworkHelper.defaultCozNeo3CustomNetwork],
         neoLegacy: [],
         neox: [],
         bitcoin: [],
@@ -73,7 +74,7 @@ export function getSettingsReducer() {
     storage,
     timeout: 0,
     migrate: createMigrate(settingsMigrations),
-    version: 12,
+    version: 13,
   }
 
   const settingsSlice = createSlice({

@@ -16,7 +16,7 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   password: string
   confirmPassword: string
 }
@@ -38,7 +38,7 @@ export const CreatePasswordModal = ({ navigation, route }: TRootStackScreenProps
 
   const { t } = useTranslation('modals', { keyPrefix: 'createPassword' })
 
-  const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionData>(
+  const { actionData, actionState, setData, setError, clearErrors, handleAct } = useActions<TActionsData>(
     {
       password: '',
       confirmPassword: '',

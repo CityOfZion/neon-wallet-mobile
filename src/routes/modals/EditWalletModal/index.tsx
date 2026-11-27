@@ -12,7 +12,7 @@ import { ModalLayout } from '@/layouts/ModalLayout'
 import { walletReducerActions } from '@/store/reducers/wallet'
 import type { TRootStackScreenProps } from '@/types/stacks'
 
-type TActionData = {
+type TActionsData = {
   name: string
 }
 
@@ -23,7 +23,7 @@ export const EditWalletModal = ({ navigation, route }: TRootStackScreenProps<'Ed
   const { t } = useTranslation('modals', { keyPrefix: 'editWallet' })
   const { t: tCommon } = useTranslation('common')
 
-  const { actionData, actionState, handleAct, setData, setError } = useActions<TActionData>({
+  const { actionData, actionState, handleAct, setData, setError } = useActions<TActionsData>({
     name: wallet.name,
   })
 

@@ -11,7 +11,7 @@ import { StyleHelper } from '@/helpers/StyleHelper'
 
 import MdChevronRight from '@/assets/images/md-chevron-right.svg'
 
-type TRootContext = {
+type TContextValue = {
   value?: boolean
   defaultValue?: boolean
   onValueChange?: (value: boolean) => void
@@ -19,14 +19,15 @@ type TRootContext = {
   disabled?: boolean
 }
 
-export type TTwAccordionRootProps = Omit<TRootContext, 'nativeID'> & ViewProps
+export type TTwAccordionRootProps = Omit<TContextValue, 'nativeID'> & ViewProps
 
-const TTwAccordionContext = createContext<TRootContext | null>(null)
+const TwAccordionContext = createContext<TContextValue | null>(null)
 
-export const useTwAccordionContext = () => {
-  const context = useContext(TTwAccordionContext)
+const useTwAccordion = () => {
+  const context = useContext(TwAccordionContext)
+
   if (!context) {
-    throw new Error('Accordion compound components cannot be rendered outside the TwAccordion.Root component')
+    throw new Error('TwAccordion compound components cannot be rendered outside the TwAccordion.Root component')
   }
   return context
 }
@@ -40,7 +41,7 @@ const Root = forwardRef<View, TTwAccordionRootProps>(
     const isControlled = value !== undefined
 
     return (
-      <TTwAccordionContext.Provider
+      <TwAccordionContext.Provider
         value={{
           value: isControlled ? value : internalValue,
           onValueChange: isControlled ? onValueChange : setInternalValue,
@@ -50,7 +51,7 @@ const Root = forwardRef<View, TTwAccordionRootProps>(
         }}
       >
         <View className={StyleHelper.mergeStyles('rounded-md', className)} ref={ref} {...props} />
-      </TTwAccordionContext.Provider>
+      </TwAccordionContext.Provider>
     )
   }
 )
@@ -63,7 +64,7 @@ export type TTwAccordionTriggerProps = {
 
 const Trigger = forwardRef<View, TTwAccordionTriggerProps>(
   ({ disabled, className, label, onPress, leftElement, iconClassName, ...props }, ref) => {
-    const context = useTwAccordionContext()
+    const context = useTwAccordion()
 
     const isDisabled = disabled || context.disabled
 
@@ -111,7 +112,7 @@ const Trigger = forwardRef<View, TTwAccordionTriggerProps>(
 export type TTwAccordionContentProps = ViewProps
 
 const Content = forwardRef<View, TTwAccordionContentProps>(({ children, className, ...props }, ref) => {
-  const context = useTwAccordionContext()
+  const context = useTwAccordion()
 
   const contentRef = useAnimatedRef<View>()
 

@@ -1,13 +1,13 @@
 import { type JSX, useEffect } from 'react'
 
 import type { TBSServiceName, TWalletKitHelperSessionDetails } from '@cityofzion/bs-multichain'
-import { BSNeoXConstants } from '@cityofzion/bs-neox'
 import type { WalletKitTypes } from '@reown/walletkit'
 import type { PendingRequestTypes, SessionTypes } from '@walletconnect/types'
 import { useTranslation } from 'react-i18next'
 
 import { WalletConnectError } from '@/helpers/ErrorHelper'
 import { LoggerHelper } from '@/helpers/LoggerHelper'
+import { NetworkHelper } from '@/helpers/NetworkHelper'
 import { ToastHelper } from '@/helpers/ToastHelper'
 import { WalletKitHelper } from '@/helpers/WalletKitHelper'
 
@@ -79,9 +79,11 @@ export const DappPermissionModal = ({ navigation, route }: TRootStackScreenProps
 
       const hasNonce = !!request.params.request.params?.[0]?.nonce
 
-      const isNeoxAntiMev =
-        blockchain === 'neox' &&
-        BSNeoXConstants.ANTI_MEV_RPC_LIST_BY_NETWORK_ID[selectedNetwork.id].some(url => url === selectedNetwork.url)
+      const isNeoxAntiMev = NetworkHelper.isNeoxAntiMev({
+        blockchain,
+        networkId: selectedNetwork.id,
+        url: selectedNetwork.url,
+      })
 
       // It's expected to receive a transaction cached error on first Anti-MEV transaction
       if (isNeoxAntiMev && hasNonce && error.message?.includes('transaction cached')) {

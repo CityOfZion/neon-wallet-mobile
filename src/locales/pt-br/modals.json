@@ -626,15 +626,15 @@
   "persistNetwork": {
     "connected": "Conexão boa",
     "createTitle": "Rede customizada",
-    "delete": "Deletar rede",
+    "deleteNetworkButtonLabel": "Deletar rede",
     "editTitle": "Editar {{networkName}}",
     "inputLabels": {
-      "name": "Nome da rede",
-      "nameDescription": "(máximo 20 caracteres)",
-      "url": "Nova URL"
+      "name": "Nome",
+      "nameDescription": "(máx. de 20 caracteres)",
+      "url": "URL"
     },
     "inputPlaceholder": {
-      "name": "Digite o nome da rede",
+      "name": "Digite o nome",
       "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "O nome deve ter no mínimo 1 caractere e no máximo 20 caracteres",

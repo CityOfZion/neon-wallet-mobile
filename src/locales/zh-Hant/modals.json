@@ -626,15 +626,15 @@
   "persistNetwork": {
     "connected": "連線良好",
     "createTitle": "自訂網路",
-    "delete": "刪除網路",
+    "deleteNetworkButtonLabel": "刪除網路",
     "editTitle": "編輯 {{networkName}}",
     "inputLabels": {
-      "name": "網路名稱",
+      "name": "名稱",
       "nameDescription": "（最多 20 個字）",
-      "url": "新的 URL"
+      "url": "URL"
     },
     "inputPlaceholder": {
-      "name": "輸入網路名稱",
+      "name": "輸入名稱",
       "url": "https://mainnet1.neo.coz.io:443"
     },
     "invalidName": "名稱必須至少 1 個字且最多 20 個字",
